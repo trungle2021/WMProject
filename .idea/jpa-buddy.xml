@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="JpaBuddyIdeaProjectConfig">
+    <option name="defaultUnitInitialized" value="true" />
     <option name="renamerInitialized" value="true" />
     <option name="reverseEngineeringLastDbConnectionId" value="16953116-e2cc-4c35-8f3e-1c46994fc1aa" />
     <option name="reLastEntityCreationPackage" value="src/main/java/com/springboot/wmproject/entities" />
