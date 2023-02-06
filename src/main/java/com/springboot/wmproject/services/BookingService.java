@@ -5,7 +5,7 @@ import com.springboot.wmproject.entities.Booking;
 import java.util.List;
 
 public interface BookingService{
-    List<Booking> getAllBooking(int customerId);
+    List<Booking> getAllBooking(Integer customerId);
     Booking getOneBooking(int bookingId);
     Booking createBooking(Booking booking);
     Booking updateBooking(Booking booking);

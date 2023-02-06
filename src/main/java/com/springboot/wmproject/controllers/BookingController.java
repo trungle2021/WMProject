@@ -21,13 +21,26 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
+    @GetMapping(value = {"/customer/{id}","/"})
+    public ResponseEntity<List<Booking>> getAll(
+            @PathVariable(required = false) Integer id){
+        return ResponseEntity.ok(bookingService.getAllBooking(id));
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<Booking> createBooking(@RequestBody Booking booking){
         return new ResponseEntity<>(bookingService.createBooking(booking), HttpStatus.CREATED);
     }
 
-    @GetMapping(value = "/customer/{id}")
-    public ResponseEntity<List<Booking>> getAll(@PathVariable int id){
-        return ResponseEntity.ok(bookingService.getAllBooking(id));
+
+    @PutMapping(value = "/update")
+    public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking){
+        return ResponseEntity.ok(bookingService.updateBooking(booking));
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<String> deleteBooking(@PathVariable int id){
+        bookingService.deleteBooking(id);
+        return ResponseEntity.ok("Deleted Booking Successfully");
     }
 }
