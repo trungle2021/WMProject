@@ -16,3 +16,4 @@ public class BookingDTO {
     private String bookingDate;
     private String appointmentDate;
 }
+

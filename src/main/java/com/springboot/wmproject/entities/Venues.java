@@ -30,7 +30,6 @@ public class Venues {
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
-    @JsonManagedReference
     @OneToMany(mappedBy = "venues",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> orders;
 

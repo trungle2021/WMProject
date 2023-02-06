@@ -106,4 +106,6 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = modelMapper.map(bookingDTO, Booking.class);
         return booking;
     }
+
+
 }

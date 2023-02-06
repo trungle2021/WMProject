@@ -44,14 +44,11 @@ public class Orders {
     @Basic
     @Column(name = "customer_id", nullable = true)
     private Integer customerId;
-    @JsonManagedReference
     @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<FoodDetails> foodDetails;
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "venue_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Venues venues;
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "booking_emp", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Employees employees;
@@ -61,6 +58,8 @@ public class Orders {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Customers customers;
+
+
     @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetails;
 
