@@ -30,7 +30,6 @@ public class EmployeeAccounts {
     @Basic
     @Column(name = "employee_id", nullable = true)
     private Integer employeeId;
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "employee_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Employees employees;

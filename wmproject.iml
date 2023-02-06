@@ -127,6 +127,7 @@
     <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.8.4" level="project" />
+    <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:2.3.9" level="project" />
     <orderEntry type="library" name="Maven: org.springdoc:springdoc-openapi-ui:1.6.4" level="project" />
     <orderEntry type="library" name="Maven: org.springdoc:springdoc-openapi-webmvc-core:1.6.4" level="project" />
     <orderEntry type="library" name="Maven: org.springdoc:springdoc-openapi-common:1.6.4" level="project" />

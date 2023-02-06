@@ -31,11 +31,9 @@ public class FoodDetails {
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private BigDecimal price;
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Orders ordersByOrderId;
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Food foodByFoodId;

@@ -1,6 +1,7 @@
 package com.springboot.wmproject.controllers;
 
 
+import com.springboot.wmproject.DTO.BookingDTO;
 import com.springboot.wmproject.entities.Booking;
 import com.springboot.wmproject.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +23,20 @@ public class BookingController {
     }
 
     @GetMapping(value = {"/customer/{id}","/"})
-    public ResponseEntity<List<Booking>> getAll(
+    public ResponseEntity<List<BookingDTO>> getAll(
             @PathVariable(required = false) Integer id){
         return ResponseEntity.ok(bookingService.getAllBooking(id));
     }
 
     @PostMapping(value = "/create")
-    public ResponseEntity<Booking> createBooking(@RequestBody Booking booking){
-        return new ResponseEntity<>(bookingService.createBooking(booking), HttpStatus.CREATED);
+    public ResponseEntity<BookingDTO> createBooking(@RequestBody BookingDTO bookingDTO){
+        return new ResponseEntity<>(bookingService.createBooking(bookingDTO), HttpStatus.CREATED);
     }
 
 
     @PutMapping(value = "/update")
-    public ResponseEntity<Booking> updateBooking(@RequestBody Booking booking){
-        return ResponseEntity.ok(bookingService.updateBooking(booking));
+    public ResponseEntity<BookingDTO> updateBooking(@RequestBody BookingDTO bookingDTO){
+        return ResponseEntity.ok(bookingService.updateBooking(bookingDTO));
     }
 
     @DeleteMapping(value = "/{id}")
