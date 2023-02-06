@@ -9,30 +9,28 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Food {
+public class Services {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "food_name", nullable = true, length = 45)
-    private String foodName;
+    @Column(name = "service_name", nullable = true, length = 45)
+    private String serviceName;
     @Basic
-    @Column(name = "food_type", nullable = true, length = 45)
-    private String foodType;
+    @Column(name = "price", nullable = true, precision = 2)
+    private Double price;
     @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
-    @Basic
-    @Column(name = "price", nullable = true, precision = 2)
-    private BigDecimal price;
-
     @JsonManagedReference
-    @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<FoodDetails> foodDetailsById;
+    @OneToMany(mappedBy = "services",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<ServiceDetails> serviceDetails;
+
 
 }

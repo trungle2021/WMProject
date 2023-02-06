@@ -13,26 +13,27 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Food {
+public class Venues {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "food_name", nullable = true, length = 45)
-    private String foodName;
+    @Column(name = "venue_name", nullable = true, length = 45)
+    private String venueName;
     @Basic
-    @Column(name = "food_type", nullable = true, length = 45)
-    private String foodType;
+    @Column(name = "min_people", nullable = true)
+    private Integer minPeople;
     @Basic
-    @Column(name = "description", nullable = true, length = 255)
-    private String description;
+    @Column(name = "max_people", nullable = true)
+    private Integer maxPeople;
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
-    private BigDecimal price;
-
+    private Double price;
     @JsonManagedReference
-    @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<FoodDetails> foodDetailsById;
+    @OneToMany(mappedBy = "venues",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<Orders> orders;
+
+
 
 }

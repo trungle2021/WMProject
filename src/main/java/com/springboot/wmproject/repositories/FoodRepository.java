@@ -1,7 +1,7 @@
 package com.springboot.wmproject.repositories;
 
-import com.springboot.wmproject.entities.Booking;
+import com.springboot.wmproject.entities.Food;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface FoodRepository extends JpaRepository<Booking,Integer> {
+public interface FoodRepository extends JpaRepository<Food,Integer> {
 }
