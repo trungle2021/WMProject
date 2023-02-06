@@ -29,5 +29,4 @@ public class Booking {
     @JoinColumn(name = "customer_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Customers customers;
 
-
 }
