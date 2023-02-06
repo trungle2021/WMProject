@@ -31,13 +31,10 @@ public class Customers {
     @Basic
     @Column(name = "gender", nullable = true, length = 10)
     private String gender;
-    @JsonManagedReference
     @OneToMany(mappedBy = "customers",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Booking> bookings;
-    @JsonManagedReference
     @OneToMany(mappedBy = "customers",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<CustomerAccounts> customerAccounts;
-    @JsonManagedReference
     @OneToMany(mappedBy = "customers",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> orders;
 

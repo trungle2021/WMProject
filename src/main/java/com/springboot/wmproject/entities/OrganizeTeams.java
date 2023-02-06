@@ -22,10 +22,8 @@ public class OrganizeTeams {
     @Basic
     @Column(name = "team_name", nullable = true, length = 45)
     private String teamName;
-    @JsonManagedReference
     @OneToMany(mappedBy = "organizeTeams",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Employees> employees;
-    @JsonManagedReference
     @OneToMany(mappedBy = "organizeTeams",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> orders;
 

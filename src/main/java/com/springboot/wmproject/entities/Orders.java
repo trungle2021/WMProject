@@ -55,15 +55,12 @@ public class Orders {
     @ManyToOne
     @JoinColumn(name = "booking_emp", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Employees employees;
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "organize_team", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private OrganizeTeams organizeTeams;
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Customers customers;
-    @JsonManagedReference
     @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetails;
 
