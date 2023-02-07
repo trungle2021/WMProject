@@ -28,7 +28,6 @@ public class Services {
     @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
-    @JsonManagedReference
     @OneToMany(mappedBy = "services",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetails;
 

@@ -1,6 +1,5 @@
 package com.springboot.wmproject.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,7 +10,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "customer_accounts", schema = "wmproject", catalog = "")
+@Table(name = "customer_account", schema = "wmproject", catalog = "")
 public class CustomerAccounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -26,8 +25,9 @@ public class CustomerAccounts {
     @Basic
     @Column(name = "customer_id", nullable = true)
     private Integer customerId;
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Customers customers;
+
+
 }

@@ -6,7 +6,7 @@
   <persistence-unit name="default">
 
     <class>com.springboot.wmproject.entities.Booking</class>
-    <class>com.springboot.wmproject.entities.CustomerAccount</class>
+    <class>com.springboot.wmproject.entities.CustomerAccounts</class>
     <class>com.springboot.wmproject.entities.Customers</class>
     <class>com.springboot.wmproject.entities.EmployeeAccounts</class>
     <class>com.springboot.wmproject.entities.Employees</class>
