@@ -41,14 +41,11 @@ public class Employees {
     @Basic
     @Column(name = "team_id", nullable = true)
     private Integer teamId;
-    @JsonManagedReference
     @OneToMany(mappedBy = "employees",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<EmployeeAccounts> employeeAccounts;
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private OrganizeTeams organizeTeams;
-    @JsonManagedReference
     @OneToMany(mappedBy = "employees",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> orders;
 

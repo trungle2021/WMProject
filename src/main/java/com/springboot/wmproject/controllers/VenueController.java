@@ -2,7 +2,6 @@ package com.springboot.wmproject.controllers;
 
 
 import com.springboot.wmproject.DTO.BookingDTO;
-import com.springboot.wmproject.entities.Booking;
 import com.springboot.wmproject.services.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/booking")
-public class BookingController {
+@RequestMapping("/api/venues")
+public class VenueController {
 
     private BookingService bookingService;
 
     @Autowired
-    public BookingController(BookingService bookingService) {
+    public VenueController(BookingService bookingService) {
         this.bookingService = bookingService;
     }
 

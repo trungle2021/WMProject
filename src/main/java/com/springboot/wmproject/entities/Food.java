@@ -29,9 +29,8 @@ public class Food {
     private String description;
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
-    private BigDecimal price;
+    private Double price;
 
-    @JsonManagedReference
     @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<FoodDetails> foodDetailsById;
 
