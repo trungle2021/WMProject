@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface EmployeeAccountService {
     List<EmployeeAccountDTO> getAllEmployeeAccounts();
-    EmployeeAccountDTO getOneEmployeeAccount(int employeeAccountId);
+    List<EmployeeAccountDTO> getEmployeeAccountByEmployeeId(int id);
+    EmployeeAccountDTO getEmployeeAccountByEmployeeAccountId(int id);
     EmployeeAccountDTO createEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
     EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
     void deleteEmployeeAccount(int employeeAccountId);

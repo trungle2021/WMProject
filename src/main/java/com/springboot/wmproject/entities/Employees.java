@@ -8,8 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 @Data
 @AllArgsConstructor
@@ -42,12 +41,10 @@ public class Employees {
     @Column(name = "team_id", nullable = true)
     private Integer teamId;
     @OneToMany(mappedBy = "employees",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<EmployeeAccounts> employeeAccounts;
+    private Collection<EmployeeAccounts> employeeAccounts=new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private OrganizeTeams organizeTeams;
     @OneToMany(mappedBy = "employees",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Orders> orders;
-
-
+    private Collection<Orders> orders=new HashSet<>();
 }

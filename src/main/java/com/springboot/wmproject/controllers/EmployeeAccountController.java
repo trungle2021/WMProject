@@ -23,6 +23,14 @@ public class EmployeeAccountController {
     public ResponseEntity<List<EmployeeAccountDTO>> getAll(){
         return ResponseEntity.ok(employeeAccountService.getAllEmployeeAccounts());
     }
+    @GetMapping(value = "/one/{id}")
+    public ResponseEntity<EmployeeAccountDTO> getOneByEmployeeAccountId(@PathVariable int id){
+        return ResponseEntity.ok(employeeAccountService.getEmployeeAccountByEmployeeAccountId(id));
+    }
+    @GetMapping(value = "/search/{employeeId}")
+    public ResponseEntity<List<EmployeeAccountDTO>> getAllByEmployeeId(@PathVariable int employeeId){
+        return ResponseEntity.ok(employeeAccountService.getEmployeeAccountByEmployeeId(employeeId));
+    }
     @PostMapping(value = "/create")
     public ResponseEntity<EmployeeAccountDTO> createEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
         return new ResponseEntity<>(employeeAccountService.createEmployeeAccount(employeeAccountDTO), HttpStatus.CREATED);

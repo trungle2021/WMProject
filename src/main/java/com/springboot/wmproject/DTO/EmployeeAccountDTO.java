@@ -2,6 +2,8 @@ package com.springboot.wmproject.DTO;
 
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class EmployeeAccountDTO {
     private int id;
@@ -9,4 +11,5 @@ public class EmployeeAccountDTO {
     private String password;
     private String role;
     private Integer employeeId;
+
 }
