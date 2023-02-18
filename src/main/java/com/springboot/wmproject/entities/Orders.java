@@ -28,7 +28,7 @@ public class Orders {
     private String orderStatus;
     @Basic
     @Column(name = "order_total", nullable = true, precision = 2)
-    private BigDecimal orderTotal;
+    private Double orderTotal;
     @Basic
     @Column(name = "time_happen", nullable = true, length = 20)
     private String timeHappen;

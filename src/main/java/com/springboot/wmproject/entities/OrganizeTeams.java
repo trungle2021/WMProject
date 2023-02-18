@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
 @Data
@@ -23,9 +24,9 @@ public class OrganizeTeams {
     @Column(name = "team_name", nullable = true, length = 45)
     private String teamName;
     @OneToMany(mappedBy = "organizeTeams",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Employees> employees;
+    private Collection<Employees> employees=new HashSet<>();
     @OneToMany(mappedBy = "organizeTeams",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Orders> orders;
+    private Collection<Orders> orders=new HashSet<>();
 
 
 }
