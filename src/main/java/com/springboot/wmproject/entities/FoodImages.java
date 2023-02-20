@@ -4,21 +4,18 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "food_details", schema = "wmproject", catalog = "")
-public class FoodDetails {
+@Table(name = "food_images", schema = "wmproject", catalog = "")
+public class FoodImages {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "order_id", nullable = true)
-    private Integer orderId;
+    @Column(name = "url", nullable = true, length = -1)
+    private String url;
     @Basic
     @Column(name = "food_id", nullable = true)
     private Integer foodId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id", referencedColumnName = "id",insertable = false,updatable = false)
-    private Orders ordersByOrderId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Food foodByFoodId;
@@ -31,12 +28,12 @@ public class FoodDetails {
         this.id = id;
     }
 
-    public Integer getOrderId() {
-        return orderId;
+    public String getUrl() {
+        return url;
     }
 
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Integer getFoodId() {
@@ -51,21 +48,13 @@ public class FoodDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        FoodDetails that = (FoodDetails) o;
-        return id == that.id && Objects.equals(orderId, that.orderId) && Objects.equals(foodId, that.foodId);
+        FoodImages that = (FoodImages) o;
+        return id == that.id && Objects.equals(url, that.url) && Objects.equals(foodId, that.foodId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, orderId, foodId);
-    }
-
-    public Orders getOrdersByOrderId() {
-        return ordersByOrderId;
-    }
-
-    public void setOrdersByOrderId(Orders ordersByOrderId) {
-        this.ordersByOrderId = ordersByOrderId;
+        return Objects.hash(id, url, foodId);
     }
 
     public Food getFoodByFoodId() {

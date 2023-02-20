@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,15 +33,15 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderDTO> getAllByOrderDate(String orderDate) throws ResourceNotFoundException {
-        if (orderDate != null) {
+        List<OrderDTO> orders = new ArrayList<>();
             if (orderDate != null) {
-                List<OrderDTO> orders = orderRepository.findByOrderDate(orderDate).stream().map(order -> mapToDTO(order)).collect(Collectors.toList());
-                if (!orders.isEmpty()) {
-                    return orders;
+                 orders = orderRepository.findByOrderDate(orderDate).stream().map(order -> mapToDTO(order)).collect(Collectors.toList());
+                if (orders.isEmpty()) {
+                    return null;
                 }
             }
-        }
-        return null;
+        return orders;
+
     }
 
     @Override

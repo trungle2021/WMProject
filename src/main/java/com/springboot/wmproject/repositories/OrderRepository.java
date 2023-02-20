@@ -21,6 +21,8 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     List<Orders> findByOrganizeTeamId(int id);
     @Query("select o from Orders o where o.orderStatus=:status")
     List<Orders> findByOrderStatus(String status);
-    @Query("select o from Orders o where o.timeHappen=:time and o.venueId=:venueId")
+    @Query("select o from Orders o where o.timeHappen=:time and o.venueId=:venueId") // COI LẠI SAU BUSINESS LOGIC VỀ KHUNG GƠPF
     Orders validOrderToCreateNew(String time,int venueId);
+
+
 }
