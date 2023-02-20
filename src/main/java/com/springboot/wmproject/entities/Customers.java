@@ -32,10 +32,10 @@ public class Customers {
     @Column(name = "gender", nullable = true, length = 10)
     private String gender;
     @OneToMany(mappedBy = "customers",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Booking> bookings;
+    private Collection<Booking> bookings = new HashSet<>();
     @OneToMany(mappedBy = "customers",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<CustomerAccounts> customerAccounts;
+    private Collection<CustomerAccounts> customerAccounts = new HashSet<>();
     @OneToMany(mappedBy = "customers",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Orders> orders;
+    private Collection<Orders> orders = new HashSet<>();
 
 }

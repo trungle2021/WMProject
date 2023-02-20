@@ -30,7 +30,7 @@ public class FoodDetails {
     private Integer count;
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
-    private BigDecimal price;
+    private Double price;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
     private Orders ordersByOrderId;

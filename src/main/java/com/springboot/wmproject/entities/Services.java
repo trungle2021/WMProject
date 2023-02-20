@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
 @Data
@@ -29,7 +30,7 @@ public class Services {
     @Column(name = "description", nullable = true, length = 255)
     private String description;
     @OneToMany(mappedBy = "services",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<ServiceDetails> serviceDetails;
+    private Collection<ServiceDetails> serviceDetails = new HashSet<>();
 
 
 }
