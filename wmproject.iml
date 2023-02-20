@@ -16,8 +16,10 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="default" value="16953116-e2cc-4c35-8f3e-1c46994fc1aa" />
+
           <factory-entry name="entityManagerFactory" />
           <factory-entry name="wmproject" />
+
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/META-INF/persistence.xml" />
@@ -59,13 +61,15 @@
     <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.12" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.sun.activation:jakarta.activation:1.2.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-jpa:2.6.0" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-orm:5.3.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-context:5.3.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-tx:5.3.14" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.14" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework.data:spring-data-commons:2.6.3" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.14" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-beans:5.3.14" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.32" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-aspects:5.3.14" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-thymeleaf:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter:2.6.2" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.6.2" level="project" />
@@ -124,8 +128,6 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-junit-jupiter:4.0.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.skyscreamer:jsonassert:1.5.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.vaadin.external.google:android-json:0.0.20131108.vaadin1" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-core:5.3.14" level="project" />
-    <orderEntry type="library" name="Maven: org.springframework:spring-jcl:5.3.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.springframework:spring-test:5.3.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.xmlunit:xmlunit-core:2.8.4" level="project" />
     <orderEntry type="library" name="Maven: org.modelmapper:modelmapper:2.3.9" level="project" />
