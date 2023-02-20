@@ -22,10 +22,17 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping(value = {"/customer/{id}","/"})
-    public ResponseEntity<List<BookingDTO>> getAll(
-            @PathVariable(required = false) Integer id){
-        return ResponseEntity.ok(bookingService.getAllBooking(id));
+    @GetMapping(value = {"/all","/all/customer/{customerId}"})
+    public ResponseEntity<List<BookingDTO>> GetAllBooking(
+            @PathVariable(required = false) Integer customerId){
+        return ResponseEntity.ok(bookingService.getAllBooking(customerId));
+    }
+
+
+    @GetMapping(value = {"{booking_id}","{booking_id}/customer/{customer_id}"})
+    public ResponseEntity<BookingDTO> GetOneBooking(
+            @PathVariable(required = false) Integer booking_id, @PathVariable(required = false) Integer customer_id){
+        return ResponseEntity.ok(bookingService.getOneBooking(booking_id, customer_id));
     }
 
     @PostMapping(value = "/create")
