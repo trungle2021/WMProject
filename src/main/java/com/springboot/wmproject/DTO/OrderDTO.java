@@ -15,7 +15,7 @@ public class OrderDTO {
     private String orderDate;
     private String orderStatus;
 
-    private BigDecimal orderTotal;
+    private Double orderTotal;
 
     private String timeHappen;
 
