@@ -19,11 +19,12 @@
     <class>com.springboot.wmproject.entities.Services</class>
     <class>com.springboot.wmproject.entities.Venues</class>
       <class>com.springboot.wmproject.entities.CustomerAccounts</class>
+      <class>com.springboot.wmproject.DTO.BookingEntity</class>
       <properties>
-      <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/wmproject"/>
+      <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/wmproject?SSL=false"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
       <property name="hibernate.connection.username" value="root"/>
-      <property name="hibernate.connection.password" value="Admin123@"/>
+      <property name="hibernate.connection.password" value="Lance101"/>
     </properties>
   </persistence-unit>
 </persistence>
