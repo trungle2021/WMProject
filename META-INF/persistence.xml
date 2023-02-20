@@ -20,11 +20,17 @@
     <class>com.springboot.wmproject.entities.Venues</class>
       <class>com.springboot.wmproject.entities.CustomerAccounts</class>
       <class>com.springboot.wmproject.DTO.BookingEntity</class>
-      <properties>
+      <class>com.springboot.wmproject.entities.FoodImages</class>
+      <class>com.springboot.wmproject.entities.VenueImages</class>
+    <class>com.springboot.wmproject.entities.te.Food</class>
+    <class>com.springboot.wmproject.entities.te.FoodImages</class>
+    <class>com.springboot.wmproject.entities.te.VenueImages</class>
+    <class>com.springboot.wmproject.entities.te.Venues</class>
+    <properties>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/wmproject?SSL=false"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
       <property name="hibernate.connection.username" value="root"/>
-      <property name="hibernate.connection.password" value="Lance101"/>
+      <property name="hibernate.connection.password" value="Admin123@"/>
     </properties>
   </persistence-unit>
 </persistence>

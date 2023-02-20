@@ -2,7 +2,6 @@ package com.springboot.wmproject.services.impl;
 
 import com.springboot.wmproject.DTO.OrderDTO;
 import com.springboot.wmproject.DTO.VenueDTO;
-import com.springboot.wmproject.entities.Customers;
 import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.entities.Venues;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
@@ -14,7 +13,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
