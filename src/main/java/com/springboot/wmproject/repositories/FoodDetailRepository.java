@@ -1,7 +1,15 @@
 package com.springboot.wmproject.repositories;
 
 import com.springboot.wmproject.entities.FoodDetails;
+import com.springboot.wmproject.entities.Materials;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.List;
 
 public interface FoodDetailRepository extends JpaRepository<FoodDetails,Integer> {
+    @Query("SELECT c FROM  FoodDetails c where c.foodId =:foodId")
+    List<FoodDetails> getAllDetailByFoodId(Integer foodId);
+    @Query("SELECT c FROM  FoodDetails c where c.orderId =:orderId")
+    List<FoodDetails> getAllDetailByOrderId(Integer orderId);
 }
