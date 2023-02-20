@@ -29,6 +29,9 @@ public class BookingServiceImpl implements BookingService {
         this.modelMapper = modelMapper;
     }
 
+    //get all booking by customerID or allBooking
+
+
     @Override
     public List<BookingDTO> getAllBooking(Integer customerId) {
         if(customerId == null){
@@ -36,12 +39,25 @@ public class BookingServiceImpl implements BookingService {
             List<BookingDTO> bookingDTOList =  bookingList.stream().map(booking -> mapToDto(booking)).collect(Collectors.toList());
             return bookingDTOList;
         }
-        return bookingRepository.findAllById(customerId).stream().map(booking ->mapToDto(booking)).collect(Collectors.toList());
+        List<BookingDTO> bookingDTOList = bookingRepository.findAllById(customerId).stream().map(booking ->mapToDto(booking)).collect(Collectors.toList());
+        if(bookingDTOList.size() == 0){
+            throw new ResourceNotFoundException("Booking List","id",String.valueOf(customerId));
+        }
+        return bookingDTOList;
     }
 
+    //get one booking by bookingID or bookingID and customerID
     @Override
-    public BookingDTO getOneBooking(int bookingId) {
-        return null;
+    public BookingDTO getOneBooking(Integer bookingId,Integer customerId) {
+        if(customerId == null){
+            return mapToDto(bookingRepository.findById(bookingId).orElseThrow(()->new ResourceNotFoundException("Booking","booking_id",String.valueOf(bookingId))));
+        }
+        Booking booking = bookingRepository.findByBookingIdAndCustomerId(bookingId,customerId);
+        if (booking == null){
+            throw new ResourceNotFoundException("Booking","booking_id",String.valueOf(bookingId).concat(" or customer_id ").concat(String.valueOf(customerId)));
+        }
+
+        return mapToDto(booking);
     }
 
     @Override

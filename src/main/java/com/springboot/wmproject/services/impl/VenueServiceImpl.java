@@ -59,8 +59,8 @@ public class VenueServiceImpl implements VenueService {
     public VenueDTO createVenue(VenueDTO venueDTO) throws ResourceNotFoundException{
         String venueName = venueDTO.getVenueName();
         if (venueName != null) {
-            Venues checkVenues = (Venues) venueRepository.validVenueByName(venueName);
-            if(checkVenues==null){
+            List<Venues> checkVenues = venueRepository.validVenueByName(venueName);
+            if(checkVenues.size() == 0){
                 Venues newVenues = venueRepository.save(mapToEntity(venueDTO));
                 return mapToDTO(newVenues);
             }
