@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 @Data
 @AllArgsConstructor
@@ -32,6 +33,6 @@ public class Food {
     private Double price;
 
     @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<FoodDetails> foodDetailsById;
+    private Collection<FoodDetails> foodDetailsById = new HashSet<>();
 
 }

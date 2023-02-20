@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4207df7-c52c-41b7-8f90-7d571249f9fa" name="Changes" comment="">
+
       <change afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/MaterialDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/dataSources/16953116-e2cc-4c35-8f3e-1c46994fc1aa.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -16,6 +17,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/MaterialService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/MaterialService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/FoodDetailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/FoodDetailServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/MaterialServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/MaterialServiceImpl.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +96,9 @@
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.44435003&quot;,
     &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;advanced.settings&quot;,
+
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.repository.indices&quot;,
+
     &quot;spring.configuration.checksum&quot;: &quot;83839f161362bc5d6f75ea4a73b8a8b2&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
@@ -156,8 +160,11 @@
       <workItem from="1676294250063" duration="5562000" />
       <workItem from="1676343257294" duration="5354000" />
       <workItem from="1676370433548" duration="5853000" />
-      <workItem from="1676889606708" duration="3291000" />
-      <workItem from="1676893249013" duration="35000" />
+
+      <workItem from="1676709554032" duration="4587000" />
+      <workItem from="1676861915415" duration="4738000" />
+      <workItem from="1676889550912" duration="991000" />
+
     </task>
     <servers />
   </component>
