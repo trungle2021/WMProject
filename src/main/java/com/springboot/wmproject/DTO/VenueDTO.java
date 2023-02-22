@@ -3,10 +3,6 @@ package com.springboot.wmproject.DTO;
 import com.springboot.wmproject.entities.Orders;
 import lombok.Data;
 
-import javax.persistence.*;
-import java.util.Collection;
-import java.util.Set;
-
 @Data
 
 public class VenueDTO {

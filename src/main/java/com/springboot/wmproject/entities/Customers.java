@@ -1,10 +1,18 @@
 package com.springboot.wmproject.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.Objects;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Customers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,86 +36,15 @@ public class Customers {
     @Column(name = "avatar", nullable = true)
     private String avatar;
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Booking> bookingsById = new HashSet<>();
+    private Collection<Booking> bookings = new HashSet<>();
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<CustomerAccounts> customerAccountsById = new HashSet<>();
+    private Collection<CustomerAccounts> customerAccounts = new HashSet<>();
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Orders> ordersById = new HashSet<>();
+    private Collection<Orders> orders = new HashSet<>();
 
-    public int getId() {
-        return id;
-    }
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "role_id", referencedColumnName = "id",insertable = false,updatable = false)
+//    private Roles rolesByRoleId;
 
-    public void setId(int id) {
-        this.id = id;
-    }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Customers customers = (Customers) o;
-        return id == customers.id && Objects.equals(name, customers.name) && Objects.equals(address, customers.address) && Objects.equals(phone, customers.phone) && Objects.equals(gender, customers.gender);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, address, phone, gender);
-    }
-
-    public Collection<Booking> getBookingsById() {
-        return bookingsById;
-    }
-
-    public void setBookingsById(Collection<Booking> bookingsById) {
-        this.bookingsById = bookingsById;
-    }
-
-    public Collection<CustomerAccounts> getCustomerAccountsById() {
-        return customerAccountsById;
-    }
-
-    public void setCustomerAccountsById(Collection<CustomerAccounts> customerAccountsById) {
-        this.customerAccountsById = customerAccountsById;
-    }
-
-    public Collection<Orders> getOrdersById() {
-        return ordersById;
-    }
-
-    public void setOrdersById(Collection<Orders> ordersById) {
-        this.ordersById = ordersById;
-    }
 }

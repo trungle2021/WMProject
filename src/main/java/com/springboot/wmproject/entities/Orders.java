@@ -1,7 +1,7 @@
 package com.springboot.wmproject.entities;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
+import jakarta.persistence.*;
+
 import java.util.Collection;
 import java.util.Objects;
 

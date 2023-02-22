@@ -3,7 +3,6 @@ package com.springboot.wmproject.DTO;
 import com.springboot.wmproject.entities.*;
 import lombok.Data;
 
-import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Set;
