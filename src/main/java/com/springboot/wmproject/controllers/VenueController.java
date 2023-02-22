@@ -9,6 +9,7 @@ import com.springboot.wmproject.services.VenueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class VenueController {
     }
 
     @GetMapping(value = {"/all"})
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<VenueDTO>> getAll() {
         return ResponseEntity.ok(venueService.getAllVenue());
     }
