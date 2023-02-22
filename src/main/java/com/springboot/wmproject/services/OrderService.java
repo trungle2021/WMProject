@@ -17,4 +17,5 @@ public interface OrderService {
     OrderDTO createOrder(OrderDTO orderDTO);
     OrderDTO updateOrder(OrderDTO orderDTO);
     void deleteOrder(int id);
+    public OrderDTO updateOrderStatus(Integer orderDTOId,String status);
 }

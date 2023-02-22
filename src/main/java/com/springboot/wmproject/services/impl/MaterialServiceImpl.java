@@ -28,7 +28,7 @@ public class MaterialServiceImpl  implements MaterialService {
     }
 
     @Override
-    public List<MaterialDTO> getAllMaterialByFoodId(int foodId) {
+    public List<MaterialDTO> getAllMaterialByFoodId(Integer foodId) {
 
       return  materialRepository.getAllMaterialByFoodId(foodId).stream().map(material->mapToDTO(material)).collect(Collectors.toList());
 

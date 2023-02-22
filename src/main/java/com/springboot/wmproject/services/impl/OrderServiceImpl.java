@@ -157,6 +157,21 @@ public class OrderServiceImpl implements OrderService {
         }
         return null;
     }
+    @Override
+    public OrderDTO updateOrderStatus(Integer orderDTOId,String status) {
+
+        if(orderDTOId!=0){
+            Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
+            if(orders!=null){
+
+                orders.setOrderStatus(status);
+
+                orderRepository.save(orders);
+                return mapToDTO(orders);
+            }
+        }
+        return null;
+    }
 
     @Override
     public void deleteOrder(int id) {

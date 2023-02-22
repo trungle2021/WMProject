@@ -2,9 +2,11 @@ package com.springboot.wmproject.DTO;
 
 import com.springboot.wmproject.entities.*;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-import java.math.BigDecimal;
-import java.util.Collection;
+
+
 import java.util.Set;
 
 @Data
@@ -19,6 +21,7 @@ public class OrderDTO {
     private String timeHappen;
 
     private Integer venueId;
+
 
     private Integer bookingEmp;
 
