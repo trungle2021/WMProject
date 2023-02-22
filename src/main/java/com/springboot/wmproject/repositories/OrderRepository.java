@@ -3,9 +3,12 @@ package com.springboot.wmproject.repositories;
 import com.springboot.wmproject.entities.Orders;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+
+@Repository
 public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("select o from Orders o where o.customerId=:customerId")
     List<Orders> findByCustomerId(int customerId);
@@ -21,7 +24,7 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     List<Orders> findByOrganizeTeamId(int id);
     @Query("select o from Orders o where o.orderStatus=:status")
     List<Orders> findByOrderStatus(String status);
-    @Query("select o from Orders o where o.timeHappen=:time and o.venueId=:venueId") // COI LẠI SAU BUSINESS LOGIC VỀ KHUNG GƠPF
+    @Query("select o from Orders o where o.timeHappen=:time and o.venueId=:venueId") // COI LẠI SAU BUSINESS LOGIC VỀ KHUNG GIO
     Orders validOrderToCreateNew(String time,int venueId);
 
 

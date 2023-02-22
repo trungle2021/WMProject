@@ -3,11 +3,12 @@ package com.springboot.wmproject.repositories;
 import com.springboot.wmproject.entities.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 //import org.springframework.data.repository.query.QueryType;
 
 import java.util.List;
 
-
+@Repository
 public interface BookingRepository extends JpaRepository<Booking,Integer> {
     @Query("SELECT a from Booking a where a.customerId = :customerId")
 //    @QueryType
