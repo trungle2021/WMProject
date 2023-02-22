@@ -28,7 +28,7 @@ public class MaterialController {
     }
 
     @GetMapping("/{foodId}")
-    public ResponseEntity<List<MaterialDTO>> getAllByFoodId(@PathVariable int foodId)
+    public ResponseEntity<List<MaterialDTO>> getAllByFoodId(@PathVariable Integer foodId)
     {
         return ResponseEntity.ok(materialService.getAllMaterialByFoodId(foodId));
     }

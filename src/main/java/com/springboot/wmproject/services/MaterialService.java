@@ -6,7 +6,7 @@ import com.springboot.wmproject.DTO.MaterialDTO;
 import java.util.List;
 
 public interface MaterialService {
-    List<MaterialDTO> getAllMaterialByFoodId(int foodId);
+    List<MaterialDTO> getAllMaterialByFoodId(Integer foodId);
     List<MaterialDTO> getAllMaterial();
     MaterialDTO getOneMaterial(int materialId);
     MaterialDTO createMaterial(MaterialDTO newMaterialDTO);
