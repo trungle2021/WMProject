@@ -4,7 +4,8 @@ import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.entities.Services;
 import lombok.Data;
 
-import javax.persistence.*;
+
+
 
 @Data
 public class ServiceDetailDTO {
