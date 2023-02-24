@@ -6,7 +6,6 @@ import lombok.Data;
 
 
 
-
 @Data
 public class ServiceDetailDTO {
     private int id;
