@@ -1,6 +1,7 @@
 package com.springboot.wmproject.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ public class OrganizeTeams {
     @Id
     @Column(name = "id", nullable = false)
     private int id;
+    @NotEmpty
     @Basic
     @Column(name = "team_name", nullable = true, length = 45)
     private String teamName;

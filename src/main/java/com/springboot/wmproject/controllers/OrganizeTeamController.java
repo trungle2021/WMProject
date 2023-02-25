@@ -3,6 +3,7 @@ package com.springboot.wmproject.controllers;
 import com.springboot.wmproject.DTO.OrganizeTeamDTO;
 import com.springboot.wmproject.entities.OrganizeTeams;
 import com.springboot.wmproject.services.OrganizeTeamService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,23 +25,23 @@ public class OrganizeTeamController {
         return ResponseEntity.ok(organizeTeamService.getAllOrganizeTeam());
     }
     @GetMapping(value = "/all/name/{name}")
-    public ResponseEntity<List<OrganizeTeamDTO>> getAllByName(@PathVariable String name){
+    public ResponseEntity<List<OrganizeTeamDTO>> getAllByName(@Valid @PathVariable String name){
         return ResponseEntity.ok(organizeTeamService.searchOrganizeTeamByName(name));
     }
     @GetMapping(value = "/one/id/{id}")
-    public ResponseEntity<OrganizeTeamDTO> getAllByName(@PathVariable int id){
+    public ResponseEntity<OrganizeTeamDTO> getAllByName(@Valid @PathVariable int id){
         return ResponseEntity.ok(organizeTeamService.getOneOrganizeTeamById(id));
     }
     @PostMapping(value = "/create")
-    public ResponseEntity<OrganizeTeamDTO> createOrganizeTeam(@RequestBody OrganizeTeamDTO organizeTeamDTO){
+    public ResponseEntity<OrganizeTeamDTO> createOrganizeTeam(@Valid @RequestBody OrganizeTeamDTO organizeTeamDTO){
         return new ResponseEntity<>(organizeTeamService.createOrganizeTeam(organizeTeamDTO), HttpStatus.CREATED);
     }
     @PutMapping("/update")
-    public ResponseEntity<OrganizeTeamDTO> updateOrganizeTeam(@RequestBody OrganizeTeamDTO organizeTeamDTO){
+    public ResponseEntity<OrganizeTeamDTO> updateOrganizeTeam(@Valid @RequestBody OrganizeTeamDTO organizeTeamDTO){
         return ResponseEntity.ok(organizeTeamService.updateOrganizeTeam(organizeTeamDTO));
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteOrganizeTeam(@PathVariable int id){
+    public ResponseEntity<String> deleteOrganizeTeam(@Valid @PathVariable int id){
         organizeTeamService.deleteOrganizeTeam(id);
         return ResponseEntity.ok("Organize Team has been deleted");
     }

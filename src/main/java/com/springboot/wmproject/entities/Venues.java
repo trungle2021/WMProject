@@ -1,6 +1,10 @@
 package com.springboot.wmproject.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 import java.util.Collection;
 import java.util.Objects;
@@ -11,21 +15,27 @@ public class Venues {
     @Id
     @Column(name = "id", nullable = false)
     private int id;
+    @NotEmpty
     @Basic
     @Column(name = "venue_name", nullable = true, length = 45)
     private String venueName;
+    @Max(3000)
+    @Min(1)
     @Basic
     @Column(name = "min_people", nullable = true)
     private Integer minPeople;
+    @Max(3000)
+    @Min(1)
     @Basic
     @Column(name = "max_people", nullable = true)
     private Integer maxPeople;
+    @Min(1)
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
-    @OneToMany(mappedBy = "venuesByVenueId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "venuesByVenueId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Orders> ordersById;
-    @OneToMany(mappedBy = "venuesByVenueId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "venuesByVenueId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<VenueImages> venueImagesById;
 
     public int getId() {
