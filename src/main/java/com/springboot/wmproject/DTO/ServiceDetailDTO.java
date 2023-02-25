@@ -5,6 +5,7 @@ import com.springboot.wmproject.entities.Services;
 import lombok.Data;
 
 
+
 @Data
 public class ServiceDetailDTO {
     private int id;

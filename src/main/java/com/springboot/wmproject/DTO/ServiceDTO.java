@@ -4,8 +4,6 @@ import com.springboot.wmproject.entities.ServiceDetails;
 import lombok.Data;
 
 
-import java.math.BigDecimal;
-import java.util.Collection;
 import java.util.Set;
 @Data
 public class ServiceDTO {
