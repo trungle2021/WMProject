@@ -36,3 +36,5 @@ build/
 .idea/workspace.xml
 .idea/dataSources/16953116-e2cc-4c35-8f3e-1c46994fc1aa.xml
 
+*.xml
+.idea/workspace.xml
