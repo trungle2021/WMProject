@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/employeeAccount")
+@RequestMapping("api/employeeAccounts")
 public class EmployeeAccountController {
     private EmployeeAccountService employeeAccountService;
 
@@ -23,14 +23,22 @@ public class EmployeeAccountController {
     public ResponseEntity<List<EmployeeAccountDTO>> getAll(){
         return ResponseEntity.ok(employeeAccountService.getAllEmployeeAccounts());
     }
-    @GetMapping(value = "/one/{id}")
-    public ResponseEntity<EmployeeAccountDTO> getOneByEmployeeAccountId(@PathVariable int id){
-        return ResponseEntity.ok(employeeAccountService.getEmployeeAccountByEmployeeAccountId(id));
+
+    @GetMapping(value = "/{empAccountId}")
+    public ResponseEntity<EmployeeAccountDTO> getEmployeeAccountByAccountId(@PathVariable int empAccountId){
+        return ResponseEntity.ok(employeeAccountService.getEmployeeAccountByEmployeeAccountId(empAccountId));
     }
-    @GetMapping(value = "/search/{employeeId}")
-    public ResponseEntity<List<EmployeeAccountDTO>> getAllByEmployeeId(@PathVariable int employeeId){
-        return ResponseEntity.ok(employeeAccountService.getEmployeeAccountByEmployeeId(employeeId));
+
+    @GetMapping(value = "/employee/{name}")
+    public ResponseEntity<List<EmployeeAccountDTO>> findByEmployeeName(@PathVariable String name){
+        return ResponseEntity.ok(employeeAccountService.findByName(name));
     }
+
+    @GetMapping(value = "/employee/type/{empType}")
+    public ResponseEntity<List<EmployeeAccountDTO>> filterByEmpType(@PathVariable String empType){
+        return ResponseEntity.ok(employeeAccountService.filterByEmpType(empType));
+    }
+
     @PostMapping(value = "/create")
     public ResponseEntity<EmployeeAccountDTO> createEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
         return new ResponseEntity<>(employeeAccountService.createEmployeeAccount(employeeAccountDTO), HttpStatus.CREATED);
@@ -39,10 +47,10 @@ public class EmployeeAccountController {
     public ResponseEntity<EmployeeAccountDTO> updateEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
         return ResponseEntity.ok(employeeAccountService.updateEmployeeAccount(employeeAccountDTO));
     }
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteEmployeeAccount(@PathVariable int id){
-        employeeAccountService.deleteEmployeeAccount(id);
-        return ResponseEntity.ok("Account Employee Deleted");
+    @DeleteMapping("/delete/{empAccountId}")
+    public ResponseEntity<String> deleteEmployeeAccount(@PathVariable int empAccountId){
+        employeeAccountService.deleteEmployeeAccount(empAccountId);
+        return ResponseEntity.ok("Employee Account Deleted");
     }
 
 }
