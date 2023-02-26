@@ -28,8 +28,8 @@ public class VenueController {
         this.orderService = orderService;
     }
 
-    @GetMapping(value = {"/all"})
     @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueDTO>> getAll() {
         return ResponseEntity.ok(venueService.getAllVenue());
     }

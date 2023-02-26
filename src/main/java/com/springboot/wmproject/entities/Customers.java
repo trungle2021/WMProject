@@ -1,5 +1,6 @@
 package com.springboot.wmproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,19 +33,23 @@ public class Customers {
     @Column(name = "gender", nullable = true, length = 10)
     private String gender;
 
+// can bo sung field email
+//    @Basic
+//    @Column(name = "email", nullable = true, length = 30)
+//    private String email;
+
     @Basic
     @Column(name = "avatar", nullable = true)
     private String avatar;
+    @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Booking> bookings = new HashSet<>();
+    @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<CustomerAccounts> customerAccounts = new HashSet<>();
+    @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> orders = new HashSet<>();
-
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "role_id", referencedColumnName = "id",insertable = false,updatable = false)
-//    private Roles rolesByRoleId;
 
 
 }

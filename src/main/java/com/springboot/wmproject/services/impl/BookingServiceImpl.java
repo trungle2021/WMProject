@@ -1,6 +1,7 @@
 package com.springboot.wmproject.services.impl;
 
 import com.springboot.wmproject.DTO.BookingDTO;
+import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.Booking;
 import com.springboot.wmproject.entities.Customers;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +52,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDTO getOneBooking(Integer bookingId,Integer customerId) {
         if(customerId == null){
-            return mapToDto(bookingRepository.findById(bookingId).orElseThrow(()->new ResourceNotFoundException("Booking","booking_id",String.valueOf(bookingId))));
+            Optional<Booking> booking = bookingRepository.findById(bookingId);
+            BookingDTO bookingDTO = mapToDto(booking.orElseThrow(()->new ResourceNotFoundException("Booking","booking_id",String.valueOf(bookingId))));
+//            bookingDTO.setCustomers(booking.get().getCustomersByCustomerId());
+            return bookingDTO;
         }
         Booking booking = bookingRepository.findByBookingIdAndCustomerId(bookingId,customerId);
         if (booking == null){
@@ -114,6 +119,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public BookingDTO mapToDto(Booking booking){
+
         BookingDTO postDto = modelMapper.map(booking, BookingDTO.class);
         return postDto;
     }

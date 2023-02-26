@@ -17,36 +17,50 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmployeeAccountServiceImpl implements EmployeeAccountService {
-    private EmployeeRepository employeesRepository;
-    private EmployeeAccountRepository employeeAccountRepository;
+    private EmployeeRepository empRepo;
+    private EmployeeAccountRepository empAccRepo;
     private ModelMapper modelMapper;
 
-    public EmployeeAccountServiceImpl(EmployeeRepository employeesRepository, EmployeeAccountRepository employeeAccountRepository, ModelMapper modelMapper) {
-        this.employeesRepository = employeesRepository;
-        this.employeeAccountRepository = employeeAccountRepository;
+    @Autowired
+    public EmployeeAccountServiceImpl(EmployeeRepository empRepo, EmployeeAccountRepository empAccRepo, ModelMapper modelMapper) {
+        this.empRepo = empRepo;
+        this.empAccRepo = empAccRepo;
         this.modelMapper = modelMapper;
     }
 
-    @Autowired
 
     @Override
-    public List<EmployeeAccountDTO> getAllEmployeeAccounts()throws ResourceNotFoundException {
-        List<EmployeeAccounts> employeeAccountsList = employeeAccountRepository.findAll();
+    public List<EmployeeAccountDTO> getAllEmployeeAccounts(){
+        List<EmployeeAccounts> employeeAccountsList = empAccRepo.findAll();
+        if(employeeAccountsList.isEmpty()){
+            return null;
+        }
         List<EmployeeAccountDTO> employeeAccountDTOList = employeeAccountsList.stream().map(booking -> mapToDto(booking)).collect(Collectors.toList());
         return employeeAccountDTOList;
     }
 
     @Override
-    public List<EmployeeAccountDTO> getEmployeeAccountByEmployeeId(int id)throws ResourceNotFoundException {
-        List<EmployeeAccountDTO> employeeAccountsList = employeeAccountRepository.getEmployeeAccountByEmployeeId(id).stream().map(employeeAccounts -> mapToDto(employeeAccounts)).collect(Collectors.toList());
+    public EmployeeAccountDTO getEmployeeAccountByEmployeeAccountId(int id) {
+        EmployeeAccounts employeeAccount= empAccRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Employee Account","Id",String.valueOf(id)));
+        return mapToDto(employeeAccount);
+    }
 
-        return employeeAccountsList;
+//    @Override
+//    public List<EmployeeAccountDTO> findByPhone(String phone) {
+//        List<EmployeeAccounts> employeeAccounts = empAccRepo.findByPhone(phone);
+//        return employeeAccounts.stream().map(emp -> mapToDto(emp)).collect(Collectors.toList());
+//    }
+
+    @Override
+    public List<EmployeeAccountDTO> findByName(String name) {
+        List<EmployeeAccounts> employeeAccounts = empAccRepo.findByName(name);
+        return employeeAccounts.stream().map(emp -> mapToDto(emp)).collect(Collectors.toList());
     }
 
     @Override
-    public EmployeeAccountDTO getEmployeeAccountByEmployeeAccountId(int id) {
-        EmployeeAccounts employeeAccount=employeeAccountRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Employee Account","Id",String.valueOf(id)));
-        return mapToDto(employeeAccount);
+    public List<EmployeeAccountDTO> filterByEmpType(String empType) {
+        List<EmployeeAccounts> employeeAccounts = empAccRepo.filterByEmpType(empType);
+        return employeeAccounts.stream().map(emp -> mapToDto(emp)).collect(Collectors.toList());
     }
 
     @Override
@@ -54,12 +68,11 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
         int employeeId = employeeAccountDTO.getEmployeeId();
         //check employee exist
         if (employeeId != 0) {
-            Employees checkEmployees = employeesRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
-            List<EmployeeAccounts> checkEmployeeAccount= (List<EmployeeAccounts>) employeeAccountRepository.getEmployeeAccountByEmployeeId(employeeId);
+            Employees checkEmployees = empRepo.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
+            List<EmployeeAccounts> checkEmployeeAccount= (List <EmployeeAccounts>) empAccRepo.getEmployeeAccountByEmployeeId(employeeId);
             //if exist create account for employee
-            if (checkEmployees != null& checkEmployeeAccount.isEmpty()) {
-                EmployeeAccounts employeeAccount = mapToEntity(employeeAccountDTO);
-                EmployeeAccounts newEmployeeAccount = employeeAccountRepository.save(employeeAccount);
+            if (checkEmployees != null && checkEmployeeAccount.isEmpty()) {
+                EmployeeAccounts newEmployeeAccount = empAccRepo.save(mapToEntity(employeeAccountDTO));
                 EmployeeAccountDTO employeeAccountResponse = mapToDto(newEmployeeAccount);
                 return employeeAccountResponse;
             }
@@ -68,10 +81,10 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO) throws ResourceNotFoundException{
+    public EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO){
         int employeeAccountId = employeeAccountDTO.getEmployeeId();
         //check employee account exist
-        EmployeeAccounts checkEmployeeAccount = employeeAccountRepository.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
+        EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
         //if exist update
         if (checkEmployeeAccount != null) {
             EmployeeAccounts updateEmployeeAccount = new EmployeeAccounts();
@@ -80,16 +93,16 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
             updateEmployeeAccount.setPassword(employeeAccountDTO.getPassword());
             updateEmployeeAccount.setRole(employeeAccountDTO.getRole());
             updateEmployeeAccount.setEmployeeId(employeeAccountDTO.getEmployeeId());
-            employeeAccountRepository.save(updateEmployeeAccount);
+            empAccRepo.save(updateEmployeeAccount);
             return mapToDto(updateEmployeeAccount);
         }
         return null;
     }
 
     @Override
-    public void deleteEmployeeAccount(int employeeAccountId)throws ResourceNotFoundException {
-        EmployeeAccounts checkEmployeeAccount = employeeAccountRepository.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
-        employeeAccountRepository.delete(checkEmployeeAccount);
+    public void deleteEmployeeAccount(int employeeAccountId) {
+        EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
+        empAccRepo.delete(checkEmployeeAccount);
     }
 
     public EmployeeAccountDTO mapToDto(EmployeeAccounts employeeAccounts) {
@@ -101,4 +114,7 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
         EmployeeAccounts employeeAccounts = modelMapper.map(employeeAccountDTO, EmployeeAccounts.class);
         return employeeAccounts;
     }
+
+
+
 }
