@@ -13,5 +13,6 @@ public class BookingDTO {
     private Integer customerId;
     private String bookingDate;
     private String appointmentDate;
+//    private Customers customers;
 }
 
