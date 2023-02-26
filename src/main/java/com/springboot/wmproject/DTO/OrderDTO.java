@@ -31,12 +31,13 @@ public class OrderDTO {
 
     private Integer table_amount;
     private Integer part_time_emp_amount;
-    private Set<FoodDetailDTO> foodDetails;
-    private Venues venues;
-    private Employees employees;
-    private OrganizeTeams organizeTeams;
-    private Customers customers;
 
+//    private Set<FoodDetailDTO> foodDetails;
+//    private Venues venues;
+//    private Employees employees;
+//    private OrganizeTeams organizeTeams;
+//    private Customers customers;
+//
 
 //    private Set<ServiceDetailsDTO> serviceDetails;
 

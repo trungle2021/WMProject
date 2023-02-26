@@ -1,16 +1,19 @@
 package com.springboot.wmproject.services.impl;
 
+import com.springboot.wmproject.DTO.FoodDetailDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
-import com.springboot.wmproject.entities.Orders;
+import com.springboot.wmproject.entities.*;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.services.OrderService;
+import com.springboot.wmproject.services.VenueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -142,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
         if(orderId!=0){
             Orders orders=orderRepository.findById(orderId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderId)));
             if(orders!=null){
-                orders.setId(orderDTO.getId());
+//                orders.setId(orderDTO.getId());
                 orders.setOrderDate(orderDTO.getOrderDate());
                 orders.setOrderStatus(orderDTO.getOrderStatus());
                 orders.setOrderTotal(orderDTO.getOrderTotal());
@@ -181,11 +184,21 @@ public class OrderServiceImpl implements OrderService {
 
     public OrderDTO mapToDTO(Orders order) {
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
+
         return orderDTO;
+
+
+
     }
 
     public Orders mapToEntity(OrderDTO orderDTO) {
+
         Orders order = modelMapper.map(orderDTO, Orders.class);
+
+
+
         return order;
+
     }
 }
+
