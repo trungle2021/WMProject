@@ -4,14 +4,17 @@ import com.springboot.wmproject.DTO.EmployeeAccountDTO;
 import com.springboot.wmproject.entities.EmployeeAccounts;
 import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
+import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.EmployeeAccountRepository;
 import com.springboot.wmproject.repositories.EmployeeRepository;
 import com.springboot.wmproject.services.EmployeeAccountService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -66,16 +69,21 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     @Override
     public EmployeeAccountDTO createEmployeeAccount(EmployeeAccountDTO employeeAccountDTO) {
         int employeeId = employeeAccountDTO.getEmployeeId();
-        //check employee exist
+
         if (employeeId != 0) {
-            Employees checkEmployees = empRepo.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
-            List<EmployeeAccounts> checkEmployeeAccount= (List <EmployeeAccounts>) empAccRepo.getEmployeeAccountByEmployeeId(employeeId);
-            //if exist create account for employee
-            if (checkEmployees != null && checkEmployeeAccount.isEmpty()) {
-                EmployeeAccounts newEmployeeAccount = empAccRepo.save(mapToEntity(employeeAccountDTO));
-                EmployeeAccountDTO employeeAccountResponse = mapToDto(newEmployeeAccount);
-                return employeeAccountResponse;
+            //check if employee exist
+            Employees employees = empRepo.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
+            //if employee info exist -> able to create account
+            if (employees != null) {
+                //check if username exist
+                Optional<EmployeeAccounts> employeeAccounts= empAccRepo.findByUsername(employeeAccountDTO.getUsername());
+                if(employeeAccounts.isPresent()){
+                    throw new WmAPIException(HttpStatus.BAD_REQUEST,"Username already existed");
+                }
+                return employeeAccountDTO;
+
             }
+
         }
         return null;
     }
@@ -103,6 +111,12 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     public void deleteEmployeeAccount(int employeeAccountId) {
         EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
         empAccRepo.delete(checkEmployeeAccount);
+    }
+
+    @Override
+    public EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO) {
+        EmployeeAccounts employeeAccounts = empAccRepo.save(mapToEntity(employeeAccountDTO));
+        return mapToDto(employeeAccounts);
     }
 
     public EmployeeAccountDTO mapToDto(EmployeeAccounts employeeAccounts) {
