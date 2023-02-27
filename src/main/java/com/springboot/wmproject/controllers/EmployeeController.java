@@ -33,10 +33,10 @@ public class EmployeeController {
     public ResponseEntity<EmployeeDTO> getOneById(@PathVariable int id){
         return ResponseEntity.ok(employeeService.getOneEmployeeById(id));
     }
-    @PostMapping(value = "/create")
-    public ResponseEntity<EmployeeDTO> creatEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return new ResponseEntity<>(employeeService.createEmployee(employeeDTO), HttpStatus.CREATED);
-    }
+//    @PostMapping(value = "/create")
+//    public ResponseEntity<EmployeeDTO> creatEmployee(@RequestBody EmployeeDTO employeeDTO){
+//        return new ResponseEntity<>(employeeService.createEmployee(employeeDTO), HttpStatus.CREATED);
+//    }
     @PutMapping(value = "/update")
     public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeDTO){
         return ResponseEntity.ok(employeeService.updateEmployee(employeeDTO));

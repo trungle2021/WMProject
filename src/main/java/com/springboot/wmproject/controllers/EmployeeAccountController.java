@@ -39,10 +39,10 @@ public class EmployeeAccountController {
         return ResponseEntity.ok(employeeAccountService.filterByEmpType(empType));
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<EmployeeAccountDTO> createEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
-        return new ResponseEntity<>(employeeAccountService.createEmployeeAccount(employeeAccountDTO), HttpStatus.CREATED);
-    }
+//    @PostMapping(value = "/create")
+//    public ResponseEntity<EmployeeAccountDTO> createEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
+//        return new ResponseEntity<>(employeeAccountService.createEmployeeAccount(employeeAccountDTO), HttpStatus.CREATED);
+//    }
     @PutMapping(value = "/update")
     public ResponseEntity<EmployeeAccountDTO> updateEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
         return ResponseEntity.ok(employeeAccountService.updateEmployeeAccount(employeeAccountDTO));
