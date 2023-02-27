@@ -8,6 +8,7 @@ import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.EmployeeRepository;
 import com.springboot.wmproject.services.EmployeeService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -45,18 +46,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDTO createEmployee(EmployeeDTO newEmployeeDTO) {
-        if(newEmployeeDTO!=null){
-            //check if new employee not null
-                Employees employees=mapToEntity(newEmployeeDTO);
-                Employees newEmployee=employeeRepository.save(employees);
-                EmployeeDTO employeeResponse=mapToDto(newEmployee);
-                return employeeResponse;
-        }
-        return null;
+        return mapToDto(employeeRepository.save(mapToEntity(newEmployeeDTO)));
     }
 
     @Override
-    public EmployeeDTO updateEmployee(EmployeeDTO updateEmployeeDTO) throws ResourceNotFoundException{
+    public EmployeeDTO updateEmployee(EmployeeDTO updateEmployeeDTO) {
         int employeeId = updateEmployeeDTO.getId();
         if(employeeId!=0){
             //check if employee exist
@@ -95,6 +89,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void deleteEmployee(int employeeId)throws ResourceNotFoundException {
         Employees employees=employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("Employee","id",String.valueOf(employeeId)));
         employeeRepository.delete(employees);
+    }
+
+    @Override
+    public EmployeeDTO save(EmployeeDTO employeeDTO) {
+        return mapToDto(employeeRepository.save(mapToEntity(employeeDTO)));
     }
 
     public EmployeeDTO mapToDto(Employees employees) {
