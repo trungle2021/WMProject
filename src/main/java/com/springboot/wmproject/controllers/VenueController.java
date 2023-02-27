@@ -58,6 +58,7 @@ public class VenueController {
     }
     @DeleteMapping(value = "delete/{id}")
     public ResponseEntity<String> deleteVenue(@Valid @PathVariable int id){
+        venueService.deleteVenue(id);
         return ResponseEntity.ok("Venue has been deleted");
     }
 
