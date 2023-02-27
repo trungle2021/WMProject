@@ -19,6 +19,7 @@ public interface EmployeeAccountService {
     EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
     void deleteEmployeeAccount(int employeeAccountId);
 
+    EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO);
     //    EmployeeAccountDTO getEmployeeAccountByEmployeeId(int id);
 
     //    List<EmployeeAccountDTO> findByPhone(String phone);

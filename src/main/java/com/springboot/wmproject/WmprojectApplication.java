@@ -22,9 +22,9 @@ public class WmprojectApplication {
     }
 
     public static void main(String[] args) {
-        PasswordEncoder pw = new BCryptPasswordEncoder();
-        System.out.println("Admin: "+pw.encode("admin"));
-        System.out.println("trungle: "+pw.encode("trungle"));
+//        PasswordEncoder pw = new BCryptPasswordEncoder();
+//        System.out.println("Admin: "+pw.encode("admin"));
+//        System.out.println("trungle: "+pw.encode("trungle"));
         SpringApplication.run(WmprojectApplication.class, args);
     }
 
