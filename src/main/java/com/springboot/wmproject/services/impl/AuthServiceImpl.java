@@ -25,7 +25,6 @@ public class AuthServiceImpl implements AuthService {
     private AuthenticationManager authenticationManager;
     private EmployeeService employeeService;
     private EmployeeAccountService employeeAccountService;
-
     private BCryptPasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
 
@@ -59,7 +58,7 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setEmpType(registerDTO.getEmpType());
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
-        EmployeeDTO empDTO = employeeService.createEmployee(employeeDTO);
+        EmployeeDTO empDTO = employeeService.validEmployee(employeeDTO);
         EmployeeDTO empResponse = employeeService.save(empDTO);
         //getID after employee created -> then pass to employee account
 
@@ -69,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         employeeAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         employeeAccountDTO.setRole(registerDTO.getRole());
         employeeAccountDTO.setEmployeeId(empResponse.getId());
-        EmployeeAccountDTO empAccDTO = employeeAccountService.createEmployeeAccount(employeeAccountDTO);
+        EmployeeAccountDTO empAccDTO = employeeAccountService.validEmployeeAccount(employeeAccountDTO);
 
 
         employeeAccountService.save(empAccDTO);
