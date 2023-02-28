@@ -5,7 +5,7 @@
              version="3.0">
     <persistence-unit name="default">
 
-<<<<<<< HEAD
+
     <class>com.springboot.wmproject.entities.Booking</class>
     <class>com.springboot.wmproject.entities.CustomerAccounts</class>
     <class>com.springboot.wmproject.entities.Customers</class>
@@ -29,29 +29,5 @@
       <property name="hibernate.connection.password" value="Admin123@"/>
     </properties>
   </persistence-unit>
-=======
-        <class>com.springboot.wmproject.entities.Booking</class>
-        <class>com.springboot.wmproject.entities.CustomerAccounts</class>
-        <class>com.springboot.wmproject.entities.Customers</class>
-        <class>com.springboot.wmproject.entities.EmployeeAccounts</class>
-        <class>com.springboot.wmproject.entities.Employees</class>
-        <class>com.springboot.wmproject.entities.Food</class>
-        <class>com.springboot.wmproject.entities.FoodDetails</class>
-        <class>com.springboot.wmproject.entities.Materials</class>
-        <class>com.springboot.wmproject.entities.Orders</class>
-        <class>com.springboot.wmproject.entities.OrganizeTeams</class>
-        <class>com.springboot.wmproject.entities.ServiceDetails</class>
-        <class>com.springboot.wmproject.entities.Services</class>
-        <class>com.springboot.wmproject.entities.Venues</class>
-        <class>com.springboot.wmproject.entities.FoodImages</class>
-        <class>com.springboot.wmproject.entities.VenueImages</class>
 
-        <properties>
-            <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/wmproject?SSL=false"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value="khoa123"/>
-        </properties>
-    </persistence-unit>
->>>>>>> develop
 </persistence>
