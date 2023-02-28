@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface EmployeeService {
     List<EmployeeDTO> getAllEmployees();
-    EmployeeDTO getOneEmployeeById(int id);
-    EmployeeDTO createEmployee(EmployeeDTO newEmployeeDTO);
+    EmployeeDTO getEmployeeById(int id);
+    EmployeeDTO validEmployee(EmployeeDTO newEmployeeDTO);
     EmployeeDTO updateEmployee(EmployeeDTO updateEmployeeDTO);
     List<EmployeeDTO> findAllByEmpType(String empType);
     List<EmployeeDTO> findAllByName(String empType);

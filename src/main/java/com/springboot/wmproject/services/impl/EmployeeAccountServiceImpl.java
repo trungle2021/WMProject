@@ -67,7 +67,7 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public EmployeeAccountDTO createEmployeeAccount(EmployeeAccountDTO employeeAccountDTO) {
+    public EmployeeAccountDTO validEmployeeAccount(EmployeeAccountDTO employeeAccountDTO) {
         int employeeId = employeeAccountDTO.getEmployeeId();
 
         if (employeeId != 0) {

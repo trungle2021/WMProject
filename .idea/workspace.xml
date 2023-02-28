@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c4207df7-c52c-41b7-8f90-7d571249f9fa" name="Changes" comment="">
+
       <change afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/WebClient/Servlet/OrderController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/static/adminStatic/build/config/.eslintrc.json" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/main/resources/static/adminStatic/build/config/postcss.config.js" afterDir="false" />
@@ -2228,6 +2229,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/WebClient/Servlet/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/WebClient/Servlet/HomeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/config/SecurityConfig.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/home.html" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

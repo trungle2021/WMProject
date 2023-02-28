@@ -15,7 +15,7 @@ public interface EmployeeAccountService {
     List<EmployeeAccountDTO> findByName(String name);
     List<EmployeeAccountDTO> filterByEmpType(String empType);
 
-    EmployeeAccountDTO createEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
+    EmployeeAccountDTO validEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
     EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
     void deleteEmployeeAccount(int employeeAccountId);
 
