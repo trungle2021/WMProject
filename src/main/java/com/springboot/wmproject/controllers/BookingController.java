@@ -5,9 +5,11 @@ import com.springboot.wmproject.DTO.BookingDTO;
 import com.springboot.wmproject.entities.Booking;
 import com.springboot.wmproject.services.BookingService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +26,8 @@ public class BookingController {
     }
 
     @GetMapping(value = {"/all","/all/customer/{customerId}"})
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<BookingDTO>> GetAllBooking(
             @PathVariable(required = false) Integer customerId){
         return ResponseEntity.ok(bookingService.getAllBooking(customerId));
