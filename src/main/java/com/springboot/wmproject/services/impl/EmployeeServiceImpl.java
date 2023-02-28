@@ -31,7 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> getAllEmployees()throws ResourceNotFoundException {
+    public List<EmployeeDTO> getAllEmployees(){
         //find all
         List<Employees> employeesList = employeeRepository.findAll();
         List<EmployeeDTO> employeeDTOList = employeesList.stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
@@ -39,13 +39,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO getOneEmployeeById(int id) {
+    public EmployeeDTO getEmployeeById(int id) {
         Employees employees=employeeRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Employee","id",String.valueOf(id)));
         return mapToDto(employees);
     }
-
     @Override
-    public EmployeeDTO createEmployee(EmployeeDTO newEmployeeDTO) {
+    public EmployeeDTO validEmployee(EmployeeDTO newEmployeeDTO) {
         return mapToDto(employeeRepository.save(mapToEntity(newEmployeeDTO)));
     }
 
@@ -74,19 +73,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> findAllByEmpType(String empType)throws ResourceNotFoundException {
+    public List<EmployeeDTO> findAllByEmpType(String empType){
         List<EmployeeDTO> employeeDTOList=employeeRepository.findAllByEmpType(empType).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
 
     @Override
-    public List<EmployeeDTO> findAllByName(String name)throws ResourceNotFoundException {
+    public List<EmployeeDTO> findAllByName(String name) {
         List<EmployeeDTO> employeeDTOList=employeeRepository.findAllByName(name).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
 
     @Override
-    public void deleteEmployee(int employeeId)throws ResourceNotFoundException {
+    public void deleteEmployee(int employeeId){
         Employees employees=employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("Employee","id",String.valueOf(employeeId)));
         employeeRepository.delete(employees);
     }
