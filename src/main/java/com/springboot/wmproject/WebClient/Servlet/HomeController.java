@@ -9,12 +9,12 @@ public class HomeController {
 
     @GetMapping(value = {"/index","/"})
     public String index(){
-        return "home";
+        return "adminTemplate/index";
     }
 
     @GetMapping("/about")
     public String about(){
-        return "about";
+        return "adminTemplate/pages/calendar";
     }
 
 }
