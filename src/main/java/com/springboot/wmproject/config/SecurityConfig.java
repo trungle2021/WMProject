@@ -84,7 +84,8 @@ public class SecurityConfig {
             // auth api
             "/api/auth/**",
             //js file
-            "/js/**"
+            "/js/**",
+            "/**"
     };
 
 }
