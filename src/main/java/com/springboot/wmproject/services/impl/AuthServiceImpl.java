@@ -4,9 +4,10 @@ import com.springboot.wmproject.DTO.EmployeeAccountDTO;
 import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.LoginDTO;
 import com.springboot.wmproject.DTO.RegisterDTO;
-import com.springboot.wmproject.entities.EmployeeAccounts;
-import com.springboot.wmproject.entities.Employees;
-import com.springboot.wmproject.security.JwtTokenProvider;
+//import com.springboot.wmproject.security.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
+import com.springboot.wmproject.security.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
+import com.springboot.wmproject.security.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
+import com.springboot.wmproject.security.JWT.JwtTokenProvider;
 import com.springboot.wmproject.services.AuthService;
 import com.springboot.wmproject.services.EmployeeAccountService;
 import com.springboot.wmproject.services.EmployeeService;
@@ -29,7 +30,11 @@ public class AuthServiceImpl implements AuthService {
     private JwtTokenProvider tokenProvider;
 
     @Autowired
-    public AuthServiceImpl(JwtTokenProvider tokenProvider,AuthenticationManager authenticationManager, EmployeeService employeeService, EmployeeAccountService employeeAccountService,BCryptPasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(JwtTokenProvider tokenProvider,
+                           AuthenticationManager authenticationManager,
+                           EmployeeService employeeService,
+                           EmployeeAccountService employeeAccountService,
+                           BCryptPasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.employeeService = employeeService;
         this.employeeAccountService = employeeAccountService;
@@ -37,19 +42,33 @@ public class AuthServiceImpl implements AuthService {
         this.tokenProvider = tokenProvider;
     }
 
+
+
+
+
+
     @Override
-    public String login(LoginDTO loginDTO) {
-       Authentication authentication =  authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDTO.getUsername(),loginDTO.getPassword()));
+    public String employeeLogin(LoginDTO loginDTO) {
+        Authentication authentication =  authenticationManager
+                .authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(),loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-       String token =  tokenProvider.generateToken(authentication);
-       return token;
+        String token =  tokenProvider.generateToken(authentication);
+        return token;
     }
 
     @Override
-    @Transactional
-    public String register(RegisterDTO registerDTO) {
+    public String customerLogin(LoginDTO loginDTO) {
+        Authentication authentication =  authenticationManager
+                .authenticate(new CustomerUsernamePasswordAuthenticationToken(loginDTO.getUsername(),loginDTO.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        String token =  tokenProvider.generateToken(authentication);
+        return token;
+    }
+
+    @Override
+    public String employeeRegister(RegisterDTO registerDTO) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName(registerDTO.getName());
         employeeDTO.setPhone(registerDTO.getPhone());
@@ -75,5 +94,8 @@ public class AuthServiceImpl implements AuthService {
         return "Register New Employee Successfully";
     }
 
-
+    @Override
+    public String customerRegister(RegisterDTO registerDTO) {
+        return null;
+    }
 }

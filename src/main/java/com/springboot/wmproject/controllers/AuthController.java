@@ -21,10 +21,10 @@ public class AuthController {
         this.authService = authService;
     }
 
-    //Login API
-    @PostMapping(value = {"/login","/signin"})
-    public ResponseEntity<JWTAuthResponse> login(@RequestBody LoginDTO loginDTO){
-        String token = authService.login(loginDTO);
+//    Login API
+    @PostMapping(value = {"employee/login"})
+    public ResponseEntity<JWTAuthResponse> staffLogin(@RequestBody LoginDTO loginDTO){
+        String token = authService.employeeLogin(loginDTO);
 
         JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
         jwtAuthResponse.setAccessToken(token);
@@ -32,10 +32,26 @@ public class AuthController {
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
-    @PostMapping(value = {"/register","/signup"})
-    public ResponseEntity<String> register(@RequestBody RegisterDTO registerDTO){
-        String response = authService.register(registerDTO);
+    @PostMapping(value = {"customer/login"})
+    public ResponseEntity<JWTAuthResponse> customerLogin(@RequestBody LoginDTO loginDTO){
+        String token = authService.customerLogin(loginDTO);
+
+        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
+        jwtAuthResponse.setAccessToken(token);
+
+        return ResponseEntity.ok(jwtAuthResponse);
+    }
+
+    @PostMapping(value = {"employee/register"})
+    public ResponseEntity<String> staffRegister(@RequestBody RegisterDTO registerDTO){
+        String response = authService.employeeRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 
+
+    @PostMapping(value = {"customer/register"})
+    public ResponseEntity<String> customerRegister(@RequestBody RegisterDTO registerDTO){
+        String response = authService.customerRegister(registerDTO);
+        return ResponseEntity.ok(response);
+    }
 }

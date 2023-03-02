@@ -13,7 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "employee_accounts", schema = "wmproject", catalog = "")
+@Table(name = "employee_accounts", schema = "wmproject")
 public class EmployeeAccounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -31,11 +31,7 @@ public class EmployeeAccounts {
     @Basic
     @Column(name = "employee_id", nullable = true)
     private Integer employeeId;
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Employees employeesByEmployeeId;
-
-
-
-
 }

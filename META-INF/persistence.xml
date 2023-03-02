@@ -21,8 +21,23 @@
     <class>com.springboot.wmproject.entities.Venues</class>
       <class>com.springboot.wmproject.entities.FoodImages</class>
       <class>com.springboot.wmproject.entities.VenueImages</class>
+        <class>com.springboot.wmproject.en.Booking</class>
+        <class>com.springboot.wmproject.en.CustomerAccounts</class>
+        <class>com.springboot.wmproject.en.Customers</class>
+        <class>com.springboot.wmproject.en.EmployeeAccounts</class>
+        <class>com.springboot.wmproject.en.Employees</class>
+        <class>com.springboot.wmproject.en.Food</class>
+        <class>com.springboot.wmproject.en.FoodDetails</class>
+        <class>com.springboot.wmproject.en.FoodImages</class>
+        <class>com.springboot.wmproject.en.Materials</class>
+        <class>com.springboot.wmproject.en.Orders</class>
+        <class>com.springboot.wmproject.en.OrganizeTeams</class>
+        <class>com.springboot.wmproject.en.ServiceDetails</class>
+        <class>com.springboot.wmproject.en.Services</class>
+        <class>com.springboot.wmproject.en.VenueImages</class>
+        <class>com.springboot.wmproject.en.Venues</class>
 
-    <properties>
+        <properties>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/wmproject?SSL=false"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
       <property name="hibernate.connection.username" value="root"/>

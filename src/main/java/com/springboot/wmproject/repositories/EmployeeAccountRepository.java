@@ -22,6 +22,6 @@ public interface EmployeeAccountRepository extends JpaRepository<EmployeeAccount
     @Query("select e from EmployeeAccounts e LEFT JOIN Employees f ON e.id = f.id where f.empType=:empType")
     List<EmployeeAccounts> filterByEmpType(String empType);
 
-    //    @Query("select e from EmployeeAccounts e JOIN Employees f where f.phone LIKE :phone% ")
-//    List<EmployeeAccounts> findByPhone(String phone);
+//    @Query("DELETE FROM EmployeeAccounts e where e.id=:id")
+//    void delete(int id);
 }

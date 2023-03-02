@@ -6,6 +6,8 @@ import com.springboot.wmproject.DTO.VenueDTO;
 import com.springboot.wmproject.services.BookingService;
 import com.springboot.wmproject.services.OrderService;
 import com.springboot.wmproject.services.VenueService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,8 @@ public class VenueController {
         this.orderService = orderService;
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueDTO>> getAll() {
         return ResponseEntity.ok(venueService.getAllVenue());
