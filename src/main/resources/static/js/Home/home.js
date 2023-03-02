@@ -1,3 +1,3 @@
 $(function (){
-    alert("Home Page")
+    // alert("Home Page")
 })

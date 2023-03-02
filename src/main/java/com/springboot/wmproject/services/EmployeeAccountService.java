@@ -17,10 +17,8 @@ public interface EmployeeAccountService {
 
     EmployeeAccountDTO validEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
     EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
-    void deleteEmployeeAccount(int employeeAccountId);
+    void deleteEmployeeAccount(int id);
 
     EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO);
-    //    EmployeeAccountDTO getEmployeeAccountByEmployeeId(int id);
 
-    //    List<EmployeeAccountDTO> findByPhone(String phone);
 }

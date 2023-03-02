@@ -21,10 +21,12 @@ public class WmprojectApplication {
         return new ModelMapper();
     }
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     public static void main(String[] args) {
-//        PasswordEncoder pw = new BCryptPasswordEncoder();
-//        System.out.println("Admin: "+pw.encode("admin"));
-//        System.out.println("trungle: "+pw.encode("trungle"));
         SpringApplication.run(WmprojectApplication.class, args);
     }
 

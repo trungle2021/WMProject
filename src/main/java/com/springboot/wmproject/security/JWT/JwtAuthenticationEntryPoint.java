@@ -1,4 +1,4 @@
-package com.springboot.wmproject.security;
+package com.springboot.wmproject.security.JWT;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

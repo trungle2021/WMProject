@@ -44,9 +44,14 @@ public class Customers {
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Booking> bookings = new HashSet<>();
+
+
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<CustomerAccounts> customerAccounts = new HashSet<>();
+
+
+
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> orders = new HashSet<>();

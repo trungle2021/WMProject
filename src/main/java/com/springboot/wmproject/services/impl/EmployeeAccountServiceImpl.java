@@ -108,9 +108,11 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public void deleteEmployeeAccount(int employeeAccountId) {
-        EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
-        empAccRepo.delete(checkEmployeeAccount);
+    public void deleteEmployeeAccount(int id) {
+        EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(id)));
+        if(checkEmployeeAccount != null){
+            empAccRepo.delete(checkEmployeeAccount);
+        }
     }
 
     @Override

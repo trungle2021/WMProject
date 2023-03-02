@@ -1,4 +1,4 @@
-package com.springboot.wmproject.security;
+package com.springboot.wmproject.security.JWT;
 
 import com.springboot.wmproject.exceptions.WmAPIException;
 import io.jsonwebtoken.*;
@@ -10,6 +10,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
@@ -20,12 +22,17 @@ public class JwtTokenProvider {
 
     //generate JWT token
     public String generateToken(Authentication authentication){
-        String username = authentication.getName();;
+        String username = authentication.getName();
+        String userType = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        Map<String, String> claims = new HashMap<>();
+        claims.put("userType",userType);
+        claims.put("username",username);
+
         Date currentDate = new Date();
         Date expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
         String token = Jwts.builder()
-                .setSubject(username)
+                .setClaims(claims)
                 .setIssuedAt(new Date())
                 .setExpiration(expirationDate)
                 .signWith(key())
@@ -45,8 +52,25 @@ public class JwtTokenProvider {
                 .parseClaimsJws(token)
                 .getBody();
 
-        String username = claims.getSubject();
+        String username = claims.get("username",String.class);
+        if(username == null){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
+        }
         return username;
+    }
+
+    public String getUserType(String token){
+        Claims claims =  Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String userType = claims.get("userType",String.class);
+        if(userType == null){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
+        }
+        return userType;
     }
 
     //validate Jwt Token

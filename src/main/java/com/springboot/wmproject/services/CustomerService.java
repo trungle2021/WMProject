@@ -1,17 +1,17 @@
 package com.springboot.wmproject.services;
 
 import com.springboot.wmproject.DTO.CustomerDTO;
+import com.springboot.wmproject.DTO.EmployeeDTO;
 
 import java.util.List;
 
 public interface CustomerService{
-    List<CustomerDTO> getAllCustomer();
-    CustomerDTO getOneCustomerById(Integer id);
-    CustomerDTO getOneCustomerByName(String name);
+    List<CustomerDTO> findAll();
+    CustomerDTO getCustomerById(int id);
+    CustomerDTO validCustomer(CustomerDTO customerDTO);
+    CustomerDTO update(CustomerDTO customerDTO);
+    void delete(int id);
 
-    CustomerDTO createCustomer(CustomerDTO customerDTO);
-
-    CustomerDTO updateCustomer(CustomerDTO customerDTO);
-    void deleteCustomer(Integer id);
+    CustomerDTO save(CustomerDTO customerDTO);
 
 }

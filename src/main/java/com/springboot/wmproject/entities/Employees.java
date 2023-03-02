@@ -46,13 +46,16 @@ public class Employees {
     @Column(name = "avatar", nullable = true)
     private String avatar;
 
-    @OneToOne(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private EmployeeAccounts employeeAccountsById;
+//    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
+//    private Collection<Employees> employeesById = new HashSet<>();
+
+    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<EmployeeAccounts> employeeAccountsById;
+
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id",insertable = false,updatable = false)
     private OrganizeTeams organizeTeamsByTeamId;
     @OneToMany(mappedBy = "employeesByBookingEmp",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Orders> ordersById = new HashSet<>();
-
 
 }
