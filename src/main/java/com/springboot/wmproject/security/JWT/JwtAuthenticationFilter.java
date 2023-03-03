@@ -41,34 +41,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         //get JWT token from Http Request
-
         String token = getTokenFromRequest(request);
-
-
         if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
             //get Username from token
             String username = jwtTokenProvider.getUsername(token);
             String userType = jwtTokenProvider.getUserType(token);
-            if(userType.equals("ROLE_EMPLOYEE") || userType.equals("ROLE_ADMIN")){
-                UserDetails userDetails = employeeDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken = new EmployeeUsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            switch (userType){
+                case "ROLE_EMPLOYEE":
+                case "ROLE_ADMIN":
+                    UserDetails userDetails = employeeDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken authenticationToken = new EmployeeUsernamePasswordAuthenticationToken(
+                            userDetails,
+                            null,
+                            userDetails.getAuthorities()
+                    );
+                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                    break;
+                case "ROLE_CUSTOMER":
+                    UserDetails customerUserDetails = customerDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken customer_authenticationToken = new CustomerUsernamePasswordAuthenticationToken(
+                            customerUserDetails,
+                            null,
+                            customerUserDetails.getAuthorities()
+                    );
+                    customer_authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(customer_authenticationToken);
+                    break;
+                default:
+                    break;
 
-            }else if(userType.equals("ROLE_CUSTOMER")){
-                UserDetails userDetails = customerDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authenticationToken = new CustomerUsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
-                );
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
+
 
         }
         filterChain.doFilter(request,response);
