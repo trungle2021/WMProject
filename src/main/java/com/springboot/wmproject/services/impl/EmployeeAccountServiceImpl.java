@@ -67,7 +67,7 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public EmployeeAccountDTO validEmployeeAccount(EmployeeAccountDTO employeeAccountDTO) {
+    public EmployeeAccountDTO create(EmployeeAccountDTO employeeAccountDTO) {
         int employeeId = employeeAccountDTO.getEmployeeId();
 
         if (employeeId != 0) {
@@ -80,16 +80,14 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
                 if(employeeAccounts.isPresent()){
                     throw new WmAPIException(HttpStatus.BAD_REQUEST,"Username already existed");
                 }
-                return employeeAccountDTO;
-
+                return mapToDto(empAccRepo.save(mapToEntity(employeeAccountDTO)));
             }
-
         }
         return null;
     }
 
     @Override
-    public EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO){
+    public EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO){
         int employeeAccountId = employeeAccountDTO.getEmployeeId();
         //check employee account exist
         EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
@@ -108,18 +106,13 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public void deleteEmployeeAccount(int id) {
+    public void delete(int id) {
         EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(id)));
         if(checkEmployeeAccount != null){
             empAccRepo.delete(checkEmployeeAccount);
         }
     }
 
-    @Override
-    public EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO) {
-        EmployeeAccounts employeeAccounts = empAccRepo.save(mapToEntity(employeeAccountDTO));
-        return mapToDto(employeeAccounts);
-    }
 
     public EmployeeAccountDTO mapToDto(EmployeeAccounts employeeAccounts) {
         EmployeeAccountDTO postDto = modelMapper.map(employeeAccounts, EmployeeAccountDTO.class);

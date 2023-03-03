@@ -1,16 +1,11 @@
 package com.springboot.wmproject.services.impl;
 
-import com.springboot.wmproject.DTO.EmployeeAccountDTO;
-import com.springboot.wmproject.DTO.EmployeeDTO;
-import com.springboot.wmproject.DTO.LoginDTO;
-import com.springboot.wmproject.DTO.RegisterDTO;
+import com.springboot.wmproject.DTO.*;
 //import com.springboot.wmproject.security.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.security.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.security.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.security.JWT.JwtTokenProvider;
-import com.springboot.wmproject.services.AuthService;
-import com.springboot.wmproject.services.EmployeeAccountService;
-import com.springboot.wmproject.services.EmployeeService;
+import com.springboot.wmproject.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,27 +20,22 @@ public class AuthServiceImpl implements AuthService {
 
     private AuthenticationManager authenticationManager;
     private EmployeeService employeeService;
+    private CustomerService customerService;
     private EmployeeAccountService employeeAccountService;
+    private CustomerAccountService customerAccountService;
     private BCryptPasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
 
     @Autowired
-    public AuthServiceImpl(JwtTokenProvider tokenProvider,
-                           AuthenticationManager authenticationManager,
-                           EmployeeService employeeService,
-                           EmployeeAccountService employeeAccountService,
-                           BCryptPasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
         this.authenticationManager = authenticationManager;
         this.employeeService = employeeService;
+        this.customerService = customerService;
         this.employeeAccountService = employeeAccountService;
+        this.customerAccountService = customerAccountService;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
     }
-
-
-
-
-
 
     @Override
     public String employeeLogin(LoginDTO loginDTO) {
@@ -68,7 +58,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String employeeRegister(RegisterDTO registerDTO) {
+    @Transactional
+    public RegisterDTO employeeRegister(RegisterDTO registerDTO) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setName(registerDTO.getName());
         employeeDTO.setPhone(registerDTO.getPhone());
@@ -77,25 +68,37 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setEmpType(registerDTO.getEmpType());
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
-        EmployeeDTO empDTO = employeeService.validEmployee(employeeDTO);
-        EmployeeDTO empResponse = employeeService.save(empDTO);
+        employeeDTO.setAvatar(registerDTO.getAvatar());
+        EmployeeDTO empDTO = employeeService.create(employeeDTO);
         //getID after employee created -> then pass to employee account
 
         EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
-
         employeeAccountDTO.setUsername(registerDTO.getUsername());
         employeeAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         employeeAccountDTO.setRole(registerDTO.getRole());
-        employeeAccountDTO.setEmployeeId(empResponse.getId());
-        EmployeeAccountDTO empAccDTO = employeeAccountService.validEmployeeAccount(employeeAccountDTO);
-
-
-        employeeAccountService.save(empAccDTO);
-        return "Register New Employee Successfully";
+        employeeAccountDTO.setEmployeeId(empDTO.getId());
+        employeeAccountService.create(employeeAccountDTO);
+        registerDTO.setEmployeeId(empDTO.getId());
+        return registerDTO;
     }
 
     @Override
-    public String customerRegister(RegisterDTO registerDTO) {
+    public RegisterDTO customerRegister(RegisterDTO registerDTO) {
+        CustomerDTO customerDTO = new CustomerDTO();
+        customerDTO.setName(registerDTO.getName());
+        customerDTO.setPhone(registerDTO.getPhone());
+        customerDTO.setAddress(registerDTO.getAddress());
+        customerDTO.setGender(registerDTO.getGender());
+        customerDTO.setAvatar(registerDTO.getAvatar());
+        CustomerDTO cusDTO = customerService.create(customerDTO);
+        //getID after employee created -> then pass to employee account
+
+        CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();
+        customerAccountDTO.setUsername(registerDTO.getUsername());
+        customerAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        customerAccountDTO.setCustomerId(cusDTO.getId());
+        customerAccountService.create(customerAccountDTO);
+        registerDTO.setEmployeeId(cusDTO.getId());
         return null;
     }
 }

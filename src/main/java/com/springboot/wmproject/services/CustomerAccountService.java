@@ -12,7 +12,7 @@ public interface CustomerAccountService {
 
     CustomerAccountDTO getAccountByAccountId(int id);
 
-    CustomerAccountDTO validCustomerAccount(CustomerAccountDTO customerAccountDTO);
+    CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO);
     CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO);
     void delete(int id);
 //    CustomerAccountDTO findByName(String name);

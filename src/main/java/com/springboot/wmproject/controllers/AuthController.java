@@ -43,15 +43,15 @@ public class AuthController {
     }
 
     @PostMapping(value = {"employee/register"})
-    public ResponseEntity<String> staffRegister(@RequestBody RegisterDTO registerDTO){
-        String response = authService.employeeRegister(registerDTO);
+    public ResponseEntity<RegisterDTO> staffRegister(@RequestBody RegisterDTO registerDTO){
+        RegisterDTO response = authService.employeeRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 
 
     @PostMapping(value = {"customer/register"})
-    public ResponseEntity<String> customerRegister(@RequestBody RegisterDTO registerDTO){
-        String response = authService.customerRegister(registerDTO);
+    public ResponseEntity<RegisterDTO> customerRegister(@RequestBody RegisterDTO registerDTO){
+        RegisterDTO response = authService.customerRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 }

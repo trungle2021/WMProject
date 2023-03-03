@@ -6,6 +6,6 @@ import com.springboot.wmproject.DTO.RegisterDTO;
 public interface AuthService {
     String employeeLogin(LoginDTO loginDTO);
     String customerLogin(LoginDTO loginDTO);
-    String employeeRegister(RegisterDTO registerDTO);
-    String customerRegister(RegisterDTO registerDTO);
+    RegisterDTO employeeRegister(RegisterDTO registerDTO);
+    RegisterDTO customerRegister(RegisterDTO registerDTO);
 }
