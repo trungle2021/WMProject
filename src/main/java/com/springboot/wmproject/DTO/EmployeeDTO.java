@@ -17,5 +17,6 @@ public class EmployeeDTO {
     private Double salary;
     private String empType;
     private int team_id;
+    private String avatar;
 
 }

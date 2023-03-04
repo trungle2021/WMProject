@@ -15,10 +15,10 @@ public interface EmployeeAccountService {
     List<EmployeeAccountDTO> findByName(String name);
     List<EmployeeAccountDTO> filterByEmpType(String empType);
 
-    EmployeeAccountDTO validEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
-    EmployeeAccountDTO updateEmployeeAccount(EmployeeAccountDTO employeeAccountDTO);
-    void deleteEmployeeAccount(int id);
+    EmployeeAccountDTO create(EmployeeAccountDTO employeeAccountDTO);
+    EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO);
+    void delete(int id);
 
-    EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO);
+//    EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO);
 
 }

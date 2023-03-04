@@ -20,10 +20,13 @@ public class RegisterDTO {
     private Double salary;
     private String empType;
     private int team_id;
+    private String gender;
+    private String avatar;
 
     //emp_account
     private String username;
     private String password;
     private String role;
     private Integer employeeId;
+
 }

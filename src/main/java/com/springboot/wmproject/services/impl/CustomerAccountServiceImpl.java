@@ -47,7 +47,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
 
     @Override
-    public CustomerAccountDTO validCustomerAccount(CustomerAccountDTO customerAccountDTO) {
+    public CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO) {
 
         int customerID = customerAccountDTO.getCustomerId();
 
@@ -61,7 +61,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
                 if(customerAccounts.isPresent()){
                     throw new WmAPIException(HttpStatus.BAD_REQUEST,"Username already existed");
                 }
-                return customerAccountDTO;
+                return mapToDto(customerAccountRepository.save(mapToEntity(customerAccountDTO)));
 
             }
 

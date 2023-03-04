@@ -51,13 +51,13 @@ public class EmployeeAccountController {
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<EmployeeAccountDTO> updateEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
-        return ResponseEntity.ok(employeeAccountService.updateEmployeeAccount(employeeAccountDTO));
+        return ResponseEntity.ok(employeeAccountService.update(employeeAccountDTO));
     }
     @DeleteMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<String> deleteEmployeeAccount(@PathVariable int id){
-        employeeAccountService.deleteEmployeeAccount(id);
+        employeeAccountService.delete(id);
         return ResponseEntity.ok("Employee Account Deleted");
     }
 

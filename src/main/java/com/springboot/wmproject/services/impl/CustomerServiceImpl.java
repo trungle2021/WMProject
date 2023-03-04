@@ -38,10 +38,9 @@ public class CustomerServiceImpl implements CustomerService
         return mapToDto(customers);
     }
     @Override
-    public CustomerDTO validCustomer(CustomerDTO customerDTO) {
+    public CustomerDTO create(CustomerDTO customerDTO) {
         return mapToDto(customerRepository.save(mapToEntity(customerDTO)));
     }
-
 
     @Override
     public CustomerDTO update(CustomerDTO customerDTO) {
@@ -65,20 +64,13 @@ public class CustomerServiceImpl implements CustomerService
         return null;
     }
 
-
-
-
-
     @Override
     public void delete(int id){
         Customers customers=customerRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Customer","id",String.valueOf(id)));
         customerRepository.delete(customers);
     }
 
-    @Override
-    public CustomerDTO save(CustomerDTO customerDTO) {
-        return mapToDto(customerRepository.save(mapToEntity(customerDTO)));
-    }
+
 
 
 
