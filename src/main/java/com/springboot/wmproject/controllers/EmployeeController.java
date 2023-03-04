@@ -52,14 +52,14 @@ public class EmployeeController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<EmployeeDTO> updateEmployee(@RequestBody EmployeeDTO employeeDTO){
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeDTO));
+        return ResponseEntity.ok(employeeService.update(employeeDTO));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable int id){
-        employeeService.deleteEmployee(id);
+        employeeService.delete(id);
         return ResponseEntity.ok("Employee has been deleted");
     }
 }

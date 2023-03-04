@@ -1,4 +1,5 @@
 
+
 dayjs.extend(window.dayjs_plugin_weekday);
 // dayjs.extend(window.dayjs_plugin_weekOfYear);
 const date = dayjs(); // Create a Day.js instance
@@ -14,9 +15,9 @@ document.getElementById("app").innerHTML = `
       class="calendar-month-header-selected-month"
     ></div>
     <section class="calendar-month-header-selectors">
-      <span id="previous-month-selector"><</span>
-      <span id="present-month-selector">Today</span>
-      <span id="next-month-selector">></span>
+      <span id="previous-month-selector">Tháng Trước</span>
+      <span id="present-month-selector">Hiện Tại</span>
+      <span id="next-month-selector">Tháng Sau</span>
     </section>
   </section>
 
@@ -43,7 +44,7 @@ let selectedMonth = dayjs(new Date(INITIAL_YEAR, INITIAL_MONTH - 1, 1));
 let currentMonthDays;
 let previousMonthDays;
 let nextMonthDays;
-
+var venueCard= document.getElementById("card-container");
 const daysOfWeekElement = document.getElementById("days-of-week");
 
 WEEKDAYS.forEach((weekday) => {
@@ -82,37 +83,70 @@ function createCalendar(year = INITIAL_YEAR, month = INITIAL_MONTH) {
 }
 
 function appendDay(day, calendarDaysElement) {
-    const test = document.createElement("a");
+
+    const dayLink = document.createElement("a");
     const dayElement = document.createElement("li");
     const dayElementClassList = dayElement.classList;
     dayElementClassList.add("calendar-day");
     const dayOfMonthElement = document.createElement("span");
     dayOfMonthElement.innerText = day.dayOfMonth;
-    test.appendChild(dayElement);
-    test.href = "/home/about";
+    dayLink.appendChild(dayElement);
+    dayLink.href = "/getvenue";
 //ajax
 
-test.addEventListener("click", function(event) {
-    event.preventDefault(); // prevent the default behavior of the a tag
+    dayLink.addEventListener("click", function(event) {
+
+        event.preventDefault(); // prevent the default behavior of the a tag
 
     // make the AJAX request
-    const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/home/about");
+     const xhr = new XMLHttpRequest();
+    xhr.open("POST", "/getvenue");
     xhr.setRequestHeader("Content-Type", "application/json");
+    let response=null;
     xhr.onload = function() {
       // handle the response from the server
+        response = JSON.parse(xhr.responseText);
+        const venueResponse=JSON.parse(response.venues);
+        const bookedsResponse=JSON.parse(response.bookeds);
 
-        const response = xhr.responseText;
-        console.log(response);
+        let card="";
+        venueResponse.forEach(function(el){
+            //append venue
+
+            card +=appendVenue(el);
+            venueCard.innerHTML=card;
+            // console.log(card);
+
+        });
+        if(bookedsResponse!=null) {
+            bookedsResponse.forEach(function(el) {
+            const button = document.querySelector(`[data-book="${el.booked}"][data-venue="${el.venueId}"]`);
+            if (button) {
+                button.setAttribute('disabled', true);
+                button.setAttribute("class","btn-danger");
+            }
+           console.log(button);
+        });
+        }
+        console.log(bookedsResponse);
+
+
+
+
     };
-    xhr.send(JSON.stringify(day.date));
+
+    xhr.send(day.date);
+
+
+
   });
 
 
-//
+
+//end event click
 
     dayElement.appendChild(dayOfMonthElement);
-    calendarDaysElement.appendChild(test);
+    calendarDaysElement.appendChild(dayLink);
 
     if (!day.isCurrentMonth) {
         dayElementClassList.add("calendar-day--not-current");
@@ -123,6 +157,28 @@ test.addEventListener("click", function(event) {
     }
 }
 
+function appendVenue(venue)
+{
+
+    let venueCard =
+        `<div class="card">
+                    <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+                    <div class="info">
+                        <h2>${venue.venueName}</h2>
+                        <p>Sức chứa: </p>
+                        <span>Tối Thiểu:${venue.minPeople}</span><span>Tối Đa:${venue.maxPeople}</span>
+
+                        <div class="button-group">
+                            <button data-book="Afternoon" data-venue="${venue.id.toString()}" class="button-primary">Tiệc Trưa</button>
+                            <button data-book="Evening" data-venue="${venue.id.toString()}" class="">Tiệc Chiều</button>
+                           
+                        </div>
+                    </div>
+          </div>
+        `
+    return venueCard;
+
+}
 function removeAllDayElements(calendarDaysElement) {
     let first = calendarDaysElement.firstElementChild;
 

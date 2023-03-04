@@ -8,10 +8,9 @@ import java.util.List;
 public interface CustomerService{
     List<CustomerDTO> findAll();
     CustomerDTO getCustomerById(int id);
-    CustomerDTO validCustomer(CustomerDTO customerDTO);
+    CustomerDTO create(CustomerDTO customerDTO);
     CustomerDTO update(CustomerDTO customerDTO);
     void delete(int id);
 
-    CustomerDTO save(CustomerDTO customerDTO);
 
 }

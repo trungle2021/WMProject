@@ -37,12 +37,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         return mapToDto(employees);
     }
     @Override
-    public EmployeeDTO validEmployee(EmployeeDTO newEmployeeDTO) {
+    public EmployeeDTO create(EmployeeDTO newEmployeeDTO) {
         return mapToDto(employeeRepository.save(mapToEntity(newEmployeeDTO)));
     }
 
     @Override
-    public EmployeeDTO updateEmployee(EmployeeDTO updateEmployeeDTO) {
+    public EmployeeDTO update(EmployeeDTO updateEmployeeDTO) {
         int employeeId = updateEmployeeDTO.getId();
         if(employeeId!=0){
             //check if employee exist
@@ -78,15 +78,15 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public void deleteEmployee(int employeeId){
+    public void delete(int employeeId){
         Employees employees=employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("Employee","id",String.valueOf(employeeId)));
         employeeRepository.delete(employees);
     }
 
-    @Override
-    public EmployeeDTO save(EmployeeDTO employeeDTO) {
-        return mapToDto(employeeRepository.save(mapToEntity(employeeDTO)));
-    }
+//    @Override
+//    public EmployeeDTO save(EmployeeDTO employeeDTO) {
+//        return mapToDto(employeeRepository.save(mapToEntity(employeeDTO)));
+//    }
 
     public EmployeeDTO mapToDto(Employees employees) {
         EmployeeDTO postDto = modelMapper.map(employees, EmployeeDTO.class);

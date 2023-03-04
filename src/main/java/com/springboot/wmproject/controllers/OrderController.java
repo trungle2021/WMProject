@@ -3,6 +3,9 @@ package com.springboot.wmproject.controllers;
 import com.springboot.wmproject.DTO.OrderDTO;
 
 import com.springboot.wmproject.services.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +24,8 @@ public class OrderController {
         this.orderService = orderService;
     }
 @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<OrderDTO>> getAllOrder()
     {
         return  ResponseEntity.ok(orderService.getAllOrder());

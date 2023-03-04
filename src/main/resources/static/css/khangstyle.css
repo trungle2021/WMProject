@@ -14,8 +14,62 @@ body {
     margin: 20px;
 
 }
+.card {
+    display: flex;
+    align-items: center;
+    /* border: 1px solid #ccc; */
+    border-radius: 5px;
+    padding: 20px;
+}
+
+.card img {
+    max-width: 150px;
+    margin-right: 20px;
+}
+
+.info {
+    flex: 1;
+    flex-wrap: wrap;
+}
+
+.info h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.info p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    overflow: hidden;
+
+}
+
+.button-group {
+    display: flex;
+}
+
+.button-group button {
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.button-primary {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.button-secondary {
+    background-color: #fff;
+    color: #007bff;
+    border: 1px solid #007bff;
+}
 .app{flex-grow: 6;}
-.info{flex-grow: 4;
+.venue{flex-grow: 4;
     margin-left: 10px;}
 ol,
 li {
@@ -46,7 +100,7 @@ li {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 80px;
+    width: 20rem;
 }
 
 .calendar-month-header-selectors > * {
