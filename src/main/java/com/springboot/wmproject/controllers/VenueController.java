@@ -30,8 +30,10 @@ public class VenueController {
         this.orderService = orderService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+
+
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueDTO>> getAll() {
         return ResponseEntity.ok(venueService.getAllVenue());
