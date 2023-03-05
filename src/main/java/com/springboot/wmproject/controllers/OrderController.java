@@ -45,6 +45,8 @@ public class OrderController {
     }
 
     @PostMapping("create")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO order)
     {
         return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.CREATED);

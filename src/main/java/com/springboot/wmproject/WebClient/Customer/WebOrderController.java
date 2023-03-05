@@ -1,12 +1,16 @@
 package com.springboot.wmproject.WebClient.Customer;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.*;
 
 import com.springboot.wmproject.entities.Venues;
 import com.springboot.wmproject.services.AuthService;
 import com.springboot.wmproject.services.impl.AuthServiceImpl;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -27,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-
+@RequestMapping("/order")
 public class WebOrderController {
 
     RestTemplate restTemplate = new RestTemplate();
@@ -47,14 +51,14 @@ public class WebOrderController {
 
 
 
-    @GetMapping("/order")
+    @GetMapping("")
         public String order(){
             return "orderpage";
         }
 
         @RequestMapping("/getvenue")
         @ResponseBody
-        public String about(@RequestBody String date) throws JsonProcessingException {
+        public String showVenue(@RequestBody String date) throws JsonProcessingException {
             Map<String, Object> map = new HashMap<>();
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(getToken());
@@ -100,17 +104,17 @@ public class WebOrderController {
                 LocalTime compareTime2 = LocalTime.parse("18:00:00");
                 if(timeHappen.isBefore(compareTime1) && !order.getOrderStatus().equals("canceled")){
                 VenueBooked newbooked=new VenueBooked();
-//                newbooked.setId(i);
+//                newbooked.setBookedDay(date);
                 newbooked.setVenueId(String.valueOf(order.getVenueId()));
-                newbooked.setBooked("Afternoon");
+                newbooked.setBookedTime("Afternoon");
                 bookeds.add(newbooked);
 //                i++;
                 }
                 else if(timeHappen.isAfter(compareTime1) && timeHappen.isBefore(compareTime2) && !order.getOrderStatus().equals("canceled")){
                     VenueBooked newbooked=new VenueBooked();
-//                    newbooked.setId(i);
+//                    newbooked.setBookedDay(date);
                     newbooked.setVenueId(String.valueOf(order.getVenueId()));
-                    newbooked.setBooked("Evening");
+                    newbooked.setBookedTime("Evening");
                     bookeds.add(newbooked);
 //                    i++;
                 }
@@ -118,8 +122,52 @@ public class WebOrderController {
             }
             String json = toJson(venueList,bookeds);
             return json;
-        }
+    }
 
+    @RequestMapping("/create")
+    @ResponseBody
+    public String createOrder(@RequestBody String jsonData) throws JsonProcessingException {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        //get JSON from ajax
+        Map<String, String> data = objectMapper.readValue(jsonData, new TypeReference<Map<String,String>>(){});
+        Integer venueId=Integer.parseInt(data.get("venueId"));
+        String dateTime=new String();
+        if(data.get("bookType").equalsIgnoreCase("Afternoon"))
+        {
+             dateTime=data.get("day")+" 12:00:00";
+        }
+        else if(data.get("bookType").equalsIgnoreCase("Evening"))
+        {
+             dateTime=data.get("day")+" 17:00:00";
+        }
+        else{ return "error";}
+
+        HttpHeaders httpHeaders= new HttpHeaders();
+         httpHeaders.setBearerAuth(getToken());
+
+        OrderDTO newOrder=new OrderDTO();
+        newOrder.setVenueId(venueId);
+        newOrder.setTimeHappen(dateTime);
+        //set cung test
+        newOrder.setCustomerId(1);
+        //
+        newOrder.setOrderStatus("Ordered");
+        newOrder.setOrderDate(LocalDateTime.now().toString());
+        HttpEntity<OrderDTO> requestEntity= new HttpEntity<>(newOrder,httpHeaders);
+
+        ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/order/create", requestEntity, OrderDTO.class);
+
+// Get the response body
+        OrderDTO responseBody = responseEntity.getBody();
+        return objectMapper.writeValueAsString(responseBody);
+    }
+
+
+
+
+
+//call login for token test
 public String getToken()
 {
     RestTemplate restTemplate = new RestTemplate();
@@ -137,7 +185,7 @@ public String getToken()
     String token = jwtAuthResponse.getAccessToken();
     return token;
 }
-
+//test
     public String checkVenueBooked(List<VenueDTO> venueList,OrderDTO order) {
 
         for (VenueDTO venue : venueList) {
@@ -183,6 +231,8 @@ public String getToken()
     }
 
 
-    }
+
+
+}
 
 
