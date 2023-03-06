@@ -13,7 +13,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "customer_accounts", schema = "wmproject", catalog = "")
+@Table(name = "customer_accounts", schema = "wmproject")
 public class CustomerAccounts {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id

@@ -30,37 +30,58 @@ public class VenueController {
         this.orderService = orderService;
     }
 
+
 //    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
 //    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+
 
 
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueDTO>> getAll() {
         return ResponseEntity.ok(venueService.getAllVenue());
     }
+
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/orders/{id}"})
     public ResponseEntity<List<VenueDTO>> getAllByOrderId(@Valid @PathVariable int id) {
         return ResponseEntity.ok(venueService.getAllVenueByOrderId(id));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/one/{id}"})
     public ResponseEntity<VenueDTO> getOneById(@Valid @PathVariable int id) {
         return ResponseEntity.ok(venueService.getOneVenueById(id));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/{name}"})
     public ResponseEntity<List<VenueDTO>> getAllByName(@Valid @PathVariable String name) {
         return ResponseEntity.ok(venueService.getVenueByName(name));
     }
 
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/create")
     public ResponseEntity<VenueDTO> createVenue(@Valid @RequestBody VenueDTO venueDTO) {
         return new ResponseEntity<>(venueService.createVenue(venueDTO), HttpStatus.CREATED);
     }
 
 
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<VenueDTO> updateVenue(@Valid @RequestBody VenueDTO venueDTO) {
         return ResponseEntity.ok(venueService.updateVenue(venueDTO));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "delete/{id}")
     public ResponseEntity<String> deleteVenue(@Valid @PathVariable int id){
         venueService.deleteVenue(id);

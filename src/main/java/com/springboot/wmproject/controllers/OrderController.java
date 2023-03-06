@@ -23,26 +23,35 @@ public class OrderController {
     public OrderController(OrderService orderService) {
         this.orderService = orderService;
     }
-@GetMapping
+
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping
+
     public ResponseEntity<List<OrderDTO>> getAllOrder()
     {
         return  ResponseEntity.ok(orderService.getAllOrder());
 
     }
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/bybookingEmp")
     public ResponseEntity<List<OrderDTO>> getAllOrderbyBooking(Integer empId)
     {
         return  ResponseEntity.ok(orderService.getAllByBookingEmp(empId));
 
     }
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byTeam")
     public ResponseEntity<List<OrderDTO>> getAllOrderbyTeam(Integer teamId)
     {
         return  ResponseEntity.ok(orderService.getAllByOrganizeTeam(teamId));
 
     }
+
+//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
 
     @PostMapping("create")
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
@@ -51,6 +60,9 @@ public class OrderController {
     {
         return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.CREATED);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/update")
     public ResponseEntity<OrderDTO> update(@RequestBody OrderDTO order)
     {
@@ -59,12 +71,16 @@ public class OrderController {
 
     }
 
-
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/updateStatus/{orderId}/{status}")
     public ResponseEntity<OrderDTO> update(@PathVariable Integer orderId,@PathVariable String status)
     {
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id)
     {
