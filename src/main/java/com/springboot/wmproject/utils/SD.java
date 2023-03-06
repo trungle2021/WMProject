@@ -12,5 +12,5 @@ public class SD {
     };
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
-//    public
+    public static final String DOMAIN_APP = "http://localhost:8080/";
 }

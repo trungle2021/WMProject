@@ -15,9 +15,9 @@ import java.util.Map;
 
 @Component
 public class JwtTokenProvider {
-    @Value("${app.jwt-secrect}")
-    private String jwtSecrect;
-    @Value("${app-jwt-expiration-milliseconds}")
+    @Value("${app.jwt-secret}")
+    private String jwtSecret;
+    @Value("${app-jwt-expiration-second}")
     private long jwtExpirationDate;
 
     //generate JWT token
@@ -41,7 +41,7 @@ public class JwtTokenProvider {
     }
 
     private Key key(){
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecrect));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     //get username from jwt token
