@@ -13,11 +13,11 @@ public class ClientSecurityConfig {
     @Bean
     public SecurityFilterChain config(HttpSecurity http) throws Exception {
         http.httpBasic().disable();
-//        http.authorizeHttpRequests()
-//                .requestMatchers("/resources/**").permitAll()
-//                .requestMatchers("/").permitAll()
+        http.authorizeHttpRequests()
+                .requestMatchers("/resources/**").permitAll()
+                .requestMatchers("/").permitAll()
 //                .requestMatchers("/staff/**").hasAnyRole("ADMIN","EMPLOYEE")
-//                .requestMatchers(AUTH_WHITELIST).permitAll()
+                .requestMatchers(AUTH_WHITELIST).permitAll();
 //                .anyRequest().authenticated();
 
 
