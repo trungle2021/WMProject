@@ -91,7 +91,7 @@ function appendDay(day, calendarDaysElement) {
     const dayOfMonthElement = document.createElement("span");
     dayOfMonthElement.innerText = day.dayOfMonth;
     dayLink.appendChild(dayElement);
-    dayLink.href = "/getvenue";
+    dayLink.href = "order/getvenue";
 //ajax
 
     dayLink.addEventListener("click", function(event) {
@@ -100,7 +100,7 @@ function appendDay(day, calendarDaysElement) {
 
     // make the AJAX request
      const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/getvenue");
+    xhr.open("POST", "order/getvenue");
     xhr.setRequestHeader("Content-Type", "application/json");
     let response=null;
     xhr.onload = function() {
@@ -120,7 +120,7 @@ function appendDay(day, calendarDaysElement) {
         });
         if(bookedsResponse!=null) {
             bookedsResponse.forEach(function(el) {
-            const button = document.querySelector(`[data-book="${el.booked}"][data-venue="${el.venueId}"]`);
+            const button = document.querySelector(`[data-book="${el.bookedTime}"][data-venue="${el.venueId}"]`);
             if (button) {
                 button.setAttribute('disabled', true);
                 button.setAttribute("class","btn-danger");
@@ -128,9 +128,12 @@ function appendDay(day, calendarDaysElement) {
            console.log(button);
         });
         }
+        //tao link
+
         console.log(bookedsResponse);
 
-
+        getOrderLink(day);
+        alert("3");
 
 
     };
@@ -169,9 +172,8 @@ function appendVenue(venue)
                         <span>Tối Thiểu:${venue.minPeople}</span><span>Tối Đa:${venue.maxPeople}</span>
 
                         <div class="button-group">
-                            <button data-book="Afternoon" data-venue="${venue.id.toString()}" class="button-primary">Tiệc Trưa</button>
-                            <button data-book="Evening" data-venue="${venue.id.toString()}" class="">Tiệc Chiều</button>
-                           
+                            <button data-book="Afternoon" data-order="true" data-venue="${venue.id.toString()}" class="button-primary">Tiệc Trưa</button>
+                            <button data-book="Evening" data-order="true" data-venue="${venue.id.toString()}" class="">Tiệc Chiều</button>                                 
                         </div>
                     </div>
           </div>
@@ -179,6 +181,50 @@ function appendVenue(venue)
     return venueCard;
 
 }
+
+function getOrderLink(day){
+    const buttons = document.querySelectorAll('button[data-order="true"]');
+
+    console.log(buttons);
+// Loop through the buttons and attach an event listener to each one
+    buttons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            // event.preventDefault(); // Prevent the default behavior of the button
+
+            // Get the values of the data attributes
+            const bookType = this.getAttribute('data-book');
+            const venueId = this.getAttribute('data-venue');
+            alert(bookType+venueId+day.date);
+            // Create a new XMLHttpRequest object
+            const xhr = new XMLHttpRequest();
+
+            // Define the AJAX request
+            xhr.open('POST', '/order/create');
+            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+            // Define what should happen when the response is received
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    console.log(xhr.response);
+                    // Handle successful response
+                    window.location.href="/index";
+
+                } else {
+                    console.error(xhr.statusText);
+                    // Handle error
+                }
+            };
+
+            // Send the AJAX request with the data in JSON format
+            xhr.send(JSON.stringify({ bookType:bookType,venueId:venueId,day:day.date}));
+
+        });
+    });
+}
+
+
+
+
 function removeAllDayElements(calendarDaysElement) {
     let first = calendarDaysElement.firstElementChild;
 

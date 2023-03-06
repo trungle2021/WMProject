@@ -8,9 +8,17 @@ import lombok.Data;
 
 public class VenueBooked {
 
-//   private Integer id;
+//   private String bookedDay;
    private String venueId;
-   private String booked;
+   private String bookedTime;
+
+//   public String getBookedDay() {
+//      return bookedDay;
+//   }
+//
+//   public void setBookedDay(String bookedDay) {
+//      this.bookedDay = bookedDay;
+//   }
 
    public String getVenueId() {
       return venueId;
@@ -20,19 +28,11 @@ public class VenueBooked {
       this.venueId = venueId;
    }
 
-   public String getBooked() {
-      return booked;
+   public String getBookedTime() {
+      return bookedTime;
    }
 
-   public void setBooked(String booked) {
-      this.booked = booked;
+   public void setBookedTime(String bookedTime) {
+      this.bookedTime = bookedTime;
    }
-
-//   public Integer getId() {
-//      return id;
-//   }
-//
-//   public void setId(Integer id) {
-//      this.id = id;
-//   }
 }
