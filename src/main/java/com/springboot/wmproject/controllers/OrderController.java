@@ -50,8 +50,9 @@ public class OrderController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+
     @PostMapping("create")
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
