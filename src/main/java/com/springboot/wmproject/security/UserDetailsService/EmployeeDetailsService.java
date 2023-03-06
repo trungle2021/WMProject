@@ -1,6 +1,7 @@
 package com.springboot.wmproject.security.UserDetailsService;
 
 import com.springboot.wmproject.entities.EmployeeAccounts;
+import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.repositories.EmployeeAccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,7 +31,7 @@ public class EmployeeDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
       EmployeeAccounts employeeAccounts =  employeeAccountRepository.findByUsername(username)
-               .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
+               .orElseThrow(()->new UserNotFoundException("Employee","username",username));
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(employeeAccounts.getRole()));

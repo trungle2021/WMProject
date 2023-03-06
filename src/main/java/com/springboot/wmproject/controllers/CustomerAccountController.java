@@ -39,7 +39,7 @@ public class CustomerAccountController {
     }
 
     @PutMapping(value = "/update")
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<CustomerAccountDTO> update(@RequestBody CustomerAccountDTO customerAccountDTO){
         return ResponseEntity.ok(customerAccountService.update(customerAccountDTO));

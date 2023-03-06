@@ -30,14 +30,14 @@ public class CustomerController {
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable int id){
         return new ResponseEntity<CustomerDTO>(service.getCustomerById(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/update")
     public ResponseEntity<CustomerDTO> update(@RequestBody CustomerDTO customerDTO){
