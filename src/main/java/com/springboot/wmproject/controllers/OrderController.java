@@ -27,6 +27,7 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
+
     public ResponseEntity<List<OrderDTO>> getAllOrder()
     {
         return  ResponseEntity.ok(orderService.getAllOrder());
@@ -52,6 +53,8 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("create")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<OrderDTO> create(@RequestBody OrderDTO order)
     {
         return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.CREATED);
