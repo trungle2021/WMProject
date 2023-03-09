@@ -89,4 +89,14 @@ public class OrderController {
         return ResponseEntity.ok("Delete Order Success!");
 
     }
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderDTO> getOneOrder(@PathVariable Integer id)
+    {
+
+
+        return ResponseEntity.ok(orderService.getOneOrderByOrderId(id));
+
+    }
 }

@@ -167,3 +167,117 @@ li {
     border-radius: 9999px;
     background-color: var(--grey-800);
 }
+
+
+
+
+
+.container {
+    padding: 20px;
+}
+#orderList,#orderInfo {
+    border: 1px solid #ddd;
+    padding: 20px;
+    height: 100%;
+}
+#foodList, #serviceList {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+#starter, #main, #dessert, #service {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+.select-box{
+    flex: 1;
+    max-width: 200px;
+    margin-right: 10px;
+}
+
+.new-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px;
+
+}
+.color{
+    background-color:  #7bdcb5;
+
+}
+.color:hover {
+    background-color: #00d084;
+}
+
+.color1{
+    background-color: #8ed1fc;
+    width: 100%;
+    font-weight: bold;
+}
+.color1:hover{
+    background-color: #0693e3;
+}
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.info-container {
+    flex-basis: 45%;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 14px;
+}
+
+@media screen and (max-width: 767px) {
+    .info-container {
+        flex-basis: 100%;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+
+}
+
+th, td {
+    text-align: left;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    width: 70%;
+}
+
+th {
+    background-color: #7bdcb5;
+    color: #fff;
+}
+.total{font-size: large;
+    font-weight: bold;
+    justify-content: space-around;
+    display: flex;}
+
+
+
