@@ -303,7 +303,7 @@ function callAJAXnewOrder(){
 
 
             response = JSON.parse(xhr.responseText);
-            alert("Chọn Món Thành Công");
+            alert(response.message);
             window.location.href="/index";
 
                 }
@@ -315,7 +315,11 @@ function callAJAXnewOrder(){
         //tao link
     };
 
-    xhr.send(data);
+    if(foodIdList.length>=6){
+    xhr.send(data);}
+    else{
+        alert("Số Món Ăn Chính Tối Thiểu là 4!")
+    }
 
 }
 

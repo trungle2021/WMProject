@@ -14,7 +14,7 @@ public class ServiceDetailDTO {
 
     private Integer serviceId;
 
-    private Orders ordersByOrderId;
-
-    private Services servicesByServiceId;
+//    private Orders ordersByOrderId;
+//
+//    private Services servicesByServiceId;
 }

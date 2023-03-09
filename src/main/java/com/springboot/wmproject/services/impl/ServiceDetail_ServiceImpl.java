@@ -43,15 +43,11 @@ public class ServiceDetail_ServiceImpl implements ServiceDetail_Service {
 
     @Override
     public ServiceDetailDTO createDetail(ServiceDetailDTO serviceDetailDTO) {
-        ServiceDetails checkDetail=DtRepository.findById(serviceDetailDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Servuce Detail","id",String.valueOf(serviceDetailDTO.getId())));
-        if(checkDetail!=null)
-        {
             ServiceDetails newServiceDt= mapToEntity(serviceDetailDTO);
            ServiceDetails newDt= DtRepository.save(newServiceDt);
             return mapToDTO(newDt);
 
-        }
-        return null;
+
     }
 
     @Override
