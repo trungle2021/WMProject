@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import wm.clientmvc.DTO.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -22,7 +24,7 @@ import java.util.Map;
 import org.springframework.ui.Model;
 
 @Controller
-@RequestMapping("/order")
+@RequestMapping("/customer/order")
 public class WebOrderController {
 
     RestTemplate restTemplate = new RestTemplate();
@@ -116,11 +118,14 @@ public class WebOrderController {
 
     @RequestMapping("/create")
     @ResponseBody
-    public String createOrder(@RequestBody String jsonData) throws JsonProcessingException {
+    public ResponseEntity<String> createOrder(@RequestBody String jsonData) throws JsonProcessingException {
+
+        DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         ObjectMapper objectMapper = new ObjectMapper();
         //get JSON from ajax
         Map<String, String> data = objectMapper.readValue(jsonData, new TypeReference<Map<String,String>>(){});
+
         Integer venueId=Integer.parseInt(data.get("venueId"));
         String dateTime=new String();
         if(data.get("bookType").equalsIgnoreCase("Afternoon"))
@@ -131,27 +136,40 @@ public class WebOrderController {
         {
              dateTime=data.get("day")+" 17:00:00";
         }
-        else{ return "error";}
+        else{  throw new BadRequestException("Có Lỗi Xảy Ra!");}
+        LocalDateTime orderDateTime = LocalDateTime.now();
+        String formattedNow = orderDateTime.format(formatter);
+        LocalDateTime happenDateTime = LocalDateTime.parse(dateTime, formatter);
 
-        HttpHeaders httpHeaders= new HttpHeaders();
-         httpHeaders.setBearerAuth(getToken());
+//        LocalTime timeHappen = happenDateTime.toLocalTime();
 
-        OrderDTO newOrder=new OrderDTO();
-        newOrder.setVenueId(venueId);
-        newOrder.setTimeHappen(dateTime);
-        //set cung test
-        newOrder.setCustomerId(1);
-        //
-        newOrder.setOrderStatus("Ordered");
-        newOrder.setOrderDate(LocalDateTime.now().toString());
-        HttpEntity<OrderDTO> requestEntity= new HttpEntity<>(newOrder,httpHeaders);
+        Duration duration=Duration.between(orderDateTime,happenDateTime);
+        if(duration.toDays() >=30 && happenDateTime.isAfter(orderDateTime)) {
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setBearerAuth(getToken());
 
-        ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/order/create", requestEntity, OrderDTO.class);
+            OrderDTO newOrder = new OrderDTO();
+            newOrder.setVenueId(venueId);
+            newOrder.setTimeHappen(dateTime);
+            //set cung test
+            newOrder.setCustomerId(1);
+            //
+            newOrder.setOrderStatus("Ordered");
+            newOrder.setOrderDate(formattedNow);
+            HttpEntity<OrderDTO> requestEntity = new HttpEntity<>(newOrder, httpHeaders);
+
+            ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/order/create", requestEntity, OrderDTO.class);
 
 // Get the response body
-        OrderDTO responseBody = responseEntity.getBody();
+            OrderDTO responseBody = responseEntity.getBody();
 
-        return objectMapper.writeValueAsString(responseBody);
+            return ResponseEntity.ok(objectMapper.writeValueAsString(responseBody));
+        }
+        else{
+
+            return new ResponseEntity<>("Đặt Trước 30 ngày",HttpStatus.BAD_REQUEST);
+
+        }
     }
 
 
@@ -160,6 +178,8 @@ public class WebOrderController {
     public String createDetail(Model model, @RequestParam("orderId") int orderId) {
         String orderUrl="http://localhost:8080/api/order/"+orderId;
 //        model.addAttribute("orderId",orderId);
+
+
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(getToken());
         HttpEntity<?> entity = new HttpEntity<>(headers);

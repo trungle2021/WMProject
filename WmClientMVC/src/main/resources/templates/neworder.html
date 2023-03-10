@@ -36,7 +36,7 @@
                             <label>Món Khai Vị</label>
                             <select data-index="food" class="form-control select-box" onchange="getId(this)">
                                 <option value="default"> Chọn Món Ăn </option>
-                                <option th:each="food : ${foodList}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
+                                <option th:each="food : ${foodList}" th:if="${food.getFoodType().equalsIgnoreCase('starter')}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
 
                             </select>
                         </div>
@@ -53,7 +53,7 @@
                             <label>Món Tráng Miệng <i class="fa-solid fa-trash-xmark"></i></label>
                             <select data-index="food" class="form-control select-box" onchange="getId(this)">
                                 <option value="default"> Chọn Món Ăn </option>
-                                <option th:each="food : ${foodList}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
+                                <option th:each="food : ${foodList}" th:if="${food.getFoodType().equalsIgnoreCase('dessert')}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
 
                             </select>
                         </div>
