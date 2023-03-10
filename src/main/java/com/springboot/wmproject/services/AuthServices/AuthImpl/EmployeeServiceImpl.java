@@ -1,10 +1,10 @@
-package com.springboot.wmproject.services.impl;
+package com.springboot.wmproject.services.AuthServices.AuthImpl;
 
 import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.EmployeeRepository;
-import com.springboot.wmproject.services.EmployeeService;
+import com.springboot.wmproject.services.AuthServices.EmployeeService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

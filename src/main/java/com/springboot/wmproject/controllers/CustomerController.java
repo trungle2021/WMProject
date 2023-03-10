@@ -1,7 +1,7 @@
 package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.CustomerDTO;
-import com.springboot.wmproject.services.CustomerService;
+import com.springboot.wmproject.services.AuthServices.CustomerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class CustomerController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
     public ResponseEntity<List<CustomerDTO>> getAllCustomer(){

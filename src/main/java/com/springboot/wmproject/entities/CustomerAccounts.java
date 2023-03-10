@@ -25,17 +25,14 @@ public class CustomerAccounts {
     @Basic
     @Column(name = "password", nullable = false, length = 45)
     private String password;
+
     @Basic
     @Column(name = "customer_id", nullable = true)
     private Integer customerId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Customers customersByCustomerId;
-
-
-
-
-
-
+    @OneToOne(mappedBy = "customerAccount", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+    private PasswordResetToken passwordResetToken;
 
 }

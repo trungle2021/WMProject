@@ -1,7 +1,7 @@
 package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.EmployeeDTO;
-import com.springboot.wmproject.services.EmployeeService;
+import com.springboot.wmproject.services.AuthServices.EmployeeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;

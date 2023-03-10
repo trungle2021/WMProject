@@ -42,15 +42,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleAccessDeniedException(org.springframework.security.access.AccessDeniedException exception,
                                                                     WebRequest webRequest){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
-                webRequest.getDescription(false),HttpStatus.UNAUTHORIZED.toString());
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+                webRequest.getDescription(false),HttpStatus.FORBIDDEN.toString());
+        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorDetails> handleUserNotFoundException(UserNotFoundException exception,
                                                                     WebRequest webRequest){
         ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
-                webRequest.getDescription(false),HttpStatus.UNAUTHORIZED.toString());
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+                webRequest.getDescription(false),HttpStatus.NOT_FOUND.toString());
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
 }

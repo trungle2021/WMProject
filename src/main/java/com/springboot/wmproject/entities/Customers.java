@@ -33,10 +33,9 @@ public class Customers {
     @Column(name = "gender", nullable = true, length = 10)
     private String gender;
 
-// can bo sung field email
-//    @Basic
-//    @Column(name = "email", nullable = true, length = 30)
-//    private String email;
+    @Basic
+    @Column(name = "email", nullable = false, length = 50)
+    private String email;
 
     @Basic
     @Column(name = "avatar", nullable = true)

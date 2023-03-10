@@ -1,10 +1,10 @@
-package com.springboot.wmproject.services.impl;
+package com.springboot.wmproject.services.AuthServices.AuthImpl;
 
 import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.Customers;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.CustomerRepository;
-import com.springboot.wmproject.services.CustomerService;
+import com.springboot.wmproject.services.AuthServices.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

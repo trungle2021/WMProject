@@ -45,9 +45,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             //get Username from token
             String username = jwtTokenProvider.getUsername(token);
             String userType = jwtTokenProvider.getUserType(token);
+            String userID = jwtTokenProvider.getUserID(token);
             switch (userType){
                 case "ROLE_EMPLOYEE":
                 case "ROLE_ADMIN":
+                case "ROLE_SALE":
+                case "ROLE_ORGANIZE":
                     UserDetails userDetails = employeeDetailsService.loadUserByUsername(username);
                     UsernamePasswordAuthenticationToken authenticationToken = new EmployeeUsernamePasswordAuthenticationToken(
                             userDetails,

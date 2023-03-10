@@ -1,10 +1,9 @@
 package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
-import com.springboot.wmproject.DTO.CustomerDTO;
-import com.springboot.wmproject.DTO.EmployeeAccountDTO;
-import com.springboot.wmproject.services.CustomerAccountService;
-import com.springboot.wmproject.services.EmployeeAccountService;
+import com.springboot.wmproject.DTO.GenericResponse;
+import com.springboot.wmproject.DTO.PasswordDTO;
+import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class CustomerAccountController {
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/{id}")
-    public ResponseEntity<CustomerAccountDTO> getEmployeeAccountByAccountId(@PathVariable int id){
+    public ResponseEntity<CustomerAccountDTO> getCustomerAccountByAccountId(@PathVariable int id){
         return ResponseEntity.ok(customerAccountService.getAccountByAccountId(id));
     }
 
@@ -51,5 +50,10 @@ public class CustomerAccountController {
         customerAccountService.delete(id);
         return ResponseEntity.ok("Customer Account Deleted");
     }
+
+//    @PostMapping("/savePassword")
+//    public ResponseEntity<GenericResponse> savePassword(PasswordDTO passwordDTO){
+//
+//    }
 
 }
