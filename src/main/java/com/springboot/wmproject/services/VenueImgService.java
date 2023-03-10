@@ -8,6 +8,7 @@ public interface VenueImgService {
     List<VenueImgDTO> getAllVenueImg();
     List<VenueImgDTO> getAllVenueImgByVenueId(int id);
     VenueImgDTO createVenueImg(VenueImgDTO venueImgDTO);
+    List<VenueImgDTO> createMultipleVenueImg(List<VenueImgDTO> venueImgDTO);
     VenueImgDTO updateVenueImg(VenueImgDTO venueImgDTO);
     void deleteVenueImg(int id);
 }

@@ -36,6 +36,10 @@ public class VenueImgController {
     public ResponseEntity<VenueImgDTO> createVenueImg(@Valid @RequestBody VenueImgDTO venueImgDTO) {
         return new ResponseEntity<>(venueImgService.createVenueImg(venueImgDTO), HttpStatus.CREATED);
     }
+    @PostMapping(value = "/creates")
+    public ResponseEntity<List<VenueImgDTO>> createMultipleVenueImg(@Valid @RequestBody List<VenueImgDTO> venueImgDTO) {
+        return new ResponseEntity<>(venueImgService.createMultipleVenueImg(venueImgDTO), HttpStatus.CREATED);
+    }
 
 
     @PutMapping(value = "/update")
