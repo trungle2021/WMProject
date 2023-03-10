@@ -1,6 +1,7 @@
 package com.springboot.wmproject.securities.JWT;
 
 import com.springboot.wmproject.exceptions.WmAPIException;
+import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -24,20 +25,28 @@ public class JwtTokenProvider {
     public String generateToken(Authentication authentication){
         String username = authentication.getName();
         String userType = authentication.getAuthorities().stream().findFirst().get().getAuthority();
-        Map<String, String> claims = new HashMap<>();
-        claims.put("userType",userType);
-        claims.put("username",username);
+        String userID = "";
+        Object userDetail = authentication.getPrincipal();
+        if(userDetail instanceof CustomUserDetails) {
+            userID = ((CustomUserDetails) userDetail).getUserId().toString();
+            Map<String, String> claims = new HashMap<>();
+            claims.put("userType",userType);
+            claims.put("username",username);
+            claims.put("userID",userID);
 
-        Date currentDate = new Date();
-        Date expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
+            Date currentDate = new Date();
+            Date expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
 
-        String token = Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(new Date())
-                .setExpiration(expirationDate)
-                .signWith(key())
-                .compact();
-        return token;
+            String token = Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(new Date())
+                    .setExpiration(expirationDate)
+                    .signWith(key())
+                    .compact();
+            return token;
+
+        }
+        return "Cannot generate token";
     }
 
     private Key key(){
@@ -59,6 +68,8 @@ public class JwtTokenProvider {
         return username;
     }
 
+
+
     public String getUserType(String token){
         Claims claims =  Jwts.parserBuilder()
                 .setSigningKey(key())
@@ -71,6 +82,20 @@ public class JwtTokenProvider {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
         }
         return userType;
+    }
+
+    public String getUserID(String token){
+        Claims claims =  Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String userID = claims.get("userID",String.class);
+        if(userID == null){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
+        }
+        return userID;
     }
 
     //validate Jwt Token

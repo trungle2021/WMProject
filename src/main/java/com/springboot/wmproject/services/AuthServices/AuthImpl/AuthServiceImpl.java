@@ -1,14 +1,16 @@
-package com.springboot.wmproject.services.impl;
+package com.springboot.wmproject.services.AuthServices.AuthImpl;
 
 import com.springboot.wmproject.DTO.*;
 //import com.springboot.wmproject.security.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.JWT.JwtTokenProvider;
-import com.springboot.wmproject.services.*;
+import com.springboot.wmproject.services.AuthServices.*;
+import org.modelmapper.internal.bytebuddy.utility.RandomString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,9 +26,10 @@ public class AuthServiceImpl implements AuthService {
     private CustomerAccountService customerAccountService;
     private BCryptPasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
+    private PasswordResetTokenService passwordResetTokenService;
 
     @Autowired
-    public AuthServiceImpl(AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider,PasswordResetTokenService passwordResetTokenService) {
         this.authenticationManager = authenticationManager;
         this.employeeService = employeeService;
         this.customerService = customerService;
@@ -34,14 +37,16 @@ public class AuthServiceImpl implements AuthService {
         this.customerAccountService = customerAccountService;
         this.passwordEncoder = passwordEncoder;
         this.tokenProvider = tokenProvider;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     @Override
     public String employeeLogin(LoginDTO loginDTO) {
         Authentication authentication =  authenticationManager
                 .authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(),loginDTO.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(authentication);
         String token =  tokenProvider.generateToken(authentication);
         return token;
     }
@@ -98,6 +103,14 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.create(customerAccountDTO);
         registerDTO.setEmployeeId(cusDTO.getId());
+        return null;
+    }
+
+    @Override
+    public GenericResponse resetPassword(String email) {
+       CustomerAccountDTO accountDTO =  customerAccountService.findByEmail(email);
+       String token = RandomString.make(30);
+       passwordResetTokenService.create(accountDTO,token);
         return null;
     }
 }

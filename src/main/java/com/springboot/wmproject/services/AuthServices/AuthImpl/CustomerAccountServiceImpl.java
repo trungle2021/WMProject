@@ -1,36 +1,41 @@
-package com.springboot.wmproject.services.impl;
+package com.springboot.wmproject.services.AuthServices.AuthImpl;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
-import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.Customers;
-import com.springboot.wmproject.entities.EmployeeAccounts;
-import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
+import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.CustomerAccountRepository;
 import com.springboot.wmproject.repositories.CustomerRepository;
-import com.springboot.wmproject.services.CustomerAccountService;
+import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
+import com.springboot.wmproject.services.AuthServices.PasswordResetTokenService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class CustomerAccountServiceImpl implements CustomerAccountService {
     private CustomerAccountRepository customerAccountRepository;
     private CustomerRepository customerRepository;
     private ModelMapper modelMapper;
 
+    private PasswordResetTokenService passwordResetTokenService;
+
     @Autowired
-    public CustomerAccountServiceImpl(CustomerAccountRepository customerAccountRepository, CustomerRepository customerRepository, ModelMapper modelMapper) {
+    public CustomerAccountServiceImpl(CustomerAccountRepository customerAccountRepository, CustomerRepository customerRepository, ModelMapper modelMapper,PasswordResetTokenService passwordResetTokenService) {
         this.customerAccountRepository = customerAccountRepository;
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
+        this.passwordResetTokenService = passwordResetTokenService;
     }
 
     @Override
@@ -98,6 +103,36 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     public CustomerAccountDTO save(CustomerAccountDTO employeeAccountDTO) {
         return null;
     }
+
+    @Override
+    public CustomerAccountDTO findByEmail(String email) {
+        CustomerAccounts customerAccounts = customerAccountRepository.findByEmail(email);
+        if(customerAccounts == null){
+            throw new ResourceNotFoundException("CustomerAccount","email",email);
+        }
+        return mapToDto(customerAccounts);
+    }
+
+    @Override
+    public CustomerAccountDTO getByResetPasswordToken(String token) {
+        CustomerAccounts customerAccounts= customerAccountRepository.getByResetPasswordToken(token);
+        if(customerAccounts == null){
+            throw new UserNotFoundException("Customer Account not found");
+        }
+        return mapToDto(customerAccounts);
+    }
+
+    @Override
+    public void updatePassword(CustomerAccountDTO customerAccountDTO, String newPass,String token) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPass = passwordEncoder.encode(newPass);
+        CustomerAccounts accounts = mapToEntity(customerAccountDTO);
+        accounts.setPassword(encodedPass);
+        passwordResetTokenService.delete(token);
+        customerAccountRepository.save(accounts);
+    }
+
+
 
     public CustomerAccountDTO mapToDto(CustomerAccounts customerAccounts){
         return modelMapper.map(customerAccounts,CustomerAccountDTO.class);

@@ -3,7 +3,7 @@ package com.springboot.wmproject.exceptions;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value= HttpStatus.UNAUTHORIZED)
+@ResponseStatus(value= HttpStatus.NOT_FOUND)
 public class UserNotFoundException extends RuntimeException{
     private String resourceName;
     private String fieldName;
@@ -14,6 +14,10 @@ public class UserNotFoundException extends RuntimeException{
         this.resourceName = resourceName;
         this.fieldName = fieldName;
         this.fieldValue = fieldValue;
+    }
+
+    public UserNotFoundException(String message) {
+        super(message);
     }
 
     public String getResourceName() {

@@ -1,5 +1,6 @@
 package wm.clientmvc.controllers.Admin;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -12,17 +13,15 @@ import wm.clientmvc.DTO.LoginDTO;
 public class StaffController {
 
     @GetMapping("/login")
-    public String employeeLogin(Model model){
+    public String employeeLogin(Model model,@CookieValue(name = "token",defaultValue = "") String token){
+
         model.addAttribute("loginDTO",new LoginDTO());
         return "adminTemplate/login";
     }
 
-    @GetMapping("/dashboard/index")
-    public String index(@CookieValue(name = "token",defaultValue = "") String token)
+    @GetMapping("/dashboard")
+    public String index()
     {
-        if(token.equals("")){
-            return "redirect:/staff/login";
-        }
         return "adminTemplate/home";
     }
 }

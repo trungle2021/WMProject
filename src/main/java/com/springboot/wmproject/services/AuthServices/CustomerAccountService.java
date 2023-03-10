@@ -1,7 +1,6 @@
-package com.springboot.wmproject.services;
+package com.springboot.wmproject.services.AuthServices;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
-import com.springboot.wmproject.DTO.EmployeeAccountDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;
 
 import java.util.List;
@@ -15,7 +14,9 @@ public interface CustomerAccountService {
     CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO);
     CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO);
     void delete(int id);
-//    CustomerAccountDTO findByName(String name);
     CustomerAccountDTO save(CustomerAccountDTO customerAccountDTO);
+    CustomerAccountDTO findByEmail(String email);
 
+    CustomerAccountDTO getByResetPasswordToken(String token);
+    void updatePassword(CustomerAccountDTO customerAccountDTO, String newPass,String token);
 }

@@ -34,14 +34,25 @@
       <li class="nav-item d-none d-sm-inline-block">
         <a href="index3.html" class="nav-link">AAA</a>
       </li>
-      <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
-      </li>
+
+
 
       <li class="nav-item d-none d-sm-inline-block">
-       <form th:action="@{/staff/logout}" method="post">
+<!--        <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'')')}">-->
+          <h3 th:text="${#authentication.getName()}"></h3>
+          <h3 th:text="${#authentication.getPrincipal().getUserId()}"></h3>
+          <h3 th:text="${#authentication.getAuthorities()}"></h3>
+<!--        </div>-->
+      </li>
+
+
+
+      <li class="nav-item d-none d-sm-inline-block">
+       <form th:action="@{/staff/logout}" method="get">
           <button type="submit">Logout</button>
        </form>
+
+<!--        <a th:href="@{/staff/logout}">LOGOUT</a>-->
       </li>
 
 

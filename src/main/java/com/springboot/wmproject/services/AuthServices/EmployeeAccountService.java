@@ -1,11 +1,8 @@
-package com.springboot.wmproject.services;
+package com.springboot.wmproject.services.AuthServices;
 
 import com.springboot.wmproject.DTO.EmployeeAccountDTO;
-import com.springboot.wmproject.entities.EmployeeAccounts;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface EmployeeAccountService {
     List<EmployeeAccountDTO> getAllEmployeeAccounts();

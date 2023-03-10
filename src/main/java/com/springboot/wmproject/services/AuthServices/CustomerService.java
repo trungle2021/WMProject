@@ -1,7 +1,6 @@
-package com.springboot.wmproject.services;
+package com.springboot.wmproject.services.AuthServices;
 
 import com.springboot.wmproject.DTO.CustomerDTO;
-import com.springboot.wmproject.DTO.EmployeeDTO;
 
 import java.util.List;
 

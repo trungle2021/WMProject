@@ -1,5 +1,6 @@
 package com.springboot.wmproject.securities.AuthenticationProvider;
 
+import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.UserDetailsService.CustomerDetailsService;
@@ -7,7 +8,6 @@ import com.springboot.wmproject.securities.UserDetailsService.EmployeeDetailsSer
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -43,11 +43,10 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         UserDetailsService userDetailsService = determineUserDetailsService(authentication);
         //load user details from the appropriate
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        //Authenticate the user
-        if(passwordEncoder.matches(password,userDetails.getPassword())){
+        if(username.equals(userDetails.getUsername()) && passwordEncoder.matches(password,userDetails.getPassword())){
             return new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
         }else{
-            throw new BadCredentialsException("Invalid username or password");
+            throw new UserNotFoundException("Invalid username or password");
         }
     }
 
@@ -58,7 +57,6 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
             return authentication.equals(EmployeeUsernamePasswordAuthenticationToken.class);
         }else if(path.startsWith("/api/auth/customer/login")){
             return authentication.equals(CustomerUsernamePasswordAuthenticationToken.class);
-
         }
         return false;
     }

@@ -21,23 +21,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-
-    @Configuration
-    @Order(1)
-    public static class RestApiSecurityConfig {
-
-
         private CustomAuthenticationProvider customAuthenticationProvider;
         private JwtAuthenticationEntryPoint authenticationEntryPoint;
 
         private JwtAuthenticationFilter authenticationFilter;
 
         @Autowired
-        public RestApiSecurityConfig(CustomAuthenticationProvider customAuthenticationProvider, JwtAuthenticationEntryPoint authenticationEntryPoint, JwtAuthenticationFilter authenticationFilter) {
-            this.customAuthenticationProvider = customAuthenticationProvider;
-            this.authenticationEntryPoint = authenticationEntryPoint;
-            this.authenticationFilter = authenticationFilter;
-        }
+    public SecurityConfig(CustomAuthenticationProvider customAuthenticationProvider, JwtAuthenticationEntryPoint authenticationEntryPoint, JwtAuthenticationFilter authenticationFilter) {
+        this.customAuthenticationProvider = customAuthenticationProvider;
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.authenticationFilter = authenticationFilter;
+    }
 
         @Bean
         public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -79,46 +73,6 @@ public class SecurityConfig {
                 "/webjars/**",
                 // auth api
                 "/api/auth/**",
-                //js file
-                "/js/**",
-                "/**",
         };
-
     }
 
-    @Configuration
-    @Order(2)
-    public static class WebClientSecurityConfig {
-
-
-        @Bean
-        SecurityFilterChain securityFilterChain1(HttpSecurity http) throws Exception {
-
-            http.csrf().disable()
-                    .authorizeRequests()
-                    .requestMatchers("/api/**").denyAll()
-                    .requestMatchers( "/customer/login").permitAll()
-                    .requestMatchers( "/staff/login").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
-                    .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                    .logoutSuccessUrl("/login");
-
-            http.sessionManagement().maximumSessions(1).expiredUrl("/login?expired=true");
-
-            return http.build();
-        }
-
-
-
-    }
-
-
-}

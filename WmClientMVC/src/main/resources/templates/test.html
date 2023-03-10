@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>TEST</h1>
+<div th:each="item : ${list}">
+  <p th:text="${item.getName()}"></p>
+  <p th:text="${item.getAddress()}"></p>
+</div>
+</body>
+</html>
