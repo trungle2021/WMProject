@@ -91,7 +91,7 @@ function appendDay(day, calendarDaysElement) {
     const dayOfMonthElement = document.createElement("span");
     dayOfMonthElement.innerText = day.dayOfMonth;
     dayLink.appendChild(dayElement);
-    dayLink.href = "order/getvenue";
+    dayLink.href = "/customer/order/getvenue";
 //ajax
 
     dayLink.addEventListener("click", function(event) {
@@ -100,7 +100,7 @@ function appendDay(day, calendarDaysElement) {
 
     // make the AJAX request
      const xhr = new XMLHttpRequest();
-    xhr.open("POST", "order/getvenue");
+    xhr.open("POST", "/customer/order/getvenue");
     xhr.setRequestHeader("Content-Type", "application/json");
     let response=null;
     xhr.onload = function() {
@@ -199,11 +199,12 @@ function getOrderLink(day){
             const xhr = new XMLHttpRequest();
 
             // Define the AJAX request
-            xhr.open('POST', '/order/create');
+            xhr.open('POST', '/customer//order/create');
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             // Define what should happen when the response is received
             xhr.onload = function() {
+                console.log(xhr.response);
                 if (xhr.status === 200) {
                     console.log(xhr.response);
                     // Handle successful response
@@ -214,7 +215,7 @@ function getOrderLink(day){
                     //chuyen sang post
                     const form = document.createElement("form");
                     form.method = "POST";
-                    form.action = "/order/create-detail";
+                    form.action = "/customer/order/create-detail";
 
                     const input = document.createElement("input");
                     input.type = "hidden";
@@ -227,8 +228,9 @@ function getOrderLink(day){
                     form.submit();
 
                 } else {
-                    console.error(xhr.statusText);
-                    alert("có gì đó sai sai! không đặt được tiệc!");
+
+                    alert(xhr.responseText);
+                    console.log(xhr.response);
                     // Handle error
                 }
             };
