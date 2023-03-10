@@ -18,5 +18,6 @@ public class EmployeeDTO {
     private String empType;
     private int team_id;
     private String avatar;
+    private OrganizeTeamDTO organizeTeamsByTeamId;
 
 }

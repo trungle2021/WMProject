@@ -16,7 +16,6 @@ public class FoodDetailDTO {
 //
 //    private BigDecimal price;
 
-    private Orders ordersByOrderId;
-    private Food foodByFoodId;
+
 
 }

@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import wm.clientmvc.DTO.*;
 
@@ -22,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.springframework.ui.Model;
 
 @Controller
 @RequestMapping("/order")
@@ -57,7 +55,6 @@ public class WebOrderController {
             headers.setBearerAuth(getToken());
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
-
             ResponseEntity<List<VenueDTO>> response = restTemplate.exchange(
                     url,
                     HttpMethod.GET,
@@ -153,9 +150,112 @@ public class WebOrderController {
 
 // Get the response body
         OrderDTO responseBody = responseEntity.getBody();
+
         return objectMapper.writeValueAsString(responseBody);
     }
 
+
+    @RequestMapping(value="/create-detail",method = RequestMethod.POST)
+
+    public String createDetail(Model model, @RequestParam("orderId") int orderId) {
+        String orderUrl="http://localhost:8080/api/order/"+orderId;
+//        model.addAttribute("orderId",orderId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(getToken());
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+//getorder
+
+        ResponseEntity<OrderDTO> response = restTemplate.exchange(
+                orderUrl,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<OrderDTO>() {}
+
+        );
+        OrderDTO myOrder=response.getBody();
+        //get foodlist
+       String foodUrl="http://localhost:8080/api/food";
+        ResponseEntity<List<FoodDTO>> foodResponse = restTemplate.exchange(
+                foodUrl,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<FoodDTO>>() {}
+
+        );
+        List<FoodDTO> foodList= foodResponse.getBody();
+        //get serviceList
+        String serviceUrl="http://localhost:8080/api/service";
+        ResponseEntity<List<ServiceDTO>> serviceResponse = restTemplate.exchange(
+                serviceUrl,
+                HttpMethod.GET,
+                entity,
+                new ParameterizedTypeReference<List<ServiceDTO>>() {}
+
+        );
+        List<ServiceDTO> serviceList= serviceResponse.getBody();
+        model.addAttribute("myOrder",myOrder);
+        model.addAttribute("foodList",foodList);
+        model.addAttribute("serviceList",serviceList);
+
+
+        return "neworder";
+    }
+    @RequestMapping(value="/create-order", method=RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> createNewOrder(@RequestBody String jsonData) throws JsonProcessingException {
+        // Process the request data here...
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        //get JSON from ajax
+        Map<String, Object> data = objectMapper.readValue(jsonData, new TypeReference<Map<String,Object>>(){});
+        // Return a response indicating success or failure
+        Integer orderId=Integer.parseInt(data.get("orderId").toString());
+        List<String> foodData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("foodList")), new TypeReference< List<String>>() {});
+        List<String> svData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("serviceList")), new TypeReference<List<String>>() {});
+
+
+        String createFDUrl="http://localhost:8080/api/foodDetail/create";
+        String createSDUrl="http://localhost:8080/api/servicedetail/create";
+//        model.addAttribute("orderId",orderId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(getToken());
+
+        for (String foodId:foodData) {
+            FoodDetailDTO newFoodDetail= new FoodDetailDTO();
+            newFoodDetail.setFoodId(Integer.parseInt(foodId));
+            newFoodDetail.setOrderId(orderId);
+            HttpEntity<?> entity=new HttpEntity<>(newFoodDetail,headers);
+
+            ResponseEntity<FoodDetailDTO> response = restTemplate.postForEntity(
+                    createFDUrl,
+                    entity,
+                    FoodDetailDTO.class);
+
+        }
+
+        for (String svId:svData) {
+            ServiceDetailDTO newSVDetail= new ServiceDetailDTO();
+            newSVDetail.setServiceId(Integer.parseInt(svId));
+            newSVDetail.setOrderId(orderId);
+            HttpEntity<?> entity=new HttpEntity<>(newSVDetail,headers);
+
+            ResponseEntity<FoodDetailDTO> response = restTemplate.postForEntity(
+                    createSDUrl,
+                    entity,
+                    FoodDetailDTO.class);
+
+        }
+
+//getorder
+
+
+
+
+
+
+
+        return ResponseEntity.ok("{\"message\": \"Chọn Món Ăn và Dịch Vụ Thành Công!\"}");
+    }
 
 
 
@@ -179,16 +279,16 @@ public String getToken()
     return token;
 }
 //test
-    public String checkVenueBooked(List<VenueDTO> venueList,OrderDTO order) {
-
-        for (VenueDTO venue : venueList) {
-            if (venue.getId() == order.getVenueId()) {
-
-                return "afternoon";
-            }
-        }
-        return "none";
-    }
+//    public String checkVenueBooked(List<VenueDTO> venueList,OrderDTO order) {
+//
+//        for (VenueDTO venue : venueList) {
+//            if (venue.getId() == order.getVenueId()) {
+//
+//                return "afternoon";
+//            }
+//        }
+//        return "none";
+//    }
 
     //toJson add Map and List of venue
     public String toJson(List<VenueDTO> venues, List<VenueBooked> bookeds) {

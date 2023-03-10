@@ -20,8 +20,8 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
     public ResponseEntity<List<EmployeeDTO>> getAll(){
         return ResponseEntity.ok(employeeService.getAllEmployees());
