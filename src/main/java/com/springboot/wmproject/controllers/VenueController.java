@@ -64,8 +64,8 @@ public class VenueController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/create")
     public ResponseEntity<VenueDTO> createVenue(@Valid @RequestBody VenueDTO venueDTO) {
         return new ResponseEntity<>(venueService.createVenue(venueDTO), HttpStatus.CREATED);
@@ -73,8 +73,8 @@ public class VenueController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<VenueDTO> updateVenue(@Valid @RequestBody VenueDTO venueDTO) {
         return ResponseEntity.ok(venueService.updateVenue(venueDTO));
