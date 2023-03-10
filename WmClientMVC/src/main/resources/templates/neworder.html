@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Order Page</title>
+    <link rel="stylesheet" href="/css/khangstyle.css">
+
+</head>
+<body>
+<section layout:fragment="content">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+
+
+
+                <div id="orderList" class="">
+                    <h3>Chọn Món và Dịch Vụ </h3>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+
+
+                    <div id="foodList" class="">
+                        <div id="starter">
+                            <label>Món Khai Vị</label>
+                            <select data-index="food" class="form-control select-box" onchange="getId(this)">
+                                <option value="default"> Chọn Món Ăn </option>
+                                <option th:each="food : ${foodList}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
+
+                            </select>
+                        </div>
+                        <hr>
+                        <a id="btn-newMain" class="btn color">Thêm Món Chính <i class="fas fa-cart-plus"></i></a>
+                        <div id="main">
+
+
+
+                        </div>
+                        <hr>
+
+                        <div id="dessert">
+                            <label>Món Tráng Miệng <i class="fa-solid fa-trash-xmark"></i></label>
+                            <select data-index="food" class="form-control select-box" onchange="getId(this)">
+                                <option value="default"> Chọn Món Ăn </option>
+                                <option th:each="food : ${foodList}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div id="serviceList">
+
+                        <button id="btn-newService" class="btn color">Thêm Dịch Vụ <i
+                                class="fas fa-cart-plus"></i></button>
+                        <div id="service">
+                            <div data-service="0" class="new-container">
+                                <label data-label="service">Dịch Vụ 1 :</label>
+                                <span class="form-control select-box">Dịch Vụ Tiệc Cơ Bản </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div id="orderInfo">
+                    <h3>Thông Tin Tiệc</h3>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+                    <div class="card-container">
+                        <div class="info-container">
+                            <label>Sảnh Đặt Tiệc :</label>
+                            <p th:text="${myOrder.getVenues().getVenueName()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Ngày Đặt Tiệc :</label>
+                            <p th:text="${myOrder.getOrderDate()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Ngày Tổ Chức :</label>
+                            <p th:text="${myOrder.getTimeHappen()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Tình Trạng Đặt Hàng :</label>
+                            <p th:text="${myOrder.getOrderStatus()}"></p>
+                        </div>
+                    </div>
+                    <hr>
+                    <table id="food-table">
+                        <tr>
+                            <th>Món Ăn</th>
+                            <th>Giá</th>
+                        </tr>
+
+                    </table>
+                    <table id="service-table">
+                        <tr>
+                            <th>Dich Vụ</th>
+                            <th>Giá</th>
+                        </tr>
+                        <tr>
+                            <td>Tiệc Cơ Bản
+                            </td>
+                            <td>Miễn Phí</td>
+                        </tr>
+
+
+                    </table>
+                    <table>
+                        <tr>
+                            <th>Sảnh :</th>
+                            <th>Giá</th>
+                        </tr>
+                        <tr>
+                            <td th:text="${myOrder.getVenues().getVenueName()}">
+                            </td>
+                            <td data-price="" th:text="${myOrder.getVenues().getPrice()}"></td>
+                        </tr>
+
+
+                    </table>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+                    <div class="total">
+                        <h4 class="total-label">Tổng Tiền Dự Tính :</h4>
+                        <h4 id="total" class="total-price" th:text="${myOrder.getVenues().getPrice()}"></h4>
+                    </div>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+                    <button id="confirm" class="btn color1">Xác Nhận Đặt Tiệc <i class="fas fa-check-square"></i></button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+
+</section>
+<section layout:fragment="optional">
+
+    <script th:inline="javascript">
+        var foodList = [[${foodList}]];
+        var serviceList = [[${serviceList}]];
+        var myOrder = [[${myOrder}]];
+    </script>
+    <script src="/js/khangorder.js" >
+
+    </script>
+
+</section>
+</body>
+
+
+</html>

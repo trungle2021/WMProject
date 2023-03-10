@@ -15,5 +15,5 @@ public class ServiceDTO {
 
     private String description;
 
-    private Set<ServiceDetails> serviceDetailsById;
+//    private Set<ServiceDetailDTO> serviceDetailsById;
 }

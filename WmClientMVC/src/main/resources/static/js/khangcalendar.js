@@ -133,7 +133,7 @@ function appendDay(day, calendarDaysElement) {
         console.log(bookedsResponse);
 
         getOrderLink(day);
-        alert("3");
+
 
 
     };
@@ -207,10 +207,28 @@ function getOrderLink(day){
                 if (xhr.status === 200) {
                     console.log(xhr.response);
                     // Handle successful response
-                    window.location.href="/index";
+                  let  myOrder= JSON.parse(xhr.responseText);
+                    // let orderId=myOrder.id
+                    // window.location.href="order/create-detail/"+orderId;
+
+                    //chuyen sang post
+                    const form = document.createElement("form");
+                    form.method = "POST";
+                    form.action = "/order/create-detail";
+
+                    const input = document.createElement("input");
+                    input.type = "hidden";
+                    input.name = "orderId";
+                    input.value = myOrder.id;
+
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+
+                    form.submit();
 
                 } else {
                     console.error(xhr.statusText);
+                    alert("có gì đó sai sai! không đặt được tiệc!");
                     // Handle error
                 }
             };

@@ -33,7 +33,7 @@ public class OrderDTO {
     private Integer part_time_emp_amount;
 
 //    private Set<FoodDetailDTO> foodDetails;
-//    private Venues venues;
+    private VenueDTO venues;
 //    private Employees employees;
 //    private OrganizeTeams organizeTeams;
 //    private Customers customers;

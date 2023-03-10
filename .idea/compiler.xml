@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="wmproject" />
         <module name="WmClientMVC" />
+        <module name="ClientMVC" />
       </profile>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -27,6 +28,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ClientMVC" options="-parameters" />
       <module name="MVC" options="-parameters" />
       <module name="WM_MVC" options="-parameters" />
       <module name="WmClientMVC" options="-parameters" />
