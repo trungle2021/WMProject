@@ -4,6 +4,8 @@ import com.springboot.wmproject.entities.Orders;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 
 public class VenueDTO {
@@ -19,5 +21,5 @@ public class VenueDTO {
     private Integer maxPeople;
     @Min(1)
     private Double price;
-//    private Set<OrderDTO> orderDTOS;
+    private List<VenueImgDTO> venueImagesById;
 }
