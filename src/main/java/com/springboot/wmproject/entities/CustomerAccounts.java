@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
@@ -32,7 +33,7 @@ public class CustomerAccounts {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Customers customersByCustomerId;
-    @OneToOne(mappedBy = "customerAccount", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private PasswordResetToken passwordResetToken;
+    @OneToMany(mappedBy = "customerAccountsByCustomerAccountsId")
+    private Collection<PasswordResetToken> passwordResetTokensById;
 
 }

@@ -39,11 +39,11 @@
 
 
       <li class="nav-item d-none d-sm-inline-block">
-<!--        <div th:if="${#authorization.expression('hasAnyRole(''ADMIN'')')}">-->
+        <div th:if="${(#authentication.isAuthenticated()) && (!#authorization.expression('hasRole(''ANONYMOUS'')'))}">
           <h3 th:text="${#authentication.getName()}"></h3>
           <h3 th:text="${#authentication.getPrincipal().getUserId()}"></h3>
           <h3 th:text="${#authentication.getAuthorities()}"></h3>
-<!--        </div>-->
+        </div>
       </li>
 
 
