@@ -40,7 +40,7 @@ public class OrganizeTeamController {
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/one/id/{id}")
-    public ResponseEntity<OrganizeTeamDTO> getAllByName(@Valid @PathVariable int id){
+    public ResponseEntity<OrganizeTeamDTO> getAllById(@Valid @PathVariable int id){
         return ResponseEntity.ok(organizeTeamService.getOneOrganizeTeamById(id));
     }
 

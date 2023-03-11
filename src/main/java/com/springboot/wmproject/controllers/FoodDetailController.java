@@ -39,13 +39,13 @@ public class FoodDetailController {
         return ResponseEntity.ok(service.getAllDetailByFoodId(orderId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<FoodDetailDTO> createFoodDetail(@RequestBody FoodDetailDTO foodDtDTO)
     {return  new ResponseEntity<>(service.createFoodDetail(foodDtDTO), HttpStatus.CREATED);}
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<FoodDetailDTO> updateFood(@RequestBody FoodDetailDTO foodDetailDTO){

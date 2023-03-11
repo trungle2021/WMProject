@@ -154,6 +154,8 @@ public class OrderServiceImpl implements OrderService {
                 orders.setBookingEmp(orderDTO.getBookingEmp());
                 orders.setOrganizeTeam(orderDTO.getOrganizeTeam());
                 orders.setCustomerId(orderDTO.getCustomerId());
+                orders.setTableAmount(orderDTO.getTableAmount());
+                orders.setPartTimeEmpAmount(orderDTO.getPartTimeEmpAmount());
                 orderRepository.save(orders);
                 return mapToDTO(orders);
             }
@@ -175,6 +177,43 @@ public class OrderServiceImpl implements OrderService {
         }
         return null;
     }
+
+    @Override
+    public OrderDTO updateOrderStatus(Integer orderDTOId, String status, Integer bookingEmp, Integer organizeTeam, Double orderTotal, Integer part_time_emp_amount) {
+
+        if(orderDTOId!=0){
+            Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
+            if(orders!=null){
+
+                orders.setOrderStatus(status);
+                orders.setBookingEmp(bookingEmp);
+                orders.setOrganizeTeam(organizeTeam);
+                orders.setOrderTotal(orderTotal);
+                orders.setPartTimeEmpAmount(part_time_emp_amount);
+
+
+                orderRepository.save(orders);
+                return mapToDTO(orders);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public OrderDTO updateOrderTable(Integer orderDTOId, Integer table) {
+        if(orderDTOId!=0){
+            Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
+            if(orders!=null){
+
+                orders.setTableAmount(table);
+
+                orderRepository.save(orders);
+                return mapToDTO(orders);
+            }
+        }
+        return null;
+    }
+
 
     @Override
     public void deleteOrder(int id) {

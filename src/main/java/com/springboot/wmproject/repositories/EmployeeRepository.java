@@ -11,5 +11,6 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
     List<Employees> findAllByEmpType(String empType);
     @Query("select e from Employees e where e.name like %:name%")
     List<Employees> findAllByName(String name);
-
+    @Query("select e from Employees e where e.teamId = :teamId")
+    List<Employees> findAllTeamId(Integer teamId);
 }

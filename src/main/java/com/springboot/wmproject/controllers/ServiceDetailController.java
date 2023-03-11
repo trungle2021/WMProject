@@ -41,12 +41,18 @@ public class ServiceDetailController {
         return ResponseEntity.ok(service.getAllDetailByService(serviceId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<ServiceDetailDTO> createDetail(@RequestBody ServiceDetailDTO serviceDetailDTO)
     {return  new ResponseEntity<>(service.createDetail(serviceDetailDTO), HttpStatus.CREATED);}
 
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = "/update")
+    public ResponseEntity<ServiceDetailDTO> updateServiceDetail(@RequestBody ServiceDetailDTO svDetailDTO){
+        return ResponseEntity.ok(service.updateDetail(svDetailDTO));
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))

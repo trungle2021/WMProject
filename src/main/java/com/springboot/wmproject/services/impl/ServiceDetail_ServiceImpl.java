@@ -2,6 +2,7 @@ package com.springboot.wmproject.services.impl;
 
 import com.springboot.wmproject.DTO.ServiceDTO;
 import com.springboot.wmproject.DTO.ServiceDetailDTO;
+import com.springboot.wmproject.entities.FoodDetails;
 import com.springboot.wmproject.entities.ServiceDetails;
 import com.springboot.wmproject.entities.Services;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
@@ -54,6 +55,20 @@ public class ServiceDetail_ServiceImpl implements ServiceDetail_Service {
     public void deleteDetail(Integer svDetailId) {
         ServiceDetails svDetail=DtRepository.findById(svDetailId).orElseThrow(() -> new ResourceNotFoundException("service","id",String.valueOf(svDetailId)));
         DtRepository.delete(svDetail);
+    }
+
+    @Override
+    public ServiceDetailDTO updateDetail(ServiceDetailDTO serviceDetailDTO) {
+        ServiceDetails checkDt= DtRepository.getById(serviceDetailDTO.getId());
+        if(checkDt !=null)
+        {
+            ServiceDetails editDetails= mapToEntity(serviceDetailDTO);
+
+            DtRepository.save(editDetails);
+            return mapToDTO(editDetails);
+        }
+
+        return null;
     }
 
 

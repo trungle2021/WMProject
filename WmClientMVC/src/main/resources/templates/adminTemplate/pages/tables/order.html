@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+</head>
+<body>
+
+
+
+    <section layout:fragment="content"  class="content-wrapper">
+
+   <br><div class="content-header"> <h5>Quản Lý Đơn</h5></div>
+
+        <div class="content ">
+            <!-- Main content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+
+
+                    <!-- /.card-header -->
+
+                    <table
+                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                            style="position: relative;width: 100%;" aria-describedby="example-info">
+
+                        <thead>
+                        <tr>
+                            <th>Mã Đơn Hàng</th>
+                            <th>Ngày Đặt</th>
+                            <th>Ngày Tổ Chức</th>
+                            <th>Chi Phí</th>
+                            <th>Sảnh</th>
+                            <th>Nhân Viên Sale</th>
+                            <th>Đội Phụ Trách</th>
+                            <th>Số Bàn</th>
+                            <th>Số Lượng Cộng Tác Viên</th>
+                            <th>Tình Trạng Đơn Hàng</th>
+                            <th>Tác Vụ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${list}">
+                            <td th:text="${c.getId()}"></td>
+                            <td th:text="${c.getOrderDate()}"></td>
+                            <td th:text="${c.getTimeHappen()}"></td>
+                            <td th:text="${c.getOrderTotal()}"></td>
+
+                            <td th:text="${c.getVenues().getVenueName()}"></td>
+
+                            <td th:text="${c.getEmployeesByBookingEmp()!=null}?${c.getEmployeesByBookingEmp().getName()}:'N/A'"></td>
+                            <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'">N/A</td>
+                            <td th:text="${c.getTableAmount()}"></td>
+                            <td th:text="${c.getPartTimeEmpAmount()}"></td>
+                            <td th:text="${c.getOrderStatus()}"></td>
+                            <td><a th:href="@{/admin/order/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Chi Tiết Đơn</a> </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+
+                </div>
+                <!--                           -->
+
+
+            </div>
+        </div>
+</div>
+            <!-- /.content -->
+
+        <!-- /.content-wrapper -->
+        <!--create employee Modal-->
+
+        <!--create organize team Modal-->
+
+        <!-- Control Sidebar -->
+
+        <!-- /.control-sidebar -->
+        <br/>
+        <br/>
+    </section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+        $(document).ready(function () {
+            $('table.display').DataTable();
+        });
+    </script>
+</section>
+</body>
+</html>
