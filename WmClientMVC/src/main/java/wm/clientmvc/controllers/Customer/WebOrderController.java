@@ -8,11 +8,14 @@ import jakarta.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import wm.clientmvc.DTO.*;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.ui.Model;
+import wm.clientmvc.securities.UserDetails.CustomUserDetails;
+import wm.clientmvc.utils.APIHelper;
 
 @Controller
 @RequestMapping("/customer/order")
@@ -38,23 +43,23 @@ public class WebOrderController {
 //        this.authService = authService;
 //    }
 
-    @Autowired
+
 
 //    String login="http://localhost:8080/api/auth/employee/login";
 
 
 
-    @GetMapping("")
+        @GetMapping("")
         public String order(){
             return "orderpage";
         }
 
         @RequestMapping("/getvenue")
         @ResponseBody
-        public String showVenue(@RequestBody String date) throws JsonProcessingException {
+        public String showVenue(@RequestBody String date,@CookieValue(name="token",defaultValue = "") String token) throws JsonProcessingException {
             Map<String, Object> map = new HashMap<>();
             HttpHeaders headers = new HttpHeaders();
-            headers.setBearerAuth(getToken());
+            headers.setBearerAuth(token);
 
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<List<VenueDTO>> response = restTemplate.exchange(
@@ -118,7 +123,7 @@ public class WebOrderController {
 
     @RequestMapping("/create")
     @ResponseBody
-    public ResponseEntity<String> createOrder(@RequestBody String jsonData) throws JsonProcessingException {
+    public ResponseEntity<String> createOrder(@RequestBody String jsonData,@CookieValue(name="token",defaultValue = "") String token) throws JsonProcessingException {
 
         DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -136,7 +141,7 @@ public class WebOrderController {
         {
              dateTime=data.get("day")+" 17:00:00";
         }
-        else{  throw new BadRequestException("Có Lỗi Xảy Ra!");}
+        else{ return new ResponseEntity<>("Đã Có Lỗi Xảy Ra!",HttpStatus.BAD_REQUEST);}
         LocalDateTime orderDateTime = LocalDateTime.now();
         String formattedNow = orderDateTime.format(formatter);
         LocalDateTime happenDateTime = LocalDateTime.parse(dateTime, formatter);
@@ -146,13 +151,16 @@ public class WebOrderController {
         Duration duration=Duration.between(orderDateTime,happenDateTime);
         if(duration.toDays() >=30 && happenDateTime.isAfter(orderDateTime)) {
             HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setBearerAuth(getToken());
+            httpHeaders.setBearerAuth(token);
 
             OrderDTO newOrder = new OrderDTO();
             newOrder.setVenueId(venueId);
             newOrder.setTimeHappen(dateTime);
             //set cung test
-            newOrder.setCustomerId(1);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails customerDetail =(CustomUserDetails) authentication.getPrincipal();
+
+            newOrder.setCustomerId(customerDetail.getUserId().intValue());
             //
             newOrder.setOrderStatus("Ordered");
             newOrder.setOrderDate(formattedNow);
@@ -175,13 +183,13 @@ public class WebOrderController {
 
     @RequestMapping(value="/create-detail",method = RequestMethod.POST)
 
-    public String createDetail(Model model, @RequestParam("orderId") int orderId) {
+    public String createDetail(Model model, @RequestParam("orderId") int orderId ,@CookieValue(name="token",defaultValue = "") String token) {
         String orderUrl="http://localhost:8080/api/order/"+orderId;
 //        model.addAttribute("orderId",orderId);
 
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(getToken());
+        headers.setBearerAuth(token);
         HttpEntity<?> entity = new HttpEntity<>(headers);
 //getorder
 
@@ -222,7 +230,7 @@ public class WebOrderController {
     }
     @RequestMapping(value="/create-order", method=RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> createNewOrder(@RequestBody String jsonData) throws JsonProcessingException {
+    public ResponseEntity<String> createNewOrder(@RequestBody String jsonData,@CookieValue(name="token",defaultValue = "") String token) throws IOException {
         // Process the request data here...
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -232,13 +240,18 @@ public class WebOrderController {
         Integer orderId=Integer.parseInt(data.get("orderId").toString());
         List<String> foodData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("foodList")), new TypeReference< List<String>>() {});
         List<String> svData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("serviceList")), new TypeReference<List<String>>() {});
-
+        Integer tableAmount= Integer.parseInt(data.get("table").toString());
+        if(tableAmount<=0)
+        {
+            return new ResponseEntity<>("Hãy Chọn Số Bàn Cần Đăt!",HttpStatus.BAD_REQUEST);
+        }
 
         String createFDUrl="http://localhost:8080/api/foodDetail/create";
         String createSDUrl="http://localhost:8080/api/servicedetail/create";
+        String updateTableUrl="http://localhost:8080/api/order/updateTable/"+orderId+"/"+tableAmount;
 //        model.addAttribute("orderId",orderId);
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(getToken());
+        headers.setBearerAuth(token);
 
         for (String foodId:foodData) {
             FoodDetailDTO newFoodDetail= new FoodDetailDTO();
@@ -246,7 +259,7 @@ public class WebOrderController {
             newFoodDetail.setOrderId(orderId);
             HttpEntity<?> entity=new HttpEntity<>(newFoodDetail,headers);
 
-            ResponseEntity<FoodDetailDTO> response = restTemplate.postForEntity(
+                    restTemplate.postForEntity(
                     createFDUrl,
                     entity,
                     FoodDetailDTO.class);
@@ -259,12 +272,20 @@ public class WebOrderController {
             newSVDetail.setOrderId(orderId);
             HttpEntity<?> entity=new HttpEntity<>(newSVDetail,headers);
 
-            ResponseEntity<FoodDetailDTO> response = restTemplate.postForEntity(
+                    restTemplate.postForEntity(
                     createSDUrl,
                     entity,
                     FoodDetailDTO.class);
 
         }
+
+                APIHelper.makeApiCall(
+                updateTableUrl,
+                HttpMethod.PUT,
+                null,
+                token,
+                OrderDTO.class
+        );
 
 //getorder
 
@@ -281,23 +302,23 @@ public class WebOrderController {
 
 
 //call login for token test
-public String getToken()
-{
-    RestTemplate restTemplate = new RestTemplate();
-    String loginUrl = "http://localhost:8080/api/auth/employee/login";
-    HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
-
-    LoginDTO loginRequest = new LoginDTO();
-    loginRequest.setUsername("admin");
-    loginRequest.setPassword("admin");
-
-    HttpEntity<LoginDTO> request = new HttpEntity<>(loginRequest, headers);
-    ResponseEntity<JWTAuthResponse> response = restTemplate.postForEntity(loginUrl, request, JWTAuthResponse.class);
-    JWTAuthResponse jwtAuthResponse = response.getBody();
-    String token = jwtAuthResponse.getAccessToken();
-    return token;
-}
+//public String getToken()
+//{
+//    RestTemplate restTemplate = new RestTemplate();
+//    String loginUrl = "http://localhost:8080/api/auth/employee/login";
+//    HttpHeaders headers = new HttpHeaders();
+//    headers.setContentType(MediaType.APPLICATION_JSON);
+//
+//    LoginDTO loginRequest = new LoginDTO();
+//    loginRequest.setUsername("admin");
+//    loginRequest.setPassword("admin");
+//
+//    HttpEntity<LoginDTO> request = new HttpEntity<>(loginRequest, headers);
+//    ResponseEntity<JWTAuthResponse> response = restTemplate.postForEntity(loginUrl, request, JWTAuthResponse.class);
+//    JWTAuthResponse jwtAuthResponse = response.getBody();
+//    String token = jwtAuthResponse.getAccessToken();
+//    return token;
+//}
 //test
 //    public String checkVenueBooked(List<VenueDTO> venueList,OrderDTO order) {
 //

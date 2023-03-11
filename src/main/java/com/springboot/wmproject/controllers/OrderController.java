@@ -24,7 +24,7 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
 
@@ -33,7 +33,7 @@ public class OrderController {
         return  ResponseEntity.ok(orderService.getAllOrder());
 
     }
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/bybookingEmp")
     public ResponseEntity<List<OrderDTO>> getAllOrderbyBooking(Integer empId)
@@ -61,6 +61,7 @@ public class OrderController {
         return new ResponseEntity<>(orderService.createOrder(order), HttpStatus.CREATED);
     }
 
+
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/update")
@@ -79,7 +80,29 @@ public class OrderController {
         return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/updateTable/{orderId}/{table}")
+    public ResponseEntity<OrderDTO> update(@PathVariable Integer orderId,@PathVariable Integer table)
+    {
+        return ResponseEntity.ok(orderService.updateOrderTable(orderId,table));
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/updateStatus")
+    public ResponseEntity<OrderDTO> updateStatus(@RequestBody OrderDTO order)
+    {
+        Integer orderId=order.getId();
+        String status=order.getOrderStatus();
+        Integer bookingEmp=order.getBookingEmp();
+        Integer organizeTeam=order.getOrganizeTeam();
+        Double orderTotal=order.getOrderTotal();
+        Integer part_time_emp_amount=order.getPartTimeEmpAmount();
+
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Integer id)

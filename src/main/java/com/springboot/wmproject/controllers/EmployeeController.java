@@ -43,6 +43,13 @@ public class EmployeeController {
 
     @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/findByTeam/{teamId}")
+    public ResponseEntity<List<EmployeeDTO>> searchByName(@PathVariable Integer teamId){
+        return ResponseEntity.ok(employeeService.findAllByTeamId(teamId));
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/{id}")
     public ResponseEntity<EmployeeDTO> getEmployeeById(@PathVariable int id){
         return ResponseEntity.ok(employeeService.getEmployeeById(id));

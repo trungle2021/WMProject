@@ -1,7 +1,9 @@
 package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.FoodDTO;
+import com.springboot.wmproject.DTO.FoodDetailDTO;
 import com.springboot.wmproject.DTO.ServiceDTO;
+import com.springboot.wmproject.DTO.ServiceDetailDTO;
 import com.springboot.wmproject.services.Service_Service;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -23,7 +25,7 @@ public class ServiceController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<ServiceDTO>> getAll()
@@ -31,13 +33,14 @@ public class ServiceController {
         return ResponseEntity.ok(service.getAllService());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<ServiceDTO> create(@RequestBody ServiceDTO serviceDTO)
     {return  new ResponseEntity<>(service.createService(serviceDTO), HttpStatus.CREATED);}
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<ServiceDTO> update(@RequestBody ServiceDTO serviceDTO){
@@ -45,7 +48,7 @@ public class ServiceController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteService(@PathVariable int id){

@@ -23,7 +23,7 @@ public class FoodDetailController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byfood/{foodId}")
     public ResponseEntity<List<FoodDetailDTO>> getAllDetailByFoodId(@PathVariable int foodId)
@@ -31,7 +31,7 @@ public class FoodDetailController {
         return ResponseEntity.ok(service.getAllDetailByFoodId(foodId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byorder/{orderId}")
     public ResponseEntity<List<FoodDetailDTO>> getAllDetailByOrderId(@PathVariable int orderId)
@@ -39,20 +39,20 @@ public class FoodDetailController {
         return ResponseEntity.ok(service.getAllDetailByFoodId(orderId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<FoodDetailDTO> createFoodDetail(@RequestBody FoodDetailDTO foodDtDTO)
     {return  new ResponseEntity<>(service.createFoodDetail(foodDtDTO), HttpStatus.CREATED);}
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<FoodDetailDTO> updateFood(@RequestBody FoodDetailDTO foodDetailDTO){
         return ResponseEntity.ok(service.updateFoodDetail(foodDetailDTO));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteMaterial(@PathVariable int id){

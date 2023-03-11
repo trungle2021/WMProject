@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  /* Style the error message container */
+  .error-page {
+    max-width: 600px;
+    width: 100%;
+    padding: 20px;
+    border: 2px solid #f0ad4e;
+    border-radius: 5px;
+    text-align: center;
+  }
+
+  /* Style the error message headline */
+  .headline {
+    margin-top: 0;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
+  /* Style the exclamation triangle icon */
+  .fas.fa-exclamation-triangle {
+    margin-right: 10px;
+    font-size: 36px;
+  }
+
+  /* Style the error message content */
+  .error-content {
+    margin-top: 30px;
+    font-size: 24px;
+    line-height: 1.5;
+  }
+
+  /* Style the link to return to the dashboard */
+  .error-content a {
+    color: #f0ad4e;
+    text-decoration: none;
+    font-weight: bold;
+    border-bottom: 2px solid #f0ad4e;
+  }
+
+  .error-content a:hover {
+    background-color: #f0ad4e;
+    color: white;
+  }</style>
+</head>
+<body>
+<section class="content">
+  <div class="error-page">
+    <h2 class="headline text-warning"> ERROR!</h2>
+
+    <div class="error-content">
+      <h3><i class="fas fa-exclamation-triangle text-warning"></i> Oops! Có Lỗi Xảy Ra.</h3>
+      <p th:text="${message}" ></p>
+      <p>
+        We could not find the page you were looking for.
+        Meanwhile, you may <a href="/admin/home">return to dashboard</a>
+      </p>
+
+
+    </div>
+    <!-- /.error-content -->
+  </div>
+  <!-- /.error-page -->
+</section>
+</body>
+</html>
