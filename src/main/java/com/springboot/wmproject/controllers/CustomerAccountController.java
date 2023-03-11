@@ -24,13 +24,13 @@ public class CustomerAccountController {
     }
 
     @GetMapping(value = "/all")
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<CustomerAccountDTO>> getAll(){
         return ResponseEntity.ok(customerAccountService.findAll());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/{id}")
     public ResponseEntity<CustomerAccountDTO> getCustomerAccountByAccountId(@PathVariable int id){
@@ -38,22 +38,18 @@ public class CustomerAccountController {
     }
 
     @PutMapping(value = "/update")
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<CustomerAccountDTO> update(@RequestBody CustomerAccountDTO customerAccountDTO){
         return ResponseEntity.ok(customerAccountService.update(customerAccountDTO));
     }
     @DeleteMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<String> delete(@PathVariable int id){
         customerAccountService.delete(id);
         return ResponseEntity.ok("Customer Account Deleted");
     }
 
-//    @PostMapping("/savePassword")
-//    public ResponseEntity<GenericResponse> savePassword(PasswordDTO passwordDTO){
-//
-//    }
 
 }

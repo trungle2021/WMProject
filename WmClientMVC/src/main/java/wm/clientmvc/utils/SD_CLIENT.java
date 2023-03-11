@@ -2,6 +2,10 @@ package wm.clientmvc.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
+import wm.clientmvc.DTO.LoginDTO;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +33,10 @@ public class SD_CLIENT {
             "/templates/**",
             "/**"
     };
+
+//    public static String preventAccessLogin(Model model, String loginPage,String dashBoardPage){
+//
+//    }
 
     public static void clearCookies(HttpServletResponse response, String ... cookieNames){
         String[] cookies = new String[]{};

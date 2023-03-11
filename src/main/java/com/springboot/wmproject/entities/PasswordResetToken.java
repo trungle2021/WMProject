@@ -1,13 +1,10 @@
 package com.springboot.wmproject.entities;
 
-import com.springboot.wmproject.DTO.CustomerAccountDTO;
-import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.util.Date;
 
 @Getter
@@ -15,23 +12,23 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "password_reset_token", schema = "wmproject")
 public class PasswordResetToken {
-
-    private static final int EXPIRATION = 60 * 24;
-
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    @Id
+    @Column(name = "id", nullable = false)
+    private long id;
+    @Basic
+    @Column(name = "expiry_date", nullable = true)
+    private String expiryDate;
+    @Basic
+    @Column(name = "token", nullable = true, length = 255)
     private String token;
+    @Basic
+    @Column(name = "customer_accounts_id", nullable = false)
+    private int customerAccountsId;
+    @ManyToOne
+    @JoinColumn(name = "customer_accounts_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+    private CustomerAccounts customerAccountsByCustomerAccountsId;
 
-    @OneToOne(targetEntity = CustomerAccounts.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false, name = "customer_accounts_id")
-    private CustomerAccounts customerAccount;
-    private Date expiryDate = new Date(EXPIRATION);
-
-    public PasswordResetToken(CustomerAccounts customerAccount,String token) {
-        this.token = token;
-        this.customerAccount = customerAccount;
-    }
 }

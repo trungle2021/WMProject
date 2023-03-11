@@ -23,7 +23,7 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<FoodDTO>> getAll()
@@ -31,20 +31,20 @@ public class FoodController {
         return ResponseEntity.ok(foodService.getAllFood());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<FoodDTO> createFood(@RequestBody FoodDTO foodDTO)
     {return  new ResponseEntity<>(foodService.createFood(foodDTO),HttpStatus.CREATED);}
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<FoodDTO> updateFood(@RequestBody FoodDTO foodDTO){
         return ResponseEntity.ok(foodService.updateFood(foodDTO));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteFood(@PathVariable int id){

@@ -1,4 +1,4 @@
-package com.springboot.wmproject.DTO;
+package wm.clientmvc.DTO;
 
 import lombok.Data;
 

@@ -9,5 +9,4 @@ public interface AuthService {
     String customerLogin(LoginDTO loginDTO);
     RegisterDTO employeeRegister(RegisterDTO registerDTO);
     RegisterDTO customerRegister(RegisterDTO registerDTO);
-    GenericResponse resetPassword(String email);
 }

@@ -26,14 +26,14 @@ public class ServiceDetailController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byorder/{orderId}")
     public ResponseEntity<List<ServiceDetailDTO>> getAllDetailByOrder(@PathVariable int orderId)
     {
         return ResponseEntity.ok(service.getAllDetailByOrder(orderId));
     }
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byservice/{serviceId}")
     public ResponseEntity<List<ServiceDetailDTO>> getAllDetailByService(@PathVariable int serviceId)
@@ -41,14 +41,14 @@ public class ServiceDetailController {
         return ResponseEntity.ok(service.getAllDetailByService(serviceId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<ServiceDetailDTO> createDetail(@RequestBody ServiceDetailDTO serviceDetailDTO)
     {return  new ResponseEntity<>(service.createDetail(serviceDetailDTO), HttpStatus.CREATED);}
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteFood(@PathVariable int id){
