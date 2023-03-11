@@ -18,10 +18,12 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.extras.springsecurity6.auth.Authorization;
 import wm.clientmvc.DTO.JWTAuthResponse;
 import wm.clientmvc.DTO.LoginDTO;
 import wm.clientmvc.securities.JWT.JwtTokenProvider;
@@ -63,8 +65,8 @@ public class LoginController {
     }
 
     @GetMapping(value = "/staff/logout")
-    public String logoutStaff(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        return logout(request,response,"/staff/login");
+    public String logoutStaff(Model model,HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        return logout(model,request,response,"/staff/login");
     }
 //    CUSTOMER LOGIN
     @PostMapping(value = "/customer/login")
@@ -80,8 +82,8 @@ public class LoginController {
     }
 
     @GetMapping(value = "/customer/logout")
-    public String logoutCustomer(HttpServletRequest request, HttpServletResponse response) throws ServletException {
-       return logout(request,response,"/customer/login");
+    public String logoutCustomer(Model model,HttpServletRequest request, HttpServletResponse response) throws ServletException {
+       return logout(model,request,response,"/customer/login");
     }
 
 
@@ -145,20 +147,17 @@ public class LoginController {
         }
         return "redirect:/error";
     }
-    public String logout(HttpServletRequest request, HttpServletResponse response,String logoutSuccessUrl) throws ServletException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication != null){
-            SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
-            logoutHandler.setInvalidateHttpSession(true);
-            logoutHandler.setClearAuthentication(true);
-
+    public String logout(Model model, HttpServletRequest request, HttpServletResponse response, String logoutSuccessUrl) throws ServletException {
             Cookie cookie = new Cookie("token",null);
             cookie.setMaxAge(0);
             cookie.setPath("/");
             response.addCookie(cookie);
-            logoutHandler.logout(request,response,authentication);
-            request.logout();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+            SecurityContextHolder.clearContext();
+                model.asMap().clear();
         }
-        return "redirect:"+logoutSuccessUrl;
+        return "redirect:"+logoutSuccessUrl+"?logout";
     }
 }

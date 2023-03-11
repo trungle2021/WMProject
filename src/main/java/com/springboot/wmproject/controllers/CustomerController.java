@@ -23,28 +23,28 @@ public class CustomerController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
     public ResponseEntity<List<CustomerDTO>> getAllCustomer(){
         return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDTO> getCustomerById(@PathVariable int id){
         return new ResponseEntity<CustomerDTO>(service.getCustomerById(id), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/update")
     public ResponseEntity<CustomerDTO> update(@RequestBody CustomerDTO customerDTO){
         return new ResponseEntity<CustomerDTO>(service.update(customerDTO), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("delete/{id}")
     public ResponseEntity<String> delete(@PathVariable int id){

@@ -10,6 +10,8 @@ import com.springboot.wmproject.repositories.CustomerAccountRepository;
 import com.springboot.wmproject.repositories.CustomerRepository;
 import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
 import com.springboot.wmproject.services.AuthServices.PasswordResetTokenService;
+import com.springboot.wmproject.utils.EmailSender;
+import com.springboot.wmproject.utils.SD;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,13 +31,16 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     private CustomerRepository customerRepository;
     private ModelMapper modelMapper;
 
+    private EmailSender sender;
+
     private PasswordResetTokenService passwordResetTokenService;
 
     @Autowired
-    public CustomerAccountServiceImpl(CustomerAccountRepository customerAccountRepository, CustomerRepository customerRepository, ModelMapper modelMapper,PasswordResetTokenService passwordResetTokenService) {
+    public CustomerAccountServiceImpl(EmailSender sender,CustomerAccountRepository customerAccountRepository, CustomerRepository customerRepository, ModelMapper modelMapper,PasswordResetTokenService passwordResetTokenService) {
         this.customerAccountRepository = customerAccountRepository;
         this.customerRepository = customerRepository;
         this.modelMapper = modelMapper;
+        this.sender = sender;
         this.passwordResetTokenService = passwordResetTokenService;
     }
 
@@ -117,21 +123,50 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     public CustomerAccountDTO getByResetPasswordToken(String token) {
         CustomerAccounts customerAccounts= customerAccountRepository.getByResetPasswordToken(token);
         if(customerAccounts == null){
-            throw new UserNotFoundException("Customer Account not found");
+            throw new UserNotFoundException("Invalid Token");
         }
         return mapToDto(customerAccounts);
     }
 
     @Override
-    public void updatePassword(CustomerAccountDTO customerAccountDTO, String newPass,String token) {
+    public String updatePassword(String newPass,String token) throws ParseException {
+        CustomerAccountDTO accountDTO = getByResetPasswordToken(token);
+       String checkToken =  passwordResetTokenService.validatePasswordResetToken(token);
+        if(!checkToken.equals("Valid")){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,checkToken);
+        }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPass = passwordEncoder.encode(newPass);
-        CustomerAccounts accounts = mapToEntity(customerAccountDTO);
+        CustomerAccounts accounts = mapToEntity(accountDTO);
         accounts.setPassword(encodedPass);
         passwordResetTokenService.delete(token);
         customerAccountRepository.save(accounts);
+        return "Your Password Has Been Updated";
     }
 
+    @Override
+    public String processForgotPassword(String email) {
+       CustomerAccountDTO customerAccountDTO = findByEmail(email);
+       String tokenCreated = passwordResetTokenService.create(customerAccountDTO.getCustomerId());
+
+       String recipient = email;
+       String subject = "Reset Password - WM RESTAURANT" ;
+       String link = SD.DOMAIN_APP_CLIENT + "customer/changePassword?token=" + tokenCreated;
+        String content =
+                "<p>Hello,</p>"
+                + "<p>You have requested to reset your password.</p>"
+                + "<p>Click the link below to change your password:</p>"
+                + "<p><a href=\"" + link + "\">Change my password</a></p>"
+                + "<br>"
+                + "<p>Ignore this email if you do remember your password, "
+                + "or you have not made the request.</p>";
+       try{
+           sender.sendEmail(recipient,subject,content);
+           return "The Email Has Been Sent";
+       }catch(Exception e){
+           return "Unable to send email!";
+       }
+    }
 
 
     public CustomerAccountDTO mapToDto(CustomerAccounts customerAccounts){

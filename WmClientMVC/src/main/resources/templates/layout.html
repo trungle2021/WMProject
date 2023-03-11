@@ -46,7 +46,27 @@
         <li class="nav-item"><a href="/customer/schedule.html" class="nav-link">Schedule</a></li>
         <li class="nav-item"><a href="/customer/blog.html" class="nav-link">Blog</a></li>
         <li class="nav-item"><a href="/customer/contact.html" class="nav-link">Contact</a></li>
-        <li class="nav-item"><a href="/customer/login" class="nav-link">Login</a></li>
+<!--        <a href="#" class="d-block" th:text="${#authentication.isAuthenticated()}"></a>-->
+<!--        <a href="#" class="d-block" th:text="${#authorization.expression('hasRole(''ANONYMOUS'')')}"></a>-->
+
+
+
+          <th:block th:if="${(#authentication.isAuthenticated()) && (#authorization.expression('hasRole(''ANONYMOUS'')'))}">
+            <li class="nav-item">
+              <a href="/customer/login" class="nav-link">Login</a>
+            </li>
+          </th:block>
+
+        <th:block th:unless="${(#authentication.isAuthenticated()) && (#authorization.expression('hasRole(''ANONYMOUS'')'))}">
+          <li class="nav-item">
+            <a href="/customer/logout" class="nav-link">Logout</a>
+          </li>
+        </th:block>
+
+
+
+
+
         <li class="nav-item cta mr-md-2"><a href="#" class="nav-link">Buy ticket</a></li>
       </ul>
     </div>

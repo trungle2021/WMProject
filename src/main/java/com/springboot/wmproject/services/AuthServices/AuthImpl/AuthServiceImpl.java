@@ -106,11 +106,5 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
-    @Override
-    public GenericResponse resetPassword(String email) {
-       CustomerAccountDTO accountDTO =  customerAccountService.findByEmail(email);
-       String token = RandomString.make(30);
-       passwordResetTokenService.create(accountDTO,token);
-        return null;
-    }
+
 }

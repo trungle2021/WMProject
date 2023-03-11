@@ -25,7 +25,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all","/all/customer/{customerId}"})
     public ResponseEntity<List<BookingDTO>> GetAllBooking(
@@ -33,7 +33,7 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getAllBooking(customerId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"{booking_id}","{booking_id}/customer/{customer_id}"})
     public ResponseEntity<BookingDTO> GetOneBooking(
@@ -41,20 +41,20 @@ public class BookingController {
         return ResponseEntity.ok(bookingService.getOneBooking(booking_id, customer_id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/create")
     public ResponseEntity<BookingDTO> createBooking(@RequestBody BookingDTO bookingDTO){
         return new ResponseEntity<>(bookingService.createBooking(bookingDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<BookingDTO> updateBooking(@RequestBody BookingDTO bookingDTO){
         return ResponseEntity.ok(bookingService.updateBooking(bookingDTO));
     }
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> deleteBooking(@PathVariable int id){

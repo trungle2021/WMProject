@@ -36,12 +36,15 @@
         <class>com.springboot.wmproject.en.Services</class>
         <class>com.springboot.wmproject.en.VenueImages</class>
         <class>com.springboot.wmproject.en.Venues</class>
+        <class>com.springboot.wmproject.t.CustomerAccounts</class>
+        <class>com.springboot.wmproject.t.PasswordResetToken</class>
+        <class>com.springboot.wmproject.t.Customers</class>
 
         <properties>
       <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/wmproject?SSL=false"/>
       <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
       <property name="hibernate.connection.username" value="root"/>
-      <property name="hibernate.connection.password" value="khoa123"/>
+      <property name="hibernate.connection.password" value="Admin123@"/>
     </properties>
   </persistence-unit>
 
