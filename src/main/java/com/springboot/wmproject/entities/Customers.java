@@ -2,6 +2,7 @@ package com.springboot.wmproject.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,26 +16,31 @@ import java.util.HashSet;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Table(name = "customers", schema = "wmproject")
 public class Customers {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "name", nullable = false, length = 45)
-    private String name;
+    @Column(name = "firstName", length = 45)
+    private String firstName;
     @Basic
-    @Column(name = "address", nullable = false, length = 100)
+    @Column(name = "lastName", length = 45)
+    private String lastName;
+
+    @Basic
+    @Column(name = "address", length = 100)
     private String address;
     @Basic
-    @Column(name = "phone", nullable = false, length = 15)
+    @Column(name = "phone",length = 15)
     private String phone;
     @Basic
     @Column(name = "gender", nullable = true, length = 10)
     private String gender;
 
     @Basic
-    @Column(name = "email", nullable = false, length = 50)
+    @Column(name = "email", length = 50)
     private String email;
 
     @Basic

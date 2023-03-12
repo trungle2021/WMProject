@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
 import java.util.Set;
 
 @Data
@@ -32,7 +31,7 @@ public class OrderDTO {
     private Integer table_amount;
     private Integer part_time_emp_amount;
 
-//    private Set<FoodDetailDTO> foodDetails;
+    //    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;
 //    private Employees employees;
 //    private OrganizeTeams organizeTeams;

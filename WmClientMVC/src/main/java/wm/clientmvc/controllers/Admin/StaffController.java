@@ -16,19 +16,18 @@ import wm.clientmvc.utils.SD_CLIENT;
 public class StaffController {
 
     @GetMapping("/login")
-    public String employeeLogin(Model model){
+    public String employeeLogin(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String roleCheck = authentication.getAuthorities().stream().findFirst().toString();
-        if(!roleCheck.contains("ANONYMOUS")){
+        if (!roleCheck.contains("ANONYMOUS")) {
             return "redirect:/staff/dashboard";
         }
-        model.addAttribute("loginDTO",new LoginDTO());
+        model.addAttribute("loginDTO", new LoginDTO());
         return "adminTemplate/login";
     }
 
     @GetMapping("/dashboard")
-    public String index()
-    {
+    public String index() {
         return "adminTemplate/home";
     }
 }

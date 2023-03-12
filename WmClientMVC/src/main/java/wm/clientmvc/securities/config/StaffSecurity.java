@@ -13,18 +13,18 @@ import wm.clientmvc.utils.SD_CLIENT;
 
 @Configuration
 @EnableWebSecurity
-@Order(2)
-public  class StaffSecurity {
+@Order(1)
+public class StaffSecurity {
 
 
     @Bean
-    public SecurityFilterChain staffFilterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain staffFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
                 .requestMatchers("/staff/login").permitAll()
                 .requestMatchers("/staff/logout").permitAll()
-//                .requestMatchers("/staff/admin/**").hasAuthority("ROLE_ADMIN")
-//                .requestMatchers("/staff/organize/**").hasAuthority("ROLE_ORGANIZE")
-//                .requestMatchers("/staff/sale/**").hasAuthority("ROLE_SALE")
+                .requestMatchers("/staff/admin/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/staff/organize/**").hasAuthority("ROLE_ORGANIZE")
+                .requestMatchers("/staff/sale/**").hasAuthority("ROLE_SALE")
                 .requestMatchers("/staff/**").permitAll()
                 .requestMatchers("/access-denied").permitAll()
                 .requestMatchers(SD_CLIENT.AUTH_WHITELIST).permitAll()

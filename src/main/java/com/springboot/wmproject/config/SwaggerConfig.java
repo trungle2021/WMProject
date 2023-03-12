@@ -18,15 +18,14 @@ import org.springframework.context.annotation.Configuration;
 )
 public class SwaggerConfig {
     final String securitySchemeName = "bearerAuth";
+    @Bean
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .info(new Info()
+                        .title("WM API")
+                        .version("1.0")
+                        .description("Wedding Management API"));
 
-        @Bean
-        public OpenAPI customOpenAPI() {
-            return new OpenAPI()
-                    .info(new Info()
-                            .title("WM API")
-                            .version("1.0")
-                            .description("Wedding Management API"));
-
-        }
+    }
 
 }

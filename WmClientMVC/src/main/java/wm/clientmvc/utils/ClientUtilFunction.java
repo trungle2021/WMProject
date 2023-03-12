@@ -13,11 +13,11 @@ import java.util.List;
 
 public class ClientUtilFunction {
     public static List<String> AddMultipleFilesEncrypted(MultipartFile[] files) {
-        List<String> encodedFiles=new ArrayList<>();
+        List<String> encodedFiles = new ArrayList<>();
         for (MultipartFile file : files
         ) {
             try {
-                String encodedFile= Base64.getEncoder().encodeToString(file.getBytes());
+                String encodedFile = Base64.getEncoder().encodeToString(file.getBytes());
                 encodedFiles.add(encodedFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);

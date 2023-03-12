@@ -1,6 +1,7 @@
 package wm.clientmvc.entities;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
@@ -17,7 +18,7 @@ public class VenueImages {
     @Column(name = "venue_id", nullable = true)
     private Integer venueId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venue_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "venue_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Venues venuesByVenueId;
 
     public int getId() {

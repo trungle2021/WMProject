@@ -1,6 +1,8 @@
 package wm.clientmvc.entities;
+
 import java.math.BigDecimal;
 import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity

@@ -70,7 +70,7 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setSalary(registerDTO.getSalary());
         employeeDTO.setAddress(registerDTO.getAddress());
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
-        employeeDTO.setEmpType(registerDTO.getEmpType());
+        employeeDTO.setEmail(registerDTO.getEmail());
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
         employeeDTO.setAvatar(registerDTO.getAvatar());
         EmployeeDTO empDTO = employeeService.create(employeeDTO);
@@ -87,13 +87,15 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterDTO customerRegister(RegisterDTO registerDTO) {
+    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) {
         CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setName(registerDTO.getName());
+        customerDTO.setFirstname(registerDTO.getFirstname());
+        customerDTO.setLastname(registerDTO.getLastname());
         customerDTO.setPhone(registerDTO.getPhone());
         customerDTO.setAddress(registerDTO.getAddress());
         customerDTO.setGender(registerDTO.getGender());
         customerDTO.setAvatar(registerDTO.getAvatar());
+        customerDTO.setEmail(registerDTO.getEmail());
         CustomerDTO cusDTO = customerService.create(customerDTO);
         //getID after employee created -> then pass to employee account
 
@@ -102,8 +104,9 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.create(customerAccountDTO);
-        registerDTO.setEmployeeId(cusDTO.getId());
-        return null;
+        registerDTO.setCustomerId(cusDTO.getId());
+//        registerDTO.setPassword(customerAccountDTO.getPassword());
+        return registerDTO;
     }
 
 

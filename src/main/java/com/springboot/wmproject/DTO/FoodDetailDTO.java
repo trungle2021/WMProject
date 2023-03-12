@@ -17,5 +17,4 @@ public class FoodDetailDTO {
 //    private BigDecimal price;
 
 
-
 }
