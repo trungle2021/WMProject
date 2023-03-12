@@ -48,12 +48,6 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
         return mapToDto(employeeAccount);
     }
 
-//    @Override
-//    public List<EmployeeAccountDTO> findByPhone(String phone) {
-//        List<EmployeeAccounts> employeeAccounts = empAccRepo.findByPhone(phone);
-//        return employeeAccounts.stream().map(emp -> mapToDto(emp)).collect(Collectors.toList());
-//    }
-
     @Override
     public List<EmployeeAccountDTO> findByName(String name) {
         List<EmployeeAccounts> employeeAccounts = empAccRepo.findByName(name);
@@ -61,8 +55,8 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public List<EmployeeAccountDTO> filterByEmpType(String empType) {
-        List<EmployeeAccounts> employeeAccounts = empAccRepo.filterByEmpType(empType);
+    public List<EmployeeAccountDTO> filterByRole(String role) {
+        List<EmployeeAccounts> employeeAccounts = empAccRepo.filterByRole(role);
         return employeeAccounts.stream().map(emp -> mapToDto(emp)).collect(Collectors.toList());
     }
 

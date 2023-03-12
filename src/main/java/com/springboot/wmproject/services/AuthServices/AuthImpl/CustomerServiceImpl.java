@@ -39,7 +39,15 @@ public class CustomerServiceImpl implements CustomerService
     }
     @Override
     public CustomerDTO create(CustomerDTO customerDTO) {
-        return mapToDto(customerRepository.save(mapToEntity(customerDTO)));
+        Customers customers = new Customers();
+        customers.setFirstName(customerDTO.getFirstname());
+        customers.setLastName(customerDTO.getLastname());
+        customers.setEmail(customerDTO.getEmail());
+        customers.setAddress(customerDTO.getAddress());
+        customers.setPhone(customerDTO.getPhone());
+        customers.setGender(customerDTO.getGender());
+        customers.setAvatar(customerDTO.getAvatar());
+        return mapToDto(customerRepository.save(customers));
     }
 
     @Override
@@ -52,7 +60,8 @@ public class CustomerServiceImpl implements CustomerService
             if(checkCustomer!=null){
                 Customers customers=new Customers();
                 customers.setId(customerDTO.getId());
-                customers.setName(customerDTO.getName());
+                customers.setFirstName(customerDTO.getFirstname());
+                customers.setLastName(customerDTO.getLastname());
                 customers.setAddress(customerDTO.getAddress());
                 customers.setPhone(customerDTO.getPhone());
                 customers.setAvatar(customerDTO.getAvatar());

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -18,9 +19,9 @@ public class OrganizeTeams {
     @Basic
     @Column(name = "team_name", nullable = true, length = 45)
     private String teamName;
-    @OneToMany(mappedBy = "organizeTeamsByTeamId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "organizeTeamsByTeamId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Employees> employeesById = new HashSet<>();
-    @OneToMany(mappedBy = "organizeTeamsByOrganizeTeam",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "organizeTeamsByOrganizeTeam", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Orders> ordersById = new HashSet<>();
 
     public int getId() {

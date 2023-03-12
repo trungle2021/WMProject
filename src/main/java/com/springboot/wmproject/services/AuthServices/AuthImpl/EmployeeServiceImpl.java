@@ -56,7 +56,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 employees.setPhone(updateEmployeeDTO.getPhone());
                 employees.setJoinDate(updateEmployeeDTO.getJoinDate());
                 employees.setSalary(updateEmployeeDTO.getSalary());
-                employees.setEmpType(updateEmployeeDTO.getEmpType());
+                employees.setEmail(updateEmployeeDTO.getEmail());
                 employees.setTeamId(updateEmployeeDTO.getTeam_id());
                 employeeRepository.save(employees);
                 return mapToDto(employees);
@@ -66,8 +66,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> findAllByEmpType(String empType){
-        List<EmployeeDTO> employeeDTOList=employeeRepository.findAllByEmpType(empType).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
+    public List<EmployeeDTO> findAllByRole(String role){
+        List<EmployeeDTO> employeeDTOList=employeeRepository.findAllByRole(role).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
 
@@ -88,11 +88,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         Employees employees=employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("Employee","id",String.valueOf(employeeId)));
         employeeRepository.delete(employees);
     }
-
-//    @Override
-//    public EmployeeDTO save(EmployeeDTO employeeDTO) {
-//        return mapToDto(employeeRepository.save(mapToEntity(employeeDTO)));
-//    }
 
     public EmployeeDTO mapToDto(Employees employees) {
         EmployeeDTO postDto = modelMapper.map(employees, EmployeeDTO.class);

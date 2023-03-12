@@ -9,12 +9,11 @@ public interface EmployeeService {
     EmployeeDTO getEmployeeById(int id);
     EmployeeDTO create(EmployeeDTO newEmployeeDTO);
     EmployeeDTO update(EmployeeDTO updateEmployeeDTO);
-    List<EmployeeDTO> findAllByEmpType(String empType);
+    List<EmployeeDTO> findAllByRole(String role);
     List<EmployeeDTO> findAllByName(String empType);
     List<EmployeeDTO> findAllByTeamId(Integer teamId);
 
     void delete(int employeeId);
 
-//    EmployeeDTO save(EmployeeDTO employeeDTO);
 
 }

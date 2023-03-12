@@ -45,8 +45,8 @@ public class EmployeeAccountController {
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/employee/type/{empType}")
-    public ResponseEntity<List<EmployeeAccountDTO>> filterByEmpType(@PathVariable String empType){
-        return ResponseEntity.ok(employeeAccountService.filterByEmpType(empType));
+    public ResponseEntity<List<EmployeeAccountDTO>> filterByEmpType(@PathVariable String role){
+        return ResponseEntity.ok(employeeAccountService.filterByRole(role));
     }
     @PutMapping(value = "/update")
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")

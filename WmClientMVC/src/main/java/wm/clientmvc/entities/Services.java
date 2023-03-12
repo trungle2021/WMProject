@@ -3,6 +3,7 @@ package wm.clientmvc.entities;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -20,7 +21,7 @@ public class Services {
     @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
-    @OneToMany(mappedBy = "servicesByServiceId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "servicesByServiceId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetailsById;
 
     public int getId() {

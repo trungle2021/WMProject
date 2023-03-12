@@ -1,4 +1,5 @@
 package wm.clientmvc.securities.JWT;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -21,50 +22,50 @@ public class JwtTokenProvider {
     private String jwtSecret;
     @Value("${app-jwt-expiration-second}")
     private long jwtExpirationDate;
-    private Key key(){
+
+    private Key key() {
         return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
     }
 
     //get username from jwt token
-    public String getUsername(String token){
-      Claims claims =  Jwts.parserBuilder()
+    public String getUsername(String token) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        String username = claims.get("username",String.class);
-        if(username == null){
+        String username = claims.get("username", String.class);
+        if (username == null) {
             return "JWT claims string is empty.";
         }
         return username;
     }
 
 
-
-    public String getUserType(String token){
-        Claims claims =  Jwts.parserBuilder()
+    public String getUserType(String token) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        String userType = claims.get("userType",String.class);
-        if(userType == null){
-           return "JWT claims string is empty.";
+        String userType = claims.get("userType", String.class);
+        if (userType == null) {
+            return "JWT claims string is empty.";
         }
         return userType;
     }
 
-    public String getUserID(String token){
-        Claims claims =  Jwts.parserBuilder()
+    public String getUserID(String token) {
+        Claims claims = Jwts.parserBuilder()
                 .setSigningKey(key())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
 
-        String userID = claims.get("userID",String.class);
-        if(userID == null){
+        String userID = claims.get("userID", String.class);
+        if (userID == null) {
             return "JWT claims string is empty.";
         }
         return userID;

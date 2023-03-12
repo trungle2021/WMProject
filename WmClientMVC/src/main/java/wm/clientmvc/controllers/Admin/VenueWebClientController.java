@@ -84,30 +84,31 @@ public class VenueWebClientController {
 
         ClientUtilFunction utilFunction = new ClientUtilFunction();
         List<String> venueImgUrls = utilFunction.AddMultipleFilesEncrypted(files);
-        List<VenueImages> newList=new ArrayList<>();
+        List<VenueImages> newList = new ArrayList<>();
         if (venueImgDTO != null) {
             for (String venueImgUrl : venueImgUrls
             ) {
-                VenueImages newVenueImages=new VenueImages();
+                VenueImages newVenueImages = new VenueImages();
                 newVenueImages.setVenueId(venueImgDTO.getVenueId());
                 newVenueImages.setUrl(venueImgUrl);
                 newList.add(newVenueImages);
             }
         }
-        restTemplate.postForEntity(uriVenue,newList,String.class);
+        restTemplate.postForEntity(uriVenue, newList, String.class);
         return "redirect:/admin/venue?msg=Success";
     }
+
     @PostMapping("admin/venue/update")
-    public String updateVenue(@ModelAttribute VenueDTO venueDTO)  {
+    public String updateVenue(@ModelAttribute VenueDTO venueDTO) {
         String uriVenue = "http://localhost:8080/api/venues/update";
         RestTemplate restTemplate = new RestTemplate();
-        Venues venues=new Venues();
+        Venues venues = new Venues();
         venues.setId(venueDTO.getId());
         venues.setVenueName(venueDTO.getVenueName());
         venues.setMinPeople(venueDTO.getMinPeople());
         venues.setMaxPeople(venueDTO.getMaxPeople());
         venues.setPrice(venueDTO.getPrice());
-        restTemplate.put(uriVenue,venues);
+        restTemplate.put(uriVenue, venues);
         return "redirect:/admin/venue?msg=Success";
     }
 }

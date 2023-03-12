@@ -4,6 +4,7 @@ package wm.clientmvc.DTO;
 import lombok.Data;
 
 import java.util.Set;
+
 @Data
 public class FoodDTO {
     private int id;

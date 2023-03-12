@@ -17,7 +17,7 @@ import java.util.List;
 @Controller
 public class OrganizeTeamWebClientController {
     @GetMapping(value = "/admin/team")
-    public String getAll(Model model, HttpServletRequest request){
+    public String getAll(Model model, HttpServletRequest request) {
         String msg = request.getParameter("msg");
         if (msg != null) {
             model.addAttribute("message", msg);

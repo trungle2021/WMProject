@@ -28,6 +28,6 @@ public class Booking {
     @Column(name = "appointment_date", nullable = true, length = 45)
     private String appointmentDate;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Customers customersByCustomerId;
 }

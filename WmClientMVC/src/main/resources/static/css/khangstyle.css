@@ -7,13 +7,18 @@ body {
     --grid-gap: 1px;
     --day-label-size: 20px;
 }
-.container{margin-top: 2rem;}
-.flex{
-    display:flex;
+
+.container {
+    margin-top: 2rem;
+}
+
+.flex {
+    display: flex;
     justify-content: center;
     margin: 20px;
 
 }
+
 .card {
     display: flex;
     align-items: center;
@@ -68,9 +73,16 @@ body {
     color: #007bff;
     border: 1px solid #007bff;
 }
-.app{flex-grow: 6;}
-.venue{flex-grow: 4;
-    margin-left: 10px;}
+
+.app {
+    flex-grow: 6;
+}
+
+.venue {
+    flex-grow: 4;
+    margin-left: 10px;
+}
+
 ol,
 li {
     padding: 0;
@@ -169,30 +181,32 @@ li {
 }
 
 
-
-
-
 .container {
     padding: 20px;
 }
-#orderList,#orderInfo {
+
+#orderList, #orderInfo {
     border: 1px solid #ddd;
     padding: 20px;
     height: 100%;
 }
+
 #foodList, #serviceList {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 #starter, #main, #dessert, #service {
     margin-top: 20px;
     margin-bottom: 20px;
 }
+
 label {
     font-weight: bold;
     margin-right: 10px;
 }
-.select-box{
+
+.select-box {
     flex: 1;
     max-width: 200px;
     margin-right: 10px;
@@ -205,22 +219,26 @@ label {
     margin: 10px;
 
 }
-.color{
-    background-color:  #7bdcb5;
+
+.color {
+    background-color: #7bdcb5;
 
 }
+
 .color:hover {
     background-color: #00d084;
 }
 
-.color1{
+.color1 {
     background-color: #8ed1fc;
     width: 100%;
     font-weight: bold;
 }
-.color1:hover{
+
+.color1:hover {
     background-color: #0693e3;
 }
+
 .card-container {
     display: flex;
     flex-wrap: wrap;
@@ -256,6 +274,7 @@ p {
         font-size: 12px;
     }
 }
+
 table {
     border-collapse: collapse;
     width: 100%;
@@ -274,10 +293,13 @@ th {
     background-color: #7bdcb5;
     color: #fff;
 }
-.total{font-size: large;
+
+.total {
+    font-size: large;
     font-weight: bold;
     justify-content: space-around;
-    display: flex;}
+    display: flex;
+}
 
 
 
