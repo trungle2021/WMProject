@@ -1,6 +1,7 @@
 package wm.clientmvc.entities;
 
 import jakarta.persistence.*;
+
 import java.util.Collection;
 import java.util.Objects;
 
@@ -40,21 +41,21 @@ public class Orders {
     @Basic
     @Column(name = "part_time_emp_amount", nullable = true)
     private Integer partTimeEmpAmount;
-    @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "ordersByOrderId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<FoodDetails> foodDetailsById;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "venue_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "venue_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Venues venuesByVenueId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "booking_emp", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "booking_emp", referencedColumnName = "id", insertable = false, updatable = false)
     private Employees employeesByBookingEmp;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "organize_team", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "organize_team", referencedColumnName = "id", insertable = false, updatable = false)
     private OrganizeTeams organizeTeamsByOrganizeTeam;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Customers customersByCustomerId;
-    @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "ordersByOrderId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetailsById;
 
     public int getId() {

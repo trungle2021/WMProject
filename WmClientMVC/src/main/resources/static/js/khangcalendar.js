@@ -1,5 +1,3 @@
-
-
 dayjs.extend(window.dayjs_plugin_weekday);
 // dayjs.extend(window.dayjs_plugin_weekOfYear);
 const date = dayjs(); // Create a Day.js instance
@@ -44,7 +42,7 @@ let selectedMonth = dayjs(new Date(INITIAL_YEAR, INITIAL_MONTH - 1, 1));
 let currentMonthDays;
 let previousMonthDays;
 let nextMonthDays;
-var venueCard= document.getElementById("card-container");
+var venueCard = document.getElementById("card-container");
 const daysOfWeekElement = document.getElementById("days-of-week");
 
 WEEKDAYS.forEach((weekday) => {
@@ -94,56 +92,53 @@ function appendDay(day, calendarDaysElement) {
     dayLink.href = "/customer/order/getvenue";
 //ajax
 
-    dayLink.addEventListener("click", function(event) {
+    dayLink.addEventListener("click", function (event) {
 
         event.preventDefault(); // prevent the default behavior of the a tag
 
-    // make the AJAX request
-     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/customer/order/getvenue");
-    xhr.setRequestHeader("Content-Type", "application/json");
-    let response=null;
-    xhr.onload = function() {
-      // handle the response from the server
-        response = JSON.parse(xhr.responseText);
-        const venueResponse=JSON.parse(response.venues);
-        const bookedsResponse=JSON.parse(response.bookeds);
+        // make the AJAX request
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/customer/order/getvenue");
+        xhr.setRequestHeader("Content-Type", "application/json");
+        let response = null;
+        xhr.onload = function () {
+            // handle the response from the server
+            response = JSON.parse(xhr.responseText);
+            const venueResponse = JSON.parse(response.venues);
+            const bookedsResponse = JSON.parse(response.bookeds);
 
-        let card="";
-        venueResponse.forEach(function(el){
-            //append venue
+            let card = "";
+            venueResponse.forEach(function (el) {
+                //append venue
 
-            card +=appendVenue(el);
-            venueCard.innerHTML=card;
-            // console.log(card);
+                card += appendVenue(el);
+                venueCard.innerHTML = card;
+                // console.log(card);
 
-        });
-        if(bookedsResponse!=null) {
-            bookedsResponse.forEach(function(el) {
-            const button = document.querySelector(`[data-book="${el.bookedTime}"][data-venue="${el.venueId}"]`);
-            if (button) {
-                button.setAttribute('disabled', true);
-                button.setAttribute("class","btn-danger");
+            });
+            if (bookedsResponse != null) {
+                bookedsResponse.forEach(function (el) {
+                    const button = document.querySelector(`[data-book="${el.bookedTime}"][data-venue="${el.venueId}"]`);
+                    if (button) {
+                        button.setAttribute('disabled', true);
+                        button.setAttribute("class", "btn-danger");
+                    }
+                    console.log(button);
+                });
             }
-           console.log(button);
-        });
-        }
-        //tao link
+            //tao link
 
-        console.log(bookedsResponse);
+            console.log(bookedsResponse);
 
-        getOrderLink(day);
+            getOrderLink(day);
 
 
+        };
 
-    };
-
-    xhr.send(day.date);
-
+        xhr.send(day.date);
 
 
-  });
-
+    });
 
 
 //end event click
@@ -160,8 +155,7 @@ function appendDay(day, calendarDaysElement) {
     }
 }
 
-function appendVenue(venue)
-{
+function appendVenue(venue) {
 
     let venueCard =
         `<div class="card">
@@ -182,19 +176,19 @@ function appendVenue(venue)
 
 }
 
-function getOrderLink(day){
+function getOrderLink(day) {
     const buttons = document.querySelectorAll('button[data-order="true"]');
 
     console.log(buttons);
 // Loop through the buttons and attach an event listener to each one
     buttons.forEach(button => {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', function (event) {
             // event.preventDefault(); // Prevent the default behavior of the button
 
             // Get the values of the data attributes
             const bookType = this.getAttribute('data-book');
             const venueId = this.getAttribute('data-venue');
-            alert(bookType+venueId+day.date);
+            alert(bookType + venueId + day.date);
             // Create a new XMLHttpRequest object
             const xhr = new XMLHttpRequest();
 
@@ -203,12 +197,12 @@ function getOrderLink(day){
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             // Define what should happen when the response is received
-            xhr.onload = function() {
+            xhr.onload = function () {
                 console.log(xhr.response);
                 if (xhr.status === 200) {
                     console.log(xhr.response);
                     // Handle successful response
-                  let  myOrder= JSON.parse(xhr.responseText);
+                    let myOrder = JSON.parse(xhr.responseText);
                     // let orderId=myOrder.id
                     // window.location.href="order/create-detail/"+orderId;
 
@@ -236,13 +230,11 @@ function getOrderLink(day){
             };
 
             // Send the AJAX request with the data in JSON format
-            xhr.send(JSON.stringify({ bookType:bookType,venueId:venueId,day:day.date}));
+            xhr.send(JSON.stringify({bookType: bookType, venueId: venueId, day: day.date}));
 
         });
     });
 }
-
-
 
 
 function removeAllDayElements(calendarDaysElement) {

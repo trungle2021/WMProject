@@ -1,113 +1,234 @@
 package wm.clientmvc.controllers.Admin;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui
         .Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
-import wm.clientmvc.DTO.VenueDTO;
-import wm.clientmvc.DTO.VenueImgDTO;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import wm.clientmvc.DTO.*;
 import wm.clientmvc.entities.VenueImages;
 import wm.clientmvc.entities.Venues;
+import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.ClientUtilFunction;
+import wm.clientmvc.utils.SD_CLIENT;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
+@RequestMapping("/staff")
 public class VenueWebClientController {
 
 
-    @GetMapping("admin/venue")
-    public String GetAllVenue(Model model, HttpServletRequest request) {
+    @GetMapping("/venue")
+    public String GetAllVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        ParameterizedTypeReference<List<VenueDTO>> responseTypeVenue = new ParameterizedTypeReference<List<VenueDTO>>() {
+        };
+        ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenueImg = new ParameterizedTypeReference<List<VenueImgDTO>>() {
+        };
+
         String msg = request.getParameter("msg");
         if (msg != null) {
             model.addAttribute("message", msg);
         }
-        String uriVenue = "http://localhost:8080/api/venues/all";
-        String uriVenueImg = "http://localhost:8080/api/venuesImg/all";
-        RestTemplate restTemplate = new RestTemplate();
-        List<VenueDTO> venueDTOList = restTemplate.getForObject(uriVenue, List.class);
-        List<VenueImgDTO> venueImgDTOList = restTemplate.getForObject(uriVenueImg, List.class);
-        ObjectMapper objectMapper = new ObjectMapper();
-        model.addAttribute("list", objectMapper.convertValue(venueDTOList, new TypeReference<List<VenueDTO>>() {
-        }));
-        model.addAttribute("imgList", objectMapper.convertValue(venueImgDTOList, new TypeReference<List<VenueImgDTO>>() {
-        }));
+
+        try {
+            List<VenueDTO> venueDTOList = APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venues/all",
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseTypeVenue
+            );
+            List<VenueImgDTO> venueImgDTOList = APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImg/all",
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseTypeVenueImg
+            );
+            model.addAttribute("list", venueDTOList);
+            model.addAttribute("imgList", venueImgDTOList);
+        } catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+
+            String status = String.valueOf(ex.getStatusCode().value());
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                case "404":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/404-not-found";
+                case "403":
+                    return "redirect:/access-denied";
+
+            }
+        }
         return "adminTemplate/pages/gallery";
     }
 
-    @GetMapping("admin/venue/delete")
-    public String deleteVenue(HttpServletRequest request) {
-        String uriVenueImg = "http://localhost:8080/api/venuesImg/delete/{id}";
-        RestTemplate restTemplate = new RestTemplate();
-        int imgId = Integer.parseInt(request.getParameter("imgId"));
-        if (imgId != 0) {
-            restTemplate.delete(uriVenueImg, imgId);
+
+    @GetMapping("/venue/delete")
+    public String deleteVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        int id = Integer.parseInt(request.getParameter("imgId"));
+        try {
+            APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImg/delete/" + id,
+                    HttpMethod.DELETE,
+                    null,
+                    token,
+                    String.class
+            );
+        } catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+
+            String status = String.valueOf(ex.getStatusCode().value());
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                case "404":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/404-not-found";
+                case "403":
+                    return "redirect:/access-denied";
+
+            }
         }
-        return "redirect:/admin/venue?msg=Success";
+        return "redirect:/staff/venue?msg=Success";
     }
 
-    @PostMapping("admin/venue/create")
-    public String createVenue(@ModelAttribute VenueDTO venueDTO, @RequestParam("create-multiple-picture") MultipartFile[] files) {
-        String uriVenue = "http://localhost:8080/api/venues/create";
-        RestTemplate restTemplate = new RestTemplate();
+    @PostMapping("/venue/create")
+    public String createVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        try {
+            APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venues/create",
+                    HttpMethod.POST,
+                    venueDTO,
+                    token,
+                    VenueDTO.class
+            );
+        } catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
 
-//        ClientUtilFunction utilFunction= new ClientUtilFunction();
-//        Path absolutePath= Paths.get("WmClientMVC/src/main/resources/static/images/venue_img/add_venue");
-//        String venueImgUrl =utilFunction.AddMultipleFilesEncrypted(files,absolutePath.toAbsolutePath());
+            String status = String.valueOf(ex.getStatusCode().value());
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                case "404":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/404-not-found";
+                case "403":
+                    return "redirect:/access-denied";
 
-        if (venueDTO != null) {
-            Venues newVenues = new Venues();
-            newVenues.setVenueName(venueDTO.getVenueName());
-            newVenues.setMinPeople(venueDTO.getMinPeople());
-            newVenues.setMaxPeople(venueDTO.getMaxPeople());
-            newVenues.setPrice(venueDTO.getPrice());
-            restTemplate.postForEntity(uriVenue, newVenues, String.class);
+            }
         }
-        return "redirect:/admin/venue?msg=Success";
+        return "redirect:/staff/venue?msg=Success";
     }
 
-    @PostMapping("admin/venueImg/create")
-    public String createVenueImg(@ModelAttribute VenueImgDTO venueImgDTO, @RequestParam("create-multiple-picture") MultipartFile[] files) {
-        String uriVenue = "http://localhost:8080/api/venuesImg/creates";
-        RestTemplate restTemplate = new RestTemplate();
-
+    @PostMapping("/venueImg/create")
+    public String createVenueImg(@ModelAttribute VenueImgDTO venueImgDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("create-multiple-picture") MultipartFile[] files) throws IOException {
         ClientUtilFunction utilFunction = new ClientUtilFunction();
         List<String> venueImgUrls = utilFunction.AddMultipleFilesEncrypted(files);
-        List<VenueImages> newList=new ArrayList<>();
+
+        List<VenueImgDTO> newList = new ArrayList<>();
         if (venueImgDTO != null) {
             for (String venueImgUrl : venueImgUrls
             ) {
-                VenueImages newVenueImages=new VenueImages();
+                VenueImgDTO newVenueImages = new VenueImgDTO();
                 newVenueImages.setVenueId(venueImgDTO.getVenueId());
                 newVenueImages.setUrl(venueImgUrl);
                 newList.add(newVenueImages);
             }
         }
-        restTemplate.postForEntity(uriVenue,newList,String.class);
-        return "redirect:/admin/venue?msg=Success";
+        ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenue = new ParameterizedTypeReference<List<VenueImgDTO>>() {
+        };
+        try {
+            APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImg/creates",
+                    HttpMethod.POST,
+                    newList,
+                    token,
+                    responseTypeVenue
+            );
+        } catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+
+            String status = String.valueOf(ex.getStatusCode().value());
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                case "404":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/404-not-found";
+                case "403":
+                    return "redirect:/access-denied";
+
+            }
+        }
+        return "redirect:/staff/venue?msg=Success";
     }
-    @PostMapping("admin/venue/update")
-    public String updateVenue(@ModelAttribute VenueDTO venueDTO)  {
-        String uriVenue = "http://localhost:8080/api/venues/update";
-        RestTemplate restTemplate = new RestTemplate();
-        Venues venues=new Venues();
-        venues.setId(venueDTO.getId());
-        venues.setVenueName(venueDTO.getVenueName());
-        venues.setMinPeople(venueDTO.getMinPeople());
-        venues.setMaxPeople(venueDTO.getMaxPeople());
-        venues.setPrice(venueDTO.getPrice());
-        restTemplate.put(uriVenue,venues);
-        return "redirect:/admin/venue?msg=Success";
+
+    @PostMapping("/venue/update")
+    public String updateVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        try {
+            APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venues/update",
+                    HttpMethod.PUT,
+                    venueDTO,
+                    token,
+                    VenueDTO.class
+            );
+        } catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+
+            String status = String.valueOf(ex.getStatusCode().value());
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                case "404":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/404-not-found";
+                case "403":
+                    return "redirect:/access-denied";
+
+            }
+        }
+        return "redirect:/staff/venue?msg=Success";
     }
 }

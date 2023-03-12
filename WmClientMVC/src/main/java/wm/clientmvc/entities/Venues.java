@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -34,9 +35,9 @@ public class Venues {
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
     @OneToMany(mappedBy = "venuesByVenueId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<Orders> ordersById=new HashSet<>();
+    private Collection<Orders> ordersById = new HashSet<>();
     @OneToMany(mappedBy = "venuesByVenueId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<VenueImages> venueImagesById=new HashSet<>();
+    private Collection<VenueImages> venueImagesById = new HashSet<>();
 
     public int getId() {
         return id;

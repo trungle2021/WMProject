@@ -3,6 +3,7 @@ package wm.clientmvc.entities;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -23,9 +24,9 @@ public class Food {
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
-    @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "foodByFoodId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<FoodDetails> foodDetailsById = new HashSet<>();
-    @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "foodByFoodId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<FoodImages> foodImagesById = new HashSet<>();
 
     public int getId() {

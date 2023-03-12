@@ -35,9 +35,15 @@ public class Employees {
     @Basic
     @Column(name = "salary", nullable = true, precision = 2)
     private Double salary;
+
     @Basic
-    @Column(name = "emp_type", nullable = true, length = 20)
-    private String empType;
+    @Column(name = "email", nullable = true)
+    private String email;
+
+
+//    @Basic
+//    @Column(name = "emp_type", nullable = true, length = 20)
+//    private String empType;
     @Basic
     @Column(name = "team_id", nullable = true)
     private Integer teamId;
@@ -45,12 +51,9 @@ public class Employees {
     @Basic
     @Column(name = "avatar", nullable = true)
     private String avatar;
-
-//    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
-//    private Collection<Employees> employeesById = new HashSet<>();
-
+    
     @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<EmployeeAccounts> employeeAccountsById;
+    private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id",insertable = false,updatable = false)

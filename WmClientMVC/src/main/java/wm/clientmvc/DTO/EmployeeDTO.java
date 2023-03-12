@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,8 +18,11 @@ public class EmployeeDTO {
     private String phone;
     private String joinDate;
     private Double salary;
-    private String empType;
+    private String email;
+//    private String empType;
     private int team_id;
     private String avatar;
     private OrganizeTeamDTO organizeTeamsByTeamId;
+    private List<EmployeeAccountDTO> employeeAccountsById;
+
 }

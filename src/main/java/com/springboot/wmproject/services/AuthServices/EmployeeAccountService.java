@@ -10,12 +10,11 @@ public interface EmployeeAccountService {
     EmployeeAccountDTO getEmployeeAccountByEmployeeAccountId(int id);
 
     List<EmployeeAccountDTO> findByName(String name);
-    List<EmployeeAccountDTO> filterByEmpType(String empType);
+    List<EmployeeAccountDTO> filterByRole(String role);
 
     EmployeeAccountDTO create(EmployeeAccountDTO employeeAccountDTO);
     EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO);
     void delete(int id);
 
-//    EmployeeAccountDTO save(EmployeeAccountDTO employeeAccountDTO);
 
 }

@@ -18,7 +18,7 @@ public class RegisterDTO {
     private String phone;
     private String joinDate;
     private Double salary;
-    private String empType;
+    private String email;
     private int team_id;
     private String gender;
     private String avatar;

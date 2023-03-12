@@ -1,6 +1,7 @@
 package wm.clientmvc.entities;
 
 import java.util.Objects;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,7 +18,7 @@ public class FoodImages {
     @Column(name = "food_id", nullable = true)
     private Integer foodId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "food_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "food_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Food foodByFoodId;
 
     public int getId() {

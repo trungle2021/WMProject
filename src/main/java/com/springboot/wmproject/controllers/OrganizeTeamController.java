@@ -23,8 +23,8 @@ public class OrganizeTeamController {
         this.organizeTeamService = organizeTeamService;
     }
 
-//    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
-//    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
     public ResponseEntity<List<OrganizeTeamDTO>> getAll(){
         return ResponseEntity.ok(organizeTeamService.getAllOrganizeTeam());

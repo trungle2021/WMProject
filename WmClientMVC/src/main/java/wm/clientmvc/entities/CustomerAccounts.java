@@ -1,4 +1,5 @@
 package wm.clientmvc.entities;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,13 +27,8 @@ public class CustomerAccounts {
     @Column(name = "customer_id", nullable = true)
     private Integer customerId;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Customers customersByCustomerId;
-
-
-
-
-
 
 
 }

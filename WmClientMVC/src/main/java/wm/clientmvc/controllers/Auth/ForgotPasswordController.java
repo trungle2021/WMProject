@@ -27,31 +27,32 @@ import java.util.Map;
 public class ForgotPasswordController {
     String processForgotPassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customer/processForgotPassword";
     String processChangePassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customer/processChangePassword";
+
     @GetMapping("/forgot_password")
-    public String showForgotPasswordForm(){
+    public String showForgotPasswordForm() {
         return "forgot_password_form";
     }
 
     @PostMapping("/forgot_password")
     public String processForgotPassword(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, Model model) throws IOException {
         String email = request.getParameter("email");
-        if(!StringUtils.hasLength(email)){
-            redirectAttributes.addFlashAttribute("error","Email must be required");
+        if (!StringUtils.hasLength(email)) {
+            redirectAttributes.addFlashAttribute("error", "Email must be required");
             return "redirect:/forgot_password";
         }
-        try{
+        try {
             String response1 = APIHelper.makeApiCall(
                     processForgotPassword,
                     HttpMethod.POST,
                     email,
                     null,
                     String.class);
-            redirectAttributes.addFlashAttribute("message","We have sent a reset password link to your email.Please check");
+            redirectAttributes.addFlashAttribute("message", "We have sent a reset password link to your email.Please check");
             return "redirect:/customer/forgot_password";
 
-        }catch(HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             String responseError = e.getResponseBodyAsString();
-            if(StringUtils.hasLength(responseError)){
+            if (StringUtils.hasLength(responseError)) {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> map = mapper.readValue(responseError, Map.class);
                 String error = map.get("error").toString();
@@ -61,48 +62,49 @@ public class ForgotPasswordController {
                         return "redirect:/access-denied";
                     default:
                         redirectAttributes.addFlashAttribute("errorMessage", error);
-                        return "redirect:/customer/forgot_password" ;
+                        return "redirect:/customer/forgot_password";
                 }
             }
         }
         return "redirect:/error";
     }
+
     @GetMapping("/changePassword")
-    public String showChangePasswordForm(@RequestParam(value = "token",defaultValue = "") String token, RedirectAttributes redirectAttributes,Model model){
-        if(!StringUtils.hasLength(token)){
-            redirectAttributes.addFlashAttribute("error","Invalid Token");
+    public String showChangePasswordForm(@RequestParam(value = "token", defaultValue = "") String token, RedirectAttributes redirectAttributes, Model model) {
+        if (!StringUtils.hasLength(token)) {
+            redirectAttributes.addFlashAttribute("error", "Invalid Token");
             return "redirect:/customer/forgot_password";
         }
-        model.addAttribute("reset_token",token);
+        model.addAttribute("reset_token", token);
         return "changePasswordForm";
     }
 
     @PostMapping("/changePassword")
     public String changePassword(HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) throws IOException {
-       String password = request.getParameter("password") != null ? request.getParameter("password") : "";
-       String cpassword = request.getParameter("cpassword") != null ? request.getParameter("cpassword") : "";
-       String token = request.getParameter("reset_token") != null ? request.getParameter("reset_token") : "";
-       if(!password.equals(cpassword)){
-           redirectAttributes.addFlashAttribute("errorMessage","Confirmed Password and New Password do not match!");
-           return "redirect:/customer/changePassword?token="+token;
-       }
+        String password = request.getParameter("password") != null ? request.getParameter("password") : "";
+        String cpassword = request.getParameter("cpassword") != null ? request.getParameter("cpassword") : "";
+        String token = request.getParameter("reset_token") != null ? request.getParameter("reset_token") : "";
+        if (!password.equals(cpassword)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Confirmed Password and New Password do not match!");
+            return "redirect:/customer/changePassword?token=" + token;
+        }
         PasswordDTO passwordDTO = new PasswordDTO();
-       passwordDTO.setNewPassword(password);
-       passwordDTO.setConfirmPassword(cpassword);
-       passwordDTO.setToken(token);
-       try{
+        passwordDTO.setNewPassword(password);
+        passwordDTO.setConfirmPassword(cpassword);
+        passwordDTO.setToken(token);
+        try {
             String response = APIHelper.makeApiCall(
                     processChangePassword,
                     HttpMethod.POST,
                     passwordDTO,
                     null,
                     String.class);
-            redirectAttributes.addFlashAttribute("message",response);
+            redirectAttributes.addFlashAttribute("message", response);
             return "redirect:/customer/login";
 
-        }catch(HttpClientErrorException e){
+        } catch (HttpClientErrorException e) {
             String responseError = e.getResponseBodyAsString();
-            if(StringUtils.hasLength(responseError)){
+            if (StringUtils.hasLength(responseError)) {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, String> map = mapper.readValue(responseError, Map.class);
                 String error = map.get("message").toString();
@@ -112,13 +114,12 @@ public class ForgotPasswordController {
                         return "redirect:/access-denied";
                     default:
                         redirectAttributes.addFlashAttribute("errorMessage", error);
-                        return "redirect:/customer/forgot_password" ;
+                        return "redirect:/customer/forgot_password";
                 }
             }
         }
         return "redirect:/error";
     }
-
 
 
 }

@@ -30,6 +30,6 @@ public class EmployeeAccounts {
     @Column(name = "employee_id", nullable = true)
     private Integer employeeId;
     @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "employee_id", referencedColumnName = "id", insertable = false, updatable = false)
     private Employees employeesByEmployeeId;
 }

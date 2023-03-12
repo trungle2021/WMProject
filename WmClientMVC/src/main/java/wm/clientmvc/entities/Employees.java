@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import java.util.Collection;
 import java.util.HashSet;
+
 import jakarta.persistence.*;
 
 @Getter
@@ -48,13 +49,14 @@ public class Employees {
 //    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
 //    private Collection<Employees> employeesById = new HashSet<>();
 
+
     @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<EmployeeAccounts> employeeAccountsById;
+    private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
 
     @ManyToOne
-    @JoinColumn(name = "team_id", referencedColumnName = "id",insertable = false,updatable = false)
+    @JoinColumn(name = "team_id", referencedColumnName = "id", insertable = false, updatable = false)
     private OrganizeTeams organizeTeamsByTeamId;
-    @OneToMany(mappedBy = "employeesByBookingEmp",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "employeesByBookingEmp", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Orders> ordersById = new HashSet<>();
 
 }

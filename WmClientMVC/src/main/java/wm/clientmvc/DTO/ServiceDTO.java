@@ -5,6 +5,7 @@ import wm.clientmvc.entities.ServiceDetails;
 import lombok.Data;
 
 import java.util.Set;
+
 @Data
 public class ServiceDTO {
     private int id;

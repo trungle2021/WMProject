@@ -7,8 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
-    @Query("select e from Employees e where e.empType like %:empType% ")
-    List<Employees> findAllByEmpType(String empType);
+    @Query("select e from Employees e join EmployeeAccounts ea on e.id = ea.id where ea.role like %:role% ")
+    List<Employees> findAllByRole(String role);
     @Query("select e from Employees e where e.name like %:name%")
     List<Employees> findAllByName(String name);
     @Query("select e from Employees e where e.teamId = :teamId")
