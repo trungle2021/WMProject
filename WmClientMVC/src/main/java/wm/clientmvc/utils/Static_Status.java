@@ -11,4 +11,5 @@ public class Static_Status {
     public static String foodTypeDessert="dessert";
     public static String empTypeSale="sale";
     public static String empTypeOrganize="Organize";
+    public static String teamAdmin="administrative";
 }
