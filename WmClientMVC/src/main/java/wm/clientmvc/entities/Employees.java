@@ -49,8 +49,9 @@ public class Employees {
 //    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
 //    private Collection<Employees> employeesById = new HashSet<>();
 
-    @OneToMany(mappedBy = "employeesByEmployeeId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<EmployeeAccounts> employeeAccountsById;
+
+    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id", insertable = false, updatable = false)

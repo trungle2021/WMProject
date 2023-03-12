@@ -20,6 +20,7 @@ public class EmployeeController {
         this.employeeService = employeeService;
     }
 
+
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
