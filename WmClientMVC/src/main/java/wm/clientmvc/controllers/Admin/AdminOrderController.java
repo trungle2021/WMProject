@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import static wm.clientmvc.utils.Static_Status.*;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/staff")
 public class AdminOrderController {
 
 RestTemplate restTemplate=new RestTemplate();
@@ -128,7 +128,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     OrderDTO.class
             );
 
-            return "redirect:/admin/order/showall";
+            return "redirect:/staff/order/showall";
         } catch (IOException e) {
             model.addAttribute("message", e.getMessage());
             return "adminTemplate/error";
@@ -203,16 +203,17 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
     Map<Integer,Integer> map=new HashMap<>();
             for (OrganizeTeamDTO team:teamList)
             {
-                int count=0;
-                for (OrderDTO obj:ordersInMonth)
-                {
+                if(!team.getTeamName().equalsIgnoreCase(teamAdmin)) {
+                    int count = 0;
+                    for (OrderDTO obj : ordersInMonth) {
 
-                    if(team.getId()==obj.getOrganizeTeam())
-                    {
-                       count+=1;
+                        if (team.getId() == obj.getOrganizeTeam()) {
+                            count += 1;
+                        }
                     }
+                    map.put(team.getId(), count);
+
                 }
-                map.put(team.getId(),count);
             }
 
             //lấy giá trị lớn nhất và lớn nhì
