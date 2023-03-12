@@ -31,7 +31,7 @@ public class VenueController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueDTO>> getAll() {
