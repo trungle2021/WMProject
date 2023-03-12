@@ -2,6 +2,7 @@ package com.springboot.wmproject.DTO;
 
 import lombok.*;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -20,5 +21,6 @@ public class EmployeeDTO {
     private int team_id;
     private String avatar;
     private OrganizeTeamDTO organizeTeamsByTeamId;
+    private List<EmployeeAccountDTO> employeeAccountsById;
 
 }

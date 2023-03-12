@@ -69,7 +69,7 @@
                                                 Update
                                             </button>
                                             <form id="add-picture-form" method="post"
-                                                  th:action="@{/admin/venueImg/create}" enctype="multipart/form-data">
+                                                  th:action="@{/staff/venueImg/create}" enctype="multipart/form-data">
                                                 <div class="input-group mb-3" style="margin-top: 1rem">
                                                     <div class="input-group-prepend">
                                                         <input type="text" id="add-picture-form-venue-id"
@@ -94,7 +94,7 @@
                                         <th:block th:each="i:${imgList}">
                                         <div class="col-sm-2 venue-img" th:attr="data-venue=${i.getVenueId()}">
                                             <a th:href="'data:image/jpeg;base64,'+${i.getUrl()}"
-                                               th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/admin/venue/delete?imgId='+${i.getId()}+'>Delete</a>'"
+                                               th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/staff/venue/delete?imgId='+${i.getId()}+'>Delete</a>'"
                                                data-toggle="lightbox"
                                                th:attrappend="data-title='Venue '+${i.getVenueId()}"
                                                data-gallery="gallery">
@@ -121,22 +121,22 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" th:action="@{/admin/venue/create}">
+                                <form method="post" th:action="@{/staff/venue/create}" id="createForm">
                                     <div class="form-group">
                                         <label class="col-form-label">Venue name:</label>
                                         <input type="text" class="form-control" name="venueName" required>
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label">Min People:</label>
-                                        <input type="number" class="form-control" name="minPeople" required>
+                                        <input type="number" class="form-control" name="minPeople" required min="1" max="3000">
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label">Max People:</label>
-                                        <input type="number" class="form-control" name="maxPeople" required>
+                                        <input type="number" class="form-control" name="maxPeople" required min="1" max="3000">
                                     </div>
                                     <div class="form-group">
                                         <label class="col-form-label">Price:</label>
-                                        <input type="text" class="form-control" name="price" required>
+                                        <input type="text" class="form-control" name="price" required id="txtPriceCreateVenue">
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
@@ -162,7 +162,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" th:action="@{/admin/venue/update}">
+                                <form method="post" th:action="@{/staff/venue/update}" id="updateForm">
                                     <input type="text" class="update-venue-id" name="id" hidden>
                                     <div class="form-group">
                                         <label for="venueName" class="col-form-label">Venue Name:</label>
@@ -173,13 +173,13 @@
                                         <label for="minPeople" class="col-form-label">Min People:</label>
                                         <input type="number" class="form-control update-venue-min" id="minPeople"
                                                required
-                                               name="minPeople">
+                                               name="minPeople" min="1" max="3000">
                                     </div>
                                     <div class="form-group">
                                         <label for="maxPeople" class="col-form-label">Max People:</label>
                                         <input type="number" class="form-control update-venue-max" id="maxPeople"
                                                required
-                                               name="maxPeople">
+                                               name="maxPeople" min="1" max="3000">
                                     </div>
                                     <div class="form-group">
                                         <label for="price" class="col-form-label">Price:</label>
@@ -248,6 +248,7 @@
     <!--    <script src="../adminStatic/dist/js/demo.js"></script>-->
     <!-- Page specific script -->
     <script>
+
         $(document).ready(function () {
             if ($(this).attr('data-venue') !== 'undefined' || $(this).attr('data-venue') !== false) {
                 $('#updateBtn').hide()
@@ -293,6 +294,24 @@
     <script>
 
         $(function () {
+            $("#createForm").submit(function (e){
+               var inputPrice=$('#txtPriceCreateVenue').val()
+                var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+
+                if (!regex.test(inputPrice)) {
+                    alert("Please enter a valid number between 1 and 500000000.");
+                    e.preventDefault(); // prevent form submission
+                }
+            });
+            $("#updateForm").submit(function (e){
+                var inputPrice=$('.update-venue-price').val()
+                var regex =/^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+
+                if (!regex.test(inputPrice)) {
+                    alert("Please enter a valid number between 1 and 500000000.");
+                    e.preventDefault(); // prevent form submission
+                }
+            });
             $(document).on('click', '[data-toggle="lightbox"]', function (event) {
                 event.preventDefault();
                 $(this).ekkoLightbox({

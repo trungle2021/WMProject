@@ -53,7 +53,7 @@ public class Employees {
     private String avatar;
     
     @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<EmployeeAccounts> employeeAccountsById;
+    private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "team_id", referencedColumnName = "id",insertable = false,updatable = false)
