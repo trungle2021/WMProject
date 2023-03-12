@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -28,14 +29,15 @@ public class OrderDTO {
 
     private Integer customerId;
 
-    private Integer table_amount;
-    private Integer part_time_emp_amount;
+    private Integer tableAmount;
+    private Integer partTimeEmpAmount;
 
-    //    private Set<FoodDetailDTO> foodDetails;
+//    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;
-//    private Employees employees;
-//    private OrganizeTeams organizeTeams;
-//    private Customers customers;
+    private EmployeeDTO employeesByBookingEmp;
+    private OrganizeTeamDTO organizeTeamsByOrganizeTeam;
+    private Collection<FoodDetailDTO> foodDetailsById;
+    private Collection<ServiceDetailDTO> serviceDetailsById;
 //
 
 //    private Set<ServiceDetailsDTO> serviceDetails;

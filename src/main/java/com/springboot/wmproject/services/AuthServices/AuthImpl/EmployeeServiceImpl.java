@@ -78,6 +78,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<EmployeeDTO> findAllByTeamId(Integer teamId) {
+        List<EmployeeDTO> employeeDTOList=employeeRepository.findAllTeamId(teamId).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
+        return employeeDTOList;
+    }
+
+    @Override
     public void delete(int employeeId){
         Employees employees=employeeRepository.findById(employeeId).orElseThrow(()->new ResourceNotFoundException("Employee","id",String.valueOf(employeeId)));
         employeeRepository.delete(employees);

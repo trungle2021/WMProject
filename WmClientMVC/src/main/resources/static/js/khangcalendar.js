@@ -193,7 +193,7 @@ function getOrderLink(day) {
             const xhr = new XMLHttpRequest();
 
             // Define the AJAX request
-            xhr.open('POST', '/customer//order/create');
+            xhr.open('POST', '/customer/order/create');
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             // Define what should happen when the response is received

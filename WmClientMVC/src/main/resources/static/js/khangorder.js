@@ -1,3 +1,4 @@
+
 // console.log(foodList,serviceList,myOrder);
 
 const newService = document.getElementById("btn-newService");
@@ -8,20 +9,22 @@ var mainContainer = document.getElementById("main");
 newMain.addEventListener("click", addMain);
 var foodTable = document.getElementById("food-table");
 var serviceTable = document.getElementById("service-table");
-var total = document.getElementById("total");
-var foodOption = "";
-var serviceOption = "";
-const confirm = document.getElementById("confirm");
-confirm.addEventListener("click", callAJAXnewOrder);
-
-foodList.forEach((food) => {
-    if (food.foodType === "main") {
+var total=document.getElementById("total");
+var foodOption="";
+var serviceOption="";
+const confirm=document.getElementById("confirm");
+confirm.addEventListener("click",callAJAXnewOrder);
+var tableAmount=document.getElementById("tableAmount");
+tableAmount.addEventListener("change",changeTableAmount);
+var tbCount=0;
+foodList.forEach((food)=> {
+    if(food.foodType ==="main") {
         foodOption += `<option value="${food.id}"> ${food.foodName}
                 </option>`
     }
 });
-serviceList.forEach((service) => {
-    serviceOption += `<option value="${service.id}"> ${service.serviceName}
+serviceList.forEach((service)=>{
+    serviceOption+=`<option value="${service.id}"> ${service.serviceName}
                 </option>`
 
 })
@@ -40,6 +43,7 @@ function addMain() {
         </select>
         <button onclick="deleteMain(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
       `
+
 
 
         let newContainer = document.createElement("div");
@@ -93,7 +97,7 @@ function addService() {
     <button onclick="deleteService(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
   `
 
-        // <option th:each="service : ${serviceList}" th:value="${service.getId()}" th:text="${service.getServiceName()}"></option>
+            // <option th:each="service : ${serviceList}" th:value="${service.getId()}" th:text="${service.getServiceName()}"></option>
 
         var newContainer = document.createElement("div");
         newContainer.setAttribute("data-service", `${list.length}`);
@@ -110,7 +114,6 @@ function addService() {
     }
 
 }
-
 function deleteService(button) {
     button.parentNode.remove();
     let list = document.querySelectorAll("[data-service]");
@@ -149,11 +152,11 @@ function clearFood() {
 }
 
 function appendFood(obj) {
-
+    const formattedNumber = obj.price.toLocaleString("vi-VN", {style: "currency", currency: "VND"})
     const tdFood = `
  
         <td data-foodId="${obj.id}">${obj.foodName}</td>
-        <td>${obj.price} VND</td>
+        <td>${formattedNumber} </td>
   `
     let trFood = document.createElement("tr");
     trFood.innerHTML = tdFood;
@@ -180,12 +183,12 @@ function clearService() {
 }
 
 function appendService(obj) {
-
+    const formattedNumber = obj.price.toLocaleString("vi-VN", {style: "currency", currency: "VND"})
     const tdService = `
    
         <td data-serviceId ="${obj.id}">
             ${obj.serviceName}</td>
-        <td>${obj.price} VND</td>
+        <td>${formattedNumber} </td>
   
   `
     let trService = document.createElement("tr");
@@ -211,11 +214,13 @@ function getId(element) {
             // console.log(element.getAttribute("data-index"));
 
 
-        } else if (order.value !== "default" && order.getAttribute("data-index") === "food") {
+        }
+        else if (order.value !== "default" && order.getAttribute("data-index") === "food") {
 
             foodValues.push(order.value);
 
-        } else if (order.value !== "default" && order.getAttribute("data-index") === "service") {
+        }
+        else if (order.value !== "default" && order.getAttribute("data-index") === "service") {
             serviceValues.push(order.value);
 
 
@@ -230,10 +235,10 @@ function getId(element) {
     // console.log(foodList);
 
     //get foodlist
-    let myNewFoodList = foodList.filter(food => foodValues.includes(food.id.toString()));
+    let myNewFoodList=foodList.filter(food=>foodValues.includes(food.id.toString()));
     console.log(myNewFoodList);
     console.log(foodValues);
-    let myNewServiceList = serviceList.filter(service => serviceValues.includes(service.id.toString()));
+    let myNewServiceList=serviceList.filter(service=>serviceValues.includes(service.id.toString()));
     //filter foodList
     console.log(myNewFoodList);
     myNewFoodList.forEach((obj) => {
@@ -243,56 +248,63 @@ function getId(element) {
     myNewServiceList.forEach((obj) => {
         appendService(obj);
     });
-    getTotalPrice(myNewFoodList, myNewServiceList, myOrder);
+    getTotalPrice(myNewFoodList,myNewServiceList,myOrder);
 
 
     //call AJAX here
 
 }
 
-function getTotalPrice(orderFoodList, orderServiceList, myOrder) {
+function getTotalPrice(orderFoodList,orderServiceList,myOrder)
+{
     // alert("o4k");
-    let foodTotalPrice = orderFoodList.reduce((acc, food) => acc + food.price, 0);
-    let serviceTotalPrice = orderServiceList.reduce((acc, service) => acc + service.price, 0);
-    let totalPrice = foodTotalPrice + serviceTotalPrice + myOrder.venues.price;
-    console.log(total);
-    total.innerHTML = totalPrice.toString() + " VND";
+    let foodTotalPrice=  orderFoodList.reduce((acc,food)=>acc+food.price,0);
+    let serviceTotalPrice= orderServiceList.reduce((acc,service)=>acc+service.price,0);
+    let tableNum=tableAmount.value;
+    let totalPrice= foodTotalPrice*tableNum + serviceTotalPrice+myOrder.venues.price;
+    // console.log(total);
+
+    const formattedNumber = totalPrice.toLocaleString("vi-VN", {style: "currency", currency: "VND"})
+    console.log(formattedNumber);
+    total.innerHTML=formattedNumber;
 
 
     ///call after load html
 
 
-}
 
+}
 //viet lây du liệu ra thymleaf ss với list foodValues và serviceValues lấy giá trị show hình hover và giá.
 // thymleaf show du liệu combobox.
-function callAJAXnewOrder() {
+function callAJAXnewOrder(){
+    if(tableAmount.value===0)
+    {alert("Hãy Thêm Số Bàn Để Biết Giá Chính Xác Hơn!");}
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/order/create-order");
+    xhr.open("POST", "/customer/order/create-order");
     xhr.setRequestHeader("Content-Type", "application/json");
-    let response = null;
+    let response=null;
 
     //
     let foodIdList = [];
-    let requestFoodList = document.querySelectorAll("[data-foodId]")
+    let requestFoodList=document.querySelectorAll("[data-foodId]")
     requestFoodList.forEach((el) => {
         let id = el.getAttribute("data-foodId");
         foodIdList.push(id);
     });
     //get serviceList
     let svIdList = [];
-    let requestSvList = document.querySelectorAll("[data-serviceId]")
-    requestSvList.forEach((el) => {
+    let requestSvList=document.querySelectorAll("[data-serviceId]")
+     requestSvList.forEach((el) => {
         let id = el.getAttribute("data-serviceId");
         svIdList.push(id);
     });
-    console.log(requestSvList);
-    console.log(requestFoodList);
-    let data = JSON.stringify({orderId: myOrder.id, foodList: foodIdList, serviceList: svIdList});
-    console.log(data);
+    // console.log(requestSvList);
+    // console.log(requestFoodList);
+   let data = JSON.stringify({orderId: myOrder.id, foodList: foodIdList, serviceList: svIdList,table:tbCount});
+   console.log(data);
     //
-    xhr.onload = function () {
+    xhr.onload = function() {
         // handle the response from the server
         if (xhr.status === 200) {
             // get foodId
@@ -300,9 +312,10 @@ function callAJAXnewOrder() {
 
             response = JSON.parse(xhr.responseText);
             alert(response.message);
-            window.location.href = "/index";
+            window.location.href="/index";
 
-        } else {
+                }
+        else{
             console.error(xhr.statusText);
             alert("có gì đó sai sai!");
             // Handle error
@@ -310,15 +323,16 @@ function callAJAXnewOrder() {
         //tao link
     };
 
-    if (foodIdList.length >= 6) {
-        xhr.send(data);
-    } else {
+    if(foodIdList.length>=6){
+    xhr.send(data);}
+    else{
         alert("Số Món Ăn Chính Tối Thiểu là 4!")
     }
 
 }
 
-function reloadTotal() {
+function reloadTotal()
+{
     let myOrderList = document.querySelectorAll("[data-index]");
     let foodValues = [];
     let serviceValues = [];
@@ -326,11 +340,12 @@ function reloadTotal() {
     clearFood();
     clearService();
     myOrderList.forEach((order) => {
-        if (order.value !== "default" && order.getAttribute("data-index") === "food") {
+       if (order.value !== "default" && order.getAttribute("data-index") === "food") {
 
             foodValues.push(order.value);
 
-        } else if (order.value !== "default" && order.getAttribute("data-index") === "service") {
+        }
+        else if (order.value !== "default" && order.getAttribute("data-index") === "service") {
             serviceValues.push(order.value);
 
 
@@ -340,12 +355,13 @@ function reloadTotal() {
     });
 
 
+
     // console.log(foodValues);
     // console.log(foodList);
 
     //get foodlist
-    let myNewfl = foodList.filter(food => foodValues.includes(food.id.toString()));
-    let myNewsl = serviceList.filter(service => serviceValues.includes(service.id.toString()));
+   let myNewfl=foodList.filter(food=>foodValues.includes(food.id.toString()));
+    let myNewsl=serviceList.filter(service=>serviceValues.includes(service.id.toString()));
     //filter foodList
     console.log(myNewfl);
     myNewfl.forEach((obj) => {
@@ -355,8 +371,29 @@ function reloadTotal() {
     myNewsl.forEach((obj) => {
         appendService(obj);
     });
-    getTotalPrice(myNewfl, myNewsl, myOrder);
-
+    getTotalPrice(myNewfl,myNewsl,myOrder);
+    tbCount=tableAmount.value;
 
     //call AJAX here
+}
+
+function changeTableAmount()
+{
+    const value=this.value;
+    const minTable= Math.ceil(myOrder.venues.minPeople/10);
+    const maxTable=Math.ceil(myOrder.venues.maxPeople/10);
+    if( value<minTable)
+    {alert("Số Bàn Chưa Đạt Tối Thiểu");
+    this.value=0;
+        reloadTotal();
+    }
+    else if(value>maxTable)
+    {alert("Số Bàn Vượt Quá Lượng Tối Đa");
+        this.value=0;
+        reloadTotal();}
+    else{
+       reloadTotal();
+    }
+
+
 }

@@ -30,4 +30,10 @@ public class StaffController {
     public String index() {
         return "adminTemplate/home";
     }
+    @GetMapping("/error")
+    public String error()
+    {
+
+        return "adminTemplate/error";
+    }
 }
