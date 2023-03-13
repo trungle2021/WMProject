@@ -9,7 +9,7 @@ public class MaterialDTO {
     private int id;
     private String materialName;
     private String unit;
-    private String foodId;
+    private int foodId;
     private Double cost;
 //    private Food foodByMaterialId;
 }
