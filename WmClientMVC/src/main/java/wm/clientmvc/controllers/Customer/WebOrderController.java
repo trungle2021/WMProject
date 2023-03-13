@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.google.gson.Gson;
 import jakarta.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,6 +13,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import wm.clientmvc.DTO.*;
 
@@ -29,7 +31,7 @@ import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
 
 @Controller
-@RequestMapping("/customers/order")
+@RequestMapping("/customers/orders")
 public class WebOrderController {
 
     RestTemplate restTemplate = new RestTemplate();
@@ -170,7 +172,6 @@ public class WebOrderController {
 
 // Get the response body
             OrderDTO responseBody = responseEntity.getBody();
-
             return ResponseEntity.ok(objectMapper.writeValueAsString(responseBody));
         }
         else{
@@ -182,7 +183,6 @@ public class WebOrderController {
 
 
     @RequestMapping(value="/create-detail",method = RequestMethod.POST)
-
     public String createDetail(Model model, @RequestParam("orderId") int orderId ,@CookieValue(name="token",defaultValue = "") String token) {
         String orderUrl="http://localhost:8080/api/orders/"+orderId;
 //        model.addAttribute("orderId",orderId);
@@ -202,7 +202,7 @@ public class WebOrderController {
         );
         OrderDTO myOrder=response.getBody();
         //get foodlist
-       String foodUrl="http://localhost:8080/api/food";
+       String foodUrl="http://localhost:8080/api/food/all";
         ResponseEntity<List<FoodDTO>> foodResponse = restTemplate.exchange(
                 foodUrl,
                 HttpMethod.GET,

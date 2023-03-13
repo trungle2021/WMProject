@@ -47,7 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String userType = jwtTokenProvider.getUserType(token);
             String userID = jwtTokenProvider.getUserID(token);
             switch (userType){
-                case "ROLE_EMPLOYEE":
                 case "ROLE_ADMIN":
                 case "ROLE_SALE":
                 case "ROLE_ORGANIZE":

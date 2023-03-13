@@ -3,10 +3,12 @@ package com.springboot.wmproject.services.impl;
 import com.springboot.wmproject.DTO.OrderDTO;
 import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
+import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.services.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -133,8 +135,9 @@ public class OrderServiceImpl implements OrderService {
             if(checkOrder==null){
 
                 Orders orders=orderRepository.save(mapToEntity(orderDTO));
+                Orders newOrder = orderRepository.findById(orders.getId()).orElseThrow();
 
-                return mapToDTO(orders);
+                return mapToDTO(newOrder);
             }
         }
         return null;

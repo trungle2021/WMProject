@@ -281,7 +281,8 @@ function callAJAXnewOrder(){
     {alert("Please add the table number to get a more accurate price!");}
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/customers/order/create-order");
+
+    xhr.open("POST", "/customers/orders/create-order");
     xhr.setRequestHeader("Content-Type", "application/json");
     let response=null;
 

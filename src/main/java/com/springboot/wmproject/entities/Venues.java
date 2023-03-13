@@ -34,9 +34,9 @@ public class Venues {
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
-    @OneToMany(mappedBy = "venuesByVenueId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venues", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Orders> ordersById=new HashSet<>();
-    @OneToMany(mappedBy = "venuesByVenueId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "venues", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<VenueImages> venueImagesById=new HashSet<>();
 
     public int getId() {
