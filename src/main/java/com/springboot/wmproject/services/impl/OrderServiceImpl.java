@@ -1,24 +1,23 @@
 package com.springboot.wmproject.services.impl;
 
-import com.springboot.wmproject.DTO.FoodDetailDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
-import com.springboot.wmproject.entities.*;
+import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.services.OrderService;
-import com.springboot.wmproject.services.VenueService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
+    @Autowired
     private OrderRepository orderRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -132,7 +131,9 @@ public class OrderServiceImpl implements OrderService {
             Orders checkOrder=orderRepository.validOrderToCreateNew(timeHappen,venueId);
             //if not create new
             if(checkOrder==null){
+
                 Orders orders=orderRepository.save(mapToEntity(orderDTO));
+
                 return mapToDTO(orders);
             }
         }
@@ -214,7 +215,6 @@ public class OrderServiceImpl implements OrderService {
         return null;
     }
 
-
     @Override
     public void deleteOrder(int id) {
         Orders orders=orderRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(id)));
@@ -223,21 +223,16 @@ public class OrderServiceImpl implements OrderService {
 
     public OrderDTO mapToDTO(Orders order) {
         OrderDTO orderDTO = modelMapper.map(order, OrderDTO.class);
-
         return orderDTO;
-
-
 
     }
 
+
     public Orders mapToEntity(OrderDTO orderDTO) {
-
         Orders order = modelMapper.map(orderDTO, Orders.class);
-
-
-
         return order;
 
     }
+
 }
 

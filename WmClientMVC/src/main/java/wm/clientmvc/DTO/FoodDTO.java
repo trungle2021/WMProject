@@ -16,7 +16,7 @@ public class FoodDTO {
     private String description;
 
     private Double price;
-
+    private Set<MaterialDTO> materialsById;
 
 //    private Set<FoodDetailDTO> foodDetailsDTOById;
 }
