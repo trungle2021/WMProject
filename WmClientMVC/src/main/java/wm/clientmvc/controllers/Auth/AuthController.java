@@ -44,10 +44,10 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 
 @Controller
 public class AuthController {
-    String customerLoginUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customer/login";
-    String customerRegisterUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customer/register";
-    String staffRegisterUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/staff/register";
-    String staffLoginUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/employee/login";
+    String customerLoginUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/login";
+    String customerRegisterUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/register";
+    String staffRegisterUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/employees/create";
+    String staffLoginUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/employees/login";
     JwtTokenProvider tokenProvider;
     @Value("${app-jwt-expiration-second}")
     private int jwtExpirationDate;
@@ -76,24 +76,24 @@ public class AuthController {
     }
 
     //    CUSTOMER
-    @PostMapping(value = "/customer/login")
+    @PostMapping(value = "/customers/login")
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 customerLoginUrl,
-                "/",
-                "/customer/login",
+                "/customers/home",
+                "/customers/login",
                 loginDTO,
                 request,
                 response,
                 redirectAttributes);
     }
 
-    @GetMapping(value = "/customer/logout")
+    @GetMapping(value = "/customers/logout")
     public String logoutCustomer(Model model, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        return logout(model, request, response, "/customer/login");
+        return logout(model, request, response, "/customers/login");
     }
 
-    @GetMapping("/customer/register")
+    @GetMapping("/customers/register")
     public String registerCustomer(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String roleCheck = authentication.getAuthorities().stream().findFirst().toString();
@@ -105,7 +105,7 @@ public class AuthController {
         return "register";
     }
 
-    @PostMapping("/customer/register")
+    @PostMapping("/customers/register")
     public String registerCustomer(@Valid @ModelAttribute RegisterCustomerDTO registerCustomerDTO,HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "register"; // return to the registration page with error messages
