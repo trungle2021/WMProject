@@ -34,12 +34,12 @@ public class AdminOrderController {
 
 RestTemplate restTemplate=new RestTemplate();
 
-@RequestMapping("/order/showall")
+@RequestMapping("/orders/showall")
 
 public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token)
 {
     ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<List<OrderDTO>>() {};
-    String url="http://localhost:8080/api/order";
+    String url="http://localhost:8080/api/orders";
     try {
        List<OrderDTO>orderList= APIHelper.makeApiCall(url,
                 HttpMethod.GET,
@@ -47,7 +47,12 @@ public String showAll(Model model, @CookieValue(name = "token",defaultValue = ""
                 token,
                 responseType);
 
-       model.addAttribute("list",orderList);
+        model.addAttribute("list",orderList);
+        model.addAttribute("warningSt",orderStatusWarning);
+        model.addAttribute("cancelingSt",orderStatusCancel);
+        model.addAttribute("confirmSt",orderStatusConfirm);
+        model.addAttribute("depositedSt",orderStatusDeposited);
+        model.addAttribute("orderedSt",orderStatusOrdered);
 
 
         return "adminTemplate/pages/tables/order";
@@ -58,10 +63,47 @@ public String showAll(Model model, @CookieValue(name = "token",defaultValue = ""
         return "adminTemplate/error";
     }
 }
-@RequestMapping("/order/order-detail/{id}")
+
+    @RequestMapping("/orders/showmyorder/{status}")
+
+    public String showMyOrder(Model model,@PathVariable String status, @CookieValue(name = "token",defaultValue = "")String token)
+    {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
+        Long empId= empUserDetails.getUserId();
+        ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<List<OrderDTO>>() {};
+        String url="http://localhost:8080/api/orders/bybookingEmp/"+empId;
+        try {
+            List<OrderDTO>orderList= APIHelper.makeApiCall(url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseType);
+
+
+           List<OrderDTO> myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+
+            model.addAttribute("list",myList);
+
+
+            model.addAttribute("warningSt",orderStatusWarning);
+            model.addAttribute("cancelingSt",orderStatusCancel);
+            model.addAttribute("confirmSt",orderStatusConfirm);
+            model.addAttribute("depositedSt",orderStatusDeposited);
+            model.addAttribute("orderedSt",orderStatusOrdered);
+            return "adminTemplate/pages/tables/order";
+        }
+        catch (HttpClientErrorException | IOException ex)
+        {
+            model.addAttribute("message",ex.getMessage());
+            return "adminTemplate/error";
+        }
+    }
+
+@RequestMapping("/orders/order-detail/{id}")
 public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
 {
-    String url="http://localhost:8080/api/order/"+id;
+    String url="http://localhost:8080/api/orders/"+id;
     try {
         OrderDTO order= APIHelper.makeApiCall(
                 url,
@@ -71,6 +113,11 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                 OrderDTO.class
         );
         model.addAttribute("order",order);
+        model.addAttribute("warningSt",orderStatusWarning);
+        model.addAttribute("cancelingSt",orderStatusCancel);
+        model.addAttribute("confirmSt",orderStatusConfirm);
+        model.addAttribute("depositedSt",orderStatusDeposited);
+        model.addAttribute("orderedSt",orderStatusOrdered);
         return "adminTemplate/pages/tables/order-update-status";
     }catch (IOException e) {
         model.addAttribute("message",e.getMessage());
@@ -78,13 +125,13 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
     }
 
 }
-@RequestMapping(value = "/order/order-update",method = RequestMethod.POST)
+@RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
 public String update(Model model, @CookieValue(name="token",defaultValue = "")String token, @ModelAttribute OrderDTO order) {
     OrderDTO editOrder = new OrderDTO();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
 
-    String orderUrl = "http://localhost:8080/api/order/" + order.getId();
+    String orderUrl = "http://localhost:8080/api/orders/" + order.getId();
     OrderDTO findOrder= new OrderDTO();
     try {
         findOrder = APIHelper.makeApiCall(
@@ -104,17 +151,18 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
 
 
         //
-        String url = "http://localhost:8080/api/order/updateStatus";
+        String url = "http://localhost:8080/api/orders/updateStatus";
         editOrder.setId(order.getId());
         editOrder.setOrderStatus(orderStatusDeposited);
         editOrder.setBookingEmp(employeeDetails.getUserId().intValue());
-        editOrder.setOrderTotal(getOrderTotal(findOrder));
-        Integer team=getTeam(findOrder,token);
-        editOrder.setOrganizeTeam(team);
         Integer tbNum=0;
         if(order.getTableAmount()==null)
-        {tbNum=order.getVenues().getMinPeople()/10;}
+        {tbNum=findOrder.getVenues().getMinPeople()/10;}
         else{tbNum=order.getTableAmount();}
+        editOrder.setOrderTotal(getOrderTotal(findOrder,tbNum));
+        Integer team=getTeam(findOrder,token);
+        editOrder.setOrganizeTeam(team);
+
         editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
 
 
@@ -128,23 +176,24 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     OrderDTO.class
             );
 
-            return "redirect:/staff/order/showall";
+            return "redirect:/staff/orders/showall";
         } catch (IOException e) {
             model.addAttribute("message", e.getMessage());
             return "adminTemplate/error";
         }
     } else {
-        model.addAttribute("message", "Kiểm Tra lại Tình Trạng Đơn! Có Lỗi Xảy ra!");
+        model.addAttribute("message", "Check Your Order Again! Have Error");
         return "adminTemplate/error";
     }
 
 }
 
+
         @RequestMapping("/test")
     public String test(){return "adminTemplate/home";}
 
 
-    public Double getOrderTotal(OrderDTO order)
+    public Double getOrderTotal(OrderDTO order,Integer tbAmount)
     {
             Double foodPrice=0.0;
             for (FoodDetailDTO food:order.getFoodDetailsById()) {
@@ -155,8 +204,8 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
             {
                 servicePrice+=servicedt.getServicesByServiceId().getPrice();
             }
-            Integer tableAmount =order.getTableAmount();
-            Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tableAmount;
+
+            Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
             return total;
     }
 
@@ -168,7 +217,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
         ParameterizedTypeReference<List<OrderDTO>> reponseOrder=new ParameterizedTypeReference<List<OrderDTO>>() {};
         ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
 
-        String orderlistUrl= "http://localhost:8080/api/order";
+        String orderlistUrl= "http://localhost:8080/api/orders";
 
         String teamUrl="http://localhost:8080/api/teams/all";
         try {
@@ -207,7 +256,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 
-                        if (team.getId() == obj.getOrganizeTeam()) {
+                        if (obj.getOrganizeTeam()!=null && team.getId() == obj.getOrganizeTeam()) {
                             count += 1;
                         }
                     }
