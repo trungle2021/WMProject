@@ -25,7 +25,7 @@ public class FoodController {
 
     @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<FoodDTO>> getAll()
             {
         return ResponseEntity.ok(foodService.getAllFood());
