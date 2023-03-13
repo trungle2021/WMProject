@@ -26,7 +26,7 @@ public class VenueImages {
     private Integer venueId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "venue_id", referencedColumnName = "id",insertable = false,updatable = false)
-    private Venues venuesByVenueId;
+    private Venues venues;
 
 
 }

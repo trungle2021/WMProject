@@ -42,12 +42,6 @@ public class EmployeeAccountController {
         return ResponseEntity.ok(employeeAccountService.findByName(name));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping(value = "/employee/type/{empType}")
-    public ResponseEntity<List<EmployeeAccountDTO>> filterByEmpType(@PathVariable String role){
-        return ResponseEntity.ok(employeeAccountService.filterByRole(role));
-    }
     @PutMapping(value = "/update")
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
@@ -63,10 +57,3 @@ public class EmployeeAccountController {
     }
 
 }
-
-
-
-//    @PostMapping(value = "/create")
-//    public ResponseEntity<EmployeeAccountDTO> createEmployeeAccount(@RequestBody EmployeeAccountDTO employeeAccountDTO){
-//        return new ResponseEntity<>(employeeAccountService.createEmployeeAccount(employeeAccountDTO), HttpStatus.CREATED);
-//    }

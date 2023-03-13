@@ -15,7 +15,7 @@ public class MVCSecurity {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests()
-//STAFF SECURITY CONFIGURATION
+                //STAFF SECURITY CONFIGURATION
                 .requestMatchers("/staff/login").permitAll()
                 .requestMatchers("/staff/logout").permitAll()
                 //ORDER
@@ -85,10 +85,11 @@ public class MVCSecurity {
                 .requestMatchers("/customers/register").permitAll()
                 .requestMatchers("/customers/logout").permitAll()
                 //ORDER
-                .requestMatchers("/customers/orders/**").hasAnyRole("CUSTOMER")
-                //CUSTOMER - PROFILE
-                .requestMatchers("/customers/profile/**").hasAnyRole("CUSTOMER")
-                .requestMatchers("/customers/**").hasAnyRole("CUSTOMER")
+//                .requestMatchers("/customers/orders/**").hasRole("CUSTOMER")
+//                //CUSTOMER - PROFILE
+//                .requestMatchers("/customers/profile/**").hasAnyRole("CUSTOMER")
+//                .requestMatchers("/customers/**").hasAnyRole("CUSTOMER")
+                .requestMatchers("/customers/**").permitAll()
                 .requestMatchers("/access-denied").permitAll()
                 .requestMatchers(SD_CLIENT.AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated()

@@ -47,12 +47,7 @@ public String showAll(Model model, @CookieValue(name = "token",defaultValue = ""
                 token,
                 responseType);
 
-        model.addAttribute("list",orderList);
-        model.addAttribute("warningSt",orderStatusWarning);
-        model.addAttribute("cancelingSt",orderStatusCancel);
-        model.addAttribute("confirmSt",orderStatusConfirm);
-        model.addAttribute("depositedSt",orderStatusDeposited);
-        model.addAttribute("orderedSt",orderStatusOrdered);
+       model.addAttribute("list",orderList);
 
 
         return "adminTemplate/pages/tables/order";
@@ -63,43 +58,6 @@ public String showAll(Model model, @CookieValue(name = "token",defaultValue = ""
         return "adminTemplate/error";
     }
 }
-
-    @RequestMapping("/orders/showmyorder/{status}")
-
-    public String showMyOrder(Model model,@PathVariable String status, @CookieValue(name = "token",defaultValue = "")String token)
-    {
-        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
-        Long empId= empUserDetails.getUserId();
-        ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<List<OrderDTO>>() {};
-        String url="http://localhost:8080/api/orders/bybookingEmp/"+empId;
-        try {
-            List<OrderDTO>orderList= APIHelper.makeApiCall(url,
-                    HttpMethod.GET,
-                    null,
-                    token,
-                    responseType);
-
-
-           List<OrderDTO> myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
-
-            model.addAttribute("list",myList);
-
-
-            model.addAttribute("warningSt",orderStatusWarning);
-            model.addAttribute("cancelingSt",orderStatusCancel);
-            model.addAttribute("confirmSt",orderStatusConfirm);
-            model.addAttribute("depositedSt",orderStatusDeposited);
-            model.addAttribute("orderedSt",orderStatusOrdered);
-            return "adminTemplate/pages/tables/order";
-        }
-        catch (HttpClientErrorException | IOException ex)
-        {
-            model.addAttribute("message",ex.getMessage());
-            return "adminTemplate/error";
-        }
-    }
-
 @RequestMapping("/orders/order-detail/{id}")
 public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
 {
@@ -113,11 +71,6 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                 OrderDTO.class
         );
         model.addAttribute("order",order);
-        model.addAttribute("warningSt",orderStatusWarning);
-        model.addAttribute("cancelingSt",orderStatusCancel);
-        model.addAttribute("confirmSt",orderStatusConfirm);
-        model.addAttribute("depositedSt",orderStatusDeposited);
-        model.addAttribute("orderedSt",orderStatusOrdered);
         return "adminTemplate/pages/tables/order-update-status";
     }catch (IOException e) {
         model.addAttribute("message",e.getMessage());
@@ -155,14 +108,13 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
         editOrder.setId(order.getId());
         editOrder.setOrderStatus(orderStatusDeposited);
         editOrder.setBookingEmp(employeeDetails.getUserId().intValue());
-        Integer tbNum=0;
-        if(order.getTableAmount()==null)
-        {tbNum=findOrder.getVenues().getMinPeople()/10;}
-        else{tbNum=order.getTableAmount();}
-        editOrder.setOrderTotal(getOrderTotal(findOrder,tbNum));
+        editOrder.setOrderTotal(getOrderTotal(findOrder));
         Integer team=getTeam(findOrder,token);
         editOrder.setOrganizeTeam(team);
-
+        Integer tbNum=0;
+        if(order.getTableAmount()==null)
+        {tbNum=order.getVenues().getMinPeople()/10;}
+        else{tbNum=order.getTableAmount();}
         editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
 
 
@@ -182,18 +134,17 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
             return "adminTemplate/error";
         }
     } else {
-        model.addAttribute("message", "Check Your Order Again! Have Error");
+        model.addAttribute("message", "Kiểm Tra lại Tình Trạng Đơn! Có Lỗi Xảy ra!");
         return "adminTemplate/error";
     }
 
 }
 
-
         @RequestMapping("/test")
     public String test(){return "adminTemplate/home";}
 
 
-    public Double getOrderTotal(OrderDTO order,Integer tbAmount)
+    public Double getOrderTotal(OrderDTO order)
     {
             Double foodPrice=0.0;
             for (FoodDetailDTO food:order.getFoodDetailsById()) {
@@ -204,8 +155,8 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
             {
                 servicePrice+=servicedt.getServicesByServiceId().getPrice();
             }
-
-            Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
+            Integer tableAmount =order.getTableAmount();
+            Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tableAmount;
             return total;
     }
 
@@ -236,7 +187,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     token,
                     responseTeam
             );
-            
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime timeHappen =  LocalDateTime.parse(order.getTimeHappen(),formatter);
         Month happenMonth=timeHappen.getMonth();
@@ -256,7 +207,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 
-                        if (obj.getOrganizeTeam()!=null && team.getId() == obj.getOrganizeTeam()) {
+                        if (team.getId() == obj.getOrganizeTeam()) {
                             count += 1;
                         }
                     }

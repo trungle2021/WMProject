@@ -18,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.*;
-import wm.clientmvc.entities.VenueImages;
-import wm.clientmvc.entities.Venues;
 import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.ClientUtilFunction;
 import wm.clientmvc.utils.SD_CLIENT;
@@ -150,10 +148,10 @@ public class VenueWebClientController {
 
             }
         }
-        return "redirect:/staff/venue?msg=Success";
+        return "redirect:/staff/venues?msg=Success";
     }
 
-    @PostMapping("/venueImg/create")
+    @PostMapping("/venueImgs/create")
     public String createVenueImg(@ModelAttribute VenueImgDTO venueImgDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("create-multiple-picture") MultipartFile[] files) throws IOException {
         ClientUtilFunction utilFunction = new ClientUtilFunction();
         List<String> venueImgUrls = utilFunction.AddMultipleFilesEncrypted(files);
@@ -172,7 +170,7 @@ public class VenueWebClientController {
         };
         try {
             APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImg/creates",
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImgs/creates",
                     HttpMethod.POST,
                     newList,
                     token,
@@ -197,7 +195,7 @@ public class VenueWebClientController {
 
             }
         }
-        return "redirect:/staff/venue?msg=Success";
+        return "redirect:/staff/venues?msg=Success";
     }
 
     @PostMapping("/venue/update")
@@ -229,6 +227,6 @@ public class VenueWebClientController {
 
             }
         }
-        return "redirect:/staff/venue?msg=Success";
+        return "redirect:/staff/venues?msg=Success";
     }
 }
