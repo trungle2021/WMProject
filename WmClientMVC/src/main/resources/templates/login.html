@@ -37,7 +37,7 @@
 
 <!--                FORM LOGIN-->
 
-                <form th:action="@{/customer/login}" th:object="${loginDTO}" method="post">
+                <form th:action="@{/customers/login}" th:object="${loginDTO}" method="post">
                   <div class="form-group first">
                     <label for="username">Username</label>
                     <input type="text" th:field="*{username}" class="form-control" id="username">
@@ -55,8 +55,8 @@
 
 
                   <div class="d-flex mb-5 align-items-center">
-                    <a style="color: #1162fb" th:href="@{/customer/register}">Create new account</a>
-                    <span class="ml-auto"><a th:href="@{/customer/forgot_password}" class="forgot-pass">Forgot Password</a></span>
+                    <a style="color: #1162fb" th:href="@{/customers/register}">Create new account</a>
+                    <span class="ml-auto"><a th:href="@{/customers/forgot_password}" class="forgot-pass">Forgot Password</a></span>
                   </div>
 
 

@@ -53,9 +53,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
     @Override
     public boolean supports(Class<?> authentication) {
         String path = request.getServletPath();
-        if(path.startsWith("/api/auth/employee/login")){
+        if(path.startsWith("/api/auth/employees/login")){
             return authentication.equals(EmployeeUsernamePasswordAuthenticationToken.class);
-        }else if(path.startsWith("/api/auth/customer/login")){
+        }else if(path.startsWith("/api/auth/customers/login")){
             return authentication.equals(CustomerUsernamePasswordAuthenticationToken.class);
         }
         return false;
@@ -63,9 +63,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private UserDetailsService determineUserDetailsService(Authentication authentication){
        String path = request.getServletPath();
-       if(path.startsWith("/api/auth/employee/login")){
+       if(path.startsWith("/api/auth/employees/login")){
            return employeeDetailsService;
-       }else if(path.startsWith("/api/auth/customer/login")){
+       }else if(path.startsWith("/api/auth/customers/login")){
            return customerDetailsService;
        }
         return null;

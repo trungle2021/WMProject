@@ -19,6 +19,7 @@ public class RegisterDTO {
     private String joinDate;
     private Double salary;
     private String email;
+    private boolean isLeader;
     private int team_id;
     private String gender;
     private String avatar;

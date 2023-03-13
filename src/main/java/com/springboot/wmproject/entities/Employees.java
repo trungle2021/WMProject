@@ -41,9 +41,9 @@ public class Employees {
     private String email;
 
 
-//    @Basic
-//    @Column(name = "emp_type", nullable = true, length = 20)
-//    private String empType;
+    @Basic
+    @Column(name = "isLeader")
+    private Boolean isLeader;
     @Basic
     @Column(name = "team_id", nullable = true)
     private Integer teamId;
@@ -51,7 +51,7 @@ public class Employees {
     @Basic
     @Column(name = "avatar", nullable = true)
     private String avatar;
-    
+
     @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
 

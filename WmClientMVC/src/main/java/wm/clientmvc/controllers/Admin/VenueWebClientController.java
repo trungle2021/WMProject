@@ -32,11 +32,11 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/staff")
+@RequestMapping("/staff/venues")
 public class VenueWebClientController {
 
 
-    @GetMapping("/venue")
+    @GetMapping("/venues")
     public String GetAllVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ParameterizedTypeReference<List<VenueDTO>> responseTypeVenue = new ParameterizedTypeReference<List<VenueDTO>>() {
         };
@@ -57,7 +57,7 @@ public class VenueWebClientController {
                     responseTypeVenue
             );
             List<VenueImgDTO> venueImgDTOList = APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImg/all",
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImgs/all",
                     HttpMethod.GET,
                     null,
                     token,
@@ -88,12 +88,12 @@ public class VenueWebClientController {
     }
 
 
-    @GetMapping("/venue/delete")
+    @GetMapping("/venues/delete")
     public String deleteVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         int id = Integer.parseInt(request.getParameter("imgId"));
         try {
             APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImg/delete/" + id,
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImgs/delete/" + id,
                     HttpMethod.DELETE,
                     null,
                     token,
@@ -118,10 +118,10 @@ public class VenueWebClientController {
 
             }
         }
-        return "redirect:/staff/venue?msg=Success";
+        return "redirect:/staff/venues?msg=Success";
     }
 
-    @PostMapping("/venue/create")
+    @PostMapping("/create")
     public String createVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         try {
             APIHelper.makeApiCall(

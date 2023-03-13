@@ -25,8 +25,10 @@ public class ClientUtilFunction {
         }
         return encodedFiles;
     }
-//    public byte[] DecryptedFile(String encoded){
-//        byte[] decoded=Base64.getDecoder().decode(encoded);
-//        return decoded;
-//    }
+
+    public static String AddFileEncrypted(MultipartFile file) throws IOException {
+        String encodedFile = Base64.getEncoder().encodeToString(file.getBytes());
+        return encodedFile;
+    }
+
 }
