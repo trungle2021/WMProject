@@ -61,7 +61,7 @@
                             <td th:text="${c.getTableAmount()}"></td>
                             <td th:text="${c.getPartTimeEmpAmount()}"></td>
                             <td th:text="${c.getOrderStatus()}"></td>
-                            <td><a th:href="@{/admin/order/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Chi Tiết Đơn</a> </td>
+                            <td><a th:href="@{/staff/order/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Chi Tiết Đơn</a> </td>
                         </tr>
 
                         </tbody>
