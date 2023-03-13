@@ -29,14 +29,16 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-    @GetMapping(value = {"/index", "/"})
-    public String index() {
+
+    @GetMapping(value = {"/home","/customers/home","/"})
+    public String home() {
         return "home";
     }
 
-    @GetMapping("/about")
+    @GetMapping(value = {"/about","/customers/about"})
     public String about() {
         return "about";
-
     }
+
+
 }

@@ -17,7 +17,7 @@ public class EmployeeDTO {
     private String joinDate;
     private Double salary;
     private String email;
-//    private String empType;
+    private boolean isLeader;
     private int team_id;
     private String avatar;
     private OrganizeTeamDTO organizeTeamsByTeamId;

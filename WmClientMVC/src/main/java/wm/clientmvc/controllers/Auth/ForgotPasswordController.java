@@ -23,10 +23,10 @@ import java.io.IOException;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/customer")
+@RequestMapping("/customers")
 public class ForgotPasswordController {
-    String processForgotPassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customer/processForgotPassword";
-    String processChangePassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customer/processChangePassword";
+    String processForgotPassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/processForgotPassword";
+    String processChangePassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/processChangePassword";
 
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm() {
@@ -48,7 +48,7 @@ public class ForgotPasswordController {
                     null,
                     String.class);
             redirectAttributes.addFlashAttribute("message", "We have sent a reset password link to your email.Please check");
-            return "redirect:/customer/forgot_password";
+            return "redirect:/customers/forgot_password";
 
         } catch (HttpClientErrorException e) {
             String responseError = e.getResponseBodyAsString();
@@ -62,7 +62,7 @@ public class ForgotPasswordController {
                         return "redirect:/access-denied";
                     default:
                         redirectAttributes.addFlashAttribute("errorMessage", error);
-                        return "redirect:/customer/forgot_password";
+                        return "redirect:/customers/forgot_password";
                 }
             }
         }

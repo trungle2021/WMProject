@@ -29,7 +29,7 @@ public class AuthController {
     }
 
     //    Login API
-    @PostMapping(value = {"/employee/login"})
+    @PostMapping(value = {"/employees/login"})
     public ResponseEntity<JWTAuthResponse> staffLogin(@RequestBody LoginDTO loginDTO){
         String token = authService.employeeLogin(loginDTO);
 
@@ -39,7 +39,7 @@ public class AuthController {
         return ResponseEntity.ok(jwtAuthResponse);
     }
 
-    @PostMapping(value = {"/customer/login"})
+    @PostMapping(value = {"/customers/login"})
     public ResponseEntity<JWTAuthResponse> customerLogin(@RequestBody LoginDTO loginDTO){
         String token = authService.customerLogin(loginDTO);
 
@@ -50,32 +50,32 @@ public class AuthController {
     }
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @PostMapping(value = {"/employee/register"})
+    @PostMapping(value = {"/employees/create"})
     public ResponseEntity<RegisterDTO> staffRegister(@RequestBody RegisterDTO registerDTO){
         RegisterDTO response = authService.employeeRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(value = {"/customer/register"})
+    @PostMapping(value = {"/customers/register"})
     public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO){
         RegisterCustomerDTO response = authService.customerRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 
 
-    @PostMapping("/customer/processForgotPassword")
+    @PostMapping("/customers/processForgotPassword")
     public ResponseEntity<String> processForgotPassword(@RequestBody String email){
         String response = accountService.processForgotPassword(email);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/customer/processChangePassword")
+    @PostMapping("/customers/processChangePassword")
     public ResponseEntity<String> processChangePassword(@RequestBody PasswordDTO passwordDTO) throws ParseException {
         String response = accountService.updatePassword(passwordDTO.getNewPassword(), passwordDTO.getToken());
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/customer/createPWToken")
+    @PostMapping("/customers/createPWToken")
     public ResponseEntity<String> createPWToken(){
         String response = passwordResetTokenService.create(1);
         return ResponseEntity.ok(response);
