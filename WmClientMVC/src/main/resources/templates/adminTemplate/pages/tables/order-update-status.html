@@ -39,7 +39,8 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form th:action="@{/admin/order/order-update}" th:object="${order}" method="post" class="form-horizontal">
+                        <form th:action="@{/staff/order/order-update}" th:object="${order}" method="post" class="form-horizontal">
+
                             <div class="card-body">
                                 <div class="form-group row">
                                     <label for="orderId" class="col-sm-2 col-form-label">Mã Đơn Hàng</label>
@@ -88,8 +89,8 @@
                                 </div>
 
                                  <div class="card-footer">
-                                        <button type="submit" class="btn btn-info">Xác Nhận Đã Đặt Cọc</button>
-                                        <a href="@{/staff/order/showall}" class="btn btn-default float-right">Quay Lại</a>
+                                        <button  type="submit" class="btn btn-info">Xác Nhận Đã Đặt Cọc</button>
+                                        <a th:href="@{/staff/order/showall}" class="btn btn-default float-right">Quay Lại</a>
                                  </div>
                             </div>
                             <!-- /.card-footer -->

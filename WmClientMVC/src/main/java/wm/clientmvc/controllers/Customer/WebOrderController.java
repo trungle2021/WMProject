@@ -29,14 +29,14 @@ import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
 
 @Controller
-@RequestMapping("/customer/order")
+@RequestMapping("/customers/order")
 public class WebOrderController {
 
     RestTemplate restTemplate = new RestTemplate();
 //    AuthService authService;
 
     String url = "http://localhost:8080/api/venues/all";
-    String orderurl="http://localhost:8080/api/order";
+    String orderurl="http://localhost:8080/api/orders";
 
 
 //    public WebOrderController(AuthService authService) {
@@ -141,7 +141,7 @@ public class WebOrderController {
         {
              dateTime=data.get("day")+" 17:00:00";
         }
-        else{ return new ResponseEntity<>("Đã Có Lỗi Xảy Ra!",HttpStatus.BAD_REQUEST);}
+        else{ return new ResponseEntity<>("Oops!Some Thing Wrong!",HttpStatus.BAD_REQUEST);}
         LocalDateTime orderDateTime = LocalDateTime.now();
         String formattedNow = orderDateTime.format(formatter);
         LocalDateTime happenDateTime = LocalDateTime.parse(dateTime, formatter);
@@ -166,7 +166,7 @@ public class WebOrderController {
             newOrder.setOrderDate(formattedNow);
             HttpEntity<OrderDTO> requestEntity = new HttpEntity<>(newOrder, httpHeaders);
 
-            ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/order/create", requestEntity, OrderDTO.class);
+            ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/orders/create", requestEntity, OrderDTO.class);
 
 // Get the response body
             OrderDTO responseBody = responseEntity.getBody();
@@ -175,7 +175,7 @@ public class WebOrderController {
         }
         else{
 
-            return new ResponseEntity<>("Đặt Trước 30 ngày",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("You need to book 30 days in advance!",HttpStatus.BAD_REQUEST);
 
         }
     }
@@ -184,7 +184,7 @@ public class WebOrderController {
     @RequestMapping(value="/create-detail",method = RequestMethod.POST)
 
     public String createDetail(Model model, @RequestParam("orderId") int orderId ,@CookieValue(name="token",defaultValue = "") String token) {
-        String orderUrl="http://localhost:8080/api/order/"+orderId;
+        String orderUrl="http://localhost:8080/api/orders/"+orderId;
 //        model.addAttribute("orderId",orderId);
 
 
@@ -212,7 +212,7 @@ public class WebOrderController {
         );
         List<FoodDTO> foodList= foodResponse.getBody();
         //get serviceList
-        String serviceUrl="http://localhost:8080/api/service";
+        String serviceUrl="http://localhost:8080/api/services";
         ResponseEntity<List<ServiceDTO>> serviceResponse = restTemplate.exchange(
                 serviceUrl,
                 HttpMethod.GET,
@@ -243,12 +243,12 @@ public class WebOrderController {
         Integer tableAmount= Integer.parseInt(data.get("table").toString());
         if(tableAmount<=0)
         {
-            return new ResponseEntity<>("Hãy Chọn Số Bàn Cần Đăt!",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Choose the number of table!",HttpStatus.BAD_REQUEST);
         }
 
-        String createFDUrl="http://localhost:8080/api/foodDetail/create";
-        String createSDUrl="http://localhost:8080/api/servicedetail/create";
-        String updateTableUrl="http://localhost:8080/api/order/updateTable/"+orderId+"/"+tableAmount;
+        String createFDUrl="http://localhost:8080/api/foodDetails/create";
+        String createSDUrl="http://localhost:8080/api/servicedetails/create";
+        String updateTableUrl="http://localhost:8080/api/orders/updateTable/"+orderId+"/"+tableAmount;
 //        model.addAttribute("orderId",orderId);
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token);
@@ -295,7 +295,7 @@ public class WebOrderController {
 
 
 
-        return ResponseEntity.ok("{\"message\": \"Chọn Món Ăn và Dịch Vụ Thành Công!\"}");
+        return ResponseEntity.ok("{\"message\": \"Congratulations on selecting a successful dish and service!\"}");
     }
 
 

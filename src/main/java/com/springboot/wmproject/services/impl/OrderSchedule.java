@@ -56,7 +56,7 @@ public class OrderSchedule {
         }
     }
 
-    @Scheduled(fixedRate = 720000) // Thực hiện kiểm tra sau mỗi 12 h
+    @Scheduled(fixedRate = 15000) // Thực hiện kiểm tra sau mỗi 12 h
     public void updateOrderStatusCancel() {
         // Lấy danh sách các Order từ database
         List<Orders> orders=orderRepository.findAll();

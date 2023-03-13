@@ -58,7 +58,7 @@ function addMain() {
         // getOrderList();
 
     } else {
-        alert("max Main is 5!");
+        alert("Maximum Dish Main is 5!");
     }
 }
 
@@ -71,7 +71,7 @@ function deleteMain(button) {
     let i = 1;
     listLabel.forEach(label => {
 
-        label.innerHTML = `Món Chính ${i} :`
+        label.innerHTML = `Main Dish ${i} :`
         i++;
     })
 
@@ -122,7 +122,7 @@ function deleteService(button) {
     let i = 1;
     listLabel.forEach(label => {
 
-        label.innerHTML = `Dịch Vụ ${i} :`
+        label.innerHTML = `Service ${i} :`
         i++;
 
     })
@@ -145,8 +145,8 @@ function clearFood() {
     // Reset the innerHTML of foodTable with the table header
     foodTable.innerHTML = `
       <tr>
-        <th>Món Ăn</th>
-        <th>Giá</th>
+        <th>Dishes</th>
+        <th>Price</th>
       </tr>
     `;
 }
@@ -172,12 +172,12 @@ function clearService() {
     // Reset the innerHTML of svTable with the table header
     serviceTable.innerHTML = `
     <tr>
-        <th>Dich Vụ</th>
-        <th>Giá</th>
+        <th>Service</th>
+        <th>Price</th>
     </tr>
     <tr>
-        <td>Dịch Vụ Tiệc Cơ Bản</td> 
-        <td>Miễn Phí</td>
+        <td>Basic Party Services</td> 
+        <td>Free</td>
     </tr>
     `;
 }
@@ -210,7 +210,7 @@ function getId(element) {
     myOrderList.forEach((order) => {
         if (order.getAttribute("data-index") === element.getAttribute("data-index") && order.value === element.value && order !== element) {
             temp = "default";
-            alert("Lựa chọn trùng,xin kiểm tra lại!");
+            alert("Duplicate selection, please check again!");
             // console.log(element.getAttribute("data-index"));
 
 
@@ -278,10 +278,10 @@ function getTotalPrice(orderFoodList,orderServiceList,myOrder)
 // thymleaf show du liệu combobox.
 function callAJAXnewOrder(){
     if(tableAmount.value===0)
-    {alert("Hãy Thêm Số Bàn Để Biết Giá Chính Xác Hơn!");}
+    {alert("Please add the table number to get a more accurate price!");}
 
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "/customer/order/create-order");
+    xhr.open("POST", "/customers/order/create-order");
     xhr.setRequestHeader("Content-Type", "application/json");
     let response=null;
 
@@ -311,13 +311,13 @@ function callAJAXnewOrder(){
 
 
             response = JSON.parse(xhr.responseText);
-            alert(response.message);
+            // alert(response.message);
             window.location.href="/index";
 
                 }
         else{
             console.error(xhr.statusText);
-            alert("có gì đó sai sai!");
+            alert("Oops!Some thing Wrong!");
             // Handle error
         }
         //tao link
@@ -326,7 +326,7 @@ function callAJAXnewOrder(){
     if(foodIdList.length>=6){
     xhr.send(data);}
     else{
-        alert("Số Món Ăn Chính Tối Thiểu là 4!")
+        alert("The minimum number of main dishes is 4.!")
     }
 
 }
@@ -383,12 +383,12 @@ function changeTableAmount()
     const minTable= Math.ceil(myOrder.venues.minPeople/10);
     const maxTable=Math.ceil(myOrder.venues.maxPeople/10);
     if( value<minTable)
-    {alert("Số Bàn Chưa Đạt Tối Thiểu");
+    {alert("The minimum required number of tables has not been reached yet");
     this.value=0;
         reloadTotal();
     }
     else if(value>maxTable)
-    {alert("Số Bàn Vượt Quá Lượng Tối Đa");
+    {alert("The maximum required number of tables has not been reached yet");
         this.value=0;
         reloadTotal();}
     else{

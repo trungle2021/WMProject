@@ -17,7 +17,12 @@
 
     <section layout:fragment="content"  class="content-wrapper">
 
-   <br><div class="content-header"> <h5>Quản Lý Đơn</h5></div>
+   <br><div class="content-header"> <h5>Quản Lý Đơn</h5>
+        <a th:href="@{/staff/order/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Đơn Hàng Cần Liên Hệ</a>
+        <a th:href="@{/staff/order/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Đơn Hàng Hủy</a>
+        <a th:href="@{/staff/order/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Đơn Hàng Đã Đặt Cọc</a>
+
+    </div>
 
         <div class="content ">
             <!-- Main content -->
