@@ -40,9 +40,10 @@
 
       <li class="nav-item d-none d-sm-inline-block">
         <div th:if="${(#authentication.isAuthenticated()) && (!#authorization.expression('hasRole(''ANONYMOUS'')'))}">
-          <h3 th:text="${#authentication.getName()}"></h3>
-          <h3 th:text="${#authentication.getPrincipal().getUserId()}"></h3>
-          <h3 th:text="${#authentication.getAuthorities()}"></h3>
+          <span th:text="${#authentication.getName()}"></span>
+          <span th:text="${#authentication.getPrincipal().getUserId()}"></span>
+<!--          <span th:text="${#authentication.getPrincipal().getUsername()}"></span>-->
+          <span th:text="${#authentication.getAuthorities()}"></span>
         </div>
       </li>
 
@@ -609,6 +610,24 @@
 <script src="/adminStatic/dist/js/adminlte.min.js"></script>
 <!-- fullCalendar 2.2.5 -->
 <script src=" /adminStatic/plugins/moment/moment.min.js"></script>
+<script>
+  // setInterval(function() {
+  //   $.ajax({
+  //     url: "/check-session",
+  //     method: "GET",
+  //     contentType: 'application/json; charset=utf-8',
+  //     success: function(data){
+  //       if (data && data.length > 0) {
+  //         window.location.replace("/login");
+  //       }
+  //     },
+  //     error: function (data) {
+  //       console.log("error");
+  //       console.log(data);
+  //     }
+  //   })
+  // }, 1800000); //30 minutes
+</script>
 <th:block layout:fragment="optional"></th:block>
 </body>
 </html>

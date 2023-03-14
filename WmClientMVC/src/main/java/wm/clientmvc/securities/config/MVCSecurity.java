@@ -6,6 +6,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
+import org.springframework.security.web.session.SessionManagementFilter;
 import wm.clientmvc.utils.SD_CLIENT;
 
 @Configuration
@@ -19,7 +23,6 @@ public class MVCSecurity {
                 .requestMatchers("/staff/login").permitAll()
                 .requestMatchers("/staff/logout").hasAnyRole("ADMIN","ORGANIZE","SALE")
                 .requestMatchers("/login","/forgot_password","/changePassword","/register").permitAll()
-
                 //ORDER
                 .requestMatchers("/staff/orders/**").hasAnyRole("ADMIN","SALE","ANONYMOUS")
                 .requestMatchers("/staff/orders/showall").hasAnyRole("ADMIN","SALE","ANONYMOUS")
@@ -80,7 +83,7 @@ public class MVCSecurity {
                 .requestMatchers("/staff/sale/**").hasAnyRole("SALE","ANONYMOUS")
                 .requestMatchers("/staff/admin/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/**").hasAnyRole("ADMIN","SALE","ORGANIZE","ANONYMOUS")
-//CUSTOMER SECURITY CONFIGURATION
+                //CUSTOMER SECURITY CONFIGURATION
 
                 .requestMatchers("/customers/logout").hasRole("CUSTOMER")
                 //ORDER
@@ -99,6 +102,29 @@ public class MVCSecurity {
                 .cors().and().csrf().disable();
         return http.build();
     }
-
-
 }
+
+
+
+//    @Bean
+//    public SessionManagementFilter sessionManagementFilter() {
+//        SessionManagementFilter sessionManagementFilter = new SessionManagementFilter(httpSessionSecurityContextRepository());
+//        sessionManagementFilter.setInvalidSessionStrategy(invalidSessionStrategy());
+//        sessionManagementFilter.setInvalidSessionStrategy((InvalidSessionStrategy) sessionInformationExpiredStrategy());
+//        return sessionManagementFilter;
+//    }
+//
+//    @Bean
+//    public InvalidSessionStrategy invalidSessionStrategy() {
+//        return new CustomInvalidSessionStrategy("/login");
+//    }
+//
+//    @Bean
+//    public SessionInformationExpiredStrategy sessionInformationExpiredStrategy() {
+//        return new CustomSessionInformationExpiredStrategy("/login");
+//    }
+//
+//    @Bean
+//    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
+//        return new HttpSessionSecurityContextRepository();
+//    }
