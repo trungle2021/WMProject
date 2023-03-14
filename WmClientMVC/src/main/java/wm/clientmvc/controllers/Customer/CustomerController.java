@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,10 +25,19 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/customers")
 public class CustomerController {
-    @GetMapping("/login")
+    @GetMapping(value = {"/login"})
     public String customerLogin(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = authentication.getAuthorities().stream().findFirst().toString();
+
+        boolean userIsStaff = role.contains("ADMIN") || role.contains("SALE") || role.contains("ORGANIZE");
+        boolean userIsCustomer = role.contains("CUSTOMER");
+        boolean isAnonymous = role.contains("ANONYMOUS");
+        if (userIsCustomer) {
+            return "redirect:/customers/home";
+        }
         model.addAttribute("loginDTO", new LoginDTO());
         return "login";
     }

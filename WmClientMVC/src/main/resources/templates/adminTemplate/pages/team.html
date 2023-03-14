@@ -146,7 +146,7 @@
                                                         >
                                                             Update
                                                         </button>
-                                                        <a th:href="@{/staff/admin/team/delete/{teamId}(teamId=${i.getId()})}"
+                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getId()})}"
                                                            class="btn btn-outline-primary float-right"
                                                            style="margin-right: 1rem">Delete</a>
                                                     </td>
@@ -182,7 +182,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/employee/create}" th:object="${registerDTO}" enctype="multipart/form-data">
+                        <form method="post" th:action="@{/staff/employees/create}" th:object="${registerDTO}" enctype="multipart/form-data">
                         <div class="row">
                                 <div class="col-md-6">
                                         <div class="form-row">
@@ -240,11 +240,6 @@
                                                 <input type="radio" th:field="*{isLeader}" th:value="true" /> Yes
                                                 <input type="radio" th:field="*{isLeader}" th:value="false" /> No
                                             </div>
-
-
-
-
-
                                             <div class="form-group col-md-12">
                                                 <label class="col-form-label">Username:</label>
                                                 <input type="text" class="form-control" th:field="*{username}" required>
@@ -281,7 +276,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/admin/team/create}">
+                        <form method="post" th:action="@{/staff/teams/create}">
                             <div class="form-group">
                                 <label class="col-form-label">Team name:</label>
                                 <input type="text" class="form-control" name="teamName" required>
@@ -309,7 +304,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/admin/employee/update}" enctype="multipart/form-data">
+                        <form method="post" th:action="@{/staff/employees/update}" enctype="multipart/form-data">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <input type="text" id="id-employee-update" name="id">
@@ -377,7 +372,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/admin/team/update}">
+                        <form method="post" th:action="@{/staff/teams/update}">
                             <div class="form-group">
                                 <input type="text" id="id-team-update" name="id">
                                 <label class="col-form-label">Team name:</label>
