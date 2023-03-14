@@ -30,8 +30,7 @@ public class OrganizeTeamWebClientController {
     public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ParameterizedTypeReference<List<EmployeeDTO>> responseTypeEmployee = new ParameterizedTypeReference<List<EmployeeDTO>>() {
         };
-        ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTypeTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {
-        };
+        ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTypeTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
 
         String msg = request.getParameter("msg");
         if (msg != null) {
@@ -53,7 +52,6 @@ public class OrganizeTeamWebClientController {
                     token,
                     responseTypeTeam
             );
-            model.addAttribute("registerDTO",new RegisterDTO());
             model.addAttribute("employeeList", employeeDTOList);
             model.addAttribute("teamList", teamDTOList);
         } catch (HttpClientErrorException ex) {

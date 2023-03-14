@@ -72,6 +72,17 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<Employees> checkPhoneExists(String phone) {
+        List<Employees> employeesList= employeeRepository.checkPhoneExists(phone);
+        return employeesList;
+    }
+
+    @Override
+    public List<Employees> checkEmailExists(String email) {
+        return employeeRepository.checkEmailExists(email);
+    }
+
+    @Override
     public List<EmployeeDTO> findAllByName(String name) {
         List<EmployeeDTO> employeeDTOList=employeeRepository.findAllByName(name).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;

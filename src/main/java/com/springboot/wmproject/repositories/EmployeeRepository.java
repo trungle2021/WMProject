@@ -13,4 +13,10 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
     List<Employees> findAllByName(String name);
     @Query("select e from Employees e where e.teamId = :teamId")
     List<Employees> findAllTeamId(Integer teamId);
+
+    @Query("select e from Employees e where e.phone = :phone")
+    List<Employees> checkPhoneExists(String phone);
+
+    @Query("select e from Employees e where e.phone = :email")
+    List<Employees> checkEmailExists(String email);
 }
