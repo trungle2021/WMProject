@@ -15,8 +15,17 @@ import wm.clientmvc.utils.SD_CLIENT;
 @RequestMapping("/staff")
 public class StaffController {
 
-    @GetMapping("/login")
+    @GetMapping(value = {"/login"})
     public String employeeLogin(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = authentication.getAuthorities().stream().findFirst().toString();
+
+        boolean userIsStaff = role.contains("ADMIN") || role.contains("SALE") || role.contains("ORGANIZE");
+        boolean userIsCustomer = role.contains("CUSTOMER");
+        boolean isAnonymous = role.contains("ANONYMOUS");
+        if(userIsStaff){
+            return "redirect:/staff/dashboard";
+        }
         model.addAttribute("loginDTO", new LoginDTO());
         return "adminTemplate/login";
     }

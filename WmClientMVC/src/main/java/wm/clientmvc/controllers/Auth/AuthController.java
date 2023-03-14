@@ -58,6 +58,8 @@ public class AuthController {
     }
 
     //    STAFF
+
+
     @PostMapping(value = "/staff/login")
     public String loginEmployee(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
@@ -76,12 +78,12 @@ public class AuthController {
     }
 
     //    CUSTOMER
-    @PostMapping(value = "/customers/login")
+    @PostMapping(value = "/login")
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 customerLoginUrl,
                 "/customers/home",
-                "/customers/login",
+                "/login",
                 loginDTO,
                 request,
                 response,
@@ -90,22 +92,25 @@ public class AuthController {
 
     @GetMapping(value = "/customers/logout")
     public String logoutCustomer(Model model, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        return logout(model, request, response, "/customers/login");
+        return logout(model, request, response, "/login");
     }
 
-    @GetMapping("/customers/register")
+    @GetMapping("/register")
     public String registerCustomer(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String roleCheck = authentication.getAuthorities().stream().findFirst().toString();
-        if (!roleCheck.contains("ANONYMOUS")) {
-            return "redirect:/";
+        String role = authentication.getAuthorities().stream().findFirst().toString();
+
+        boolean userIsCustomer = role.contains("CUSTOMER");
+
+        if(userIsCustomer){
+            return "redirect:/customers/home";
         }
         RegisterCustomerDTO registerCustomerDTO = new RegisterCustomerDTO();
         model.addAttribute("registerCustomerDTO", registerCustomerDTO);
         return "register";
     }
 
-    @PostMapping("/customers/register")
+    @PostMapping("/register")
     public String registerCustomer(@Valid @ModelAttribute RegisterCustomerDTO registerCustomerDTO,HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, BindingResult result) throws IOException {
         if (result.hasErrors()) {
             return "register"; // return to the registration page with error messages
@@ -211,8 +216,8 @@ public class AuthController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
-            SecurityContextHolder.clearContext();
-            model.asMap().clear();
+//            SecurityContextHolder.clearContext();
+//            model.asMap().clear();
         }
         return "redirect:" + logoutSuccessUrl + "?logout";
     }
