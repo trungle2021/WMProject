@@ -13,9 +13,9 @@ document.getElementById("app").innerHTML = `
       class="calendar-month-header-selected-month"
     ></div>
     <section class="calendar-month-header-selectors">
-      <span id="previous-month-selector">Tháng Trước</span>
-      <span id="present-month-selector">Hiện Tại</span>
-      <span id="next-month-selector">Tháng Sau</span>
+      <span id="previous-month-selector">Previous</span>
+      <span id="present-month-selector">Today</span>
+      <span id="next-month-selector">Next</span>
     </section>
   </section>
 
@@ -89,7 +89,8 @@ function appendDay(day, calendarDaysElement) {
     const dayOfMonthElement = document.createElement("span");
     dayOfMonthElement.innerText = day.dayOfMonth;
     dayLink.appendChild(dayElement);
-    dayLink.href = "/customer/order/getvenue";
+
+    dayLink.href = "/customers/orders/getvenue";
 //ajax
 
     dayLink.addEventListener("click", function (event) {
@@ -98,7 +99,8 @@ function appendDay(day, calendarDaysElement) {
 
         // make the AJAX request
         const xhr = new XMLHttpRequest();
-        xhr.open("POST", "/customer/order/getvenue");
+
+        xhr.open("POST", "/customers/orders/getvenue");
         xhr.setRequestHeader("Content-Type", "application/json");
         let response = null;
         xhr.onload = function () {
@@ -193,7 +195,8 @@ function getOrderLink(day) {
             const xhr = new XMLHttpRequest();
 
             // Define the AJAX request
-            xhr.open('POST', '/customer/order/create');
+
+            xhr.open('POST', '/customers/orders/create');
             xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
             // Define what should happen when the response is received
@@ -209,7 +212,8 @@ function getOrderLink(day) {
                     //chuyen sang post
                     const form = document.createElement("form");
                     form.method = "POST";
-                    form.action = "/customer/order/create-detail";
+
+                    form.action = "/customers/orders/create-detail";
 
                     const input = document.createElement("input");
                     input.type = "hidden";

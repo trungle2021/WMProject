@@ -1,8 +1,6 @@
 package wm.clientmvc.DTO;
 
 import lombok.Data;
-import wm.clientmvc.entities.Food;
-import wm.clientmvc.entities.Orders;
 
 @Data
 public class FoodDetailDTO {

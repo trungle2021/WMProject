@@ -17,11 +17,6 @@ public class StaffController {
 
     @GetMapping("/login")
     public String employeeLogin(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String roleCheck = authentication.getAuthorities().stream().findFirst().toString();
-        if (!roleCheck.contains("ANONYMOUS")) {
-            return "redirect:/staff/dashboard";
-        }
         model.addAttribute("loginDTO", new LoginDTO());
         return "adminTemplate/login";
     }
@@ -30,10 +25,13 @@ public class StaffController {
     public String index() {
         return "adminTemplate/home";
     }
+
     @GetMapping("/error")
     public String error()
     {
-
         return "adminTemplate/error";
     }
 }
+
+
+///staff/admin/addStaff

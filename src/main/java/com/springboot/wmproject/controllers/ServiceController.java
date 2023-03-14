@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/service")
+@RequestMapping("/api/services")
 public class ServiceController {
     private Service_Service service;
     @Autowired
@@ -25,7 +25,7 @@ public class ServiceController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<ServiceDTO>> getAll()
@@ -33,14 +33,14 @@ public class ServiceController {
         return ResponseEntity.ok(service.getAllService());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
     public ResponseEntity<ServiceDTO> create(@RequestBody ServiceDTO serviceDTO)
     {return  new ResponseEntity<>(service.createService(serviceDTO), HttpStatus.CREATED);}
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
     public ResponseEntity<ServiceDTO> update(@RequestBody ServiceDTO serviceDTO){
@@ -48,7 +48,7 @@ public class ServiceController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "/delete/{id}")
     public ResponseEntity<String> deleteService(@PathVariable int id){

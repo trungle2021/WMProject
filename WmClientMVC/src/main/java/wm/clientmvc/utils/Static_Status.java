@@ -7,10 +7,12 @@ public class Static_Status {
     public static String orderStatusCanceled="canceled";
     public static String orderStatusWarning="warning";
     public static String orderStatusConfirm="confirm";
+    public static String orderStatusCompleted="completed";
     public static String foodTypeStarter="starter";
     public static String foodTypeMain="main";
     public static String foodTypeDessert="dessert";
-    public static String empTypeSale="sale";
-    public static String empTypeOrganize="Organize";
-    public static String teamAdmin="ADMINISTRATIVE";
+
+    public static String teamAdmin="ADMINISTRATOR";
+
+
 }

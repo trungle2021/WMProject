@@ -1,6 +1,5 @@
 package wm.clientmvc.DTO;
 
-import wm.clientmvc.entities.ServiceDetails;
 
 import lombok.Data;
 

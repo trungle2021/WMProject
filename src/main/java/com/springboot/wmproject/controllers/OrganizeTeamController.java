@@ -23,35 +23,35 @@ public class OrganizeTeamController {
         this.organizeTeamService = organizeTeamService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
     public ResponseEntity<List<OrganizeTeamDTO>> getAll(){
         return ResponseEntity.ok(organizeTeamService.getAllOrganizeTeam());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all/name/{name}")
     public ResponseEntity<List<OrganizeTeamDTO>> getAllByName(@Valid @PathVariable String name){
         return ResponseEntity.ok(organizeTeamService.searchOrganizeTeamByName(name));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/one/id/{id}")
     public ResponseEntity<OrganizeTeamDTO> getAllById(@Valid @PathVariable int id){
         return ResponseEntity.ok(organizeTeamService.getOneOrganizeTeamById(id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = "/create")
     public ResponseEntity<OrganizeTeamDTO> createOrganizeTeam(@Valid @RequestBody OrganizeTeamDTO organizeTeamDTO){
         return new ResponseEntity<>(organizeTeamService.createOrganizeTeam(organizeTeamDTO), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/update")
     public ResponseEntity<OrganizeTeamDTO> updateOrganizeTeam(@Valid @RequestBody OrganizeTeamDTO organizeTeamDTO){

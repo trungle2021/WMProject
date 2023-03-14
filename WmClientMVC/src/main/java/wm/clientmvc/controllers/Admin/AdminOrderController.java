@@ -34,12 +34,12 @@ public class AdminOrderController {
 
 RestTemplate restTemplate=new RestTemplate();
 
-@RequestMapping("/order/showall")
+@RequestMapping("/orders/showall")
 
 public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token)
 {
     ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<List<OrderDTO>>() {};
-    String url="http://localhost:8080/api/order";
+    String url="http://localhost:8080/api/orders";
     try {
        List<OrderDTO>orderList= APIHelper.makeApiCall(url,
                 HttpMethod.GET,
@@ -58,10 +58,10 @@ public String showAll(Model model, @CookieValue(name = "token",defaultValue = ""
         return "adminTemplate/error";
     }
 }
-@RequestMapping("/order/order-detail/{id}")
+@RequestMapping("/orders/order-detail/{id}")
 public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
 {
-    String url="http://localhost:8080/api/order/"+id;
+    String url="http://localhost:8080/api/orders/"+id;
     try {
         OrderDTO order= APIHelper.makeApiCall(
                 url,
@@ -78,13 +78,13 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
     }
 
 }
-@RequestMapping(value = "/order/order-update",method = RequestMethod.POST)
+@RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
 public String update(Model model, @CookieValue(name="token",defaultValue = "")String token, @ModelAttribute OrderDTO order) {
     OrderDTO editOrder = new OrderDTO();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
 
-    String orderUrl = "http://localhost:8080/api/order/" + order.getId();
+    String orderUrl = "http://localhost:8080/api/orders/" + order.getId();
     OrderDTO findOrder= new OrderDTO();
     try {
         findOrder = APIHelper.makeApiCall(
@@ -104,7 +104,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
 
 
         //
-        String url = "http://localhost:8080/api/order/updateStatus";
+        String url = "http://localhost:8080/api/orders/updateStatus";
         editOrder.setId(order.getId());
         editOrder.setOrderStatus(orderStatusDeposited);
         editOrder.setBookingEmp(employeeDetails.getUserId().intValue());
@@ -128,7 +128,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     OrderDTO.class
             );
 
-            return "redirect:/staff/order/showall";
+            return "redirect:/staff/orders/showall";
         } catch (IOException e) {
             model.addAttribute("message", e.getMessage());
             return "adminTemplate/error";
@@ -168,7 +168,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
         ParameterizedTypeReference<List<OrderDTO>> reponseOrder=new ParameterizedTypeReference<List<OrderDTO>>() {};
         ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
 
-        String orderlistUrl= "http://localhost:8080/api/order";
+        String orderlistUrl= "http://localhost:8080/api/orders";
 
         String teamUrl="http://localhost:8080/api/teams/all";
         try {
@@ -187,7 +187,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     token,
                     responseTeam
             );
-            
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime timeHappen =  LocalDateTime.parse(order.getTimeHappen(),formatter);
         Month happenMonth=timeHappen.getMonth();
