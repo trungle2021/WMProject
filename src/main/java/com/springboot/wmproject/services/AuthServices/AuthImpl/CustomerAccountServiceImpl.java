@@ -120,6 +120,11 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     }
 
     @Override
+    public List<CustomerAccounts> checkUsernameExists(String username) {
+        return customerAccountRepository.checkUsernameExists(username);
+    }
+
+    @Override
     public CustomerAccountDTO getByResetPasswordToken(String token) {
         CustomerAccounts customerAccounts= customerAccountRepository.getByResetPasswordToken(token);
         if(customerAccounts == null){

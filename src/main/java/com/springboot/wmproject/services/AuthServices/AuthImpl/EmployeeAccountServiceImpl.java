@@ -107,6 +107,11 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
         }
     }
 
+    @Override
+    public List<EmployeeAccounts> checkUsernameExists(String username) {
+        return empAccRepo.checkUsernameExists(username);
+    }
+
 
     public EmployeeAccountDTO mapToDto(EmployeeAccounts employeeAccounts) {
         EmployeeAccountDTO postDto = modelMapper.map(employeeAccounts, EmployeeAccountDTO.class);

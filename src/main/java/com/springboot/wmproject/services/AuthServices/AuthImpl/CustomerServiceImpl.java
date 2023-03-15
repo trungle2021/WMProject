@@ -79,8 +79,15 @@ public class CustomerServiceImpl implements CustomerService
         customerRepository.delete(customers);
     }
 
+    @Override
+    public List<Customers> checkEmailExists(String email) {
+        return customerRepository.checkEmailExists(email);
+    }
 
-
+    @Override
+    public List<Customers> checkPhoneExists(String phone) {
+        return customerRepository.checkPhoneExists(phone);
+    }
 
 
     public CustomerDTO mapToDto(Customers customers){

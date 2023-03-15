@@ -17,6 +17,6 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
     @Query("select e from Employees e where e.phone = :phone")
     List<Employees> checkPhoneExists(String phone);
 
-    @Query("select e from Employees e where e.phone = :email")
+    @Query("select e from Employees e where e.email = :email")
     List<Employees> checkEmailExists(String email);
 }

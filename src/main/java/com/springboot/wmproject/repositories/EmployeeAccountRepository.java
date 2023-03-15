@@ -3,6 +3,7 @@ package com.springboot.wmproject.repositories;
 import com.springboot.wmproject.entities.Booking;
 import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.EmployeeAccounts;
+import com.springboot.wmproject.entities.Employees;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,5 +22,8 @@ public interface EmployeeAccountRepository extends JpaRepository<EmployeeAccount
 
     @Query("select e from EmployeeAccounts e LEFT JOIN Employees f ON e.id = f.id where e.role=:role")
     List<EmployeeAccounts> filterByRole(String role);
+
+    @Query("select e from EmployeeAccounts e where e.username = :username")
+    List<EmployeeAccounts> checkUsernameExists(String username);
 
 }
