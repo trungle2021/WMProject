@@ -26,7 +26,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("/staff/teams")
 public class OrganizeTeamWebClientController {
-    @GetMapping(value = "/index")
+    @GetMapping(value = {"/","/index",""})
     public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ParameterizedTypeReference<List<EmployeeDTO>> responseTypeEmployee = new ParameterizedTypeReference<List<EmployeeDTO>>() {
         };

@@ -49,6 +49,7 @@ public class AuthController {
 
         return ResponseEntity.ok(jwtAuthResponse);
     }
+
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = {"/employees/create"})
@@ -57,12 +58,44 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = {"/customers/register"})
     public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
         RegisterCustomerDTO response = authService.customerRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = {"/employees/update"})
+    public ResponseEntity<RegisterDTO> staffUpdate(@RequestBody RegisterDTO registerDTO) throws JsonProcessingException {
+        RegisterDTO response = authService.employeeUpdate(registerDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = {"/customers/update"})
+    public ResponseEntity<RegisterCustomerDTO> customerUpdate(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+        RegisterCustomerDTO response = authService.customerUpdate(registerDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = {"/customers/getOne/RegisterCustomer/{id}"})
+    public ResponseEntity<RegisterCustomerDTO> getOneRegisterCustomer(@PathVariable int id) throws JsonProcessingException {
+        RegisterCustomerDTO response = authService.getOneRegisterCustomer(id);
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = {"/employees/getOne/RegisterEmployee/{id}"})
+    public ResponseEntity<RegisterDTO> getOneRegisterEmp(@PathVariable int id) throws JsonProcessingException {
+        RegisterDTO response = authService.getOneRegisterEmp(id);
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping("/customers/processForgotPassword")
     public ResponseEntity<String> processForgotPassword(@RequestBody String email){

@@ -8,6 +8,7 @@ import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.EmployeeAccountRepository;
 import com.springboot.wmproject.repositories.EmployeeRepository;
 import com.springboot.wmproject.services.AuthServices.EmployeeAccountService;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,9 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
 
 
     @Override
-    public List<EmployeeAccountDTO> getAllEmployeeAccounts(){
+    public List<EmployeeAccountDTO> getAllEmployeeAccounts() {
         List<EmployeeAccounts> employeeAccountsList = empAccRepo.findAll();
-        if(employeeAccountsList.isEmpty()){
+        if (employeeAccountsList.isEmpty()) {
             return null;
         }
         List<EmployeeAccountDTO> employeeAccountDTOList = employeeAccountsList.stream().map(booking -> mapToDto(booking)).collect(Collectors.toList());
@@ -44,8 +45,17 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
 
     @Override
     public EmployeeAccountDTO getEmployeeAccountByEmployeeAccountId(int id) {
-        EmployeeAccounts employeeAccount= empAccRepo.findById(id).orElseThrow(()->new ResourceNotFoundException("Employee Account","Id",String.valueOf(id)));
+        EmployeeAccounts employeeAccount = empAccRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "Id", String.valueOf(id)));
         return mapToDto(employeeAccount);
+    }
+
+    @Override
+    public EmployeeAccountDTO getEmployeeAccountByEmployeeId(int id) {
+        EmployeeAccounts employeeAccounts = empAccRepo.getEmployeeAccountByEmployeeId(id);
+        if(employeeAccounts == null){
+            throw new ResourceNotFoundException("Employee Account","emp ID",String.valueOf(id));
+        }
+        return mapToDto(employeeAccounts);
     }
 
     @Override
@@ -61,6 +71,7 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
+    @Transactional
     public EmployeeAccountDTO create(EmployeeAccountDTO employeeAccountDTO) {
         int employeeId = employeeAccountDTO.getEmployeeId();
 
@@ -70,9 +81,9 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
             //if employee info exist -> able to create account
             if (employees != null) {
                 //check if username exist
-                Optional<EmployeeAccounts> employeeAccounts= empAccRepo.findByUsername(employeeAccountDTO.getUsername());
-                if(employeeAccounts.isPresent()){
-                    throw new WmAPIException(HttpStatus.BAD_REQUEST,"Username already existed");
+                Optional<EmployeeAccounts> employeeAccounts = empAccRepo.findByUsername(employeeAccountDTO.getUsername());
+                if (employeeAccounts.isPresent()) {
+                    throw new WmAPIException(HttpStatus.BAD_REQUEST, "Username already existed");
                 }
                 return mapToDto(empAccRepo.save(mapToEntity(employeeAccountDTO)));
             }
@@ -81,30 +92,24 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO){
-        int employeeAccountId = employeeAccountDTO.getEmployeeId();
+    public EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO) {
+        int employeeAccountId = employeeAccountDTO.getId();
+        if(employeeAccountId == 0){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,"EmployeeAccount ID is required to update");
+        }
         //check employee account exist
         EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
-        //if exist update
-        if (checkEmployeeAccount != null) {
-            EmployeeAccounts updateEmployeeAccount = new EmployeeAccounts();
-            updateEmployeeAccount.setId(employeeAccountDTO.getId());
-            updateEmployeeAccount.setUsername(employeeAccountDTO.getUsername());
-            updateEmployeeAccount.setPassword(employeeAccountDTO.getPassword());
-            updateEmployeeAccount.setRole(employeeAccountDTO.getRole());
-            updateEmployeeAccount.setEmployeeId(employeeAccountDTO.getEmployeeId());
-            empAccRepo.save(updateEmployeeAccount);
-            return mapToDto(updateEmployeeAccount);
-        }
-        return null;
+            checkEmployeeAccount.setUsername(employeeAccountDTO.getUsername());
+            checkEmployeeAccount.setPassword(employeeAccountDTO.getPassword());
+            checkEmployeeAccount.setRole(employeeAccountDTO.getRole());
+            empAccRepo.save(checkEmployeeAccount);
+            return mapToDto(checkEmployeeAccount);
     }
 
     @Override
     public void delete(int id) {
         EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(id)));
-        if(checkEmployeeAccount != null){
-            empAccRepo.delete(checkEmployeeAccount);
-        }
+        empAccRepo.delete(checkEmployeeAccount);
     }
 
     @Override
@@ -122,7 +127,6 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
         EmployeeAccounts employeeAccounts = modelMapper.map(employeeAccountDTO, EmployeeAccounts.class);
         return employeeAccounts;
     }
-
 
 
 }

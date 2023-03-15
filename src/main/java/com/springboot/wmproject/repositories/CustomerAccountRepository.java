@@ -12,6 +12,9 @@ import java.util.Optional;
 
 @Repository
 public interface CustomerAccountRepository extends JpaRepository<CustomerAccounts,Integer> {
+
+    @Query("select c from CustomerAccounts c JOIN Customers cu ON c.customerId = cu.id where c.customerId=:customerId")
+    CustomerAccounts getCustomerAccountByCustomerId(int customerId);
     Optional<CustomerAccounts> findByUsername(String username);
     @Query("select ca FROM CustomerAccounts ca JOIN Customers c ON ca.customerId = c.id where c.email =:email")
     CustomerAccounts findByEmail(String email);

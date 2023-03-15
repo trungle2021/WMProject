@@ -3,10 +3,12 @@ package com.springboot.wmproject.services.AuthServices.AuthImpl;
 import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.Customers;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
+import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.CustomerRepository;
 import com.springboot.wmproject.services.AuthServices.CustomerService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,23 +56,19 @@ public class CustomerServiceImpl implements CustomerService
     public CustomerDTO update(CustomerDTO customerDTO) {
         int customerId = customerDTO.getId();
         if(customerId!=0){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, "CustomerID is required to update");
+        }
             //check if customer exist
             Customers checkCustomer=customerRepository.findById(customerId).orElseThrow(()->new ResourceNotFoundException("Customer","id",String.valueOf(customerId)));
-            //if customer = null create new
-            if(checkCustomer!=null){
-                Customers customers=new Customers();
-                customers.setId(customerDTO.getId());
-                customers.setFirstName(customerDTO.getFirstname());
-                customers.setLastName(customerDTO.getLastname());
-                customers.setAddress(customerDTO.getAddress());
-                customers.setPhone(customerDTO.getPhone());
-                customers.setAvatar(customerDTO.getAvatar());
-                customers.setGender(customerDTO.getGender());
-                customerRepository.save(customers);
-                return mapToDto(customers);
-            }
-        }
-        return null;
+                checkCustomer.setFirstName(customerDTO.getFirstname());
+                checkCustomer.setLastName(customerDTO.getLastname());
+                checkCustomer.setAddress(customerDTO.getAddress());
+                checkCustomer.setPhone(customerDTO.getPhone());
+                checkCustomer.setEmail(customerDTO.getEmail());
+                checkCustomer.setAvatar(customerDTO.getAvatar());
+                checkCustomer.setGender(customerDTO.getGender());
+                customerRepository.save(checkCustomer);
+                return mapToDto(checkCustomer);
     }
 
     @Override
