@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+
 public class AuthServiceImpl implements AuthService {
 
     private AuthenticationManager authenticationManager;
@@ -73,7 +74,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    @Transactional
     public RegisterDTO employeeRegister(RegisterDTO registerDTO) throws JsonProcessingException {
         errors = new ArrayList<>();
         OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(registerDTO.getTeam_id());

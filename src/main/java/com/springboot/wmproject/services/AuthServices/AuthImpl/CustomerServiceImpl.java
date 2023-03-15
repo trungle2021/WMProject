@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,6 +41,7 @@ public class CustomerServiceImpl implements CustomerService
         return mapToDto(customers);
     }
     @Override
+    @Transactional
     public CustomerDTO create(CustomerDTO customerDTO) {
         Customers customers = new Customers();
         customers.setFirstName(customerDTO.getFirstname());
@@ -53,6 +55,7 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
+    @Transactional
     public CustomerDTO update(CustomerDTO customerDTO) {
         int customerId = customerDTO.getId();
         if(customerId!=0){
@@ -72,6 +75,7 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
+    @Transactional
     public void delete(int id){
         Customers customers=customerRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Customer","id",String.valueOf(id)));
         customerRepository.delete(customers);

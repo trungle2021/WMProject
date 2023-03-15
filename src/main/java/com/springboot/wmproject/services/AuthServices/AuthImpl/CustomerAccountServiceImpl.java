@@ -25,7 +25,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class CustomerAccountServiceImpl implements CustomerAccountService {
     private CustomerAccountRepository customerAccountRepository;
     private CustomerRepository customerRepository;
@@ -63,6 +62,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
 
     @Override
+    @Transactional
     public CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO) {
 
         int customerID = customerAccountDTO.getCustomerId();
@@ -86,6 +86,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     }
 
     @Override
+    @Transactional
     public CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO) {
         int customerAccountID = customerAccountDTO.getCustomerId();
         if(customerAccountID == 0){
@@ -102,6 +103,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         CustomerAccounts customerAccounts = customerAccountRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("CustomerAccount","id",String.valueOf(id)));
        if(customerAccounts != null){

@@ -28,11 +28,12 @@ public class JwtTokenProvider {
         String userID = "";
         Object userDetail = authentication.getPrincipal();
         if(userDetail instanceof CustomUserDetails) {
-            userID = ((CustomUserDetails) userDetail).getUserId().toString();
+            userID =    ((CustomUserDetails) userDetail).getUserId().toString();
             Map<String, String> claims = new HashMap<>();
             claims.put("userType",userType);
             claims.put("username",username);
             claims.put("userID",userID);
+
 
             Date currentDate = new Date();
             Date expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);

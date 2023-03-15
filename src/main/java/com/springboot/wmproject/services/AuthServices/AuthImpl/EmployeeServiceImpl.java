@@ -48,6 +48,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public EmployeeDTO update(EmployeeDTO updateEmployeeDTO) {
         int employeeId = updateEmployeeDTO.getId();
         if (employeeId == 0) {
@@ -102,6 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public void delete(int employeeId) {
         Employees employees = employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
         employeeRepository.delete(employees);
