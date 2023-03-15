@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.EmployeeDTO;
@@ -29,7 +30,11 @@ import java.util.Map;
 @Controller
 @RequestMapping("/staff/employees")
 public class EmployeeController {
-    String api_create_employee = "/api/auth/employees/create";
+    String api_create_employee = SD_CLIENT.DOMAIN_APP_API + "/api/auth/employees/create";
+    String api_update_employee = SD_CLIENT.DOMAIN_APP_API +  "/api/auth/employees/update";
+    String api_getOne_employee = SD_CLIENT.DOMAIN_APP_API +  "/api/auth/employees/getOne/RegisterEmployee/";
+
+    String api_teams_all = SD_CLIENT.DOMAIN_APP_API + "/api/teams/all";
 
 
     @GetMapping("/create")
@@ -42,7 +47,12 @@ public class EmployeeController {
             model.addAttribute("registerDTO",model.asMap().get("registerDTO"));
         }else{
             model.addAttribute("message",model.asMap().get("message"));
-            model.addAttribute("registerDTO",new RegisterDTO());
+            RegisterDTO registerDTO = (RegisterDTO) model.asMap().get("registerDTO");
+            if(registerDTO != null){
+                model.addAttribute("registerDTO",registerDTO);
+            }else{
+                model.addAttribute("registerDTO",new RegisterDTO());
+            }
         }
         model.addAttribute("errorMessages",model.asMap().get("errorMessages"));
 
@@ -50,7 +60,7 @@ public class EmployeeController {
         ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTypeTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
         try {
             List<OrganizeTeamDTO> teamDTOList = APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API + "/api/teams/all",
+                    api_teams_all,
                     HttpMethod.GET,
                     null,
                     token,
@@ -77,12 +87,14 @@ public class EmployeeController {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }catch(HttpServerErrorException e){
+            return "redirect:/error";
         }
         return "adminTemplate/pages/create-employee";
     }
 
     @PostMapping("/create")
-    public String createEmp(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file, Model model) throws IOException {
+    public String createEmp(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
 
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
@@ -91,22 +103,21 @@ public class EmployeeController {
                     registerDTO.setAvatar(avatar);
         }
 
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("result",result);
+            attributes.addFlashAttribute("registerDTO",registerDTO);
+            return "redirect:/staff/employees/create";
+        }
+
         registerDTO.setTeam_id(registerDTO.getTeam_id());
         try {
             RegisterDTO response_ =  APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API + api_create_employee,
+                    api_create_employee,
                     HttpMethod.POST,
                     registerDTO,
                     token,
                    RegisterDTO.class
             );
-
-            if (result.hasErrors()) {
-                attributes.addFlashAttribute("result",result);
-                attributes.addFlashAttribute("registerDTO",registerDTO);
-                return "redirect:/staff/employees/create";
-            }
-
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
@@ -131,33 +142,47 @@ public class EmployeeController {
 
             }
         }
+//        catch(HttpServerErrorException e){
+//            return "redirect:/error";
+//        }
         attributes.addFlashAttribute("message","Create Employee Success");
         return "redirect:/staff/employees/create";
     }
 
+    @GetMapping("/update/{id}")
+    public String updateEmp(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
 
-
-    @PostMapping("/employees/update")
-    public String updateEmp(@ModelAttribute EmployeeDTO employeeDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("employee-update-pic") MultipartFile[] files,@RequestParam("teamId") String teamId) throws IOException {
-        //xu ly avatar
-        ClientUtilFunction utilFunction = new ClientUtilFunction();
-        List<String> empAvatar = utilFunction.AddMultipleFilesEncrypted(files);
-        if (empAvatar != null) {
-            for (String item : empAvatar
-            ) {
-                employeeDTO.setAvatar(item);
-            }
+        BindingResult result = (BindingResult) model.asMap().get("result");
+        if(result != null){
+            model.addAttribute("result",result);
+            model.addAttribute("registerDTO",model.asMap().get("registerDTO"));
         }
-        employeeDTO.setTeam_id(Integer.parseInt(teamId));
+
+
+        ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTypeTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
         try {
-            APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API + "/api/employees/update",
-                    HttpMethod.PUT,
-                    employeeDTO,
+            List<OrganizeTeamDTO> teamDTOList = APIHelper.makeApiCall(
+                    api_teams_all,
+                    HttpMethod.GET,
+                    null,
                     token,
-                    EmployeeDTO.class
+                    responseTypeTeam
             );
-        }catch (HttpClientErrorException ex) {
+            model.addAttribute("teamList", teamDTOList);
+
+            RegisterDTO registerDTO = APIHelper.makeApiCall(
+                    api_getOne_employee + id,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    RegisterDTO.class);
+            model.addAttribute("message",model.asMap().get("message"));
+            model.addAttribute("registerDTO",registerDTO);
+
+            model.addAttribute("errorMessages",model.asMap().get("errorMessages"));
+
+
+        } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(responseError, Map.class);
@@ -175,7 +200,73 @@ public class EmployeeController {
                     return "redirect:/access-denied";
 
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return "redirect:/admin/team?msg=Success";
+//        catch(HttpServerErrorException e){
+//            return "redirect:/error";
+//        }
+        return "adminTemplate/pages/update-employee";
     }
+
+    @PostMapping("/update")
+    public String updateEmp(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
+
+        //xu ly avatar
+        ClientUtilFunction utilFunction = new ClientUtilFunction();
+        if(!file.isEmpty()){
+            String avatar = utilFunction.AddFileEncrypted(file);
+            registerDTO.setAvatar(avatar);
+        }
+
+//        registerDTO.setEmployeeId(re);
+        try {
+            RegisterDTO response_ =  APIHelper.makeApiCall(
+                    api_update_employee,
+                    HttpMethod.PUT,
+                    registerDTO,
+                    token,
+                    RegisterDTO.class
+            );
+
+            if (result.hasErrors()) {
+                attributes.addFlashAttribute("result",result);
+                attributes.addFlashAttribute("registerDTO",registerDTO);
+                return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
+            }
+
+        }catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+
+            final ObjectMapper objectMapper = new ObjectMapper();
+            String[] langs = objectMapper.readValue(message, String[].class);
+
+            String status = String.valueOf(ex.getStatusCode().value());
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                default:
+                    if (result.hasErrors()) {
+                        attributes.addFlashAttribute("result",result);
+                    }
+                    attributes.addFlashAttribute("registerDTO",registerDTO);
+                    attributes.addFlashAttribute("errorMessages", langs);
+                    return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
+
+            }
+        }
+//        catch(HttpServerErrorException e){
+//            return "redirect:/error";
+//        }
+
+        attributes.addFlashAttribute("message","Update Employee Success");
+        return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
+    }
+
+
+
 }

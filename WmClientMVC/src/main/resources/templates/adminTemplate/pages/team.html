@@ -88,23 +88,15 @@
                                             </th:block>
 
                                             <td>
-                                                <button type="button" class="btn btn-outline-primary float-right"
-                                                        data-toggle="modal"
-                                                        data-target="#updateEmployeeModal"
-                                                        th:attr="data-updateemployee=${c.getId()}
-                                                        ,data-employeename=${c.getName()}
-                                                        ,data-employeeaddress=${c.getAddress()}
-                                                        ,data-employeephone=${c.getPhone()}
-                                                        ,data-employeedate=${c.getJoinDate()}
-                                                        ,data-employeesalary=${c.getSalary()}
-                                                        ,data-employeeemail=${c.getEmail()}
-                                                        ,data-employeeteam=${c.getOrganizeTeamsByTeamId().getId()}
-                                                        ,data-employeeavatar=${c.getAvatar()}"
-                                                >Update
-                                                </button>
-                                                <a th:href="@{/staff/admin/employee/delete/{empId}(empId=${c.getId()})}"
-                                                   class="btn btn-outline-primary float-right"
+
+                                                <a th:href="@{/staff/employees/update/{empId}(empId=${c.getId()})}" class=" btn btn-outline-primary ">
+                                                    Update
+                                                </a>
+
+                                                <a th:href="@{/staff/employees/delete/{empId}(empId=${c.getId()})}"
+                                                   class="btn btn-outline-primary "
                                                    style="margin-right: 1rem">Delete</a>
+
                                             </td>
                                         </tr>
 
@@ -136,18 +128,19 @@
                                                 <tr th:each="i:${teamList}">
                                                     <td th:text="${i.teamName}"></td>
                                                     <td>
+
+                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getId()})}"
+                                                           class="btn btn-outline-primary float-right"
+                                                           style="margin-right: 1rem">Delete</a>
+
                                                         <button type="button"
                                                                 class="btn btn-outline-primary float-right"
                                                                 data-toggle="modal"
                                                                 data-target="#updateTeamModal"
                                                                 th:attr="data-updateteam=${i.getId()}"
-                                                                th:attrappend="data-teamname=${i.getTeamName()}"
-                                                        >
+                                                                th:attrappend="data-teamname=${i.getTeamName()}">
                                                             Update
                                                         </button>
-                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getId()})}"
-                                                           class="btn btn-outline-primary float-right"
-                                                           style="margin-right: 1rem">Delete</a>
                                                     </td>
                                                 </tr>
 
@@ -169,26 +162,7 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <!--create employee Modal-->
-        <div class="modal fade" id="createEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create Employee</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
 
-
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
         <!--create organize team Modal-->
         <div class="modal fade" id="createTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">

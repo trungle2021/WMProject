@@ -11,6 +11,7 @@ public interface CustomerAccountService {
     List<CustomerAccountDTO> findAll();
 
     CustomerAccountDTO getAccountByAccountId(int id);
+    CustomerAccountDTO getAccountByCustomerId(int id);
 
     CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO);
     CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO);

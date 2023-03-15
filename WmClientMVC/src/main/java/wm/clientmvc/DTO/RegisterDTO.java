@@ -13,11 +13,11 @@ import lombok.Setter;
 public class RegisterDTO {
     private int id;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 2, max = 50)
     private String name;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 2, max = 50)
     private String address;
 
@@ -25,35 +25,30 @@ public class RegisterDTO {
     @Size(min = 10,max = 11,message = "Phone must be between 10 and 11 numbers")
     private String phone;
 
-    @NotNull
+    @NotEmpty
     private String joinDate;
 
-    @NotNull
     @Min(0)
     private Double salary;
 
-    @NotNull
+    @NotEmpty
     @Email
     private String email;
 
-    @NotNull
-    private Boolean isLeader;
+    private Integer isLeader;
 
-    @NotNull
-    private int team_id;
+    private Integer team_id;
 
-    @NotNull
+    @NotEmpty
     private String gender;
 
     private String avatar;
 
     //emp_account
-    @NotNull
+    @NotEmpty
     @Size(min = 5, max = 20)
     private String username;
 
-    @NotNull
-    @Size(min = 5, max = 20)
     private String password;
 
 //    @NotNull

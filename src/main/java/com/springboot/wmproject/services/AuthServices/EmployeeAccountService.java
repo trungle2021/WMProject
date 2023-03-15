@@ -10,6 +10,7 @@ public interface EmployeeAccountService {
     List<EmployeeAccountDTO> getAllEmployeeAccounts();
 
     EmployeeAccountDTO getEmployeeAccountByEmployeeAccountId(int id);
+    EmployeeAccountDTO getEmployeeAccountByEmployeeId(int id);
 
     List<EmployeeAccountDTO> findByName(String name);
     List<EmployeeAccountDTO> filterByRole(String role);
