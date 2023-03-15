@@ -22,5 +22,7 @@ public interface CustomerAccountService {
     String processForgotPassword(String email);
     CustomerAccountDTO findByEmail(String email);
 
+    List<CustomerAccounts> checkUsernameExists(String username);
+
 
 }

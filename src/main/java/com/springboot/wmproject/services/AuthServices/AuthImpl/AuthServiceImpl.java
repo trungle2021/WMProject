@@ -1,5 +1,7 @@
 package com.springboot.wmproject.services.AuthServices.AuthImpl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.*;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
@@ -18,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,9 +33,9 @@ public class AuthServiceImpl implements AuthService {
     private CustomerAccountService customerAccountService;
     private BCryptPasswordEncoder passwordEncoder;
     private JwtTokenProvider tokenProvider;
-
     private OrganizeTeamService teamService;
     private PasswordResetTokenService passwordResetTokenService;
+    private List<String> errors;
 
     @Autowired
     public AuthServiceImpl(OrganizeTeamService teamService, AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PasswordResetTokenService passwordResetTokenService) {
@@ -70,24 +73,25 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional
-    public RegisterDTO employeeRegister(RegisterDTO registerDTO) {
+    public RegisterDTO employeeRegister(RegisterDTO registerDTO) throws JsonProcessingException {
+        errors = new ArrayList<>();
         OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(registerDTO.getTeam_id());
         EmployeeDTO employeeDTO = new EmployeeDTO();
-
         String teamName = teamDTO.getTeamName();
-        Boolean phoneIsValid = employeeService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
-        Boolean emailIsValid = employeeService.checkEmailExists(registerDTO.getEmail()).size() == 0;
+        boolean isPhoneValid = employeeService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
+        boolean isEmailValid = employeeService.checkEmailExists(registerDTO.getEmail()).size() == 0;
+        boolean isUsernameValid = employeeAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
 
-        if (phoneIsValid) {
+        if(isPhoneValid){
             employeeDTO.setPhone(registerDTO.getPhone());
-        } else {
-            throw new WmAPIException(HttpStatus.BAD_REQUEST, "Phone number: " + registerDTO.getPhone() + " has already existed");
+        }else{
+            errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
         }
 
-        if (emailIsValid) {
+        if(isEmailValid){
             employeeDTO.setEmail(registerDTO.getEmail());
-        } else {
-            throw new WmAPIException(HttpStatus.BAD_REQUEST, "Email Address : " + registerDTO.getEmail() + " has already existed");
+        }else{
+            errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
         }
 
         employeeDTO.setName(registerDTO.getName());
@@ -100,16 +104,34 @@ public class AuthServiceImpl implements AuthService {
             if (!hasLeaderInTeam) {
                 employeeDTO.setLeader(true);
             } else {
-                throw new WmAPIException(HttpStatus.BAD_REQUEST, "Team" + teamDTO.getTeamName() + "already has a leader");
+                errors.add(teamDTO.getTeamName() + " already has a leader");
             }
         }
+
+        if(errors.size() != 0){
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,responseError);
+        }
+
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
         employeeDTO.setAvatar(registerDTO.getAvatar());
         EmployeeDTO empDTO = employeeService.create(employeeDTO);
         //getID after employee created -> then pass to employee account
 
         EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
-        employeeAccountDTO.setUsername(registerDTO.getUsername());
+        if(isUsernameValid){
+            employeeAccountDTO.setUsername(registerDTO.getUsername());
+        }else{
+            errors.add("Username : " + registerDTO.getUsername() + " has already existed");
+        }
+
+        if(errors.size() != 0){
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,responseError);
+        }
+
         employeeAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         String role = "";
 
@@ -128,27 +150,59 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) {
+    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+        errors = new ArrayList<>();
+        boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
+        boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
+        boolean isUsernameValid = customerAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
+
         CustomerDTO customerDTO = new CustomerDTO();
+
+        if(isPhoneValid){
+            customerDTO.setPhone(registerDTO.getPhone());
+        }else{
+            errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
+        }
+        if(isEmailValid){
+            customerDTO.setEmail(registerDTO.getEmail());
+        }else{
+            errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
+        }
+
+        if(errors.size() != 0){
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,responseError);
+        }
+
         customerDTO.setFirstname(registerDTO.getFirstname());
         customerDTO.setLastname(registerDTO.getLastname());
-        customerDTO.setPhone(registerDTO.getPhone());
         customerDTO.setAddress(registerDTO.getAddress());
         customerDTO.setGender(registerDTO.getGender());
         customerDTO.setAvatar(registerDTO.getAvatar());
-        customerDTO.setEmail(registerDTO.getEmail());
         CustomerDTO cusDTO = customerService.create(customerDTO);
         //getID after employee created -> then pass to employee account
 
         CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();
-        customerAccountDTO.setUsername(registerDTO.getUsername());
+
+        if(isUsernameValid){
+            customerAccountDTO.setUsername(registerDTO.getUsername());
+        }else{
+            errors.add("Username : " + registerDTO.getUsername() + " has already existed");
+        }
+
+        if(errors.size() != 0){
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,responseError);
+        }
+
         customerAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.create(customerAccountDTO);
         registerDTO.setCustomerId(cusDTO.getId());
+
 //        registerDTO.setPassword(customerAccountDTO.getPassword());
         return registerDTO;
     }
-
-
 }

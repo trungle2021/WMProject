@@ -1,5 +1,6 @@
 package com.springboot.wmproject.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.springboot.wmproject.DTO.*;
 import com.springboot.wmproject.services.AuthServices.AuthService;
 import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
@@ -51,13 +52,13 @@ public class AuthController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = {"/employees/create"})
-    public ResponseEntity<RegisterDTO> staffRegister(@RequestBody RegisterDTO registerDTO){
+    public ResponseEntity<RegisterDTO> staffRegister(@RequestBody RegisterDTO registerDTO) throws JsonProcessingException {
         RegisterDTO response = authService.employeeRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
 
     @PostMapping(value = {"/customers/register"})
-    public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO){
+    public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
         RegisterCustomerDTO response = authService.customerRegister(registerDTO);
         return ResponseEntity.ok(response);
     }
