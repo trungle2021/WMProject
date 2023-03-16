@@ -34,7 +34,7 @@ import java.util.Map;
 public class VenueWebClientController {
 
 
-    @GetMapping("/venues")
+    @GetMapping("/")
     public String GetAllVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ParameterizedTypeReference<List<VenueDTO>> responseTypeVenue = new ParameterizedTypeReference<List<VenueDTO>>() {
         };
