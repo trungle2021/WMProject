@@ -26,9 +26,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.springframework.ui.Model;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
+
+import static wm.clientmvc.utils.Static_Status.*;
 
 @Controller
 @RequestMapping("/customers/orders")
@@ -37,7 +41,7 @@ public class WebOrderController {
     RestTemplate restTemplate = new RestTemplate();
 //    AuthService authService;
 
-    String url = "http://localhost:8080/api/venues/all";
+    String url = "http://localhost:8080/api/venues/allactive";
     String orderurl="http://localhost:8080/api/orders";
 
 
@@ -58,11 +62,11 @@ public class WebOrderController {
 
         @RequestMapping("/getvenue")
         @ResponseBody
-        public String showVenue(@RequestBody String date,@CookieValue(name="token",defaultValue = "") String token) throws JsonProcessingException {
+        public ResponseEntity<String> showVenue(@RequestBody String date,@CookieValue(name="token",defaultValue = "") String token) throws JsonProcessingException {
             Map<String, Object> map = new HashMap<>();
             HttpHeaders headers = new HttpHeaders();
             headers.setBearerAuth(token);
-
+        try{
             HttpEntity<?> entity = new HttpEntity<>(headers);
             ResponseEntity<List<VenueDTO>> response = restTemplate.exchange(
                     url,
@@ -72,7 +76,9 @@ public class WebOrderController {
             );
 
             List<VenueDTO> venueList = response.getBody();
+  //get active venueList
 
+//
             ResponseEntity<List<OrderDTO>> orderResponse = restTemplate.exchange(
                     orderurl,
                     HttpMethod.GET,
@@ -80,11 +86,14 @@ public class WebOrderController {
                     new ParameterizedTypeReference<List<OrderDTO>>() {}
             );
             List<OrderDTO> orderList = orderResponse.getBody();
+
 //        List find in date
             List<OrderDTO> bookedList=new ArrayList<>();
+
+
             if(orderList!=null){
             for (OrderDTO order: orderList) {
-                if (order.getTimeHappen().contains(date)) {
+                if (order.getTimeHappen().contains(date) && !order.getOrderStatus().equals(orderStatusCanceled)&& !order.getOrderStatus().equals(orderStatusCancel)&& !order.getOrderStatus().equals(orderStatusRefund)) {
                     bookedList.add(order);
                 }
             }
@@ -101,7 +110,7 @@ public class WebOrderController {
                 LocalTime timeHappen = LocalDateTime.parse(order.getTimeHappen(), formatter).toLocalTime();
                 LocalTime compareTime1 = LocalTime.parse("13:00:00");
                 LocalTime compareTime2 = LocalTime.parse("18:00:00");
-                if(timeHappen.isBefore(compareTime1) && !order.getOrderStatus().equals("canceled")){
+                if(timeHappen.isBefore(compareTime1)){
                 VenueBooked newbooked=new VenueBooked();
 //                newbooked.setBookedDay(date);
                 newbooked.setVenueId(String.valueOf(order.getVenueId()));
@@ -109,7 +118,7 @@ public class WebOrderController {
                 bookeds.add(newbooked);
 //                i++;
                 }
-                else if(timeHappen.isAfter(compareTime1) && timeHappen.isBefore(compareTime2) && !order.getOrderStatus().equals("canceled")){
+                else if(timeHappen.isAfter(compareTime1) && timeHappen.isBefore(compareTime2)){
                     VenueBooked newbooked=new VenueBooked();
 //                    newbooked.setBookedDay(date);
                     newbooked.setVenueId(String.valueOf(order.getVenueId()));
@@ -120,7 +129,13 @@ public class WebOrderController {
              }
             }
             String json = toJson(venueList,bookeds);
-            return json;
+
+            return ResponseEntity.ok(json);}
+        catch (Exception ex)
+            {
+                return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
+            }
+
     }
 
     @RequestMapping("/create")
@@ -149,11 +164,11 @@ public class WebOrderController {
         LocalDateTime happenDateTime = LocalDateTime.parse(dateTime, formatter);
 
 //        LocalTime timeHappen = happenDateTime.toLocalTime();
-
+//check status
         Duration duration=Duration.between(orderDateTime,happenDateTime);
         if(duration.toDays() >=30 && happenDateTime.isAfter(orderDateTime)) {
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setBearerAuth(token);
+//            HttpHeaders httpHeaders = new HttpHeaders();
+//            httpHeaders.setBearerAuth(token);
 
             OrderDTO newOrder = new OrderDTO();
             newOrder.setVenueId(venueId);
@@ -164,15 +179,33 @@ public class WebOrderController {
 
             newOrder.setCustomerId(customerDetail.getUserId().intValue());
             //
-            newOrder.setOrderStatus("Ordered");
+            newOrder.setOrderStatus(orderStatusOrdered);
             newOrder.setOrderDate(formattedNow);
-            HttpEntity<OrderDTO> requestEntity = new HttpEntity<>(newOrder, httpHeaders);
+//            HttpEntity<OrderDTO> requestEntity = new HttpEntity<>(newOrder, httpHeaders);
+            try {
+                OrderDTO responseOrder= APIHelper.makeApiCall(
+                        "http://localhost:8080/api/orders/create",
+                        HttpMethod.POST,
+                        newOrder,
+                        token,
+                        OrderDTO.class
+                );
+                if(responseOrder!=null)
+                {
+                return ResponseEntity.ok(objectMapper.writeValueAsString(responseOrder));
+                }
 
-            ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/orders/create", requestEntity, OrderDTO.class);
+                else{
+                    return new ResponseEntity<>("Oops! Some thing wrong! This venues already booked!",HttpStatus.BAD_REQUEST);
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+//            ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/orders/create", requestEntity, OrderDTO.class);
 
 // Get the response body
-            OrderDTO responseBody = responseEntity.getBody();
-            return ResponseEntity.ok(objectMapper.writeValueAsString(responseBody));
+//            OrderDTO responseBody = responseEntity.getBody();
+
         }
         else{
 
@@ -202,7 +235,7 @@ public class WebOrderController {
         );
         OrderDTO myOrder=response.getBody();
         //get foodlist
-       String foodUrl="http://localhost:8080/api/food/all";
+       String foodUrl="http://localhost:8080/api/food/allactive";
         ResponseEntity<List<FoodDTO>> foodResponse = restTemplate.exchange(
                 foodUrl,
                 HttpMethod.GET,
@@ -212,7 +245,7 @@ public class WebOrderController {
         );
         List<FoodDTO> foodList= foodResponse.getBody();
         //get serviceList
-        String serviceUrl="http://localhost:8080/api/services";
+        String serviceUrl="http://localhost:8080/api/services/allactive";
         ResponseEntity<List<ServiceDTO>> serviceResponse = restTemplate.exchange(
                 serviceUrl,
                 HttpMethod.GET,
@@ -222,6 +255,7 @@ public class WebOrderController {
         );
         List<ServiceDTO> serviceList= serviceResponse.getBody();
         model.addAttribute("myOrder",myOrder);
+
         model.addAttribute("foodList",foodList);
         model.addAttribute("serviceList",serviceList);
 

@@ -84,7 +84,9 @@ public class CustomerServiceImpl implements CustomerService
 
 
     public CustomerDTO mapToDto(Customers customers){
-        return modelMapper.map(customers,CustomerDTO.class);
+        CustomerDTO cusDTO=modelMapper.map(customers,CustomerDTO.class);
+        cusDTO.setAvatarFromDB(customers.getAvatar());
+        return cusDTO;
     }
 
     public Customers mapToEntity(CustomerDTO customerDTO){

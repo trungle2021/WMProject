@@ -14,12 +14,13 @@ import java.util.Set;
 @NoArgsConstructor
 public class CustomerDTO {
     private int id;
-    private String name;
+    private String firstname;
+    private String lastname;
     private String address;
     private String phone;
     private String gender;
     private String avatar;
-    private Set<BookingDTO> bookings = new HashSet<>();
-    private Set<OrderDTO> orders = new HashSet<>();
+//    private Set<BookingDTO> bookings = new HashSet<>();
+//    private Set<OrderDTO> orders = new HashSet<>();
 
 }

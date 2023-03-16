@@ -10,9 +10,11 @@ import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.repositories.VenueRepository;
 import com.springboot.wmproject.services.VenueService;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class VenueServiceImpl implements VenueService {
     private VenueRepository venueRepository;
     private ModelMapper modelMapper;
+
     private CustomerRepository customerRepository;
     private OrderRepository orderRepository;
 
@@ -27,6 +30,7 @@ public class VenueServiceImpl implements VenueService {
     public VenueServiceImpl(VenueRepository venueRepository, ModelMapper modelMapper, CustomerRepository customerRepository, OrderRepository orderRepository) {
         this.venueRepository = venueRepository;
         this.modelMapper = modelMapper;
+        modelMapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
         this.customerRepository = customerRepository;
         this.orderRepository = orderRepository;
     }
@@ -34,6 +38,21 @@ public class VenueServiceImpl implements VenueService {
     @Override
     public List<VenueDTO> getAllVenue()throws ResourceNotFoundException {
         return venueRepository.findAll().stream().map(venue -> mapToDTO(venue)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VenueDTO> getAllVenueActive() {
+        List<Venues>list=venueRepository.findAll();
+        List<VenueDTO>venues= list.stream().map(venue -> mapToDTO(venue)).collect(Collectors.toList());
+        List<VenueDTO> newList=new ArrayList<>();
+        for (VenueDTO venue:venues)
+        {
+            if(venue.isActive())
+            {
+                newList.add(venue);
+            }
+        }
+        return newList;
     }
 
     @Override
@@ -93,6 +112,7 @@ public class VenueServiceImpl implements VenueService {
 
     public VenueDTO mapToDTO(Venues venue) {
         VenueDTO venueDTO = modelMapper.map(venue, VenueDTO.class);
+        venueDTO.setActive(venue.isActive());
         return venueDTO;
     }
 
@@ -102,7 +122,9 @@ public class VenueServiceImpl implements VenueService {
     }
 
     public Venues mapToEntity(VenueDTO venueDTO) {
+
         Venues venue = modelMapper.map(venueDTO, Venues.class);
+        venue.setActive(venueDTO.isActive());
         return venue;
     }
 

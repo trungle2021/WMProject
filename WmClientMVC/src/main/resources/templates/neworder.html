@@ -15,7 +15,7 @@
 
 
                 <div id="orderList" class="">
-                    <h3>Chọn Món và Dịch Vụ </h3>
+                    <h3>Choose Food And Service </h3>
                     <svg viewBox="0 0 100 1">
                         <style>
                             .line {
@@ -31,7 +31,7 @@
                     </svg>
 
                         <div>
-                            <label>Số Bàn</label>
+                            <label>Number Table</label>
                            <input class="form-control select-box" id="tableAmount" type="number" required>
                         </div>
 
@@ -39,15 +39,15 @@
 
                     <div id="foodList" class="">
                         <div id="starter">
-                            <label>Món Khai Vị</label>
-                            <select data-index="food" class="form-control select-box" onchange="getId(this)">
-                                <option value="default"> Chọn Món Ăn </option>
+                            <label>Starter Dish</label>
+                            <select data-index="food" class="form-control select-box" onchange="getId(this)" required>
+                                <option value="default">Choose Menu </option>
                                 <option th:each="food : ${foodList}" th:if="${food.getFoodType().equalsIgnoreCase('starter')}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
 
                             </select>
                         </div>
                         <hr>
-                        <a id="btn-newMain" class="btn color">Thêm Món Chính <i class="fas fa-cart-plus"></i></a>
+                        <a id="btn-newMain" class="btn color">Add More Main Dish <i class="fas fa-cart-plus"></i></a>
                         <div id="main">
 
 <!--                            <div th:if="${#authentication.getPrincipal().getUserId()}">-->
@@ -59,9 +59,9 @@
                         <hr>
 
                         <div id="dessert">
-                            <label>Món Tráng Miệng <i class="fa-solid fa-trash-xmark"></i></label>
-                            <select data-index="food" class="form-control select-box" onchange="getId(this)">
-                                <option value="default"> Chọn Món Ăn </option>
+                            <label>Dessert <i class="fa-solid fa-trash-xmark"></i></label>
+                            <select data-index="food" class="form-control select-box" onchange="getId(this)" required>
+                                <option value="default"> Choose Dish </option>
                                 <option th:each="food : ${foodList}" th:if="${food.getFoodType().equalsIgnoreCase('dessert')}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
 
                             </select>
@@ -71,12 +71,12 @@
                     <hr>
                     <div id="serviceList">
 
-                        <button id="btn-newService" class="btn color">Thêm Dịch Vụ <i
+                        <button id="btn-newService" class="btn color">Add more Service <i
                                 class="fas fa-cart-plus"></i></button>
                         <div id="service">
                             <div data-service="0" class="new-container">
-                                <label data-label="service">Dịch Vụ 1 :</label>
-                                <span class="form-control select-box">Dịch Vụ Tiệc Cơ Bản </span>
+                                <label data-label="service">Service 1 :</label>
+                                <span class="form-control select-box">Basic Service : </span>
                             </div>
 
                         </div>
@@ -86,7 +86,7 @@
             </div>
             <div class="col-6">
                 <div id="orderInfo">
-                    <h3>Thông Tin Tiệc</h3>
+                    <h3>Booking Information</h3>
                     <svg viewBox="0 0 100 1">
                         <style>
                             .line {
@@ -102,47 +102,51 @@
                     </svg>
                     <div class="card-container">
                         <div class="info-container">
-                            <label>Sảnh Đặt Tiệc :</label>
+                            <label> Venue :</label>
                             <p th:text="${myOrder.getVenues().getVenueName()}"></p>
                         </div>
                         <div class="info-container">
-                            <label>Ngày Đặt Tiệc :</label>
+                            <label>Party Booking Date :</label>
                             <p th:text="${myOrder.getOrderDate()}"></p>
                         </div>
                         <div class="info-container">
-                            <label>Ngày Tổ Chức :</label>
+                            <label>Event Date:</label>
                             <p th:text="${myOrder.getTimeHappen()}"></p>
                         </div>
                         <div class="info-container">
-                            <label>Tình Trạng Đặt Hàng :</label>
+                            <label>Booking Status :</label>
                             <p th:text="${myOrder.getOrderStatus()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Number of Table :</label>
+                            <p>From:<span th:text="${myOrder.getVenues().getMinPeople()/10}"> </span> To <span th:text="${myOrder.getVenues().getMaxPeople()/10}"></span>
                         </div>
                     </div>
                     <hr>
                     <table id="food-table">
                         <tr>
-                            <th>Món Ăn</th>
-                            <th>Giá</th>
+                            <th>Food</th>
+                            <th>Price</th>
                         </tr>
 
                     </table>
                     <table id="service-table">
                         <tr>
-                            <th>Dich Vụ</th>
-                            <th>Giá</th>
+                            <th>Service</th>
+                            <th>Price</th>
                         </tr>
                         <tr>
-                            <td>Tiệc Cơ Bản
+                            <td>Basic Service
                             </td>
-                            <td>Miễn Phí</td>
+                            <td>Free</td>
                         </tr>
 
 
                     </table>
                     <table>
                         <tr>
-                            <th>Sảnh :</th>
-                            <th>Giá</th>
+                            <th>Venue :</th>
+                            <th>Price</th>
                         </tr>
                         <tr>
                             <td th:text="${myOrder.getVenues().getVenueName()}">
@@ -166,7 +170,7 @@
                         <use xlink:href="#horizontal-line" />
                     </svg>
                     <div class="total">
-                        <h4 class="total-label">Tổng Tiền Dự Tính :</h4>
+                        <h4 class="total-label">Total :</h4>
                         <h4 id="total" class="total-price" th:text="${myOrder.getVenues().getPrice()}"></h4>
                     </div>
                     <svg viewBox="0 0 100 1">
@@ -182,7 +186,7 @@
                         </symbol>
                         <use xlink:href="#horizontal-line" />
                     </svg>
-                    <button id="confirm" class="btn color1">Xác Nhận Đặt Tiệc <i class="fas fa-check-square"></i></button>
+                    <button id="confirm" class="btn color1">Confirm Update Booking  <i class="fas fa-check-square"></i></button>
                 </div>
 
 

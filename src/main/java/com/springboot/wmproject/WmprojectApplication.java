@@ -20,6 +20,7 @@ public class WmprojectApplication {
     public ModelMapper modelMapper(){
 
         return new ModelMapper();
+
     }
 
     @Bean

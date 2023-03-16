@@ -31,6 +31,9 @@ public class Food {
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean isActive;
     @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<FoodDetails> foodDetailsById = new HashSet<>();
     @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
@@ -38,4 +41,11 @@ public class Food {
     @OneToMany(mappedBy = "foodByFoodId", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Materials> materialsById = new HashSet<>();
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
 }

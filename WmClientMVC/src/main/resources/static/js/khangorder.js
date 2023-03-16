@@ -35,13 +35,13 @@ function addMain() {
 
     if (list.length < 5) {
         const foodSelector = `
-        <label data-label="main" >Món Chính  ${list.length + 1} :</label>
+        <label data-label="main" >Main dish  ${list.length + 1} :</label>
         <select data-index="food" class="form-control select-box" onchange="getId(this)">
-        <option value="default"> Chọn Món Ăn </option>
+        <option value="default"> Choose Dish </option>
          ${foodOption}  
 
         </select>
-        <button onclick="deleteMain(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+        <button onclick="deleteMain(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Remove</button>
       `
 
 
@@ -58,7 +58,8 @@ function addMain() {
         // getOrderList();
 
     } else {
-        alert("Maximum Dish Main is 5!");
+
+        swal("Warning!", "Maximum Dish Main is 5!", "warning");
     }
 }
 
@@ -89,12 +90,12 @@ function addService() {
     let list = document.querySelectorAll("[data-service]");
     if (list.length < 4) {
         const serviceSelector = `
-    <label data-label="service">Dịch Vụ ${list.length + 1} :</label>
+    <label data-label="service">Service  ${list.length + 1} :</label>
     <select data-index="service" class="form-control select-box" onchange="getId(this)" >
-    <option value="default"> Chọn Dịch Vụ </option>
+    <option value="default"> Choose Service </option>
         ${serviceOption}          
     </select>
-    <button onclick="deleteService(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+    <button onclick="deleteService(this)" class="btn btn-danger"><i class="fas fa-trash-alt"> </i> Remove</button>
   `
 
             // <option th:each="service : ${serviceList}" th:value="${service.getId()}" th:text="${service.getServiceName()}"></option>
@@ -110,7 +111,8 @@ function addService() {
         // getOrderList();
 
     } else {
-        alert("max service is 4!");
+
+        swal("Warning!", "Max service is 4!", "warning");
     }
 
 }
@@ -152,7 +154,7 @@ function clearFood() {
 }
 
 function appendFood(obj) {
-    const formattedNumber = obj.price.toLocaleString("vi-VN", {style: "currency", currency: "VND"})
+    const formattedNumber = obj.price.toLocaleString("en-US", {style: "currency", currency: "USD"})
     const tdFood = `
  
         <td data-foodId="${obj.id}">${obj.foodName}</td>
@@ -183,7 +185,7 @@ function clearService() {
 }
 
 function appendService(obj) {
-    const formattedNumber = obj.price.toLocaleString("vi-VN", {style: "currency", currency: "VND"})
+    const formattedNumber = obj.price.toLocaleString("en-US", {style: "currency", currency: "USD"})
     const tdService = `
    
         <td data-serviceId ="${obj.id}">
@@ -210,7 +212,8 @@ function getId(element) {
     myOrderList.forEach((order) => {
         if (order.getAttribute("data-index") === element.getAttribute("data-index") && order.value === element.value && order !== element) {
             temp = "default";
-            alert("Duplicate selection, please check again!");
+            swal("Warning!", "Duplicate selection, please check again!", "warning");
+
             // console.log(element.getAttribute("data-index"));
 
 
@@ -264,7 +267,7 @@ function getTotalPrice(orderFoodList,orderServiceList,myOrder)
     let totalPrice= foodTotalPrice*tableNum + serviceTotalPrice+myOrder.venues.price;
     // console.log(total);
 
-    const formattedNumber = totalPrice.toLocaleString("vi-VN", {style: "currency", currency: "VND"})
+    const formattedNumber = totalPrice.toLocaleString("en-US", {style: "currency", currency: "USD"})
     console.log(formattedNumber);
     total.innerHTML=formattedNumber;
 
@@ -278,7 +281,10 @@ function getTotalPrice(orderFoodList,orderServiceList,myOrder)
 // thymleaf show du liệu combobox.
 function callAJAXnewOrder(){
     if(tableAmount.value===0)
-    {alert("Please add the table number to get a more accurate price!");}
+    {
+        swal("Warning!", "Please add the table number to get a more accurate price!", "warning");
+
+    }
 
     const xhr = new XMLHttpRequest();
 
@@ -312,13 +318,15 @@ function callAJAXnewOrder(){
 
 
             response = JSON.parse(xhr.responseText);
-            // alert(response.message);
-            window.location.href="/index";
+            swal("Success!", response.message, "success");
+
+            window.location.href="/";
 
                 }
         else{
             console.error(xhr.statusText);
-            alert("Oops!Some thing Wrong!");
+            // alert("Oops!Some thing Wrong!");
+            swal("Fail!", "Oops!Some thing Wrong!", "error");
             // Handle error
         }
         //tao link
@@ -327,7 +335,8 @@ function callAJAXnewOrder(){
     if(foodIdList.length>=6){
     xhr.send(data);}
     else{
-        alert("The minimum number of main dishes is 4.!")
+
+        swal("Warning!", "The minimum number of main dishes is 4!", "warning");
     }
 
 }
@@ -384,12 +393,17 @@ function changeTableAmount()
     const minTable= Math.ceil(myOrder.venues.minPeople/10);
     const maxTable=Math.ceil(myOrder.venues.maxPeople/10);
     if( value<minTable)
-    {alert("The minimum required number of tables has not been reached yet");
+    {
+        swal("Warning!", "The minimum required number of tables has not been reached yet!", "warning");
+
     this.value=0;
         reloadTotal();
     }
     else if(value>maxTable)
-    {alert("The maximum required number of tables has not been reached yet");
+    {
+        swal("Warning!", "The maximum required number of tables has not been reached yet!", "warning");
+
+
         this.value=0;
         reloadTotal();}
     else{

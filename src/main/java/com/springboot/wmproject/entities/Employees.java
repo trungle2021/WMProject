@@ -42,8 +42,8 @@ public class Employees {
 
 
     @Basic
-    @Column(name = "isLeader")
-    private Boolean isLeader;
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean isLeader;
     @Basic
     @Column(name = "team_id", nullable = true)
     private Integer teamId;

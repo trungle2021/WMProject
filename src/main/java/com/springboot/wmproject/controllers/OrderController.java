@@ -43,10 +43,10 @@ public class OrderController {
     }
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/byTeam/{teamId}")
-    public ResponseEntity<List<OrderDTO>> getAllOrderbyTeam(@PathVariable Integer teamId)
+    @GetMapping("/byTeam/empId/{empId}")
+    public ResponseEntity<List<OrderDTO>> getAllOrderbyTeam(@PathVariable Integer empId)
     {
-        return  ResponseEntity.ok(orderService.getAllByOrganizeTeam(teamId));
+        return  ResponseEntity.ok(orderService.getAllByTeamEmpId(empId));
 
     }
 
@@ -98,8 +98,9 @@ public class OrderController {
         Integer organizeTeam=order.getOrganizeTeam();
         Double orderTotal=order.getOrderTotal();
         Integer part_time_emp_amount=order.getPartTimeEmpAmount();
+        Integer table=order.getTableAmount();
 
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount));
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount,table));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+import org.hibernate.annotations.Type;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -34,6 +35,9 @@ public class Venues {
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
     private Double price;
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean active;
     @OneToMany(mappedBy = "venues", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Orders> ordersById=new HashSet<>();
     @OneToMany(mappedBy = "venues", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -77,6 +81,14 @@ public class Venues {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     @Override

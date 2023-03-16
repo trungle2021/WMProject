@@ -1,5 +1,7 @@
 package wm.clientmvc.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Collection;
@@ -23,7 +25,7 @@ public class OrderDTO {
     private Integer organizeTeam;
 
     private Integer customerId;
-
+    @NotNull(message = "Table amount is required")
     private Integer tableAmount;
     private Integer partTimeEmpAmount;
 
@@ -33,6 +35,7 @@ public class OrderDTO {
     private OrganizeTeamDTO organizeTeamsByOrganizeTeam;
     private Collection<FoodDetailDTO> foodDetailsById;
     private Collection<ServiceDetailDTO> serviceDetailsById;
+    private CustomerDTO customersByCustomerId;
 //
 
 //    private Set<ServiceDetailsDTO> serviceDetails;
