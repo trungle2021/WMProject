@@ -21,6 +21,9 @@ public class Services {
     @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean isActive;
     @OneToMany(mappedBy = "servicesByServiceId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetailsById;
 
@@ -54,6 +57,14 @@ public class Services {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 
     @Override

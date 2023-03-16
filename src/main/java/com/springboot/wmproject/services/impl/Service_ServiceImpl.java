@@ -1,5 +1,6 @@
 package com.springboot.wmproject.services.impl;
 
+import com.springboot.wmproject.DTO.FoodDTO;
 import com.springboot.wmproject.DTO.ServiceDTO;
 import com.springboot.wmproject.entities.Materials;
 import com.springboot.wmproject.entities.Services;
@@ -11,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,6 +29,20 @@ public class Service_ServiceImpl implements Service_Service {
     @Override
     public List<ServiceDTO> getAllService() {
         return  SRepository.findAll().stream().map(services -> maptoDTO(services)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ServiceDTO> getAllServiceActive() {
+        List<ServiceDTO>services= SRepository.findAll().stream().map(sv -> maptoDTO(sv)).collect(Collectors.toList());
+        List<ServiceDTO> newList=new ArrayList<>();
+        for (ServiceDTO sv:services)
+        {
+            if(sv.isActive())
+            {
+                newList.add(sv);
+            }
+        }
+        return newList;
     }
 
     @Override
@@ -71,12 +87,14 @@ public class Service_ServiceImpl implements Service_Service {
 
     public Services maptoEntity(ServiceDTO dto)
     {
-        Services services=modelMapper.map(dto,Services.class);
-        return services;
+        Services service=modelMapper.map(dto,Services.class);
+        service.setActive(dto.isActive());
+        return service;
     }
     public ServiceDTO maptoDTO(Services services)
     {
         ServiceDTO dto= modelMapper.map(services,ServiceDTO.class);
+        dto.setActive(services.isActive());
         return dto;
     }
 }

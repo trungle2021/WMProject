@@ -38,6 +38,7 @@ public class OrderDTO {
     private OrganizeTeamDTO organizeTeamsByOrganizeTeam;
     private Collection<FoodDetailDTO> foodDetailsById;
     private Collection<ServiceDetailDTO> serviceDetailsById;
+    private CustomerDTO customersByCustomerId;
 //
 
 //    private Set<ServiceDetailsDTO> serviceDetails;

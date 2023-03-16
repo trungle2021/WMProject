@@ -11,6 +11,7 @@ public interface OrderService {
     List<OrderDTO> getAllByVenueId(int id);
     List<OrderDTO> getAllByBookingEmp(int id);
     List<OrderDTO> getAllByOrganizeTeam(int id);
+    List<OrderDTO> getAllByTeamEmpId(int id);
     List<OrderDTO> getAllByCustomerId(int id);
     List<OrderDTO> getAllByOrderStatus(String status);
     OrderDTO getOneOrderByOrderId(int id);
@@ -18,7 +19,7 @@ public interface OrderService {
     OrderDTO updateOrder(OrderDTO orderDTO);
     void deleteOrder(int id);
     public OrderDTO updateOrderStatus(Integer orderDTOId,String status);
-    public OrderDTO updateOrderStatus(Integer orderDTOId,String status, Integer bookingEmp, Integer organizeTeam,Double orderTotal,Integer part_time_emp_amount);
+    public OrderDTO updateOrderStatus(Integer orderDTOId,String status, Integer bookingEmp, Integer organizeTeam,Double orderTotal,Integer part_time_emp_amount,Integer table);
     public OrderDTO updateOrderTable(Integer orderDTOId,Integer table);
 
     //test autoUpdate

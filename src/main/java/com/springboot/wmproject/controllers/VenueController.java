@@ -38,6 +38,13 @@ public class VenueController {
         return ResponseEntity.ok(venueService.getAllVenue());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = {"/allactive"})
+    public ResponseEntity<List<VenueDTO>> getAllActive() {
+        return ResponseEntity.ok(venueService.getAllVenueActive());
+    }
+
 
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))

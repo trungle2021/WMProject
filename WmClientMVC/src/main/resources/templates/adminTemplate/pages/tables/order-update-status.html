@@ -5,105 +5,129 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Order Detail</title>
-
+    <link rel="stylesheet" href="/css/khangstyleadmin.css">
 
 </head>
 <body>
 <section layout:fragment="content"  class="content-wrapper">
 
 
-        <!-- Content Header (Page header) -->
-        <section class="content-header">
-            <div class="container-fluid">
-                <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1>Text Editors</h1>
-                    </div>
-                    <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Text Editors</li>
-                        </ol>
-                    </div>
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Text Editors</h1>
                 </div>
-            </div><!-- /.container-fluid -->
-        </section>
-
-        <!-- Main content -->
-        <section class="content">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card card-info">
-                        <div class="card-header">
-                            <h3 class="card-title">Chi Tiết ĐƠn Hàng</h3>
-                        </div>
-                        <!-- /.card-header -->
-                        <!-- form start -->
-                        <form th:action="@{/staff/order/order-update}" th:object="${order}" method="post" class="form-horizontal">
-
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label for="orderId" class="col-sm-2 col-form-label">Mã Đơn Hàng</label>
-                                    <div class="col-sm-10">
-                                        <input th:value="${order.getId()}" th:field="*{id}" type="text" class="form-control" id="orderId" placeholder="OrderId" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="orderDate" class="col-sm-2 col-form-label">Ngày Đặt Hàng</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" th:value="${order.getOrderDate()}" th:field="*{orderDate}" class="form-control" id="orderDate" placeholder="" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="timeHappen" class="col-sm-2 col-form-label">Ngày Tổ Chức</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" th:value="${order.getTimeHappen()}" th:field="*{timeHappen}" class="form-control" id="timeHappen" placeholder="" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="venue" class="col-sm-2 col-form-label">Sảnh</label>
-                                    <div class="col-sm-10">
-                                        <input type="text"  th:value="${order.getVenues().getVenueName()}" class="form-control" id="venue" placeholder="" readonly>
-                                        <input type="text" hidden="hidden" th:value="${order.getVenueId()}" th:field="*{venueId}">
-                                    </div>
-                                </div>
-
-
-                                <div class="form-group row">
-                                    <label for="customerId" class="col-sm-2 col-form-label">Mã Khách Hàng</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" th:value="${order.getCustomerId()}" th:field="*{customerId}"  class="form-control" id="customerId" placeholder="" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="table_amount" class="col-sm-2 col-form-label">Số Lượng Bàn</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" th:value="${order.getTableAmount()}" th:field="*{tableAmount}"  class="form-control" id="table_amount" placeholder="" readonly>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="status" class="col-sm-2 col-form-label">Tình Trạng Đơn</label>
-                                    <div class="col-sm-10">
-                                        <input type="text" th:value="${order.getOrderStatus()}" th:field="*{orderStatus}"  class="form-control" id="status" placeholder="" readonly>
-                                    </div>
-                                </div>
-
-                                 <div class="card-footer">
-                                        <button  type="submit" class="btn btn-info">Xác Nhận Đã Đặt Cọc</button>
-                                        <a th:href="@{/staff/order/showall}" class="btn btn-default float-right">Quay Lại</a>
-                                 </div>
-                            </div>
-                            <!-- /.card-footer -->
-                        </form>
-                    </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Text Editors</li>
+                    </ol>
                 </div>
-                <!-- /.col-->
             </div>
-            <!-- ./row -->
+        </div><!-- /.container-fluid -->
+    </section>
 
-            <!-- ./row -->
-        </section>
-        <!-- /.content -->
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Order Detail</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form th:action="@{/staff/orders/order-update}" th:object="${orderDTO}" method="post" class="form-horizontal">
+
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label for="orderId" class="col-sm-2 col-form-label">Order Id</label>
+                                <div class="col-sm-10">
+                                    <input th:value="${orderDTO.getId()}" th:field="*{id}" type="text" class="form-control" id="orderId" placeholder="OrderId" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="orderDate" class="col-sm-2 col-form-label">Booking Date</label>
+                                <div class="col-sm-10">
+                                    <input type="text" th:value="${orderDTO.getOrderDate()}" th:field="*{orderDate}" class="form-control" id="orderDate" placeholder="" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="timeHappen" class="col-sm-2 col-form-label">Celebration date</label>
+                                <div class="col-sm-10">
+                                    <input type="text" th:value="${orderDTO.getTimeHappen()}" th:field="*{timeHappen}" class="form-control" id="timeHappen" placeholder="" readonly>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="venue" class="col-sm-2 col-form-label">Venue</label>
+                                <div class="col-sm-10">
+                                    <input type="text"  th:value="${orderDTO.getVenues().getVenueName()}" class="form-control" id="venue" placeholder="" readonly>
+                                    <input type="text" hidden="hidden" th:value="${orderDTO.getVenueId()}" th:field="*{venueId}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="customer" class="col-sm-2 col-form-label">Customer:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="customer"  class="form-control" th:value="${orderDTO.getCustomerId()}" th:field="*{customerId}" >
+                                    <!--                  modal-dialog-->
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                </div>
+
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="table_amount" class="col-sm-2 col-form-label">Table Amount</label>
+                                <div class="col-sm-10">
+                                    <input type="text" th:value="${orderDTO.getTableAmount()}" th:field="*{tableAmount}"  class="form-control" id="table_amount" placeholder="">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('tableAmount')}" th:errors="*{tableAmount}">Invalid table amount</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="status" class="col-sm-2 col-form-label">Order Status</label>
+                                <div class="col-sm-10">
+                                    <input type="text" th:value="${orderDTO.getOrderStatus()}" th:field="*{orderStatus}"  class="form-control" id="status" placeholder="" readonly>
+                                </div>
+                            </div>
+
+                            <div class="card-footer">
+                                <button  type="submit" class="btn btn-info">Confirm Event</button>
+                                <a th:href="@{/staff/orders/showall}" class="btn btn-default float-right">Back</a>
+                            </div>
+                        </div>
+                        <!-- /.card-footer -->
+                    </form>
+                </div>
+            </div>
+            <!-- /.col-->
+        </div>
+        <!-- ./row -->
+        <!--modal-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="container">
+                    <div class="block information">
+                        <h1 th:text="${orderDTO.getCustomersByCustomerId().getFirstname()}+' '+${orderDTO.getCustomersByCustomerId().getLastname()}"></h1>
+                        <p class="expertise" th:text="'Customer Id : '+${orderDTO.getCustomerId()}"></p>
+                        <address th:text="'Address: '+ ${orderDTO.getCustomersByCustomerId().getAddress()}"></address>
+                        <p th:text="'Gender: '+${orderDTO.getCustomersByCustomerId().getGender()}"></p>
+                        <p th:text="'Phone: ' +${orderDTO.getCustomersByCustomerId().getPhone()}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ./row -->
+    </section>
+    <!-- /.content -->
 
     <!-- /.content-wrapper -->
 
@@ -113,7 +137,9 @@
 
 <!-- ./wrapper -->
 <section layout:fragment="optional">
+    <script>$('#myModal').on('shown.bs.modal', function () {
 
+    })</script>
 </section>
 </body>
 </html>

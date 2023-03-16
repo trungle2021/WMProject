@@ -46,8 +46,9 @@ public class Employees {
     private String gender;
 
     @Basic
-    @Column(name = "isLeader", nullable = true)
-    private Integer isLeader;
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean isLeader;
+
     @Basic
     @Column(name = "team_id", nullable = true)
     private Integer team_id;
