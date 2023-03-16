@@ -56,6 +56,11 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         return null;
     }
 
+    @Override
+    public CustomerAccountDTO getAccountByCustomerId(int id) {
+        return mapToDto(customerAccountRepository.getCustomerAccountByCustomerId(id));
+    }
+
 
     @Override
     public CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO) {
@@ -82,19 +87,18 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
     @Override
     public CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO) {
-        int customerID = customerAccountDTO.getCustomerId();
-        //check employee account exist
-        CustomerAccounts customerAccounts = customerAccountRepository.findById(customerID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerID)));
-        //if exist update
-        if (customerAccounts != null) {
-            CustomerAccounts updateCustomer = new CustomerAccounts();
-            updateCustomer.setId(customerAccountDTO.getId());
-            updateCustomer.setUsername(customerAccountDTO.getUsername());
-            updateCustomer.setPassword(customerAccountDTO.getPassword());
-            updateCustomer.setCustomerId(customerAccountDTO.getCustomerId());
-            return mapToDto(customerAccountRepository.save(updateCustomer));
+        int customerAccountID = customerAccountDTO.getCustomerId();
+        if(customerAccountID == 0){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, "CustomerAccount ID is required to update");
         }
-        return null;
+        //check employee account exist
+        CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
+        //if exist update
+        customerAccounts.setUsername(customerAccountDTO.getUsername());
+        if(!customerAccountDTO.getPassword().equals("") || !customerAccountDTO.getPassword().isEmpty() || !customerAccountDTO.getPassword().isBlank()){
+            customerAccounts.setPassword(customerAccountDTO.getPassword());
+        }
+            return mapToDto(customerAccountRepository.save(customerAccounts));
     }
 
     @Override
@@ -117,6 +121,11 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
             throw new ResourceNotFoundException("CustomerAccount","email",email);
         }
         return mapToDto(customerAccounts);
+    }
+
+    @Override
+    public List<CustomerAccounts> checkUsernameExists(String username) {
+        return customerAccountRepository.checkUsernameExists(username);
     }
 
     @Override
@@ -151,7 +160,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
        String recipient = email;
        String subject = "Reset Password - WM RESTAURANT" ;
-       String link = SD.DOMAIN_APP_CLIENT + "customer/changePassword?token=" + tokenCreated;
+       String link = SD.DOMAIN_APP_CLIENT + "/changePassword?token=" + tokenCreated;
         String content =
                 "<p>Hello,</p>"
                 + "<p>You have requested to reset your password.</p>"

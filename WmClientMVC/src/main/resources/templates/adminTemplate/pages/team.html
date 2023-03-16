@@ -49,10 +49,9 @@
                                     <table
                                             class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
                                             style="width:100%" aria-describedby="example-info">
-                                        <button type="button" class="btn btn-outline-primary float-right"
-                                                data-toggle="modal"
-                                                data-target="#createEmployeeModal" data-whatever="@mdo">Create
-                                        </button>
+                                        <a th:href="@{/staff/employees/create}" class="btn btn-outline-primary float-right">
+                                            Create
+                                        </a>
                                         <thead>
                                         <tr>
                                             <th>Name</th>
@@ -89,23 +88,15 @@
                                             </th:block>
 
                                             <td>
-                                                <button type="button" class="btn btn-outline-primary float-right"
-                                                        data-toggle="modal"
-                                                        data-target="#updateEmployeeModal"
-                                                        th:attr="data-updateemployee=${c.getId()}
-                                                        ,data-employeename=${c.getName()}
-                                                        ,data-employeeaddress=${c.getAddress()}
-                                                        ,data-employeephone=${c.getPhone()}
-                                                        ,data-employeedate=${c.getJoinDate()}
-                                                        ,data-employeesalary=${c.getSalary()}
-                                                        ,data-employeeemail=${c.getEmail()}
-                                                        ,data-employeeteam=${c.getOrganizeTeamsByTeamId().getId()}
-                                                        ,data-employeeavatar=${c.getAvatar()}"
-                                                >Update
-                                                </button>
-                                                <a th:href="@{/staff/admin/employee/delete/{empId}(empId=${c.getId()})}"
-                                                   class="btn btn-outline-primary float-right"
+
+                                                <a th:href="@{/staff/employees/update/{empId}(empId=${c.getId()})}" class=" btn btn-outline-primary ">
+                                                    Update
+                                                </a>
+
+                                                <a th:href="@{/staff/employees/delete/{empId}(empId=${c.getId()})}"
+                                                   class="btn btn-outline-primary "
                                                    style="margin-right: 1rem">Delete</a>
+
                                             </td>
                                         </tr>
 
@@ -137,18 +128,19 @@
                                                 <tr th:each="i:${teamList}">
                                                     <td th:text="${i.teamName}"></td>
                                                     <td>
+
+                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getId()})}"
+                                                           class="btn btn-outline-primary float-right"
+                                                           style="margin-right: 1rem">Delete</a>
+
                                                         <button type="button"
                                                                 class="btn btn-outline-primary float-right"
                                                                 data-toggle="modal"
                                                                 data-target="#updateTeamModal"
                                                                 th:attr="data-updateteam=${i.getId()}"
-                                                                th:attrappend="data-teamname=${i.getTeamName()}"
-                                                        >
+                                                                th:attrappend="data-teamname=${i.getTeamName()}">
                                                             Update
                                                         </button>
-                                                        <a th:href="@{/staff/admin/team/delete/{teamId}(teamId=${i.getId()})}"
-                                                           class="btn btn-outline-primary float-right"
-                                                           style="margin-right: 1rem">Delete</a>
                                                     </td>
                                                 </tr>
 
@@ -170,105 +162,7 @@
             <!-- /.content -->
         </div>
         <!-- /.content-wrapper -->
-        <!--create employee Modal-->
-        <div class="modal fade" id="createEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Create Employee</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" th:action="@{/staff/employee/create}" th:object="${registerDTO}" enctype="multipart/form-data">
-                        <div class="row">
-                                <div class="col-md-6">
-                                        <div class="form-row">
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Full Name:</label>
-                                                <input type="text" class="form-control" th:field="*{name}" required>
-                                            </div>
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Address:</label>
-                                                <input type="text" class="form-control" th:field="*{address}" required>
-                                            </div>
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Email:</label>
-                                                <input type="text" class="form-control" th:field="*{email}" required>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="col-form-label">Phone:</label>
-                                                <input type="text" class="form-control" th:field="*{phone}" required>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <label class="col-form-label">Join date:</label>
-                                                <input type="date" class="form-control" th:field="*{joinDate}" required>
-                                            </div>
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Salary:</label>
-                                                <input type="text" class="form-control" th:field="*{salary}" required>
-                                            </div>
 
-
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Avatar:</label>
-                                                <input type="file" class="form-control"  name="employee-create-pic"
-                                                       required>
-                                            </div>
-                                            <div class="form-group col-md-6">
-                                                <img>
-                                            </div>
-
-                                        </div>
-                                </div>
-                                <div class="col-md-6">
-                                        <div class="form-row">
-
-                                            <div class="form-group col-md-6">
-                                                <label class="col-form-label" for="empteam">Team:</label>
-                                                <select th:field="*{team_id}" class="form-control">
-                                                    <th:block th:each="c:${teamList}">
-                                                        <option th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
-                                                    </th:block>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group col-md-4 offset-1 mt-2">
-                                                <label th:for="isLeader">Is Leader?</label><br>
-                                                <input type="radio" th:field="*{isLeader}" th:value="true" /> Yes
-                                                <input type="radio" th:field="*{isLeader}" th:value="false" /> No
-                                            </div>
-
-
-
-
-
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Username:</label>
-                                                <input type="text" class="form-control" th:field="*{username}" required>
-                                            </div>
-                                            <div class="form-group col-md-12">
-                                                <label class="col-form-label">Password:</label>
-                                                <input type="text" class="form-control" th:field="*{password}" required>
-                                            </div>
-                                            <div class="modal-footer col-md-12">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                                </button>
-                                                <input type="submit" class="btn btn-primary" value="Create">
-                                            </div>
-                                        </div>
-                                </div>
-                        </div>
-                        </form>
-
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
         <!--create organize team Modal-->
         <div class="modal fade" id="createTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
              aria-hidden="true">
@@ -281,7 +175,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/admin/team/create}">
+                        <form method="post" th:action="@{/staff/teams/create}">
                             <div class="form-group">
                                 <label class="col-form-label">Team name:</label>
                                 <input type="text" class="form-control" name="teamName" required>
@@ -309,7 +203,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/admin/employee/update}" enctype="multipart/form-data">
+                        <form method="post" th:action="@{/staff/employees/update}" enctype="multipart/form-data">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <input type="text" id="id-employee-update" name="id">
@@ -377,7 +271,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/admin/team/update}">
+                        <form method="post" th:action="@{/staff/teams/update}">
                             <div class="form-group">
                                 <input type="text" id="id-team-update" name="id">
                                 <label class="col-form-label">Team name:</label>

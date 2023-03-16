@@ -11,6 +11,7 @@ public interface CustomerAccountService {
     List<CustomerAccountDTO> findAll();
 
     CustomerAccountDTO getAccountByAccountId(int id);
+    CustomerAccountDTO getAccountByCustomerId(int id);
 
     CustomerAccountDTO create(CustomerAccountDTO customerAccountDTO);
     CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO);
@@ -21,6 +22,8 @@ public interface CustomerAccountService {
     String updatePassword(String newPass,String token) throws ParseException;
     String processForgotPassword(String email);
     CustomerAccountDTO findByEmail(String email);
+
+    List<CustomerAccounts> checkUsernameExists(String username);
 
 
 }

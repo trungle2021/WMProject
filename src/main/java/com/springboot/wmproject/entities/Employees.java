@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -40,13 +41,17 @@ public class Employees {
     @Column(name = "email", nullable = true)
     private String email;
 
+    @Basic
+    @Column(name = "gender", nullable = true)
+    private String gender;
 
     @Basic
     @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
     private boolean isLeader;
+
     @Basic
     @Column(name = "team_id", nullable = true)
-    private Integer teamId;
+    private Integer team_id;
 
     @Basic
     @Column(name = "avatar", nullable = true)
