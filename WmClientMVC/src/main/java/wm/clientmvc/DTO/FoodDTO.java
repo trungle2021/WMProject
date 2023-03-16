@@ -17,6 +17,7 @@ public class FoodDTO {
 
     private Double price;
     private Set<MaterialDTO> materialsById;
+    private Set<FoodImageDTO> foodImagesById;
 
 //    private Set<FoodDetailDTO> foodDetailsDTOById;
 }
