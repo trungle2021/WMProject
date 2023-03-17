@@ -26,7 +26,6 @@
     <section layout:fragment="content">
 
         <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
                 <!-- Content Header (Page header) -->
@@ -165,11 +164,9 @@
                                                 <input type="hidden" id="removeMaterial" name="removeMaterial">
 
                                                 <div class="modal-footer col-md-12">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            onclick="detailCloseBtn()"
-                                                            id="detailCloseBtn" data-dismiss="modal">Close
-                                                    </button>
-                                                    <input type="submit" class="btn btn-primary" value="Create">
+                                                    <a type="button" class="btn btn-secondary" th:href="@{/staff/food/index}">Back
+                                                    </a>
+                                                    <input type="submit" class="btn btn-primary" value="Update">
                                                 </div>
                                             </div>
                                         </form>
@@ -186,7 +183,6 @@
                 </aside>
                 <!-- /.control-sidebar -->
             </div>
-        </div>
     </section>
 
 </div>
