@@ -179,6 +179,9 @@ li {
     border-radius: 9999px;
     background-color: var(--grey-800);
 }
+.clicked {
+    background-color: #8ed1fc !important;
+}
 
 
 .container {

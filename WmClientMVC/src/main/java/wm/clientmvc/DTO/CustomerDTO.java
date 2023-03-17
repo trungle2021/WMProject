@@ -19,9 +19,8 @@ public class CustomerDTO {
     private String address;
     private String phone;
     private String gender;
-    private String email;
     private String avatar;
-    private Set<BookingDTO> bookings = new HashSet<>();
-    private Set<OrderDTO> orders = new HashSet<>();
+//    private Set<BookingDTO> bookings = new HashSet<>();
+//    private Set<OrderDTO> orders = new HashSet<>();
 
 }

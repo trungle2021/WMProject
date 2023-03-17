@@ -1,11 +1,15 @@
 package com.springboot.wmproject.services.impl;
 
+import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
+import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
+import com.springboot.wmproject.repositories.EmployeeRepository;
 import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.services.OrderService;
+import com.springboot.wmproject.utils.SD;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,18 +19,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.springboot.wmproject.utils.SD.*;
+
 @Service
 public class OrderServiceImpl implements OrderService {
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
+     private OrderRepository orderRepository;
+
     private ModelMapper modelMapper;
 
+    private EmployeeRepository employeeRepository;
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper) {
+    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
         this.orderRepository = orderRepository;
         this.modelMapper = modelMapper;
+        this.employeeRepository = employeeRepository;
     }
+
+
+
 
 
     @Override
@@ -92,6 +102,26 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDTO> getAllByTeamEmpId(int id) {
+        if(id!=0){
+            List<OrderDTO> orderDTOS=orderRepository.findAll().stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
+            Employees emp=employeeRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Employees","Id",String.valueOf(id)));
+            Integer team=emp.getOrganizeTeamsByTeamId().getId();
+           List<OrderDTO>list= new ArrayList<>();
+            for (OrderDTO order:orderDTOS)
+            {
+             if(order.getOrganizeTeam()==team && order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm))
+             {
+                list.add(order);
+             }
+
+            }
+                return list;
+        }
+        return null;
+    }
+
+    @Override
     public List<OrderDTO> getAllByCustomerId(int id)throws ResourceNotFoundException {
         if(id!=0){
             List<OrderDTO> orderDTOS=orderRepository.findByCustomerId(id).stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
@@ -129,15 +159,28 @@ public class OrderServiceImpl implements OrderService {
         if(orderDTO!=null){
             String timeHappen=orderDTO.getTimeHappen();
             int venueId= orderDTO.getVenueId();
-            //check if order has the same time and venue
-            Orders checkOrder=orderRepository.validOrderToCreateNew(timeHappen,venueId);
+            //check if order has the same time and venue//sai logic
+            List<Orders> orderList=orderRepository.orderListInTimeVenue(timeHappen,venueId);
             //if not create new
-            if(checkOrder==null){
+            boolean booked=false;
 
-                Orders orders=orderRepository.save(mapToEntity(orderDTO));
+            for (Orders order:orderList)
+            {
+             if(order.getOrderStatus().equalsIgnoreCase(orderStatusOrdered)||order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited)
+             || order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm)||order.getOrderStatus().equalsIgnoreCase(orderStatusWarning))
+             {
+                booked=true;
+                break;
+             }
+            }
+            if(!booked) {
+                Orders orders = orderRepository.save(mapToEntity(orderDTO));
                 Orders newOrder = orderRepository.findById(orders.getId()).orElseThrow();
 
                 return mapToDTO(newOrder);
+            }
+            else{
+                return null;
             }
         }
         return null;
@@ -183,7 +226,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO updateOrderStatus(Integer orderDTOId, String status, Integer bookingEmp, Integer organizeTeam, Double orderTotal, Integer part_time_emp_amount) {
+    public OrderDTO updateOrderStatus(Integer orderDTOId, String status, Integer bookingEmp, Integer organizeTeam, Double orderTotal, Integer part_time_emp_amount,Integer table) {
 
         if(orderDTOId!=0){
             Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
@@ -194,7 +237,7 @@ public class OrderServiceImpl implements OrderService {
                 orders.setOrganizeTeam(organizeTeam);
                 orders.setOrderTotal(orderTotal);
                 orders.setPartTimeEmpAmount(part_time_emp_amount);
-
+                orders.setTableAmount(table);
 
                 orderRepository.save(orders);
                 return mapToDTO(orders);

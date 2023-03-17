@@ -14,9 +14,10 @@ public class FoodDTO {
     private String foodType;
 
     private String description;
-
+    private boolean isActive;
     private Double price;
     private Set<MaterialDTO> materialsById;
+    private Set<FoodImageDTO> foodImagesById;
 
 //    private Set<FoodDetailDTO> foodDetailsDTOById;
 }

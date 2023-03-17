@@ -14,6 +14,7 @@ public class ServiceDTO {
     private Double price;
 
     private String description;
+    private boolean isActive;
 
 //    private Set<ServiceDetailDTO> serviceDetailsById;
 }

@@ -14,7 +14,7 @@ document.getElementById("app").innerHTML = `
     ></div>
     <section class="calendar-month-header-selectors">
       <span id="previous-month-selector">Previous</span>
-      <span id="present-month-selector">Today</span>
+      <span id="present-month-selector">Present</span>
       <span id="next-month-selector">Next</span>
     </section>
   </section>
@@ -84,6 +84,7 @@ function appendDay(day, calendarDaysElement) {
 
     const dayLink = document.createElement("a");
     const dayElement = document.createElement("li");
+
     const dayElementClassList = dayElement.classList;
     dayElementClassList.add("calendar-day");
     const dayOfMonthElement = document.createElement("span");
@@ -94,6 +95,12 @@ function appendDay(day, calendarDaysElement) {
 //ajax
 
     dayLink.addEventListener("click", function (event) {
+        //add color for choosenday
+        document.querySelectorAll(".calendar-day").forEach(day=>{
+            day.classList.remove("clicked");
+        });
+        this.childNodes[0].classList.add("clicked");
+
 
         event.preventDefault(); // prevent the default behavior of the a tag
 
@@ -102,38 +109,44 @@ function appendDay(day, calendarDaysElement) {
 
         xhr.open("POST", "/customers/orders/getvenue");
         xhr.setRequestHeader("Content-Type", "application/json");
-        let response = null;
+        // let response = null;
         xhr.onload = function () {
-            // handle the response from the server
-            response = JSON.parse(xhr.responseText);
-            const venueResponse = JSON.parse(response.venues);
-            const bookedsResponse = JSON.parse(response.bookeds);
+            if(xhr.status===200) {
+                // handle the response from the server
+                let response = JSON.parse(xhr.responseText);
+                let venueResponse = JSON.parse(response.venues);
+                let bookedsResponse = JSON.parse(response.bookeds);
 
-            let card = "";
-            venueResponse.forEach(function (el) {
-                //append venue
+                let card = "";
+                venueResponse.forEach(function (el) {
+                    //append venue
 
-                card += appendVenue(el);
-                venueCard.innerHTML = card;
-                // console.log(card);
+                    card += appendVenue(el);
+                    venueCard.innerHTML = card;
+                    // console.log(card);
 
-            });
-            if (bookedsResponse != null) {
-                bookedsResponse.forEach(function (el) {
-                    const button = document.querySelector(`[data-book="${el.bookedTime}"][data-venue="${el.venueId}"]`);
-                    if (button) {
-                        button.setAttribute('disabled', true);
-                        button.setAttribute("class", "btn-danger");
-                    }
-                    console.log(button);
                 });
+                if (bookedsResponse != null) {
+                    bookedsResponse.forEach(function (el) {
+                        const button = document.querySelector(`[data-book="${el.bookedTime}"][data-venue="${el.venueId}"]`);
+                        if (button) {
+                            button.setAttribute('disabled', true);
+                            button.setAttribute("class", "btn-danger");
+                        }
+                        console.log(button);
+                    });
+                }
+                //tao link
+
+                console.log(bookedsResponse);
+
+                getOrderLink(day);
             }
-            //tao link
+            else{
+                swal("Can't get Venues!Login Try Again!","Make sure that your connection is currently active/operational", "error");
 
-            console.log(bookedsResponse);
-
-            getOrderLink(day);
-
+            console.log(xhr.responseText);
+            }
 
         };
 
@@ -164,12 +177,13 @@ function appendVenue(venue) {
                     <img src="https://via.placeholder.com/150" alt="Placeholder Image">
                     <div class="info">
                         <h2>${venue.venueName}</h2>
-                        <p>Sức chứa: </p>
-                        <span>Tối Thiểu:${venue.minPeople}</span><span>Tối Đa:${venue.maxPeople}</span>
-
+                        <p> Capacity: 
+                        <span>Min :${venue.minPeople}--</span>  <span>--Max :${venue.maxPeople}</span> People</p>
+                        <p>Table: From <span>${venue.minPeople/10} </span> To <span> ${(venue.maxPeople/10)}</span>
+                      </p>
                         <div class="button-group">
-                            <button data-book="Afternoon" data-order="true" data-venue="${venue.id.toString()}" class="button-primary">Tiệc Trưa</button>
-                            <button data-book="Evening" data-order="true" data-venue="${venue.id.toString()}" class="">Tiệc Chiều</button>                                 
+                            <button data-book="Afternoon" data-order="true" data-venue="${venue.id.toString()}" class="button-primary">Afternoon Party</button>
+                            <button data-book="Evening" data-order="true" data-venue="${venue.id.toString()}" class="">Everning Party</button>                                 
                         </div>
                     </div>
           </div>
@@ -181,60 +195,77 @@ function appendVenue(venue) {
 function getOrderLink(day) {
     const buttons = document.querySelectorAll('button[data-order="true"]');
 
-    console.log(buttons);
+    // console.log(buttons);
 // Loop through the buttons and attach an event listener to each one
     buttons.forEach(button => {
         button.addEventListener('click', function (event) {
             // event.preventDefault(); // Prevent the default behavior of the button
+            swal({
+                title: "Are you sure to booking this Venue?",
+                text: "Press OK to confirm this booking!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((booking) => {
+                    if (booking) {
+                         // Get the values of the data attributes
+                            const bookType = this.getAttribute('data-book');
+                            const venueId = this.getAttribute('data-venue');
+                            // alert(bookType + venueId + day.date);
+                            // Create a new XMLHttpRequest object
+                            const xhr = new XMLHttpRequest();
 
-            // Get the values of the data attributes
-            const bookType = this.getAttribute('data-book');
-            const venueId = this.getAttribute('data-venue');
-            alert(bookType + venueId + day.date);
-            // Create a new XMLHttpRequest object
-            const xhr = new XMLHttpRequest();
+                            // Define the AJAX request
 
-            // Define the AJAX request
+                            xhr.open('POST', '/customers/orders/create');
+                            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
 
-            xhr.open('POST', '/customers/orders/create');
-            xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                            // Define what should happen when the response is received
+                            xhr.onload = function () {
+                                // console.log(xhr.response);
+                                if (xhr.status === 200) {
+                                    console.log(xhr.response);
+                                    // Handle successful response
+                                    let myOrder = JSON.parse(xhr.responseText);
+                                    // let orderId=myOrder.id
+                                    // window.location.href="order/create-detail/"+orderId;
+                                    // debugger;
+                                    //chuyen sang post
+                                    const form = document.createElement("form");
+                                    form.method = "POST";
 
-            // Define what should happen when the response is received
-            xhr.onload = function () {
-                console.log(xhr.response);
-                if (xhr.status === 200) {
-                    console.log(xhr.response);
-                    // Handle successful response
-                    let myOrder = JSON.parse(xhr.responseText);
-                    // let orderId=myOrder.id
-                    // window.location.href="order/create-detail/"+orderId;
+                                    form.action = "/customers/orders/create-detail";
 
-                    //chuyen sang post
-                    const form = document.createElement("form");
-                    form.method = "POST";
+                                    const input = document.createElement("input");
+                                    input.type = "hidden";
+                                    input.name = "orderId";
+                                    input.value = myOrder.id;
 
-                    form.action = "/customers/orders/create-detail";
+                                    form.appendChild(input);
+                                    document.body.appendChild(form);
 
-                    const input = document.createElement("input");
-                    input.type = "hidden";
-                    input.name = "orderId";
-                    input.value = myOrder.id;
+                                    form.submit();
 
-                    form.appendChild(input);
-                    document.body.appendChild(form);
+                                } else {
+                                    swal("Error!", xhr.responseText, "error");
 
-                    form.submit();
 
-                } else {
+                                    console.log(xhr.responseText);
+                                    // console.log(xhr.response);
+                                    // Handle error
+                                }
+                            };
 
-                    alert(xhr.responseText);
-                    console.log(xhr.response);
-                    // Handle error
-                }
-            };
+                            // Send the AJAX request with the data in JSON format
+                            xhr.send(JSON.stringify({bookType: bookType, venueId: venueId, day: day.date}));
 
-            // Send the AJAX request with the data in JSON format
-            xhr.send(JSON.stringify({bookType: bookType, venueId: venueId, day: day.date}));
+                    } else {
+                        swal("Thank you. Please see other options!");
+                    }
+                });
+
+            // if(confirm("Are You sure to book this venue for your party?"))
 
         });
     });

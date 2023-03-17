@@ -28,7 +28,6 @@ public class Customers {
     @Basic
     @Column(name = "last_name", length = 45)
     private String last_name;
-
     @Basic
     @Column(name = "address", length = 100)
     private String address;
@@ -43,12 +42,10 @@ public class Customers {
     @Column(name = "email", length = 50)
     private String email;
 
-    @Basic
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "avatar", nullable = true)
     private String avatar;
-    @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
-    @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Booking> bookings = new HashSet<>();
+
 
 
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})

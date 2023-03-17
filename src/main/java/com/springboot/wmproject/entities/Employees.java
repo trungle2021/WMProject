@@ -48,6 +48,7 @@ public class Employees {
     @Basic
     @Column(name = "isLeader", nullable = true ,columnDefinition = "integer default 0")
     private Integer isLeader;
+
     @Basic
     @Column(name = "team_id", nullable = true,columnDefinition = "integer default 0")
     private Integer team_id;

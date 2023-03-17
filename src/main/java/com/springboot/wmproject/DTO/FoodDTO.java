@@ -1,6 +1,7 @@
 package com.springboot.wmproject.DTO;
 
 
+import com.springboot.wmproject.entities.FoodImages;
 import lombok.Data;
 
 import java.util.Set;
@@ -16,7 +17,9 @@ public class FoodDTO {
     private String description;
 
     private Double price;
+    private boolean isActive;
 
     private Set<MaterialDTO> materialsById;
+    private Set<FoodImageDTO> foodImagesById;
 //    private Set<FoodDetailDTO> foodDetailsDTOById;
 }

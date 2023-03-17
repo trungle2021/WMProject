@@ -9,6 +9,6 @@ import java.util.List;
 public class OrganizeTeamDTO {
     private int id;
     private String teamName;
-    @JsonIgnore
-    private List<EmployeeDTO> employeesById;
+//    @JsonIgnore
+//    private List<EmployeeDTO> employeesById;
 }

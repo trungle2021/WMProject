@@ -33,6 +33,14 @@ public class ServiceController {
         return ResponseEntity.ok(service.getAllService());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/allactive")
+    public ResponseEntity<List<ServiceDTO>> getAllActive()
+    {
+        return ResponseEntity.ok(service.getAllServiceActive());
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
