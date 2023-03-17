@@ -1,5 +1,6 @@
 package wm.clientmvc.controllers.Auth;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
@@ -25,10 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import wm.clientmvc.DTO.JWTAuthResponse;
-import wm.clientmvc.DTO.LoginDTO;
-import wm.clientmvc.DTO.RegisterCustomerDTO;
-import wm.clientmvc.DTO.RegisterDTO;
+import wm.clientmvc.DTO.*;
 import wm.clientmvc.securities.JWT.JwtTokenProvider;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
@@ -40,14 +38,12 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
+import static wm.clientmvc.utils.SD_CLIENT.*;
 
 
 @Controller
 public class AuthController {
-    String customerLoginUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/login";
-    String customerRegisterUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/register";
-    String staffRegisterUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/employees/create";
-    String staffLoginUrl = SD_CLIENT.DOMAIN_APP_API + "/api/auth/employees/login";
+
     JwtTokenProvider tokenProvider;
     @Value("${app-jwt-expiration-second}")
     private int jwtExpirationDate;
@@ -63,7 +59,7 @@ public class AuthController {
     @PostMapping(value = "/staff/login")
     public String loginEmployee(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
-                staffLoginUrl,
+                SD_CLIENT.api_staffLoginUrl,
                 "/staff/dashboard",
                 "/staff/login",
                 loginDTO,
@@ -81,7 +77,7 @@ public class AuthController {
     @PostMapping(value = "/login")
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
-                customerLoginUrl,
+                api_customerLoginUrl,
                 "/customers/home",
                 "/login",
                 loginDTO,
@@ -116,12 +112,12 @@ public class AuthController {
             return "register"; // return to the registration page with error messages
         }
         try {
-            RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(customerRegisterUrl, HttpMethod.POST, registerCustomerDTO, null, RegisterCustomerDTO.class);
+            RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerCustomerDTO, null, RegisterCustomerDTO.class);
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setUsername(responseRegister.getUsername());
             loginDTO.setPassword(responseRegister.getPassword());
             return callApiLogin(
-                    customerLoginUrl,
+                    api_customerLoginUrl,
                     "/",
                     "/customer/login",
                     loginDTO,
@@ -151,6 +147,11 @@ public class AuthController {
 
     //    FUNCTION
     public String callApiLogin(String apiUrl, String successUrl, String has401ExceptionUrl, @Valid @ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        CustomerDTO customerDTO = new CustomerDTO();
+        String avatar = "";
+
+
         try {
             JWTAuthResponse jwtAuthResponse = APIHelper.makeApiCall(
                     apiUrl,
@@ -173,12 +174,45 @@ public class AuthController {
 
                     String userType = tokenProvider.getUserType(token);
                     String userID = tokenProvider.getUserID(token);
-
+                    String fullName = "";
                     Set<GrantedAuthority> authorities = new HashSet<>();
                     authorities.add(new SimpleGrantedAuthority(userType));
 
-                    CustomUserDetails customerUserDetails = new CustomUserDetails(loginDTO.getUsername(), loginDTO.getPassword(), Long.parseLong(userID), authorities);
+                    if (apiUrl.contains("/api/auth/customers")) {
+                        customerDTO = APIHelper.makeApiCall(
+                                api_getOne_customer + userID,
+                                HttpMethod.GET,
+                                null,
+                                token,
+                                CustomerDTO.class);
+                        if(customerDTO.getAvatar() == null){
+                            avatar = avatarDefault;
+                        }else{
+                            avatar = customerDTO.getAvatar();
+                        }
+                        fullName = customerDTO.getFirst_name() + " " +  customerDTO.getLast_name();
+
+
+                    }else if(apiUrl.contains("/api/auth/employees")){
+                        employeeDTO = APIHelper.makeApiCall(
+                                api_getOne_employee + userID,
+                                HttpMethod.GET,
+                                null,
+                                token,
+                                EmployeeDTO.class);
+                        if(employeeDTO.getAvatar() == null){
+                            avatar = avatarDefault;
+                        }else{
+                            avatar = employeeDTO.getAvatar();
+                        }
+                        fullName = employeeDTO.getName();
+                    }
+
+
+                   CustomUserDetails customerUserDetails = new CustomUserDetails(loginDTO.getUsername(), loginDTO.getPassword(), Long.parseLong(userID), fullName,avatar, authorities);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(customerUserDetails, loginDTO.getPassword(), authorities);
+
+
                     SecurityContext securityContext = SecurityContextHolder.getContext();
                     securityContext.setAuthentication(authentication);
                     HttpSession session = request.getSession(true);
@@ -187,20 +221,17 @@ public class AuthController {
             }
             return "redirect:" + successUrl;
 
-        } catch (HttpClientErrorException e) {
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            String status = String.valueOf(e.getStatusCode().value());
+
             String responseError = e.getResponseBodyAsString();
             if (StringUtils.hasLength(responseError)) {
                 ObjectMapper mapper = new ObjectMapper();
+                mapper.configure(JsonParser.Feature.AUTO_CLOSE_SOURCE, true);
                 Map<String, String> map = mapper.readValue(responseError, Map.class);
                 String message = map.get("message").toString();
-                String status = String.valueOf(e.getStatusCode().value());
-                switch (status) {
-                    case "403":
-                        return "redirect:/access-denied";
-                    default:
-                        redirectAttributes.addFlashAttribute("errorMessage", message);
-                        return "redirect:" + has401ExceptionUrl;
-                }
+                redirectAttributes.addFlashAttribute("errorMessage", message);
+                return "redirect:/error";
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

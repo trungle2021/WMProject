@@ -21,9 +21,9 @@ public class EmployeeDTO {
     private Integer isLeader;
     private Double salary;
     private String email;
-//    private String empType;
     private Integer team_id;
     private String avatar;
+    private Integer is_deleted;
     private OrganizeTeamDTO organizeTeamsByTeamId;
     private List<EmployeeAccountDTO> employeeAccountsById;
 

@@ -23,12 +23,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>DataTables</h1>
+                            <h1>Employees & Teams</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">DataTables</li>
+                                <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/teams">Employees & Teams</a></li>
                             </ol>
                         </div>
                     </div>
@@ -60,7 +60,6 @@
                                             <th>Join Date</th>
                                             <th>Salary</th>
                                             <th>Team</th>
-                                            <th>Account</th>
                                             <th>Detail</th>
                                         </tr>
                                         </thead>
@@ -72,23 +71,7 @@
                                             <td th:text="${c.joinDate}"></td>
                                             <td th:text="${c.salary}"></td>
                                             <td th:text="${c.organizeTeamsByTeamId.teamName}"></td>
-                                            <th:block th:if="${c.employeeAccountsById.isEmpty()}">
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-primary "
-                                                            data-toggle="modal"
-                                                            data-target="#createAccountModal" data-whatever="@mdo">
-                                                        Create Account
-                                                    </button>
-                                                </td>
-                                            </th:block>
-                                            <th:block th:unless="${c.employeeAccountsById.size()==0}">
-                                                <th:block th:each="a:${c.employeeAccountsById}">
-                                                    <td th:text="${a.getUsername()}"></td>
-                                                </th:block>
-                                            </th:block>
-
                                             <td>
-
                                                 <a th:href="@{/staff/employees/update/{empId}(empId=${c.getId()})}" class=" btn btn-outline-primary ">
                                                     Update
                                                 </a>
@@ -96,7 +79,6 @@
                                                 <a th:href="@{/staff/employees/delete/{empId}(empId=${c.getId()})}"
                                                    class="btn btn-outline-primary "
                                                    style="margin-right: 1rem">Delete</a>
-
                                             </td>
                                         </tr>
 
@@ -104,6 +86,9 @@
                                     </table>
                                 </div>
                             </div>
+
+
+
                             <div class="row">
                                 <div class="col-12">
                                     <div class="card">
@@ -121,26 +106,35 @@
                                                 <thead>
                                                 <tr>
                                                     <th>Name</th>
-                                                    <th>Order</th>
+                                                    <th>Total Members</th>
+                                                    <th>Leader</th>
+                                                    <th>Action</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr th:each="i:${teamList}">
-                                                    <td th:text="${i.teamName}"></td>
+                                                <tr th:each="i: ${teamSummary}">
+                                                    <td th:text="${i.getTeam_name()}"></td>
+                                                    <td th:text="${i.getTotal_members()}"></td>
+                                                    <td><a th:href="@{/staff/employees/update/{id}(id=${i.getEmp_id()})}" th:text="${i.getLeader_name()}"></a></td>
                                                     <td>
 
-                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getId()})}"
-                                                           class="btn btn-outline-primary float-right"
-                                                           style="margin-right: 1rem">Delete</a>
+                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getTeam_id()})}"
+                                                           class="btn btn-outline-primary "
+                                                           style="margin-right: 1rem">View</a>
 
                                                         <button type="button"
-                                                                class="btn btn-outline-primary float-right"
+                                                                class="btn btn-outline-primary "
                                                                 data-toggle="modal"
                                                                 data-target="#updateTeamModal"
-                                                                th:attr="data-updateteam=${i.getId()}"
-                                                                th:attrappend="data-teamname=${i.getTeamName()}">
+                                                                th:attr="data-updateteam=${i.getTeam_id()}"
+                                                                th:attrappend="data-teamname=${i.getTeam_name()}"
+                                                                style="margin-right: 1rem">
                                                             Update
                                                         </button>
+
+                                                        <a th:href="@{/staff/teams/delete/{teamId}(teamId=${i.getTeam_id()})}"
+                                                           class="btn btn-outline-primary "
+                                                           style="margin-right: 1rem">Delete</a>
                                                     </td>
                                                 </tr>
 
@@ -184,74 +178,6 @@
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                 </button>
                                 <input type="submit" class="btn btn-primary" value="Update">
-                            </div>
-                        </form>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-        <!--update employee Modal-->
-        <div class="modal fade" id="updateEmployeeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Update Employee</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form method="post" th:action="@{/staff/employees/update}" enctype="multipart/form-data">
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <input type="text" id="id-employee-update" name="id">
-                                    <label class="col-form-label">Name:</label>
-                                    <input type="text" class="form-control" name="name" id="empname" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label class="col-form-label">Address:</label>
-                                    <input type="text" class="form-control" name="address" id="empaddress" required>
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label class="col-form-label">Email:</label>
-                                    <input type="text" class="form-control" name="email" id="empemail" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Phone:</label>
-                                    <input type="text" class="form-control" name="phone" required id="empphone">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Join date:</label>
-                                    <input type="date" class="form-control" name="joinDate" required id="empdate">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Salary:</label>
-                                    <input type="text" class="form-control" name="salary" required id="empsalary">
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label" for="empteam">Team:</label>
-                                    <select name="teamId" id="empteam" class="form-control">
-                                        <th:block th:each="c:${teamList}">
-                                            <option th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
-                                        </th:block>
-                                    </select>
-
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Avatar:</label>
-                                    <input type="file" class="form-control" name="employee-update-pic" required>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <input type="text" id="empavatar">
-                                </div>
-                                <div class="modal-footer col-md-12">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                    </button>
-                                    <input type="submit" class="btn btn-primary" value="Update">
-                                </div>
                             </div>
                         </form>
                     </div>
@@ -303,32 +229,6 @@
         $(document).ready(function () {
             $('table.display').DataTable();
         });
-        $('#updateEmployeeModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('updateemployee') // Extract info from data-* attributes
-            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-            var name = button.data('employeename')
-            var address = button.data('employeeaddress')
-            var phone = button.data('employeephone')
-            var date = button.data('employeedate')
-            var salary = button.data('employeesalary')
-            var email = button.data('employeeemail')
-            var teamId = button.data('employeeteam')
-            var avatar = button.data('employeeavatar')
-            $('#id-employee-update').val(recipient)
-            $('#empname').val(name)
-            $('#empaddress').val(address)
-            $('#empphone').val(phone)
-            $('#empdate').val(date)
-            $('#empsalary').val(salary)
-            $('#empemail').val(email)
-            $('#empteam').each(function () {
-                $(this).val(teamId); // Lấy giá trị của option hiện tại
-
-            });
-            $('#empavatar').val(avatar)
-        })
         $('#updateTeamModal').on('show.bs.modal', function (event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('updateteam') // Extract info from data-* attributes

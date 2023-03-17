@@ -30,9 +30,9 @@ public class JwtTokenProvider {
         if(userDetail instanceof CustomUserDetails) {
             userID =    ((CustomUserDetails) userDetail).getUserId().toString();
             Map<String, String> claims = new HashMap<>();
-            claims.put("userType",userType);
-            claims.put("username",username);
             claims.put("userID",userID);
+            claims.put("username",username);
+            claims.put("userType",userType);
 
 
             Date currentDate = new Date();
@@ -68,9 +68,6 @@ public class JwtTokenProvider {
         }
         return username;
     }
-
-
-
     public String getUserType(String token){
         Claims claims =  Jwts.parserBuilder()
                 .setSigningKey(key())

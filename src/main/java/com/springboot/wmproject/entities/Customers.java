@@ -23,11 +23,11 @@ public class Customers {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "firstName", length = 45)
-    private String firstName;
+    @Column(name = "first_name", length = 45)
+    private String first_name;
     @Basic
-    @Column(name = "lastName", length = 45)
-    private String lastName;
+    @Column(name = "last_name", length = 45)
+    private String last_name;
 
     @Basic
     @Column(name = "address", length = 100)

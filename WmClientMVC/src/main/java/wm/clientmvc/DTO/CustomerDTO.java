@@ -14,8 +14,8 @@ import java.util.Set;
 @NoArgsConstructor
 public class CustomerDTO {
     private int id;
-    private String firstName;
-    private String lastName;
+    private String first_name;
+    private String last_name;
     private String address;
     private String phone;
     private String gender;

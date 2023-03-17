@@ -9,23 +9,20 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import wm.clientmvc.DTO.CustomerAccountDTO;
-import wm.clientmvc.DTO.GenericResponse;
 import wm.clientmvc.DTO.PasswordDTO;
 import wm.clientmvc.utils.APIHelper;
-import wm.clientmvc.utils.SD_CLIENT;
 
 import java.io.IOException;
 import java.util.Map;
 
+import static wm.clientmvc.utils.SD_CLIENT.*;
+
 @Controller
 public class ForgotPasswordController {
-    String processForgotPassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/processForgotPassword";
-    String processChangePassword = SD_CLIENT.DOMAIN_APP_API + "/api/auth/customers/processChangePassword";
+
 
     @GetMapping("/forgot_password")
     public String showForgotPasswordForm() {
@@ -41,7 +38,7 @@ public class ForgotPasswordController {
         }
         try {
             String response1 = APIHelper.makeApiCall(
-                    processForgotPassword,
+                    api_processForgotPassword,
                     HttpMethod.POST,
                     email,
                     null,
@@ -93,7 +90,7 @@ public class ForgotPasswordController {
         passwordDTO.setToken(token);
         try {
             String response = APIHelper.makeApiCall(
-                    processChangePassword,
+                    api_processChangePassword,
                     HttpMethod.POST,
                     passwordDTO,
                     null,

@@ -1,7 +1,8 @@
 package com.springboot.wmproject.services;
 
 import com.springboot.wmproject.DTO.OrganizeTeamDTO;
-import com.springboot.wmproject.entities.OrganizeTeams;
+import com.springboot.wmproject.DTO.TeamSummaryDTO;
+import com.springboot.wmproject.entities.TeamSummary;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface OrganizeTeamService {
     OrganizeTeamDTO createOrganizeTeam(OrganizeTeamDTO newOrganizeTeam);
     OrganizeTeamDTO updateOrganizeTeam(OrganizeTeamDTO editOrganizeTeam);
     void deleteOrganizeTeam(int id);
+
+    List<TeamSummaryDTO> getSummaryTeamOrganization();
 
 }

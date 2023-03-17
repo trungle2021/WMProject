@@ -1,10 +1,12 @@
 package com.springboot.wmproject.securities.UserDetailsService;
 
+import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.entities.EmployeeAccounts;
 import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.repositories.EmployeeAccountRepository;
 import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
 //import com.springboot.wmproject.securities.UserDetails.CustomerUserDetails;
+import com.springboot.wmproject.services.AuthServices.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +23,7 @@ public class EmployeeDetailsService implements UserDetailsService {
 
     EmployeeAccountRepository employeeAccountRepository;
 
+
     @Autowired
     public EmployeeDetailsService(EmployeeAccountRepository employeeAccountRepository) {
         this.employeeAccountRepository = employeeAccountRepository;
@@ -31,12 +34,15 @@ public class EmployeeDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
       EmployeeAccounts employeeAccounts =  employeeAccountRepository.findByUsername(username)
                .orElseThrow(()->new UserNotFoundException("Invalid username or password"));
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(employeeAccounts.getRole()));
-        return new CustomUserDetails(employeeAccounts.getUsername(),employeeAccounts.getPassword(),employeeAccounts.getEmployeeId().longValue() ,authorities);
+        return new CustomUserDetails(employeeAccounts.getUsername(),employeeAccounts.getPassword(),employeeAccounts.getEmployeeId().longValue(),authorities);
 
     }
 }
+
+

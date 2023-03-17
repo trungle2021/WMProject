@@ -1,11 +1,14 @@
 package com.springboot.wmproject.services.impl;
 
 import com.springboot.wmproject.DTO.OrganizeTeamDTO;
+import com.springboot.wmproject.DTO.TeamSummaryDTO;
 import com.springboot.wmproject.entities.OrganizeTeams;
+import com.springboot.wmproject.entities.TeamSummary;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.EmployeeRepository;
 import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.repositories.OrganizeTeamRepository;
+import com.springboot.wmproject.repositories.TeamSummaryRepository;
 import com.springboot.wmproject.services.OrganizeTeamService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +23,15 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     private OrderRepository orderRepository;
     private EmployeeRepository employeeRepository;
     private ModelMapper modelMapper;
+    private TeamSummaryRepository teamSummaryRepository;
 
     @Autowired
-    public OrganizeTeamServiceImpl(OrganizeTeamRepository organizeTeamRepository, OrderRepository orderRepository, EmployeeRepository employeeRepository, ModelMapper modelMapper) {
+    public OrganizeTeamServiceImpl(TeamSummaryRepository teamSummaryRepository,OrganizeTeamRepository organizeTeamRepository, OrderRepository orderRepository, EmployeeRepository employeeRepository, ModelMapper modelMapper) {
         this.organizeTeamRepository = organizeTeamRepository;
         this.orderRepository = orderRepository;
         this.employeeRepository = employeeRepository;
         this.modelMapper = modelMapper;
+        this.teamSummaryRepository = teamSummaryRepository;
     }
 
 
@@ -88,6 +93,12 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
         organizeTeamRepository.delete(organizeTeams);
     }
 
+    @Override
+    public List<TeamSummaryDTO> getSummaryTeamOrganization() {
+        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization().stream().map(object -> mapToTeamSummaryDTO(mapToTeamSummaryEntity(object))).collect(Collectors.toList());
+        return teamSummaries;
+    }
+
     public OrganizeTeams mapToEntity(OrganizeTeamDTO organizeTeamDTO) {
         OrganizeTeams organizeTeams = modelMapper.map(organizeTeamDTO, OrganizeTeams.class);
         return organizeTeams;
@@ -96,5 +107,15 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     public OrganizeTeamDTO mapToDTO(OrganizeTeams organizeTeams) {
         OrganizeTeamDTO organizeTeamDTO = modelMapper.map(organizeTeams, OrganizeTeamDTO.class);
         return organizeTeamDTO;
+    }
+
+    public TeamSummary mapToTeamSummaryEntity(Object object) {
+        TeamSummary teamSummary = modelMapper.map(object, TeamSummary.class);
+        return teamSummary;
+    }
+
+    public TeamSummaryDTO mapToTeamSummaryDTO(TeamSummary teamSummary) {
+        TeamSummaryDTO teamSummaryDTO = modelMapper.map(teamSummary, TeamSummaryDTO.class);
+        return teamSummaryDTO;
     }
 }
