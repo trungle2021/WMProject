@@ -9,6 +9,7 @@ import java.util.List;
 public interface Service_Service {
 
     List<ServiceDTO> getAllService();
+    List<ServiceDTO> getAllServiceActive();
 
     ServiceDTO getOneService(int serviceId);
     ServiceDTO createService(ServiceDTO newServiceDTO);

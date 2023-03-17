@@ -1,5 +1,8 @@
 package com.springboot.wmproject.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Basic;
+import jakarta.persistence.FetchType;
 import lombok.*;
 
 import java.util.HashSet;
@@ -17,8 +20,14 @@ public class CustomerDTO {
     private String phone;
     private String gender;
     private String email;
+    @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private String avatar;
-    private Set<BookingDTO> bookings = new HashSet<>();
-    private Set<OrderDTO> orders = new HashSet<>();
+    private String avatarFromDB;
+    public String getAvatar() {
+        return this.avatar != null ? this.avatar : this.avatarFromDB;
+    }
+
+//    private Set<OrderDTO> orders = new HashSet<>();
 
 }

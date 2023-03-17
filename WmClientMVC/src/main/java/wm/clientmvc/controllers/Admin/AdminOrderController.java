@@ -1,22 +1,22 @@
 package wm.clientmvc.controllers.Admin;
 
+
+import jakarta.validation.Valid;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
-import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 import wm.clientmvc.DTO.*;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
-import wm.clientmvc.utils.Static_Status;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -29,35 +29,90 @@ import java.util.stream.Collectors;
 import static wm.clientmvc.utils.Static_Status.*;
 
 @Controller
+//@Validated
 @RequestMapping("/staff")
 public class AdminOrderController {
 
-RestTemplate restTemplate=new RestTemplate();
+//RestTemplate restTemplate=new RestTemplate();
 
-@RequestMapping("/orders/showall")
-
-public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token)
-{
-    ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<List<OrderDTO>>() {};
-    String url="http://localhost:8080/api/orders";
+    @RequestMapping("/orders/showall")
+    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token)
+    {
+    model.addAttribute("warningSt", orderStatusWarning);
+    model.addAttribute("cancelingSt", orderStatusCancel);
+    model.addAttribute("depositedSt", orderStatusDeposited);
+    model.addAttribute("orderedSt", orderStatusOrdered);
+    model.addAttribute("confirmSt", orderStatusConfirm);
+    Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
+    String role= authentication.getAuthorities().stream().findFirst().toString();
+    ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<>() {
+    };
+    String url = "http://localhost:8080/api/orders";
     try {
-       List<OrderDTO>orderList= APIHelper.makeApiCall(url,
+        List<OrderDTO> orderList = APIHelper.makeApiCall(url,
                 HttpMethod.GET,
                 null,
                 token,
                 responseType);
 
-       model.addAttribute("list",orderList);
+        if(role.contains("ADMIN")) {
+            model.addAttribute("list", orderList);
 
+        }else if(role.contains("SALE")){
+         List<OrderDTO> list=  orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(orderStatusOrdered)).collect(Collectors.toList());
+            model.addAttribute("list",list);
+
+        }
+        else{
+            return "redirect:staff/dashboard";
+
+            }
 
         return "adminTemplate/pages/tables/order";
-    }
-    catch (HttpClientErrorException | IOException ex)
-    {
-        model.addAttribute("message",ex.getMessage());
+
+
+    } catch (HttpClientErrorException | IOException ex) {
+        model.addAttribute("message", ex.getMessage());
         return "adminTemplate/error";
     }
+
 }
+    @RequestMapping("/orders/showmyorder/{status}")
+
+    public String showMyOrder(Model model,@PathVariable String status, @CookieValue(name = "token",defaultValue = "")String token)
+    {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
+        Long empId= empUserDetails.getUserId();
+        ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<>() {
+        };
+        String url="http://localhost:8080/api/orders/bybookingEmp/"+empId;
+        try {
+            List<OrderDTO>orderList= APIHelper.makeApiCall(url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseType);
+
+
+            List<OrderDTO> myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+
+            model.addAttribute("list",myList);
+
+
+            model.addAttribute("warningSt",orderStatusWarning);
+            model.addAttribute("cancelingSt",orderStatusCancel);
+            model.addAttribute("confirmSt",orderStatusConfirm);
+            model.addAttribute("depositedSt",orderStatusDeposited);
+            model.addAttribute("orderedSt",orderStatusOrdered);
+            return "adminTemplate/pages/tables/order";
+        }
+        catch (HttpClientErrorException | IOException ex)
+        {
+            model.addAttribute("message",ex.getMessage());
+            return "adminTemplate/error";
+        }
+    }
 @RequestMapping("/orders/order-detail/{id}")
 public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
 {
@@ -70,7 +125,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                 token,
                 OrderDTO.class
         );
-        model.addAttribute("order",order);
+        model.addAttribute("orderDTO",order);
         return "adminTemplate/pages/tables/order-update-status";
     }catch (IOException e) {
         model.addAttribute("message",e.getMessage());
@@ -78,8 +133,29 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
     }
 
 }
+
+    @RequestMapping("/orders/order-detail-confirm/{id}")
+    public String OrderDetailConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
+    {
+        String url="http://localhost:8080/api/orders/"+id;
+        try {
+            OrderDTO order= APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    OrderDTO.class
+            );
+            model.addAttribute("orderDTO",order);
+            return "adminTemplate/pages/tables/order-update-confirm";
+        }catch (IOException e) {
+            model.addAttribute("message",e.getMessage());
+            return "adminTemplate/error";
+        }
+
+    }
 @RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
-public String update(Model model, @CookieValue(name="token",defaultValue = "")String token, @ModelAttribute OrderDTO order) {
+public String update(@Validated  OrderDTO order, BindingResult bindingResult, Model model, @CookieValue(name="token",defaultValue = "")String token) {
     OrderDTO editOrder = new OrderDTO();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -102,19 +178,39 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
 
         //call API order
 
+        Integer tbNum=order.getTableAmount();
+        Integer min=findOrder.getVenues().getMinPeople() /10;
+        Integer max=findOrder.getVenues().getMaxPeople()/10;
 
-        //
+            if(tbNum!=null && tbNum<min ||tbNum!=null && tbNum> max )
+        {
+            bindingResult.rejectValue("tableAmount","tableAmount.range","Please enter table amount from "+min+" to "+ max );
+
+        }
+        if (bindingResult.hasErrors()) {
+            order.setVenues(findOrder.getVenues());
+            order.setCustomersByCustomerId(findOrder.getCustomersByCustomerId());
+            model.addAttribute("orderDTO",order);
+
+            return "adminTemplate/pages/tables/order-update-status";
+
+        }
+        else{
+
         String url = "http://localhost:8080/api/orders/updateStatus";
         editOrder.setId(order.getId());
         editOrder.setOrderStatus(orderStatusDeposited);
         editOrder.setBookingEmp(employeeDetails.getUserId().intValue());
-        editOrder.setOrderTotal(getOrderTotal(findOrder));
+
+
+        //update total amount if customer didn't set tt table
+//        findOrder.setTableAmount(tbNum);
+        editOrder.setTableAmount(tbNum);
+        editOrder.setOrderTotal(getTotal(findOrder,tbNum));
         Integer team=getTeam(findOrder,token);
         editOrder.setOrganizeTeam(team);
-        Integer tbNum=0;
-        if(order.getTableAmount()==null)
-        {tbNum=order.getVenues().getMinPeople()/10;}
-        else{tbNum=order.getTableAmount();}
+
+
         editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
 
 
@@ -133,18 +229,131 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
             model.addAttribute("message", e.getMessage());
             return "adminTemplate/error";
         }
+        }
     } else {
-        model.addAttribute("message", "Kiểm Tra lại Tình Trạng Đơn! Có Lỗi Xảy ra!");
+        model.addAttribute("message", "Oops!Have a Error! Check ordered status or contact your leader!");
         return "adminTemplate/error";
     }
 
 }
 
-        @RequestMapping("/test")
-    public String test(){return "adminTemplate/home";}
+@RequestMapping(value = "/orders/order-confirm",method = RequestMethod.POST)
+public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult)
+{
+    //tinh lại total amount and partime emp
+    OrderDTO editOrder = new OrderDTO();
+//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
+
+    String orderUrl = "http://localhost:8080/api/orders/" + order.getId();
+    OrderDTO findOrder= new OrderDTO();
+    try {
+        findOrder = APIHelper.makeApiCall(
+                orderUrl,
+                HttpMethod.GET,
+                null,
+                token,
+                OrderDTO.class
+        );
+    } catch (IOException e) {
+        model.addAttribute("message", e.getMessage());
+        return "adminTemplate/error";
+    }
+    if (order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited) && findOrder!=null || order.getOrderStatus().equalsIgnoreCase(orderStatusWarning) && findOrder!=null)
+    {
+        //check total amount
+        Integer tbNum=order.getTableAmount();
+        Integer min=findOrder.getVenues().getMinPeople() /10;
+        Integer max=findOrder.getVenues().getMaxPeople()/10;
+        if(tbNum!=null&&tbNum<min ||tbNum!=null&& tbNum> max)
+        {
+            bindingResult.rejectValue("tableAmount","tableAmount.range","Please enter table amount form "+min+"to "+ max );
+
+        }
+        if (bindingResult.hasErrors()) {
+            order.setVenues(findOrder.getVenues());
+            order.setCustomersByCustomerId(findOrder.getCustomersByCustomerId());
+            order.setOrganizeTeamsByOrganizeTeam(findOrder.getOrganizeTeamsByOrganizeTeam());
+            model.addAttribute("orderDTO",order);
+
+            return "adminTemplate/pages/tables/order-update-confirm";
+
+        }
+        else {
+            // process the order
+        String url = "http://localhost:8080/api/orders/updateStatus";
+        editOrder.setId(order.getId());
+        editOrder.setOrderStatus(orderStatusConfirm);
+        editOrder.setBookingEmp(findOrder.getBookingEmp());
+        editOrder.setTableAmount(tbNum);
+        editOrder.setOrderTotal(getTotal(findOrder,tbNum));
+        Integer team=findOrder.getOrganizeTeam();
+        editOrder.setOrganizeTeam(team);
+        editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
+            //update
+             try {
+                APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.PUT,
+                    editOrder,
+                    token,
+                    OrderDTO.class
+                 );
+
+                    return "redirect:/staff/orders/showall";
+                } catch (IOException e) {
+                 model.addAttribute("message","Oops! Something Wrong:" + e.getMessage());
+                 return "adminTemplate/error";
+                }
 
 
-    public Double getOrderTotal(OrderDTO order)
+
+        }
+
+    } else {
+        model.addAttribute("message", "Check Order Status Again! Something wrong! Contact your leader!");
+        return "adminTemplate/error";
+    }
+}
+
+//organize team
+    @RequestMapping("/orders/showallorder/organize")
+
+    public String showAllbyOrganize(Model model, @CookieValue(name = "token",defaultValue = "")String token)
+    {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
+        Long empId= empUserDetails.getUserId();
+
+        ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<>() {
+        };
+        String url = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
+        try {
+            List<OrderDTO> orderList = APIHelper.makeApiCall(url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseType);
+
+
+                model.addAttribute("list",orderList);
+
+            return "adminTemplate/pages/organize/order-organize-manage";
+
+
+        } catch (HttpClientErrorException | IOException ex) {
+            model.addAttribute("message", ex.getMessage());
+            return "adminTemplate/error";
+        }
+
+    }
+
+
+
+
+
+
+    public Double getTotal(OrderDTO order,Integer tbAmount)
     {
             Double foodPrice=0.0;
             for (FoodDetailDTO food:order.getFoodDetailsById()) {
@@ -155,8 +364,8 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
             {
                 servicePrice+=servicedt.getServicesByServiceId().getPrice();
             }
-            Integer tableAmount =order.getTableAmount();
-            Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tableAmount;
+
+            Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
             return total;
     }
 
@@ -207,7 +416,7 @@ public String update(Model model, @CookieValue(name="token",defaultValue = "")St
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 
-                        if (team.getId() == obj.getOrganizeTeam()) {
+                        if (obj.getOrganizeTeam()!=null && team.getId() == obj.getOrganizeTeam()) {
                             count += 1;
                         }
                     }

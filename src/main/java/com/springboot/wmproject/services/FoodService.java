@@ -9,6 +9,7 @@ public interface FoodService {
 
     List<FoodDTO> getAllFood();
 
+    List<FoodDTO> getAllFoodActive();
     FoodDTO getOneFood(int foodId);
     FoodDTO createFood(FoodDTO newFoodDTO);
     FoodDTO updateFood(FoodDTO editFoodDTO);

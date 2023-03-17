@@ -38,7 +38,7 @@ public class OrderSchedule {
 
 
     @Scheduled(fixedRate = 720000) // Thực hiện kiểm tra sau mỗi 12 h
-    public void updateOrderStatus() {
+    public void updateOrderStatusWarning() {
         // Lấy danh sách các Order từ database
         List<Orders> orders=orderRepository.findAll();
         // Kiểm tra xem có Order nào gần tới timeHappen không
@@ -49,15 +49,20 @@ public class OrderSchedule {
             Duration duration = Duration.between(now, timeHappen);
             long seconds = duration.getSeconds();
 
-            // Nếu còn 7 ngày nữa tới timeHappen, thực hiện việc cập nhật trạng thái của Order
-            if (seconds > 0 && seconds <= 7 * 24 * 60 * 60) {
-                updateOrderStatusAuto(order);
+            // Nếu còn 14 ngày nữa tới timeHappen, thực hiện việc cập nhật trạng thái của Order->warning
+            //neu6 con 7 ngay thi2 cap65 nhat status warning->canceled
+            if (seconds > 7 * 24 * 60 * 60 && seconds <= 14 * 24 * 60 * 60) {
+                updateDepositedWarningAuto(order);
             }
+            else if (seconds<7*24*60*60) {
+               updateWarningCanceledAuto(order);
+            }
+
         }
     }
 
-    @Scheduled(fixedRate = 15000) // Thực hiện kiểm tra sau mỗi 12 h
-    public void updateOrderStatusCancel() {
+    @Scheduled(fixedRate = 720000) // Thực hiện kiểm tra sau mỗi 12 h
+    public void updateOrderStatusCanceled() {
         // Lấy danh sách các Order từ database
         List<Orders> orders=orderRepository.findAll();
         // Kiểm tra xem có Order nào gần tới timeHappen không
@@ -69,15 +74,15 @@ public class OrderSchedule {
             Duration duration = Duration.between(timeOrder, now);
             long seconds = duration.getSeconds();
 
-            // Nếu còn 7 ngày nữa tới timeHappen, thực hiện việc cập nhật trạng thái của Order
-            if (seconds > 7 * 24 * 60 * 60) {
-                updateOrderStatusCancelAuto(order);
+            // Nếu còn 3 ngày sau order, thực hiện việc cập nhật trạng thái của Order
+            if (seconds > 3 * 24 * 60 * 60) {
+                updateOrderedCanceledAuto(order);
             }
         }
     }
-    public void updateOrderStatusAuto(Orders order) {
+    public void updateDepositedWarningAuto(Orders order) {
 
-        if(order.getOrderStatus().equalsIgnoreCase(orderStatusOrdered) || order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited)){
+        if(order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited)){
 
             order.setOrderStatus(orderStatusWarning);
 
@@ -87,9 +92,20 @@ public class OrderSchedule {
 
     }
 
-    public void updateOrderStatusCancelAuto(Orders order) {
+    public void updateOrderedCanceledAuto(Orders order) {
 
         if(order.getOrderStatus().equalsIgnoreCase(orderStatusOrdered)){
+
+            order.setOrderStatus(orderStatusCanceled);
+
+            orderRepository.save(order);
+
+        }
+
+    }
+    public void updateWarningCanceledAuto(Orders order) {
+
+        if(order.getOrderStatus().equalsIgnoreCase(orderStatusWarning)){
 
             order.setOrderStatus(orderStatusCanceled);
 

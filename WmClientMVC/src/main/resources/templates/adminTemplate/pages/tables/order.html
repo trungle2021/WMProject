@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | DataTables</title>
+    <title>Order Management</title>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -17,10 +17,11 @@
 
     <section layout:fragment="content"  class="content-wrapper">
 
-   <br><div class="content-header"> <h5>Quản Lý Đơn</h5>
-        <a th:href="@{/staff/order/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Đơn Hàng Cần Liên Hệ</a>
-        <a th:href="@{/staff/order/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Đơn Hàng Hủy</a>
-        <a th:href="@{/staff/order/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Đơn Hàng Đã Đặt Cọc</a>
+   <br><div class="content-header"> <h5>Order Management</h5>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Warning Order</a>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Canceling Order</a>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Deposited Order</a>
+        <a th:href="@{/staff/orders/showall}" class="btn btn-success">All Order</a>
 
     </div>
 
@@ -39,34 +40,41 @@
 
                         <thead>
                         <tr>
-                            <th>Mã Đơn Hàng</th>
-                            <th>Ngày Đặt</th>
-                            <th>Ngày Tổ Chức</th>
-                            <th>Chi Phí</th>
-                            <th>Sảnh</th>
-                            <th>Nhân Viên Sale</th>
-                            <th>Đội Phụ Trách</th>
-                            <th>Số Bàn</th>
-                            <th>Số Lượng Cộng Tác Viên</th>
-                            <th>Tình Trạng Đơn Hàng</th>
-                            <th>Tác Vụ</th>
+                            <th>Order Id</th>
+                            <th>Venue</th>
+                            <th>Table Amount</th>
+                            <th>Sale employee</th>
+                            <th>Organize Team</th>
+                            <th>Order Status</th>
+                            <th>Event Date</th>
+                            <th>Number of collaborators:</th>
+                            <th>Booking Date</th>
+                            <th>Total Amount:</th>
+                            <th>Action:</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="c:${list}">
                             <td th:text="${c.getId()}"></td>
-                            <td th:text="${c.getOrderDate()}"></td>
-                            <td th:text="${c.getTimeHappen()}"></td>
-                            <td th:text="${c.getOrderTotal()}"></td>
-
                             <td th:text="${c.getVenues().getVenueName()}"></td>
-
+                            <td th:text="${c.getTableAmount()}"></td>
                             <td th:text="${c.getEmployeesByBookingEmp()!=null}?${c.getEmployeesByBookingEmp().getName()}:'N/A'"></td>
                             <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'">N/A</td>
-                            <td th:text="${c.getTableAmount()}"></td>
-                            <td th:text="${c.getPartTimeEmpAmount()}"></td>
                             <td th:text="${c.getOrderStatus()}"></td>
-                            <td><a th:href="@{/staff/order/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Chi Tiết Đơn</a> </td>
+                            <td th:text="${c.getTimeHappen()}"></td>
+                            <td th:text="${c.getPartTimeEmpAmount()}"></td>
+
+                            <td th:text="${c.getOrderDate()}"></td>
+                            <td th:text="${c.getOrderTotal()}"></td>
+                             <th:block th:switch="${c.getOrderStatus()}">
+                                <td th:case="${orderedSt}"><a th:href="@{/staff/orders/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Order Detail</a> </td>
+                                <td th:case="${depositedSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
+                                 <td th:case="${warningSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
+                                 <td th:case="${cancelingSt}"><a th:href="@{/staff/orders/order-refunded/{id}(id=${c.getId()})}" class="btn btn-danger">Refund Order</a> </td>
+                                <td th:case="${confirmSt}"><a th:href="@{/staff/orders/order-completed/{id}(id=${c.getId()})}" class="btn btn-success">Completed Order</a> </td>
+                                <td th:case="*">None</td>
+                            </th:block>
+
                         </tr>
 
                         </tbody>

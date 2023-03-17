@@ -123,7 +123,7 @@ public class AuthController {
             return callApiLogin(
                     customerLoginUrl,
                     "/",
-                    "/customer/login",
+                    "/customers/login",
                     loginDTO,
                     request,
                     response,
@@ -140,12 +140,12 @@ public class AuthController {
                         return "redirect:/access-denied";
                     default:
                         redirectAttributes.addFlashAttribute("errorMessage", message);
-                        return "redirect:/customer/register";
+                        return "redirect:/customers/register";
                 }
             }
         }
 
-        return "redirect:/customer/login";
+        return "redirect:/customers/login";
     }
 
 

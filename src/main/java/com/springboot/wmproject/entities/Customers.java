@@ -23,10 +23,10 @@ public class Customers {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "firstName", length = 45)
+    @Column(name = "first_name", length = 45)
     private String firstName;
     @Basic
-    @Column(name = "lastName", length = 45)
+    @Column(name = "last_name", length = 45)
     private String lastName;
 
     @Basic
@@ -43,12 +43,10 @@ public class Customers {
     @Column(name = "email", length = 50)
     private String email;
 
-    @Basic
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "avatar", nullable = true)
     private String avatar;
-    @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
-    @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Booking> bookings = new HashSet<>();
+
 
 
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
