@@ -10,6 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -40,10 +41,11 @@ public class CustomerServiceImpl implements CustomerService
         return mapToDto(customers);
     }
     @Override
+    @Transactional
     public CustomerDTO create(CustomerDTO customerDTO) {
         Customers customers = new Customers();
-        customers.setFirstName(customerDTO.getFirstname());
-        customers.setLastName(customerDTO.getLastname());
+        customers.setFirst_name(customerDTO.getFirst_name());
+        customers.setLast_name(customerDTO.getLast_name());
         customers.setEmail(customerDTO.getEmail());
         customers.setAddress(customerDTO.getAddress());
         customers.setPhone(customerDTO.getPhone());
@@ -53,25 +55,29 @@ public class CustomerServiceImpl implements CustomerService
     }
 
     @Override
-    public CustomerDTO update(CustomerDTO customerDTO) {
-        int customerId = customerDTO.getId();
-        if(customerId!=0){
+    @Transactional
+    public CustomerDTO update(CustomerDTO dto) {
+        int customerId = dto.getId();
+        if(customerId==0){
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "CustomerID is required to update");
         }
             //check if customer exist
             Customers checkCustomer=customerRepository.findById(customerId).orElseThrow(()->new ResourceNotFoundException("Customer","id",String.valueOf(customerId)));
-                checkCustomer.setFirstName(customerDTO.getFirstname());
-                checkCustomer.setLastName(customerDTO.getLastname());
-                checkCustomer.setAddress(customerDTO.getAddress());
-                checkCustomer.setPhone(customerDTO.getPhone());
-                checkCustomer.setEmail(customerDTO.getEmail());
-                checkCustomer.setAvatar(customerDTO.getAvatar());
-                checkCustomer.setGender(customerDTO.getGender());
+                checkCustomer.setFirst_name(dto.getFirst_name());
+                checkCustomer.setLast_name(dto.getLast_name());
+                checkCustomer.setAddress(dto.getAddress());
+                checkCustomer.setPhone(dto.getPhone());
+                checkCustomer.setGender(dto.getGender());
+                checkCustomer.setEmail(dto.getEmail());
+                if(dto.getAvatar() != null){
+                    checkCustomer.setAvatar(dto.getAvatar());
+                }
                 customerRepository.save(checkCustomer);
                 return mapToDto(checkCustomer);
     }
 
     @Override
+    @Transactional
     public void delete(int id){
         Customers customers=customerRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Customer","id",String.valueOf(id)));
         customerRepository.delete(customers);

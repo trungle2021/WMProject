@@ -40,13 +40,13 @@
 
 						<div class="form-group">
 							<div class="form-row form-row-1">
-								<input type="text" th:field="*{firstname}" class="input-text" placeholder="First Name" required>
-								<div th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></div>
+								<input type="text" th:field="*{first_name}" class="input-text" placeholder="First Name" required>
+								<div th:if="${#fields.hasErrors('first_name')}" th:errors="*{first_name}"></div>
 
 							</div>
 							<div class="form-row form-row-2">
-								<input type="text" th:field="*{lastname}" class="input-text" placeholder="Last Name" required>
-								<div th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></div>
+								<input type="text" th:field="*{last_name}" class="input-text" placeholder="Last Name" required>
+								<div th:if="${#fields.hasErrors('last_name')}" th:errors="*{last_name}"></div>
 
 							</div>
 						</div>

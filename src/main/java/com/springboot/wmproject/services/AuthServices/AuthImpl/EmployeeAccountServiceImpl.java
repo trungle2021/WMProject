@@ -92,6 +92,7 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
+    @Transactional
     public EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO) {
         int employeeAccountId = employeeAccountDTO.getId();
         if(employeeAccountId == 0){
@@ -107,6 +108,7 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
+    @Transactional
     public void delete(int id) {
         EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(id)));
         empAccRepo.delete(checkEmployeeAccount);

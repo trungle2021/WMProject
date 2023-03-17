@@ -1,7 +1,7 @@
 package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.OrganizeTeamDTO;
-import com.springboot.wmproject.entities.OrganizeTeams;
+import com.springboot.wmproject.DTO.TeamSummaryDTO;
 import com.springboot.wmproject.services.OrganizeTeamService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,6 +21,14 @@ public class OrganizeTeamController {
     @Autowired
     public OrganizeTeamController(OrganizeTeamService organizeTeamService) {
         this.organizeTeamService = organizeTeamService;
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/getSummaryTeamOrganization")
+    public ResponseEntity<List<TeamSummaryDTO>> getSummaryTeamOrganization(){
+        List<TeamSummaryDTO> list = organizeTeamService.getSummaryTeamOrganization();
+        return ResponseEntity.ok(list);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")

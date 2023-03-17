@@ -25,14 +25,14 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>UPDATE EMPLOYEE</h1>
+                            <h1>CREATE CUSTOMER</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/employees/getAll">Employee
+                                <li class="breadcrumb-item active"><a href="/staff/customers/">Customer
                                     Management</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/employees/update">Update</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/customers/create">Create</a></li>
                             </ol>
                         </div>
                     </div>
@@ -51,26 +51,33 @@
                     <li style="color: green" th:text="${message}"></li>
                 </th:block>
 
-                <form method="post" th:action="@{/staff/employees/update}" th:object="${registerDTO} "
+                <form method="post" th:action="@{/staff/customers/create}" th:object="${registerDTO} "
                       enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-row">
-
-                                <input type="text" class="form-control" th:field="*{employeeId}" th:value="*{employeeId}">
-
-                                <div class="form-group col-md-12">
-                                    <label class="col-form-label">Full Name:</label>
-                                    <input type="text" class="form-control" th:field="*{name}" th:value="*{name}" required>
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">First Name:</label>
+                                    <input type="text" class="form-control" th:field="*{first_name}" required>
                                     <ul>
                                         <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('name')}" th:text="${err.defaultMessage}" class="error" />
+                                            <li th:each="err : ${result.getFieldErrors('first_name')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Last Name:</label>
+                                    <input type="text" class="form-control" th:field="*{last_name}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('last_name')}" th:text="${err.defaultMessage}" class="error" />
                                         </th:block>
                                     </ul>
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="col-form-label">Address:</label>
-                                    <input type="text" class="form-control" th:field="*{address}"  required>
+                                    <input type="text" class="form-control" th:field="*{address}" required>
                                     <ul>
                                         <th:block th:if="${result != null}">
                                             <li th:each="err : ${result.getFieldErrors('address')}" th:text="${err.defaultMessage}" class="error" />
@@ -101,25 +108,6 @@
                                 </div>
 
 
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Join date:</label>
-                                    <input type="date" class="form-control" th:field="*{joinDate}" th:value="*{joinDate}" required>
-                                    <ul>
-                                        <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('joinDate')}" th:text="${err.defaultMessage}" class="error" />
-                                        </th:block>
-                                    </ul>
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Salary:</label>
-                                    <input type="text" class="form-control" th:field="*{salary}" required>
-                                    <ul>
-                                        <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('salary')}" th:text="${err.defaultMessage}" class="error" />
-                                        </th:block>
-                                    </ul>
-                                </div>
-
                                 <div class="form-group col-md-4 offset-1 mt-2">
                                     <label >Gender</label><br>
                                     <input type="radio" th:field="*{gender}" th:value="Male" th:checked="${registerDTO.setGender('Male')}"/> Male
@@ -137,20 +125,6 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Team:</label>
-                                    <select th:field="*{team_id}" class="form-control">
-                                        <th:block th:each="c:${teamList}">
-                                            <option  th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
-                                        </th:block>
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-md-4 offset-1 mt-2">
-                                    <label th:for="isLeader">Is Leader?</label><br>
-                                    <input type="radio" th:field="*{isLeader}" th:value="1"/> Yes
-                                    <input type="radio" th:field="*{isLeader}" th:value="0" th:checked="${registerDTO.setIsLeader(0)}"/> No
-                                </div>
                                 <div class="form-group col-md-12 mt-3">
                                     <label class="col-form-label">Username:</label>
                                     <input type="text" class="form-control" th:field="*{username}" required>
@@ -162,7 +136,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="col-form-label">Password:</label>
-                                    <input type="text" class="form-control" th:field="*{password}" >
+                                    <input type="text" class="form-control" th:field="*{password}" required>
                                     <ul>
                                         <th:block th:if="${result != null}">
                                             <li th:each="err : ${result.getFieldErrors('password')}" th:text="${err.defaultMessage}" class="error" />
@@ -170,10 +144,9 @@
                                     </ul>
                                 </div>
                                 <div class="modal-footer col-md-12">
-                                    <a th:href="@{/staff/teams}" class="btn btn-secondary ">
-                                        Back
-                                    </a>
-                                    <input type="submit" class="btn btn-primary" value="Update Profile">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                    <input type="submit" class="btn btn-primary" value="Create">
                                 </div>
                             </div>
                         </div>

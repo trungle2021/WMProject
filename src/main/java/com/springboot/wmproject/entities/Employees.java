@@ -46,16 +46,22 @@ public class Employees {
     private String gender;
 
     @Basic
-    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
-    private boolean isLeader;
+    @Column(name = "isLeader", nullable = true ,columnDefinition = "integer default 0")
+    private Integer isLeader;
 
     @Basic
-    @Column(name = "team_id", nullable = true)
+    @Column(name = "team_id", nullable = true,columnDefinition = "integer default 0")
     private Integer team_id;
 
     @Basic
     @Column(name = "avatar", nullable = true)
     private String avatar;
+
+    @Basic
+    @Column(name = "is_deleted", nullable = true, columnDefinition = "integer default 0")
+    private Integer is_deleted;
+
+
 
     @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
