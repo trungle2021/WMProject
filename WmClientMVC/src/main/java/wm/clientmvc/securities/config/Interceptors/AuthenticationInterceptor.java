@@ -25,10 +25,12 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         if(isAnonymous){
             if (path.startsWith("/customers")) {
                 response.sendRedirect("/login");
+                return false;
             }
 
             if(path.startsWith("/staff")){
                 response.sendRedirect("/staff/login");
+                return false;
             }
         }
         return true;

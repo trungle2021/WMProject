@@ -48,25 +48,26 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public EmployeeDTO update(EmployeeDTO updateEmployeeDTO) {
-        int employeeId = updateEmployeeDTO.getId();
+    @Transactional
+    public EmployeeDTO update(EmployeeDTO dto) {
+        int employeeId = dto.getId();
         if (employeeId == 0) {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "Employee ID is required to update");
         }
         //check if employee exist
         Employees checkEmployees = employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
-        checkEmployees.setName(updateEmployeeDTO.getName());
-        checkEmployees.setAddress(updateEmployeeDTO.getAddress());
-        checkEmployees.setPhone(updateEmployeeDTO.getPhone());
-        checkEmployees.setJoinDate(updateEmployeeDTO.getJoinDate());
-        checkEmployees.setSalary(updateEmployeeDTO.getSalary());
-        checkEmployees.setGender(updateEmployeeDTO.getGender());
-        checkEmployees.setIsLeader(updateEmployeeDTO.getIsLeader());
-        if(updateEmployeeDTO.getAvatar() != null){
-            checkEmployees.setAvatar(updateEmployeeDTO.getAvatar());
+        checkEmployees.setName(dto.getName());
+        checkEmployees.setAddress(dto.getAddress());
+        checkEmployees.setPhone(dto.getPhone());
+        checkEmployees.setJoinDate(dto.getJoinDate());
+        checkEmployees.setSalary(dto.getSalary());
+        checkEmployees.setGender(dto.getGender());
+        checkEmployees.setIsLeader(dto.getIsLeader());
+        if(dto.getAvatar() != null){
+            checkEmployees.setAvatar(dto.getAvatar());
         }
-        checkEmployees.setEmail(updateEmployeeDTO.getEmail());
-        checkEmployees.setTeam_id(updateEmployeeDTO.getTeam_id());
+        checkEmployees.setEmail(dto.getEmail());
+        checkEmployees.setTeam_id(dto.getTeam_id());
         employeeRepository.save(checkEmployees);
         return mapToDto(checkEmployees);
 
@@ -102,6 +103,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    @Transactional
     public void delete(int employeeId) {
         Employees employees = employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
         employeeRepository.delete(employees);
