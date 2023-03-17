@@ -74,6 +74,10 @@ public class AuthController {
     }
 
     //    CUSTOMER
+    @GetMapping(value = "/customers/logout")
+    public String logoutCustomer(Model model, HttpServletRequest request, HttpServletResponse response) throws ServletException {
+        return logout(model, request, response, "/login");
+    }
     @PostMapping(value = "/login")
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
@@ -86,10 +90,7 @@ public class AuthController {
                 redirectAttributes);
     }
 
-    @GetMapping(value = "/customers/logout")
-    public String logoutCustomer(Model model, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        return logout(model, request, response, "/login");
-    }
+
 
     @GetMapping("/register")
     public String registerCustomer(Model model) {
@@ -231,7 +232,7 @@ public class AuthController {
                 Map<String, String> map = mapper.readValue(responseError, Map.class);
                 String message = map.get("message").toString();
                 redirectAttributes.addFlashAttribute("errorMessage", message);
-                return "redirect:/error";
+                return "redirect:" + has401ExceptionUrl;
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
