@@ -59,6 +59,8 @@ public class Team_EmployeeController {
 
             String status = String.valueOf(ex.getStatusCode().value());
             switch (status) {
+                case "403":
+                    return "/access-denied";
                 case "404":
                     attributes.addFlashAttribute("errorMessage", message);
                     return "redirect:/404-not-found";

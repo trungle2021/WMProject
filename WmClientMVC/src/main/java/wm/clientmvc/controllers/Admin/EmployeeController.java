@@ -19,6 +19,7 @@ import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.ClientUtilFunction;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -212,4 +213,27 @@ public class EmployeeController {
         return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
     }
 
+    @PostMapping(value = "/delete/{id}",produces = "application/json")
+    @ResponseBody
+    public Map<String, Object> delete(@PathVariable int id, @CookieValue(name = "token", defaultValue = "") String token) throws IOException {
+        Map<String, Object> response = new HashMap<>();
+
+        try{
+            String response_api = APIHelper.makeApiCall(api_delete_employee + id,HttpMethod.DELETE,null,token,String.class);
+            response.put("result", "success");
+            response.put("statusCode", 200);
+            response.put("message", response_api);
+
+        }catch (HttpClientErrorException e){
+            String responseError = e.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+            response.put("result", "success");
+            response.put("statusCode", e.getStatusCode());
+            response.put("message",message);
+        }
+
+        return response;
+    }
 }

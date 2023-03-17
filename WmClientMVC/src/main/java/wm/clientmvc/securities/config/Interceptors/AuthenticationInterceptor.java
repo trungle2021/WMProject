@@ -16,8 +16,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String role = authentication.getAuthorities().stream().findFirst().toString();
 
-//        boolean userIsStaff = role.contains("ADMIN") || role.contains("SALE") || role.contains("ORGANIZE");
-//        boolean userIsCustomer = role.contains("CUSTOMER");
         boolean isAnonymous = role.contains("ANONYMOUS");
         String path = request.getServletPath();
 

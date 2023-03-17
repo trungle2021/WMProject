@@ -8,7 +8,7 @@ import com.springboot.wmproject.DTO.RegisterDTO;
 
 public interface AuthService {
 
-
+    String staffDelete(int id);
     String employeeLogin(LoginDTO loginDTO);
     String customerLogin(LoginDTO loginDTO);
     RegisterDTO employeeRegister(RegisterDTO registerDTO) throws JsonProcessingException;

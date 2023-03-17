@@ -55,6 +55,7 @@ public class SD_CLIENT {
     public static final String api_getOne_RegisterEmployee = DOMAIN_APP_API +  "/api/auth/employees/getOne/RegisterEmployee/";
     public static final String api_create_employee = DOMAIN_APP_API + "/api/auth/employees/create";
     public static final String api_update_employee = DOMAIN_APP_API +  "/api/auth/employees/update";
+    public static final String api_delete_employee = DOMAIN_APP_API +  "/api/auth/employees/delete/";
 
     public static final String api_teams_all = DOMAIN_APP_API + "/api/teams/all";
     public static final String api_getSummaryTeamOrganization = DOMAIN_APP_API + "/api/teams/getSummaryTeamOrganization";

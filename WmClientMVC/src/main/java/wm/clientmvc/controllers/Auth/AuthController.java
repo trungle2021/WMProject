@@ -152,7 +152,6 @@ public class AuthController {
         CustomerDTO customerDTO = new CustomerDTO();
         String avatar = "";
 
-
         try {
             JWTAuthResponse jwtAuthResponse = APIHelper.makeApiCall(
                     apiUrl,

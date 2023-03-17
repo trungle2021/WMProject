@@ -20,5 +20,7 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
     @Query("select e from Employees e where e.email = :email")
     List<Employees> checkEmailExists(String email);
 
+    @Query("SELECT e from Employees e where e.id = :id and e.is_deleted = 0")
+    Employees getEmployeeById(int id);
 
 }

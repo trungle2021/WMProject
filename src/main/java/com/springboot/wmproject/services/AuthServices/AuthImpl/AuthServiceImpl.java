@@ -3,6 +3,7 @@ package com.springboot.wmproject.services.AuthServices.AuthImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.*;
+import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
@@ -51,6 +52,15 @@ public class AuthServiceImpl implements AuthService {
         this.teamService = teamService;
     }
 
+
+    @Override
+    @Transactional
+    public String staffDelete(int id) {
+        EmployeeAccountDTO employeeAccountDTO =  employeeAccountService.getEmployeeAccountByEmployeeId(id);
+        employeeService.delete(id);
+        employeeAccountService.delete(employeeAccountDTO.getId());
+        return "Employee Deleted Successfully ";
+    }
 
     @Override
     public String employeeLogin(LoginDTO loginDTO) {

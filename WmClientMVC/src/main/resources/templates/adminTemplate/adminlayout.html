@@ -309,24 +309,16 @@
                     <p>Customers</p>
                   </a>
                 </li>
-
-
               </th:block>
 
-              <th:block th:if="${ #authorization.expression('hasRole(''ORGANIZE'')')}"}>
-                <li class="nav-item">
-                  <a th:href="@{/staff/teams}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>ORDER</p>
-                  </a>
-                </li>
+
               </th:block>
 
               <th:block th:if="${ #authorization.expression('hasRole(''SALE'')')}"}>
                 <li class="nav-item">
-                  <a th:href="@{/staff/teams}" class="nav-link">
+                  <a th:href="@{/staff/customers}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>CUSTOMER</p>
+                    <p>Customers</p>
                   </a>
                 </li>
               </th:block>
@@ -601,32 +593,16 @@
 
 <!-- AdminLTE for demo purposes -->
 
-<!--<script src="/adminStatic/plugins/jquery/jquery.min.js"></script>-->
+<script src="/adminStatic/plugins/jquery/jquery.min.js"></script>
 <!--&lt;!&ndash; Bootstrap &ndash;&gt;-->
-<!--<script src="/adminStatic/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>-->
+<script src="/adminStatic/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!--&lt;!&ndash; jQuery UI &ndash;&gt;-->
-<!--<script src="/adminStatic/plugins/jquery-ui/jquery-ui.min.js"></script>-->
+<script src="/adminStatic/plugins/jquery-ui/jquery-ui.min.js"></script>
 <!-- AdminLTE App -->
 <script src="/adminStatic/dist/js/adminlte.min.js"></script>
 <!-- fullCalendar 2.2.5 -->
 <script src=" /adminStatic/plugins/moment/moment.min.js"></script>
 <script>
-  // setInterval(function() {
-  //   $.ajax({
-  //     url: "/check-session",
-  //     method: "GET",
-  //     contentType: 'application/json; charset=utf-8',
-  //     success: function(data){
-  //       if (data && data.length > 0) {
-  //         window.location.replace("/login");
-  //       }
-  //     },
-  //     error: function (data) {
-  //       console.log("error");
-  //       console.log(data);
-  //     }
-  //   })
-  // }, 1800000); //30 minutes
 </script>
 <th:block layout:fragment="optional"></th:block>
 </body>
