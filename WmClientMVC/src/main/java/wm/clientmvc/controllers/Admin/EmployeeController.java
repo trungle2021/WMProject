@@ -130,7 +130,7 @@ public class EmployeeController {
 
     @GetMapping("/update/{id}")
     public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
-
+        ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTypeTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
         BindingResult result = (BindingResult) model.asMap().get("result");
         if(result != null){
             model.addAttribute("result",result);
@@ -143,6 +143,15 @@ public class EmployeeController {
                     null,
                     token,
                     RegisterDTO.class);
+
+            List<OrganizeTeamDTO> teamDTOList = APIHelper.makeApiCall(
+                    api_teams_all,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseTypeTeam
+            );
+            model.addAttribute("teamList", teamDTOList);
             model.addAttribute("message",model.asMap().get("message"));
             model.addAttribute("registerDTO",registerDTO);
             model.addAttribute("errorMessages",model.asMap().get("errorMessages"));

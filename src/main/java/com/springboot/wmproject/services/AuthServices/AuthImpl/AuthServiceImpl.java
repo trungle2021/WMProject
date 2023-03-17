@@ -237,7 +237,7 @@ public class AuthServiceImpl implements AuthService {
         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
         boolean phoneHasChanged = !empExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !empExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
-        boolean userNameHasChanged = !empExist.getPhone().equalsIgnoreCase(registerDTO.getPhone());
+        boolean userNameHasChanged = !empHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername());
         boolean leaderHasChanged = empExist.getIsLeader() != registerDTO.getIsLeader();
 
 
@@ -344,7 +344,7 @@ public class AuthServiceImpl implements AuthService {
         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
         boolean phoneHasChanged = !cusExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !cusExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
-        boolean userNameHasChanged = !cusExist.getPhone().equalsIgnoreCase(registerDTO.getPhone());
+        boolean userNameHasChanged = !cusHasAccount.getUsername().equalsIgnoreCase(registerDTO.getPhone());
 
 
         if(phoneHasChanged){
