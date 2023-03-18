@@ -25,13 +25,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>UPDATE CUSTOMER</h1>
+                            <h1>Update Profile</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/customers/">Customer Management</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/customers/update">Update</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/customers/getAll">Customer Management</a></li>
                             </ol>
                         </div>
                     </div>
@@ -50,13 +49,13 @@
                     <li style="color: green" th:text="${message}"></li>
                 </th:block>
 
-                <form method="post" th:action="@{/staff/employees/update}" th:object="${registerDTO} "
+                <form method="post" th:action="@{/staff/customers/update}" th:object="${registerDTO} "
                       enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-row">
 
-                                <input type="hidden" class="form-control" th:field="*{customerId}" th:value="*{customerId}">
+                                <input type="hidden" class="form-control" th:field="*{getId()}" th:value="*{getId()}">
 
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">First Name:</label>
@@ -97,8 +96,6 @@
 
                                 </div>
 
-
-
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">Phone:</label>
                                     <input type="text" class="form-control" th:field="*{phone}">
@@ -108,11 +105,6 @@
                                         </th:block>
                                     </ul>
                                 </div>
-
-
-
-
-
 
                                 <div class="form-group col-md-4 offset-1 mt-2">
                                     <label >Gender</label><br>
@@ -151,9 +143,7 @@
                                     </ul>
                                 </div>
                                 <div class="modal-footer col-md-12">
-                                    <a th:href="@{/staff/customers}" class="btn btn-secondary ">
-                                        Back
-                                    </a>
+                                    <a th:href="'javascript:window.history.back()'" class="btn btn-secondary">Back</a>
                                     <input type="submit" class="btn btn-primary" value="Update Profile">
                                 </div>
                             </div>

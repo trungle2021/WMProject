@@ -55,7 +55,6 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     @Override
     public OrganizeTeamDTO getOneOrganizeTeamById(int id) {
         OrganizeTeams organizeTeams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(id)));
-
         return mapToDTO(organizeTeams);
     }
 
@@ -78,11 +77,8 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
         int organizeTeamId=editOrganizeTeam.getId();
         OrganizeTeams checkOrganizeTeam=organizeTeamRepository.findById(organizeTeamId).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(organizeTeamId)));
         if(checkOrganizeTeam!=null){
-            OrganizeTeams organizeTeams=new OrganizeTeams();
-            organizeTeams.setId(editOrganizeTeam.getId());
-            organizeTeams.setTeamName(editOrganizeTeam.getTeamName());
-            organizeTeamRepository.save(organizeTeams);
-            return mapToDTO(organizeTeams);
+            checkOrganizeTeam.setTeamName(editOrganizeTeam.getTeamName());
+            return mapToDTO(organizeTeamRepository.save(checkOrganizeTeam));
         }
         return null;
     }

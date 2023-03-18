@@ -35,6 +35,12 @@ public class MVCSecurity {
                 .requestMatchers("/staff/employees/getAll").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/employees/update/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
                 .requestMatchers("/staff/employees/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
+                //TEAM
+                .requestMatchers("/staff/teams/create").hasAnyRole("ADMIN","ANONYMOUS")
+                .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/getAll").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/update/**").hasAnyRole("ADMIN","ANONYMOUS")
+                .requestMatchers("/staff/teams/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //EMPLOYEE ACCOUNT
                 .requestMatchers("/staff/employeeAccounts/create").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/employeeAccounts/getOne/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
@@ -73,12 +79,7 @@ public class MVCSecurity {
                 .requestMatchers("/staff/venues/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //MATERIAL
                 .requestMatchers("/staff/materials/**").hasAnyRole("ADMIN","ANONYMOUS")
-                //TEAM
-                .requestMatchers("/staff/teams/create").hasAnyRole("ADMIN","ANONYMOUS")
-                .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
-                .requestMatchers("/staff/teams/getAll").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
-                .requestMatchers("/staff/teams/update/**").hasAnyRole("ADMIN","ANONYMOUS")
-                .requestMatchers("/staff/teams/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
+
                 //PERSONAL PERMISSION
                 .requestMatchers("/staff/organize/**").hasAnyRole("ORGANIZE","ANONYMOUS")
                 .requestMatchers("/staff/sale/**").hasAnyRole("SALE","ANONYMOUS")

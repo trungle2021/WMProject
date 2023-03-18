@@ -176,7 +176,7 @@
           <img th:src="${#authentication.getPrincipal().getAvatar()}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-          <a href="#" class="d-block" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+          <a th:href="@{/staff/employees/update/{id}(id=${#authentication.getPrincipal().getUserId()})}" class="d-block" th:text="${#authentication.getPrincipal().getFullName()}"></a>
         </div>
       </div>
 
@@ -297,20 +297,27 @@
 
               <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}"}>
                 <li class="nav-item">
-                  <a th:href="@{/staff/teams}" class="nav-link">
+                  <a th:href="@{/staff/employees/getAll}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>Employees & Teams</p>
+                    <p>Employees</p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a th:href="@{/staff/customers}" class="nav-link">
+                  <a th:href="@{/staff/teams/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Teams</p>
+                  </a>
+                </li>
+
+
+                <li class="nav-item">
+                  <a th:href="@{/staff/customers/getAll}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Customers</p>
                   </a>
                 </li>
               </th:block>
-
 
               </th:block>
 
@@ -319,6 +326,15 @@
                   <a th:href="@{/staff/customers}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Customers</p>
+                  </a>
+                </li>
+              </th:block>
+
+              <th:block th:if="${ #authorization.expression('hasRole(''ORGANIZE'')')}"}>
+                <li class="nav-item">
+                  <a th:href="@{/staff/teams/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Teams</p>
                   </a>
                 </li>
               </th:block>

@@ -30,5 +30,8 @@ public class PasswordResetToken {
     @ManyToOne
     @JoinColumn(name = "customer_accounts_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
     private CustomerAccounts customerAccountsByCustomerAccountsId;
+//    @ManyToOne
+//    @JoinColumn(name = "employee_accounts_id", referencedColumnName = "id", nullable = false,insertable = false,updatable = false)
+//    private CustomerAccounts  employeeAccountByEmployeeAccountsId;
 
 }

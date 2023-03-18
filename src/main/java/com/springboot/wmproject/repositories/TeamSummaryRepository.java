@@ -16,11 +16,11 @@ public interface TeamSummaryRepository extends JpaRepository<TeamSummary,Integer
                             Q2.id As emp_id
                         FROM
                             (SELECT
-                                team_id, team_name, COUNT(*) AS Total
-                            FROM
-                                employees e
-                            JOIN organize_teams o ON e.team_id = o.id
-                            GROUP BY team_name) AS Q1
+                                  o.id as team_id, o.team_name as team_name, count(e.id) as Total
+                              FROM
+                                  employees e
+                              RIGHT JOIN organize_teams o ON e.team_id = o.id
+                              GROUP BY team_name) AS Q1
                                 LEFT JOIN
                             (SELECT
                                 e.team_id, o.team_name, e.name, e.id
