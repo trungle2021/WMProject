@@ -91,14 +91,13 @@ public class VenueServiceImpl implements VenueService {
         if (venueId != 0) {
             Venues checkVenue = venueRepository.findById(venueId).orElseThrow(() -> new ResourceNotFoundException("Venues", "id", String.valueOf(venueId)));
             if (checkVenue != null) {
-                Venues venues = new Venues();
-                venues.setId(venueDTO.getId());
-                venues.setVenueName(venueDTO.getVenueName());
-                venues.setMinPeople(venueDTO.getMinPeople());
-                venues.setMaxPeople(venueDTO.getMaxPeople());
-                venues.setPrice(venueDTO.getPrice());
-                venueRepository.save(venues);
-                return mapToDTO(venues);
+                checkVenue.setVenueName(venueDTO.getVenueName());
+                checkVenue.setMinPeople(venueDTO.getMinPeople());
+                checkVenue.setMaxPeople(venueDTO.getMaxPeople());
+                checkVenue.setPrice(venueDTO.getPrice());
+                checkVenue.setActive(venueDTO.isActive());
+                venueRepository.save(checkVenue);
+                return mapToDTO(checkVenue);
             }
         }
         return null;
