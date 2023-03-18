@@ -143,7 +143,7 @@ public class FoodController {
             try {
                 MaterialDTO materialDTO=new MaterialDTO();
                 materialDTO.setMaterialName(material1);
-                materialDTO.setCost(Double.parseDouble(cost1));
+                materialDTO.setCount(Double.parseDouble(cost1));
                 materialDTO.setUnit(unit1);
                 materialDTO.setFoodId(foodDTO.getId());
                 APIHelper.makeApiCall(
@@ -177,7 +177,7 @@ public class FoodController {
             try {
                 MaterialDTO materialDTO=new MaterialDTO();
                 materialDTO.setMaterialName(material2);
-                materialDTO.setCost(Double.parseDouble(cost2));
+                materialDTO.setCount(Double.parseDouble(cost2));
                 materialDTO.setUnit(unit2);
                 materialDTO.setFoodId(foodDTO.getId());
                 APIHelper.makeApiCall(
@@ -211,7 +211,7 @@ public class FoodController {
             try {
                 MaterialDTO materialDTO=new MaterialDTO();
                 materialDTO.setMaterialName(material3);
-                materialDTO.setCost(Double.parseDouble(cost3));
+                materialDTO.setCount(Double.parseDouble(cost3));
                 materialDTO.setUnit(unit3);
                 materialDTO.setFoodId(foodDTO.getId());
                 APIHelper.makeApiCall(

@@ -20,17 +20,25 @@ public class MaterialController {
 
     private MaterialService materialService;
     @Autowired
-
     public MaterialController(MaterialService materialService) {
         this.materialService = materialService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping
     public ResponseEntity<List<MaterialDTO>> getAll()
     {
         return ResponseEntity.ok(materialService.getAllMaterial());
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/byorder/{orderId}")
+    public ResponseEntity<List<MaterialDTO>> getAllbyOrderId(@PathVariable Integer orderId)
+    {
+    List<MaterialDTO>list =materialService.getAllMaterialByOrder(orderId);
+        return ResponseEntity.ok(list);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
