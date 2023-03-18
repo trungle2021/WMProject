@@ -28,6 +28,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public String findRoleByEmployeeID(int empID) {
+        EmployeeDTO employeeDTO = getEmployeeById(empID);
+        return findRoleByEmployeeID(empID);
+    }
+
+    @Override
     public List<EmployeeDTO> getAllEmployees() {
         //find all
         List<Employees> employeesList = employeeRepository.findAll();

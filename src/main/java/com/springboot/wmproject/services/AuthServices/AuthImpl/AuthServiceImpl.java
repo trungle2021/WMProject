@@ -54,6 +54,11 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
+    public String findRoleByEmployeeID(int empID) {
+        return employeeService.findRoleByEmployeeID(empID);
+    }
+
+    @Override
     @Transactional
     public String staffDelete(int id) {
         EmployeeAccountDTO employeeAccountDTO =  employeeAccountService.getEmployeeAccountByEmployeeId(id);
@@ -326,6 +331,7 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setSalary(registerDTO.getSalary());
         employeeDTO.setIsLeader(isLeader_intValue);
+//        employeeDTO.setTeam_id(team_id_intValue);
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());
         employeeDTO.setId(empExist.getId());
@@ -370,7 +376,7 @@ public class AuthServiceImpl implements AuthService {
         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
         boolean phoneHasChanged = !cusExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !cusExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
-        boolean userNameHasChanged = !cusHasAccount.getUsername().equalsIgnoreCase(registerDTO.getPhone());
+        boolean userNameHasChanged = !cusHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername());
 
 
         if(phoneHasChanged){
@@ -437,6 +443,7 @@ public class AuthServiceImpl implements AuthService {
         EmployeeDTO employeeDTO = employeeService.getEmployeeById(empID);
         EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeId(empID);
         RegisterDTO registerDTO = new RegisterDTO();
+        registerDTO.setId(employeeDTO.getId());
         registerDTO.setName(employeeDTO.getName());
         registerDTO.setAddress(employeeDTO.getAddress());
         registerDTO.setPhone(employeeDTO.getPhone());
@@ -458,6 +465,7 @@ public class AuthServiceImpl implements AuthService {
         CustomerDTO customerDTO = customerService.getCustomerById(customerID);
         CustomerAccountDTO customerAccountDTO = customerAccountService.getAccountByCustomerId(customerID);
         RegisterCustomerDTO registerDTO = new RegisterCustomerDTO();
+        registerDTO.setId(customerDTO.getId());
         registerDTO.setFirst_name(customerDTO.getFirst_name());
         registerDTO.setLast_name(customerDTO.getLast_name());
         registerDTO.setAddress(customerDTO.getAddress());

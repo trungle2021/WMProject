@@ -23,4 +23,7 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
     @Query("SELECT e from Employees e where e.id = :id and e.is_deleted = 0")
     Employees getEmployeeById(int id);
 
+    @Query("select ea.role from Employees e join EmployeeAccounts ea on e.id = ea.employeeId where e.id = :empID ")
+    String findRoleByEmployeeID(int empID);
+
 }

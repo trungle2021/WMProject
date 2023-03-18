@@ -44,11 +44,11 @@ public class CustomerServiceImpl implements CustomerService
     @Transactional
     public CustomerDTO create(CustomerDTO customerDTO) {
         Customers customers = new Customers();
-        customers.setFirst_name(customerDTO.getFirst_name());
-        customers.setLast_name(customerDTO.getLast_name());
-        customers.setEmail(customerDTO.getEmail());
-        customers.setAddress(customerDTO.getAddress());
-        customers.setPhone(customerDTO.getPhone());
+        customers.setFirst_name(customerDTO.getFirst_name().trim());
+        customers.setLast_name(customerDTO.getLast_name().trim());
+        customers.setEmail(customerDTO.getEmail().trim());
+        customers.setAddress(customerDTO.getAddress().trim());
+        customers.setPhone(customerDTO.getPhone().trim());
         customers.setGender(customerDTO.getGender());
         customers.setAvatar(customerDTO.getAvatar());
         return mapToDto(customerRepository.save(customers));
@@ -63,10 +63,10 @@ public class CustomerServiceImpl implements CustomerService
         }
             //check if customer exist
             Customers checkCustomer=customerRepository.findById(customerId).orElseThrow(()->new ResourceNotFoundException("Customer","id",String.valueOf(customerId)));
-                checkCustomer.setFirst_name(dto.getFirst_name());
-                checkCustomer.setLast_name(dto.getLast_name());
-                checkCustomer.setAddress(dto.getAddress());
-                checkCustomer.setPhone(dto.getPhone());
+                checkCustomer.setFirst_name(dto.getFirst_name().trim());
+                checkCustomer.setLast_name(dto.getLast_name().trim());
+                checkCustomer.setAddress(dto.getAddress().trim());
+                checkCustomer.setPhone(dto.getPhone().trim());
                 checkCustomer.setGender(dto.getGender());
                 checkCustomer.setEmail(dto.getEmail());
                 if(dto.getAvatar() != null){

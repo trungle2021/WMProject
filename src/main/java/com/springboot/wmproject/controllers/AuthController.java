@@ -89,6 +89,14 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = {"/employees/findRoleByEmployeeID/{id}"})
+    public ResponseEntity<String> findRoleByEmployeeID(@PathVariable int id) throws JsonProcessingException {
+        String response = authService.findRoleByEmployeeID(id);
+        return ResponseEntity.ok(response);
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/customers/getOne/RegisterCustomer/{id}"})

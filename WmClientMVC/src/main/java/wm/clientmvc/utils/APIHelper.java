@@ -3,6 +3,7 @@ package wm.clientmvc.utils;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.core.ParameterizedTypeReference;
@@ -48,6 +49,19 @@ public class APIHelper {
 
             ResponseEntity<List<T>> responseEntity = restTemplate.exchange(url, method, requestEntity, responseType);
             return responseEntity.getBody();
+    }
+
+
+    public static String getCookie(HttpServletRequest request,String cookieName){
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(cookieName)) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
     }
 
 

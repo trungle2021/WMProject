@@ -6,6 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,13 +21,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.EmployeeDTO;
 import wm.clientmvc.DTO.OrganizeTeamDTO;
 import wm.clientmvc.DTO.RegisterDTO;
+import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.ClientUtilFunction;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static wm.clientmvc.utils.SD_CLIENT.*;
 
@@ -227,6 +230,11 @@ public class EmployeeController {
     @PostMapping("/update")
     public String update(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
 
+        if (result.hasErrors()) {
+            attributes.addFlashAttribute("result",result);
+            attributes.addFlashAttribute("registerDTO",registerDTO);
+            return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
+        }
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
         if(!file.isEmpty()){
@@ -242,12 +250,12 @@ public class EmployeeController {
                     token,
                     RegisterDTO.class
             );
-
-            if (result.hasErrors()) {
-                attributes.addFlashAttribute("result",result);
-                attributes.addFlashAttribute("registerDTO",registerDTO);
-                return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+            if(response_.getEmployeeId() == customUserDetails.getUserId().intValue()){
+                ((CustomUserDetails) authentication.getPrincipal()).setFullName(response_.getName());
             }
+
 
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();

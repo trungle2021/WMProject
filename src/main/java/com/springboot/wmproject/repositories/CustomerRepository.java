@@ -16,3 +16,5 @@ public interface CustomerRepository extends JpaRepository<Customers,Integer> {
     @Query("select c from Customers c where c.email = :email")
     List<Customers> checkEmailExists(String email);
 }
+
+
