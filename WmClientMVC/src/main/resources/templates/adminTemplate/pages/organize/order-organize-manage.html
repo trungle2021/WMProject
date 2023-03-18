@@ -18,9 +18,6 @@
 <section layout:fragment="content"  class="content-wrapper">
 
   <br><div class="content-header"> <h5>Order Management</h5>
-  <a th:href="@{/staff/orders/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Warning Order</a>
-  <a th:href="@{/staff/orders/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Canceling Order</a>
-  <a th:href="@{/staff/orders/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Deposited Order</a>
   <a th:href="@{/staff/orders/showall}" class="btn btn-success">All Order</a>
 
 </div>
@@ -59,7 +56,7 @@
               <td th:text="${c.getOrderStatus()}"></td>
               <td th:text="${c.getTimeHappen()}"></td>
               <td th:text="${c.getPartTimeEmpAmount()}"></td>
-              <td><a th:href="@{/staff/material/detail/{id}(id=${c.getId()})}">Material Detail</a></td>
+              <td><a th:href="@{/staff/materials/detail/{id}(id=${c.getId()})}">Material Detail</a></td>
             </tr>
             </tbody>
           </table>

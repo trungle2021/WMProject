@@ -35,13 +35,21 @@ public class OrderController {
     }
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/byStatus/{status}")
+    public ResponseEntity<List<OrderDTO>> getAllOrderByStatus(@PathVariable String status)
+    {
+        return  ResponseEntity.ok(orderService.getAllByOrderStatus(status));
+
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/bybookingEmp/{empId}")
     public ResponseEntity<List<OrderDTO>> getAllOrderbyBooking(@PathVariable Integer empId)
     {
         return  ResponseEntity.ok(orderService.getAllByBookingEmp(empId));
 
     }
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byTeam/empId/{empId}")
     public ResponseEntity<List<OrderDTO>> getAllOrderbyTeam(@PathVariable Integer empId)
