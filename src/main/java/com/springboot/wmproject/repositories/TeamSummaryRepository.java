@@ -8,21 +8,21 @@ import java.util.List;
 
 public interface TeamSummaryRepository extends JpaRepository<TeamSummary,Integer> {
     String getSummaryTeamOrganization = """
-            SELECT\s
+            SELECT
                             Q1.team_id,
                             Q1.team_name AS team_name,
                             Q1.Total AS total_members,
                             Q2.name AS leader_name,
                             Q2.id As emp_id
                         FROM
-                            (SELECT\s
-                                team_id, team_name, COUNT(*) AS Total
-                            FROM
-                                employees e
-                            JOIN organize_teams o ON e.team_id = o.id
-                            GROUP BY team_name) AS Q1
+                            (SELECT
+                                  o.id as team_id, o.team_name as team_name, count(e.id) as Total
+                              FROM
+                                  employees e
+                              RIGHT JOIN organize_teams o ON e.team_id = o.id
+                              GROUP BY team_name) AS Q1
                                 LEFT JOIN
-                            (SELECT\s
+                            (SELECT
                                 e.team_id, o.team_name, e.name, e.id
                             FROM
                                 employees e

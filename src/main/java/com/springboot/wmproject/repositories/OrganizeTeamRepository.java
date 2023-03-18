@@ -16,4 +16,6 @@ public interface OrganizeTeamRepository extends JpaRepository<OrganizeTeams,Inte
     List<OrganizeTeams> searchOrganizeTeamsByName(String name);
 
 
+
+
 }

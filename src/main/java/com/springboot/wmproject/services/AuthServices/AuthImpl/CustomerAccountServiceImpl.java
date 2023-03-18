@@ -95,7 +95,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         //check employee account exist
         CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
         //if exist update
-        customerAccounts.setUsername(customerAccountDTO.getUsername());
+        customerAccounts.setUsername(customerAccountDTO.getUsername().trim());
         if(!customerAccountDTO.getPassword().equals("") || !customerAccountDTO.getPassword().isEmpty() || !customerAccountDTO.getPassword().isBlank()){
             customerAccounts.setPassword(customerAccountDTO.getPassword());
         }

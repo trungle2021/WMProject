@@ -62,8 +62,7 @@ public class Employees {
     private Integer is_deleted;
 
 
-
-    @OneToMany(mappedBy = "employeesByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "employeesByEmployeeId")
     private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
 
     @ManyToOne

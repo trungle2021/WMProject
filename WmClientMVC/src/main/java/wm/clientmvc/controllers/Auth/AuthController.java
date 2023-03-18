@@ -152,7 +152,6 @@ public class AuthController {
         CustomerDTO customerDTO = new CustomerDTO();
         String avatar = "";
 
-
         try {
             JWTAuthResponse jwtAuthResponse = APIHelper.makeApiCall(
                     apiUrl,
@@ -181,7 +180,7 @@ public class AuthController {
 
                     if (apiUrl.contains("/api/auth/customers")) {
                         customerDTO = APIHelper.makeApiCall(
-                                api_getOne_customer + userID,
+                                api_customers_getOne + userID,
                                 HttpMethod.GET,
                                 null,
                                 token,
@@ -196,7 +195,7 @@ public class AuthController {
 
                     }else if(apiUrl.contains("/api/auth/employees")){
                         employeeDTO = APIHelper.makeApiCall(
-                                api_getOne_employee + userID,
+                                api_employees_getOne + userID,
                                 HttpMethod.GET,
                                 null,
                                 token,

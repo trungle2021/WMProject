@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface EmployeeService {
+    String findRoleByEmployeeID(int empID);
     List<EmployeeDTO> getAllEmployees();
     EmployeeDTO getEmployeeById(int id);
     EmployeeDTO create(EmployeeDTO newEmployeeDTO);

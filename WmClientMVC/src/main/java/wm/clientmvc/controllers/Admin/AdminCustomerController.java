@@ -16,9 +16,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.CustomerDTO;
-import wm.clientmvc.DTO.OrganizeTeamDTO;
 import wm.clientmvc.DTO.RegisterCustomerDTO;
-import wm.clientmvc.DTO.RegisterDTO;
 import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.ClientUtilFunction;
 
@@ -31,19 +29,15 @@ import static wm.clientmvc.utils.SD_CLIENT.*;
 @Controller
 @RequestMapping("staff/customers")
 public class AdminCustomerController {
-    @GetMapping(value = {"/","/index",""})
+    @GetMapping(value = {"/getAll"})
     public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ParameterizedTypeReference<List<CustomerDTO>> responseTypeEmployee = new ParameterizedTypeReference<List<CustomerDTO>>() {
         };
 
-        String msg = request.getParameter("msg");
-        if (msg != null) {
-            model.addAttribute("message", msg);
-        }
 
         try {
             List<CustomerDTO> customerDTOS = APIHelper.makeApiCall(
-                    api_getAll_customer,
+                    api_customers_getAll,
                     HttpMethod.GET,
                     null,
                     token,
@@ -102,6 +96,7 @@ public class AdminCustomerController {
             return "redirect:/staff/customers/create";
         }
 
+
         try {
             RegisterCustomerDTO response_ =  APIHelper.makeApiCall(
                     api_customerRegisterUrl,
@@ -144,7 +139,7 @@ public class AdminCustomerController {
         }
         try {
             RegisterCustomerDTO registerDTO = APIHelper.makeApiCall(
-                    api_getOne_RegisterCustomer + id,
+                    api_customers_getOne_RegisterCustomer + id,
                     HttpMethod.GET,
                     null,
                     token,
@@ -153,21 +148,32 @@ public class AdminCustomerController {
             model.addAttribute("registerDTO",registerDTO);
             model.addAttribute("errorMessages",model.asMap().get("errorMessages"));
 
-        } catch (HttpClientErrorException ex) {
-            String responseError = ex.getResponseBodyAsString();
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = mapper.readValue(responseError, Map.class);
-            String message = map.get("message").toString();
-
-            String status = String.valueOf(ex.getStatusCode().value());
-            attributes.addFlashAttribute("errorMessage", message);
-            return "redirect:/404-not-found";
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            String message = "";
+            String responseError = e.getResponseBodyAsString();
+            String status = String.valueOf(e.getStatusCode().value());
+            if(!responseError.isEmpty()){
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> map = mapper.readValue(responseError, Map.class);
+                message = map.get("message").toString();
+            }
+            switch (status) {
+                case "401":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/staff/login";
+                case "403":
+                    return "/access-denied";
+                case "404":
+                    attributes.addFlashAttribute("errorMessage", message);
+                    return "redirect:/404-not-found";
+                default:
+                    model.addAttribute("message",message);
+                    return "adminTemplate/error";
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-//        catch(HttpServerErrorException e){
-//            return "redirect:/error";
-//        }
+
         return "adminTemplate/pages/customers/update";
     }
 
@@ -183,7 +189,7 @@ public class AdminCustomerController {
 
         try {
             RegisterCustomerDTO response_ =  APIHelper.makeApiCall(
-                    api_update_customer,
+                    api_customers_update,
                     HttpMethod.PUT,
                     registerDTO,
                     token,
@@ -211,9 +217,7 @@ public class AdminCustomerController {
             return "redirect:/staff/customers/update/" + registerDTO.getCustomerId();
 
         }
-//        catch(HttpServerErrorException e){
-//            return "redirect:/error";
-//        }
+
 
         attributes.addFlashAttribute("message","Update Employee Success");
         return "redirect:/staff/customers/update/" + registerDTO.getCustomerId();
