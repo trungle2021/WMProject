@@ -51,12 +51,10 @@ public class FoodImgServiceImp implements FoodImgService {
         if(foodImageDTO!=null){
             FoodImages foodImages=foodImgRepository.findById(foodImageDTO.getId()).orElseThrow(()->new ResourceNotFoundException("Food Image","Id",String.valueOf(foodImageDTO.getId())));
             if(foodImages!=null){
-                FoodImages updateFoodImg=new FoodImages();
-                updateFoodImg.setId(foodImageDTO.getId());
-                updateFoodImg.setUrl(foodImageDTO.getUrl());
-                updateFoodImg.setFoodId(foodImageDTO.getFoodId());
-                foodImgRepository.save(updateFoodImg);
-                return mapToDTO(updateFoodImg);
+                foodImages.setUrl(foodImageDTO.getUrl());
+                foodImages.setFoodId(foodImageDTO.getFoodId());
+                foodImgRepository.save(foodImages);
+                return mapToDTO(foodImages);
             }
         }
         return null;

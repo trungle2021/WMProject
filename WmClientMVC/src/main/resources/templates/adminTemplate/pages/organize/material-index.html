@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Detail</title>
+  <link rel="stylesheet" href="/css/khangstyleadmin.css">
+
+</head>
+<body>
+<section layout:fragment="content"  class="content-wrapper">
+
+
+
+
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Material Management</h1>
+        </div>
+        <div class="col-sm-6">
+          <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <li class="breadcrumb-item active">Text Editors</li>
+          </ol>
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+
+  <h5 class="p-2">To day is: <p th:text="${today}"></p></h5>
+  <div class="d-flex flex-row">
+    <form class="p-2" th:action="@{/staff/materials/detail/searchId}" method="post">
+      <input type="text" name="orderId">
+      <input type="submit" value="Search">
+    </form>
+
+    <form class="p-2" th:action="@{/staff/materials/detail/searchDate}" method="post">
+      <input type="date" name="date">
+      <input type="submit" value="Search">
+    </form>
+  </div>
+  <div>
+    <h4 th:if="${message}!=null" th:text="${message}"> </h4>
+  </div>
+
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+  <script>$('#myModal').on('shown.bs.modal', function () {
+
+  })</script>
+</section>
+</body>
+</html>

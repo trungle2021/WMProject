@@ -327,6 +327,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
 
         ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<>() {
         };
+        //confirm only
         String url = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
         try {
             List<OrderDTO> orderList = APIHelper.makeApiCall(url,
@@ -481,9 +482,10 @@ ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTy
                     responseType
             );
             Integer partTimeNum=0;
+            //defaul team leader +2 chef
             if(tableNum/4 -empList.size()>0)
-            {partTimeNum= tableNum/4 -empList.size();}
-            else{partTimeNum=0;}
+            {partTimeNum= tableNum/4 -empList.size()+3;}
+            else{partTimeNum=3;}
             return partTimeNum;
         } catch (IOException e) {
             throw new RuntimeException(e);

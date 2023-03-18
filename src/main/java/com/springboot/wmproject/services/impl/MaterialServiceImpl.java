@@ -3,29 +3,37 @@ package com.springboot.wmproject.services.impl;
 import com.springboot.wmproject.DTO.MaterialDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
 import com.springboot.wmproject.DTO.VenueDTO;
-import com.springboot.wmproject.entities.Materials;
-import com.springboot.wmproject.entities.Orders;
-import com.springboot.wmproject.entities.Venues;
+import com.springboot.wmproject.entities.*;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.FoodRepository;
 import com.springboot.wmproject.repositories.MaterialRepository;
+import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.services.MaterialService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.springboot.wmproject.utils.SD.orderStatusConfirm;
 
 @Service
 public class MaterialServiceImpl  implements MaterialService {
     private MaterialRepository materialRepository;
+    private OrderRepository orderrepo;
     private ModelMapper modelMapper;
+
     @Autowired
-    public MaterialServiceImpl(MaterialRepository materialRepository, ModelMapper modelMapper) {
+    public MaterialServiceImpl(MaterialRepository materialRepository, OrderRepository orderrepo, ModelMapper modelMapper) {
         this.materialRepository = materialRepository;
+        this.orderrepo = orderrepo;
         this.modelMapper = modelMapper;
     }
+
+
+
 
     @Override
     public List<MaterialDTO> getAllMaterialByFoodId(Integer foodId) {
@@ -38,6 +46,53 @@ public class MaterialServiceImpl  implements MaterialService {
     @Override
     public List<MaterialDTO> getAllMaterial() {
         return materialRepository.findAll().stream().map(materials -> mapToDTO(materials)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MaterialDTO> getAllMaterialByOrder(Integer orderId) {
+       Orders myOrder= orderrepo.findById(orderId).orElseThrow(()->new ResourceNotFoundException("Orders","id",String.valueOf(orderId)));
+try {
+    if (myOrder.getOrderStatus().equalsIgnoreCase(orderStatusConfirm)) {
+        List<Materials> list = new ArrayList<>();
+        List<Food> foodList = new ArrayList<>();
+        for (FoodDetails fdt : myOrder.getFoodDetailsById()) {
+            Food test=fdt.getFoodByFoodId();
+            foodList.add(test);
+        }
+
+        for (Food food : foodList) {
+            for (Materials foodMaterial : food.getMaterialsById()) {
+                //get Id material
+                String foodMaterialCode = foodMaterial.getMaterialCode();
+                boolean materialExist = false;
+                //loop a new list
+                for (Materials material : list) {
+
+                    //exit?
+                    if (material.getMaterialCode().equalsIgnoreCase(foodMaterialCode)) {
+                        //change unit if ext
+                        material.setCount(material.getCount() + foodMaterial.getCount());
+                        materialExist = true;
+                        break;
+                    }
+
+                }
+                //add new if exit
+                if (!materialExist) {
+                    list.add(foodMaterial);
+                }
+            }
+
+        }
+        return list.stream().map(materials -> mapToDTO(materials)).collect(Collectors.toList());
+        //
+    }
+                }catch (Exception ex)
+            {
+                return null;
+            }
+
+        return null;
     }
 
     @Override

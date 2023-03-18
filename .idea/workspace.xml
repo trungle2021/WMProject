@@ -25,6 +25,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/EmployeeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/utils/SD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/utils/SD.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,10 +62,10 @@
         <option value="package.json" />
         <option value="JavaScript File" />
         <option value="CSS File" />
-        <option value="HTML File" />
         <option value="Interface" />
         <option value="Class" />
         <option value="AnnotationType" />
+
       </list>
     </option>
   </component>
@@ -269,6 +270,7 @@
       <workItem from="1679019089084" duration="30253000" />
       <workItem from="1679069693509" duration="10736000" />
       <workItem from="1679104494074" duration="18140000" />
+
     </task>
     <servers />
   </component>
@@ -296,6 +298,7 @@
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
           <line>57</line>
           <option name="timeStamp" value="19" />
+
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
@@ -322,6 +325,7 @@
           <line>60</line>
           <option name="timeStamp" value="279" />
         </line-breakpoint>
+
       </breakpoints>
     </breakpoint-manager>
     <pin-to-top-manager>
@@ -334,6 +338,7 @@
         <watch expression="authenticationManager" language="JAVA" />
         <watch expression="newOrder.orderDate" />
         <watch expression="jsonData" />
+        <watch expression="((FoodDetails)((org.hibernate.collection.spi.PersistentBag)myOrder.foodDetailsById).get(0)).foodByFoodId" custom="org.hibernate.collection.spi.PersistentBag,com.springboot.wmproject.entities.FoodDetails" />
       </configuration>
     </watches-manager>
   </component>

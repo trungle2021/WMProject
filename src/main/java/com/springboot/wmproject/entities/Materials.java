@@ -18,17 +18,20 @@ public class Materials {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
+    @Column(name = "material_code", nullable = true, length = 45)
+    private String materialCode;
+    @Basic
     @Column(name = "material_name", nullable = true, length = 45)
     private String materialName;
     @Basic
     @Column(name = "unit", nullable = true, length = 45)
-    private String unit;
+    private Double unit;
     @Basic
     @Column(name = "food_id", nullable = true)
     private int foodId;
     @Basic
-    @Column(name = "cost", nullable = true, precision = 2)
-    private BigDecimal cost;
+    @Column(name = "count", nullable = true, precision = 2)
+    private Double count;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "food_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Food foodByFoodId;

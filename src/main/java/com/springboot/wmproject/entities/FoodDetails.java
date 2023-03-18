@@ -20,7 +20,7 @@ public class FoodDetails {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Orders ordersByOrderId;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "food_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Food foodByFoodId;
 

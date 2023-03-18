@@ -1,5 +1,8 @@
 package wm.clientmvc.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Basic;
+import jakarta.persistence.FetchType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +23,15 @@ public class CustomerDTO {
     private String phone;
     private String email;
     private String gender;
+
+    private String email;
+    @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
     private String avatar;
+    private String avatarFromDB;
+    public String getAvatar() {
+        return this.avatar != null ? this.avatar : this.avatarFromDB;
+    }
 //    private Set<BookingDTO> bookings = new HashSet<>();
 //    private Set<OrderDTO> orders = new HashSet<>();
 
