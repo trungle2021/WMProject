@@ -10,6 +10,7 @@ import com.springboot.wmproject.services.AuthServices.PasswordResetTokenService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -30,6 +31,8 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
     }
 
     @Override
+    @Transactional
+
     public String create(int customerAccountId) {
         //create token
         String token = UUID.randomUUID().toString();
@@ -47,6 +50,8 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
     }
 
     @Override
+    @Transactional
+
     public void delete(String token) {
          PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token).orElseThrow(() -> new ResourceNotFoundException("PasswordToken","token",token));
         if(resetToken != null){

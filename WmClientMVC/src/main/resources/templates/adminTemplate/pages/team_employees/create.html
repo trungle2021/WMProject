@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <section layout:fragment="content">
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>CREATE EMPLOYEE</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/teams/">Employee
+                                    Management</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/employees/create">Create</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <div class="container">
+
+                <th:block th:if="${errorMessages != null}">
+                    <ul>
+                        <li th:each="error : ${errorMessages}" th:text="${error}" style="color: red"></li>
+                    </ul>
+                </th:block>
+
+                <th:block th:if="${message != null}">
+                    <li style="color: green" th:text="${message}"></li>
+                </th:block>
+
+                <form method="post" th:action="@{/staff/employees/create}" th:object="${registerDTO} "
+                      enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Full Name:</label>
+                                    <input type="text" class="form-control" th:field="*{name}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('name')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Address:</label>
+                                    <input type="text" class="form-control" th:field="*{address}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('address')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Email:</label>
+                                    <input type="text" class="form-control" th:field="*{email}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('email')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+
+                                </div>
+
+
+
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Phone:</label>
+                                    <input type="text" class="form-control" th:field="*{phone}">
+                                    <ul >
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('phone')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Join date:</label>
+                                    <input type="date" class="form-control" th:field="*{joinDate}" required th:attr="value=${#dates.format(joinDate, 'dd-MM-yyyy')}" >
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('joinDate')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Salary:</label>
+                                    <input type="text" class="form-control" th:field="*{salary}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('salary')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+
+                                <div class="form-group col-md-4 offset-1 mt-2">
+                                    <label >Gender</label><br>
+                                    <input type="radio" th:field="*{gender}" th:value="Male" th:checked="${registerDTO.setGender('Male')}"/> Male
+                                    <input type="radio" th:field="*{gender}" th:value="Female"/> Female
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Avatar:</label>
+                                    <input type="file" class="form-control" name="employee-create-pic">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <img>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Team:</label>
+                                    <select th:field="*{team_id}" class="form-control">
+                                        <th:block th:each="c:${teamList}">
+                                            <option th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+
+                                <div class="form-group col-md-4 offset-1 mt-2">
+                                    <label th:for="isLeader">Is Leader?</label><br>
+                                    <input type="radio" th:field="*{isLeader}" th:value="1"/> Yes
+                                    <input type="radio" th:field="*{isLeader}" th:value="0" th:checked="${registerDTO.setIsLeader(0)}"/> No
+                                </div>
+                                <div class="form-group col-md-12 mt-3">
+                                    <label class="col-form-label">Username:</label>
+                                    <input type="text" class="form-control" th:field="*{username}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('username')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Password:</label>
+                                    <input type="text" class="form-control" th:field="*{password}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('password')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="modal-footer col-md-12">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                    <input type="submit" class="btn btn-primary" value="Create">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </section>
+</div>
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+    <!-- Page specific script -->
+</section>
+</body>
+</html>

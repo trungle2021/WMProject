@@ -21,6 +21,7 @@ public class EmployeeDTO {
     private Integer isLeader;
     private Integer team_id;
     private String avatar;
+    private Integer is_deleted;
     private OrganizeTeamDTO organizeTeamsByTeamId;
     private List<EmployeeAccountDTO> employeeAccountsById;
 

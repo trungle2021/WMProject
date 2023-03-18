@@ -17,10 +17,10 @@ public class RegisterCustomerDTO {
 
     @NotEmpty
     @Size(max = 45)
-    private String firstname;
+    private String first_name;
     @NotEmpty
     @Size(max = 45)
-    private String lastname;
+    private String last_name;
     @NotEmpty
     @Size(max = 100)
     private String address;

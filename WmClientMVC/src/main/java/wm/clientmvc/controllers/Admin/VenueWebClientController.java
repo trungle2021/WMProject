@@ -34,7 +34,7 @@ import java.util.Map;
 public class VenueWebClientController {
 
 
-    @GetMapping("/")
+    @GetMapping("")
     public String GetAllVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         ParameterizedTypeReference<List<VenueDTO>> responseTypeVenue = new ParameterizedTypeReference<List<VenueDTO>>() {
         };
@@ -79,14 +79,15 @@ public class VenueWebClientController {
                     return "redirect:/404-not-found";
                 case "403":
                     return "redirect:/access-denied";
-
+                default:
+                    return "redirect:/staff/venues?msg="+message;
             }
         }
         return "adminTemplate/pages/gallery";
     }
 
 
-    @GetMapping("/venues/delete")
+    @GetMapping("/delete")
     public String deleteVenue(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         int id = Integer.parseInt(request.getParameter("imgId"));
         try {
@@ -113,7 +114,8 @@ public class VenueWebClientController {
                     return "redirect:/404-not-found";
                 case "403":
                     return "redirect:/access-denied";
-
+                default:
+                    return "redirect:/staff/venues?msg="+message;
             }
         }
         return "redirect:/staff/venues?msg=Success";
@@ -145,7 +147,8 @@ public class VenueWebClientController {
                     return "redirect:/404-not-found";
                 case "403":
                     return "redirect:/access-denied";
-
+                default:
+                    return "redirect:/staff/venues?msg="+message;
             }
         }
         return "redirect:/staff/venues?msg=Success";
@@ -192,14 +195,18 @@ public class VenueWebClientController {
                     return "redirect:/404-not-found";
                 case "403":
                     return "redirect:/access-denied";
-
+                default:
+                    return "redirect:/staff/venues?msg="+message;
             }
         }
         return "redirect:/staff/venues?msg=Success";
     }
 
-    @PostMapping("/venue/update")
-    public String updateVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+    @PostMapping("/update")
+    public String updateVenue(@RequestParam("check")Boolean checkActive,@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        if(checkActive!=null){
+            venueDTO.setActive(checkActive);
+        }
         try {
             APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venues/update",
@@ -224,7 +231,8 @@ public class VenueWebClientController {
                     return "redirect:/404-not-found";
                 case "403":
                     return "redirect:/access-denied";
-
+                default:
+                    return "redirect:/staff/venues?msg="+message;
             }
         }
         return "redirect:/staff/venues?msg=Success";

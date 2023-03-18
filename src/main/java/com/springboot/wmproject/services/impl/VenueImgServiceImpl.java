@@ -55,12 +55,10 @@ public class VenueImgServiceImpl implements VenueImgService {
     public VenueImgDTO updateVenueImg(VenueImgDTO venueImgDTO) {
         if (venueImgDTO != null) {
             VenueImages venueImages = venueImgRepository.findById(venueImgDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venues image", "Id", String.valueOf(venueImgDTO.getId())));
-            VenueImages updateVenueImg = new VenueImages();
-            updateVenueImg.setId(venueImgDTO.getId());
-            updateVenueImg.setUrl(venueImgDTO.getUrl());
-            updateVenueImg.setVenueId(venueImgDTO.getVenueId());
-            venueImgRepository.save(updateVenueImg);
-            return mapToDTO(updateVenueImg);
+            venueImages.setUrl(venueImgDTO.getUrl());
+            venueImages.setVenueId(venueImgDTO.getVenueId());
+            venueImgRepository.save(venueImages);
+            return mapToDTO(venueImages);
         }
         return null;
     }

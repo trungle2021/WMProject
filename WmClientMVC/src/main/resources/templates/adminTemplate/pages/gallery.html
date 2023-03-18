@@ -8,7 +8,7 @@
     <title>AdminLTE 3 | Gallery</title>
 
     <!-- Ekko Lightbox -->
-    <link rel="stylesheet" href="../adminStatic/plugins/ekko-lightbox/ekko-lightbox.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
           integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
@@ -94,7 +94,7 @@
                                         <th:block th:each="i:${imgList}">
                                         <div class="col-sm-2 venue-img" th:attr="data-venue=${i.getVenueId()}">
                                             <a th:href="'data:image/jpeg;base64,'+${i.getUrl()}"
-                                               th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/staff/venue/delete?imgId='+${i.getId()}+'>Delete</a>'"
+                                               th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/staff/venues/delete?imgId='+${i.getId()}+'>Delete</a>'"
                                                data-toggle="lightbox"
                                                th:attrappend="data-title='Venue '+${i.getVenueId()}"
                                                data-gallery="gallery">
@@ -121,7 +121,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" th:action="@{/staff/venue/create}" id="createForm">
+                                <form method="post" th:action="@{/staff/venues/create}" id="createForm">
                                     <div class="form-group">
                                         <label class="col-form-label">Venue name:</label>
                                         <input type="text" class="form-control" name="venueName" required>
@@ -162,7 +162,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form method="post" th:action="@{/staff/venue/update}" id="updateForm">
+                                <form method="post" th:action="@{/staff/venues/update}" id="updateForm">
                                     <input type="text" class="update-venue-id" name="id" hidden>
                                     <div class="form-group">
                                         <label for="venueName" class="col-form-label">Venue Name:</label>
@@ -185,7 +185,13 @@
                                         <label for="price" class="col-form-label">Price:</label>
                                         <input class="form-control update-venue-price" id="price" name="price" required>
                                     </div>
-
+                                    <div class="form-group">
+                                        <label for="price" class="col-form-label">Is active:</label>
+                                        <select class="form-control update-venue-active" id="check" name="check">
+                                            <option th:text="No" value="false"></option>
+                                            <option th:text="Yes" value="true"></option>
+                                        </select>
+                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                         </button>
@@ -241,12 +247,8 @@
         }
     </script>
     <!-- Ekko Lightbox -->
-    <script src="../adminStatic/plugins/ekko-lightbox/ekko-lightbox.min.js"></script>
-    <!-- Filterizr-->
-    <!--    <script src="../adminStatic/plugins/filterizr/jquery.filterizr.min.js"></script>-->
-    <!-- AdminLTE for demo purposes -->
-    <!--    <script src="../adminStatic/dist/js/demo.js"></script>-->
-    <!-- Page specific script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js" integrity="sha512-YibiFIKqwi6sZFfPm5HNHQYemJwFbyyYHjrr3UT+VobMt/YBo1kBxgui5RWc4C3B4RJMYCdCAJkbXHt+irKfSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
 
         $(document).ready(function () {
@@ -271,6 +273,13 @@
                             min.val(item.minPeople)
                             max.val(item.maxPeople)
                             price.val(item.price)
+                            $('.update-venue-active option').each(function (){
+                                var value=$(this).val();
+                                if(value===item.isActive)
+                                {
+                                    $(this).prop('selected', true);
+                                }
+                            })
                         }
                     })
                     if (selectedOption !== 0 && selectedOption !== "all") {
@@ -289,7 +298,10 @@
                 $('#add-picture-form').hide();
             }
         })
-
+        $('.update-venue-active').on('change',function (){
+            var selected=$(this).find('option:selected').val();
+            $(this).val(selected);
+        })
     </script>
     <script>
 
@@ -336,7 +348,18 @@
                         min.val(item.minPeople)
                         max.val(item.maxPeople)
                         price.val(item.price)
+                        $('.update-venue-active option').each(function (){
+                            var value=$(this).val();
+                            if(value===item.isActive)
+                            {
+                                $(this).prop('selected', true);
+                            }
+                        })
                     }
+                })
+                $('.update-venue-active').on('change',function (){
+                    var selected=$(this).find('option:selected').val();
+                    $(this).val(selected);
                 })
                 $('div[data-venue]').each(function () {
                     if ($(this).attr('data-venue') === selectedOption) {

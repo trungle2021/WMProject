@@ -26,166 +26,167 @@
     <section layout:fragment="content">
 
         <!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
-            <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-                <!-- Content Header (Page header) -->
-                <section class="content-header">
-                    <div class="container-fluid">
-                        <div class="row mb-2">
-                            <div class="col-sm-6">
-                                <h1>DataTables</h1>
-                            </div>
-                            <div class="col-sm-6">
-                                <ol class="breadcrumb float-sm-right">
-                                    <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li class="breadcrumb-item active">DataTables</li>
-                                </ol>
-                            </div>
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>DataTables</h1>
                         </div>
-                    </div><!-- /.container-fluid -->
-                </section>
-                <!--detail food Modal-->
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">DataTables</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+            <!--detail food Modal-->
 
-                <section class="content">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h3 class="card-title">Material</h3>
-                                    </div>
-                                    <!-- /.card-header -->
-                                    <div class="card-body">
-                                        <form method="post" id="formDetail" th:action="@{/staff/food/update/material}"
-                                              enctype="multipart/form-data">
-                                            <div class="form-row">
-                                                <th:block th:each="c:${foodList}" th:if="${c.getId()==foodId}">
-                                                    <input type="hidden" name="id" th:value="${c.getId()}">
-                                                    <div class="form-group col-md-6">
-                                                        <label class="col-form-label">Name:</label>
-                                                        <input type="text" class="form-control"
-                                                               th:value="${c.getFoodName()}" name="foodName" required>
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label class="col-form-label">Type:</label>
-                                                        <input type="hidden" class="form-control" id="hiddenType"
-                                                               th:value="${c.getFoodType()}"  required>
-                                                        <select class="form-control" name="foodType"  th:value="${c.getFoodType()}" id="foodType">
-                                                            <th:block th:each="c:${foodTypeList}">
-                                                                <option th:value="${c}" th:text="${c}"></option>
-                                                            </th:block>
-                                                        </select>
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label class="col-form-label">Description:</label>
-                                                        <input type="text" class="form-control" name="description"
-                                                               th:value="${c.getDescription()}" required>
-                                                    </div>
-                                                    <div class="form-group col-md-6">
-                                                        <label class="col-form-label">Price:</label>
-                                                        <input type="text" class="form-control" name="price"
-                                                               th:value="${c.getPrice()}" required>
-                                                    </div>
-                                                </th:block>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Material</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <form method="post" id="formDetail" th:action="@{/staff/food/update/material}"
+                                          enctype="multipart/form-data">
+                                        <div class="form-row">
+                                            <th:block th:each="c:${foodList}" th:if="${c.getId()==foodId}">
+                                                <input type="hidden" name="id" th:value="${c.getId()}">
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-form-label">Name:</label>
+                                                    <input type="text" class="form-control"
+                                                           th:value="${c.getFoodName()}" name="foodName" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-form-label">Type:</label>
+                                                    <input type="hidden" class="form-control" id="hiddenType"
+                                                           th:value="${c.getFoodType()}" required>
+                                                    <select class="form-control" name="foodType"
+                                                            th:value="${c.getFoodType()}" id="foodType">
+                                                        <th:block th:each="c:${foodTypeList}">
+                                                            <option th:value="${c}" th:text="${c}"></option>
+                                                        </th:block>
+                                                    </select>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-form-label">Description:</label>
+                                                    <input type="text" class="form-control" name="description"
+                                                           th:value="${c.getDescription()}" required>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <label class="col-form-label">Price:</label>
+                                                    <input type="text" class="form-control" name="price" id="txtPrice"
+                                                           th:value="${c.getPrice()}" required>
+                                                </div>
+                                            </th:block>
+                                            <div class="form-group col-md-12">
+                                                <label class="col-form-label">Materials:</label>
                                                 <div class="form-group col-md-12">
-                                                    <label class="col-form-label">Materials:</label>
-                                                    <div class="form-group col-md-12">
-                                                        <label class="col-form-label">Have:</label>
-                                                        <div id="box1" style="border: 1px solid black">
-                                                            <th:block th:each="c:${foodList}">
-                                                                <th:block th:each="mat:${c.getMaterialsById()}"
-                                                                          th:if="${mat.getFoodId()==foodId}">
-                                                                    <button type="button" class="btn btn-primary"
-                                                                            style="margin: 1px"
-                                                                            onclick="highlight(this)"
-                                                                            th:value="${mat.getId()}"
-                                                                            th:text="${mat.getMaterialName()}"></button>
-                                                                </th:block>
-                                                                <!--                                        <button onclick="highlight(this)">Button 1</button>-->
-                                                                <!--                                        <button onclick="highlight(this)">Button 2</button>-->
-                                                                <!--                                        <button onclick="highlight(this)">Button 3</button>-->
+                                                    <label class="col-form-label">Have:</label>
+                                                    <div id="box1" style="border: 1px solid black">
+                                                        <th:block th:each="c:${foodList}">
+                                                            <th:block th:each="mat:${c.getMaterialsById()}"
+                                                                      th:if="${mat.getFoodId()==foodId}">
+                                                                <button type="button" class="btn btn-primary"
+                                                                        style="margin: 1px"
+                                                                        onclick="highlight(this)"
+                                                                        th:value="${mat.getId()}"
+                                                                        th:text="${mat.getMaterialName()}"></button>
                                                             </th:block>
-                                                        </div>
-                                                        <button type="button" onclick="deleteButtons()"
-                                                                class="btn btn-outline-warning"
-                                                                style="margin-top: 1rem">Remove
-                                                        </button>
+                                                            <!--                                        <button onclick="highlight(this)">Button 1</button>-->
+                                                            <!--                                        <button onclick="highlight(this)">Button 2</button>-->
+                                                            <!--                                        <button onclick="highlight(this)">Button 3</button>-->
+                                                        </th:block>
                                                     </div>
-
-                                                    <div class="form-group col-md-12">
-                                                        <label class="col-form-label">Will be removed:</label>
-                                                        <div id="box2" style="border: 1px solid black">
-                                                        </div>
-                                                        <button type="button" onclick="addButton()"
-                                                                class="btn btn-outline-warning"
-                                                                style="margin-top: 1rem">Restore
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-
-                                                <button type="button" onclick="toggle('input-group-1')"
-                                                        class="btn btn-outline-primary">
-                                                    Add material
-                                                </button>
-                                                <div id="input-group-1" class="input-group">
-                                                    <label for="input-1-1">Material name:</label>
-                                                    <input type="text" id="input-1-1" name="material1"/><br/><br/>
-                                                    <label for="input-1-2">Unit:</label>
-                                                    <input type="text" id="input-1-2" name="unit1"/><br/><br/>
-                                                    <label for="input-1-3">Cost:</label>
-                                                    <input type="text" id="input-1-3" name="cost1"/><br/><br/>
-                                                </div>
-                                                <button type="button" onclick="toggle('input-group-2')"
-                                                        class="btn btn-outline-primary">
-                                                    Add material
-                                                </button>
-                                                <div id="input-group-2" class="input-group">
-                                                    <label for="input-2-1">Material name:</label>
-                                                    <input type="text" id="input-2-1" name="material2"/><br/><br/>
-                                                    <label for="input-2-2">Unit:</label>
-                                                    <input type="text" id="input-2-2" name="unit2"/><br/><br/>
-                                                    <label for="input-2-3">Cost:</label>
-                                                    <input type="text" id="input-2-3" name="cost2"/><br/><br/>
-                                                </div>
-                                                <button type="button" onclick="toggle('input-group-3')"
-                                                        class="btn btn-outline-primary">
-                                                    Add material
-                                                </button>
-
-                                                <div id="input-group-3" class="input-group">
-                                                    <label for="input-3-1">Material name:</label>
-                                                    <input type="text" id="input-3-1" name="material3"/><br/><br/>
-                                                    <label for="input-3-2">Unit:</label>
-                                                    <input type="text" id="input-3-2" name="unit3"/><br/><br/>
-                                                    <label for="input-3-3">Cost:</label>
-                                                    <input type="text" id="input-3-3" name="cost3"/><br/><br/>
-                                                </div>
-                                                <input type="hidden" id="removeMaterial" name="removeMaterial">
-
-                                                <div class="modal-footer col-md-12">
-                                                    <button type="button" class="btn btn-secondary"
-                                                            onclick="detailCloseBtn()"
-                                                            id="detailCloseBtn" data-dismiss="modal">Close
+                                                    <button type="button" onclick="deleteButtons()"
+                                                            class="btn btn-outline-warning"
+                                                            style="margin-top: 1rem">Remove
                                                     </button>
-                                                    <input type="submit" class="btn btn-primary" value="Create">
+                                                </div>
+
+                                                <div class="form-group col-md-12">
+                                                    <label class="col-form-label">Will be removed:</label>
+                                                    <div id="box2" style="border: 1px solid black">
+                                                    </div>
+                                                    <button type="button" onclick="addButton()"
+                                                            class="btn btn-outline-warning"
+                                                            style="margin-top: 1rem">Restore
+                                                    </button>
                                                 </div>
                                             </div>
-                                        </form>
-                                    </div>
+
+
+                                            <button type="button" onclick="toggle('input-group-1')"
+                                                    class="btn btn-outline-primary">
+                                                Add material
+                                            </button>
+                                            <div id="input-group-1" class="input-group">
+                                                <label for="input-1-1">Material name:</label>
+                                                <input type="text" id="input-1-1" name="material1"/><br/><br/>
+                                                <label for="input-1-2">Unit:</label>
+                                                <input type="text" id="input-1-2" name="unit1"/><br/><br/>
+                                                <label for="input-1-3">Cost:</label>
+                                                <input type="text" id="input-1-3" name="cost1"
+                                                       th:id="txtPrice1"/><br/><br/>
+                                            </div>
+                                            <button type="button" onclick="toggle('input-group-2')"
+                                                    class="btn btn-outline-primary">
+                                                Add material
+                                            </button>
+                                            <div id="input-group-2" class="input-group">
+                                                <label for="input-2-1">Material name:</label>
+                                                <input type="text" id="input-2-1" name="material2"/><br/><br/>
+                                                <label for="input-2-2">Unit:</label>
+                                                <input type="text" id="input-2-2" name="unit2"/><br/><br/>
+                                                <label for="input-2-3">Cost:</label>
+                                                <input type="text" id="input-2-3" name="cost2"
+                                                       th:id="txtPrice2"/><br/><br/>
+                                            </div>
+                                            <button type="button" onclick="toggle('input-group-3')"
+                                                    class="btn btn-outline-primary">
+                                                Add material
+                                            </button>
+
+                                            <div id="input-group-3" class="input-group">
+                                                <label for="input-3-1">Material name:</label>
+                                                <input type="text" id="input-3-1" name="material3"/><br/><br/>
+                                                <label for="input-3-2">Unit:</label>
+                                                <input type="text" id="input-3-2" name="unit3"/><br/><br/>
+                                                <label for="input-3-3">Cost:</label>
+                                                <input type="text" id="input-3-3" name="cost3"
+                                                       th:id="txtPrice3"/><br/><br/>
+                                            </div>
+                                            <input type="hidden" id="removeMaterial" name="removeMaterial">
+
+                                            <div class="modal-footer col-md-12">
+                                                <a type="button" class="btn btn-secondary"
+                                                   th:href="@{/staff/food/index}">Back
+                                                </a>
+                                                <input type="submit" class="btn btn-primary" value="Update">
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
-                        <!-- /.container-fluid -->
                     </div>
-                </section>
+                    <!-- /.container-fluid -->
+                </div>
+            </section>
 
-                <aside class="control-sidebar control-sidebar-dark">
-                    <!-- Control sidebar content goes here -->
-                </aside>
-                <!-- /.control-sidebar -->
-            </div>
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
         </div>
     </section>
 
@@ -198,70 +199,87 @@
     <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
     <script>
-        function deleteButtons() {
-            var box1 = document.getElementById("box1");
-            var box2 = document.getElementById("box2");
 
-            var highlightedButtons = box1.querySelectorAll(".highlight");
+            function deleteButtons() {
+                var box1 = document.getElementById("box1");
+                var box2 = document.getElementById("box2");
 
-            highlightedButtons.forEach(function (button) {
-                box1.removeChild(button);
-                box2.appendChild(button);
-                button.classList.remove("highlight");
-            });
-        }
+                var highlightedButtons = box1.querySelectorAll(".highlight");
 
-        function highlight(button) {
-            button.classList.toggle("highlight");
-        }
-
-        function toggle(id) {
-            var group = document.getElementById(id);
-            if (group.style.display === "none") {
-                group.style.display = "block";
-            } else {
-                group.style.display = "none";
+                highlightedButtons.forEach(function (button) {
+                    box1.removeChild(button);
+                    box2.appendChild(button);
+                    button.classList.remove("highlight");
+                });
             }
-        }
 
-        function addButton() {
-            var box1 = document.getElementById("box1");
-            var box2 = document.getElementById("box2");
+            function highlight(button) {
+                button.classList.toggle("highlight");
+            }
 
-            var highlightedButtons = box2.querySelectorAll(".highlight");
+            function toggle(id) {
+                var group = document.getElementById(id);
+                if (group.style.display === "none") {
+                    group.style.display = "block";
+                } else {
+                    group.style.display = "none";
+                }
+            }
 
-            highlightedButtons.forEach(function (button) {
-                box2.removeChild(button);
-                box1.appendChild(button);
-                button.classList.remove("highlight");
-            });
-        }
+            function addButton() {
+                var box1 = document.getElementById("box1");
+                var box2 = document.getElementById("box2");
 
-        var formDetail = document.getElementById("formDetail");
-        formDetail.addEventListener('submit', (e) => {
-            e.preventDefault();
-            var form = document.getElementById("formDetail");
-            var box2 = document.getElementById("box2");
+                var highlightedButtons = box2.querySelectorAll(".highlight");
 
-            var allBox2Btn = box2.querySelectorAll('button');
-            console.log(allBox2Btn)
-            var input = document.getElementById("removeMaterial");
-            allBox2Btn.forEach(function (button) {
-                console.log(button)
-                input.value = input.value + "," + button.value;
-            });
-            form.submit();
-        })
-        var hiddenType=document.getElementById("hiddenType").value;
-        $(document).ready(function (){
-            $("#foodType option").each(function (){
-                var value=$(this).val();
-                if(value===hiddenType){
-                    $(this).prop('selected',true);
+                highlightedButtons.forEach(function (button) {
+                    box2.removeChild(button);
+                    box1.appendChild(button);
+                    button.classList.remove("highlight");
+                });
+            }
+
+            var formDetail = document.getElementById("formDetail");
+
+            formDetail.addEventListener('submit', (e) => {
+                e.preventDefault();
+                var inputPrice = $('#txtPrice').val()
+                var inputPrice1 = $('#txtPrice1').val()
+                var inputPrice2 = $('#txtPrice2').val()
+                var inputPrice3 = $('#txtPrice3').val()
+                var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+                if (!regex.test(inputPrice)) {
+                    alert("Please enter a valid number between 1 and 500000000.");
+                }else if(!regex.test(inputPrice1) && inputPrice1!=""){
+                    alert("Please enter a valid number between 1 and 500000000.");
+                }else if(!regex.test(inputPrice2) && inputPrice2!=""){
+                    alert("Please enter a valid number between 1 and 500000000.");
+                }else if(!regex.test(inputPrice3) && inputPrice3!=""){
+                    alert("Please enter a valid number between 1 and 500000000.");
+                }
+                else {
+                    var form = document.getElementById("formDetail");
+                    var box2 = document.getElementById("box2");
+
+                    var allBox2Btn = box2.querySelectorAll('button');
+                    console.log(allBox2Btn)
+                    var input = document.getElementById("removeMaterial");
+                    allBox2Btn.forEach(function (button) {
+                        console.log(button)
+                        input.value = input.value + "," + button.value;
+                    });
+                    form.submit();
                 }
             })
+            var hiddenType = document.getElementById("hiddenType").value;
+            $(document).ready(function () {
+                $("#foodType option").each(function () {
+                    var value = $(this).val();
+                    if (value === hiddenType) {
+                        $(this).prop('selected', true);
+                    }
+                })
         })
-
 
     </script>
 </section>
