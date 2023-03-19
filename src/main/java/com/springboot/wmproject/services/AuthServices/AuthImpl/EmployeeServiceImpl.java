@@ -114,7 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void delete(int employeeId) {
+    public void softDelete(int employeeId) {
         Employees employees = employeeRepository.getEmployeeById(employeeId);
         employees.setTeam_id(null);
         employees.set_deleted(true);

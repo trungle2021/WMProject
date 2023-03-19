@@ -1,5 +1,6 @@
 package wm.clientmvc.DTO;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -7,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import wm.clientmvc.DTO.ValidateCustom.Name;
 
 @Getter
 @Setter
@@ -28,7 +28,7 @@ public class RegisterCustomerDTO {
     @Size(max = 100)
     private String address;
     @NotEmpty
-    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Phone must be 10 numbers, start with 0 or 84")
+    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Phone must be 10 numbers, starts with 0 or 84")
     private String phone;
     @NotEmpty
     @Pattern(regexp = "Male|Female|Other")

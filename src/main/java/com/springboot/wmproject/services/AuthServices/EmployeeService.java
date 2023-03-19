@@ -19,7 +19,7 @@ public interface EmployeeService {
     List<EmployeeDTO> findAllByName(String empType);
     List<EmployeeDTO> findAllByTeamId(Integer teamId);
 
-    void delete(int employeeId);
+    void softDelete(int employeeId);
 
 
 }
