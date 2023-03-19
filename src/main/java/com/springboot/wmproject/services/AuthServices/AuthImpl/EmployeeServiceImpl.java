@@ -37,7 +37,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<EmployeeDTO> getAllEmployees() {
         //find all
         List<Employees> employeesList = employeeRepository.findAll();
-        List<EmployeeDTO> employeeDTOList = employeesList.stream().filter(employees -> employees.getIs_deleted()==0).map(employees -> mapToDto(employees)).collect(Collectors.toList());
+        List<EmployeeDTO> employeeDTOList = employeesList.stream().filter(employees -> employees.is_deleted() == false).map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
 
@@ -117,18 +117,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void delete(int employeeId) {
         Employees employees = employeeRepository.getEmployeeById(employeeId);
         employees.setTeam_id(null);
-        employees.setIs_deleted(1);
+        employees.set_deleted(true);
         employees.setIsLeader(0);
         employeeRepository.save(employees);
     }
 
     public EmployeeDTO mapToDto(Employees employees) {
-        EmployeeDTO postDto = modelMapper.map(employees, EmployeeDTO.class);
-        return postDto;
+        EmployeeDTO employeeDTO = modelMapper.map(employees, EmployeeDTO.class);
+        employeeDTO.set_deleted(employees.is_deleted());
+        return employeeDTO;
     }
 
     public Employees mapToEntity(EmployeeDTO employeeDTO) {
         Employees employees = modelMapper.map(employeeDTO, Employees.class);
+        employees.set_deleted(employeeDTO.is_deleted());
         return employees;
     }
 }

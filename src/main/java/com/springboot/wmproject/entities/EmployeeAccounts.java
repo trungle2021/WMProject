@@ -36,6 +36,5 @@ public class EmployeeAccounts {
     @JoinColumn(name = "employee_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Employees employeesByEmployeeId;
 
-//    @OneToMany(mappedBy = "customerAccountsByCustomerAccountsId")
-//    private Collection<PasswordResetToken> passwordResetTokensById;
+
 }

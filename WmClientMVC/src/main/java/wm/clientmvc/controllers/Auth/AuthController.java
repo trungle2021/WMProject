@@ -57,7 +57,7 @@ public class AuthController {
 
 
     @PostMapping(value = "/staff/login")
-    public String loginEmployee(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
+    public String loginStaff(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 SD_CLIENT.api_staffLoginUrl,
                 "/staff/dashboard",
@@ -82,7 +82,7 @@ public class AuthController {
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 api_customerLoginUrl,
-                "/customers/home",
+                "/customers/dashboard",
                 "/login",
                 loginDTO,
                 request,
@@ -120,7 +120,7 @@ public class AuthController {
             return callApiLogin(
                     api_customerLoginUrl,
                     "/",
-                    "/customers/login",
+                    "/login",
                     loginDTO,
                     request,
                     response,
@@ -133,16 +133,18 @@ public class AuthController {
                 String message = map.get("message").toString();
                 String status = String.valueOf(e.getStatusCode().value());
                 switch (status) {
+                    case "401":
+                        return "redirect:/login";
                     case "403":
                         return "redirect:/access-denied";
                     default:
                         redirectAttributes.addFlashAttribute("errorMessage", message);
-                        return "redirect:/customers/register";
+                        return "redirect:/register";
                 }
             }
         }
 
-        return "redirect:/customers/login";
+        return "redirect:/login";
     }
 
 
@@ -150,7 +152,7 @@ public class AuthController {
     public String callApiLogin(String apiUrl, String successUrl, String has401ExceptionUrl, @Valid @ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         CustomerDTO customerDTO = new CustomerDTO();
-        String avatar = "";
+        String avatar = null;
 
         try {
             JWTAuthResponse jwtAuthResponse = APIHelper.makeApiCall(

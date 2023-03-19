@@ -37,7 +37,7 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
 
     @Override
     public List<OrganizeTeamDTO> getAllOrganizeTeam() {
-        return organizeTeamRepository.findAll().stream().map(organizeTeams -> mapToDTO(organizeTeams)).collect(Collectors.toList());
+        return organizeTeamRepository.findAll().stream().filter(team -> team.isIs_deleted() == false).map(organizeTeams -> mapToDTO(organizeTeams)).collect(Collectors.toList());
     }
 
     @Override
@@ -83,10 +83,14 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
         return null;
     }
 
+
+
     @Override
-    public void deleteOrganizeTeam(int id)throws ResourceNotFoundException {
-        OrganizeTeams organizeTeams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","id",String.valueOf(id)));
-        organizeTeamRepository.delete(organizeTeams);
+    public void softDelete(int id)throws ResourceNotFoundException {
+
+        OrganizeTeams teams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","id",String.valueOf(id)));
+        teams.setIs_deleted(true);
+        organizeTeamRepository.save(teams);
     }
 
     @Override

@@ -148,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());
-        employeeDTO.setIs_deleted(0);
+        employeeDTO.set_deleted(false);
         EmployeeDTO empDTO = employeeService.create(employeeDTO);
         //getID after employee created -> then pass to employee account
 
