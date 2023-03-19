@@ -16,7 +16,19 @@
 	<div class="form-v10">
 		<div class="page-content">
 			<div class="form-v10-content">
-				<form class="form-detail" th:action="@{/customers/register}" method="post" id="myform" th:object="${registerCustomerDTO}">
+
+				<th:block th:if="${errorMessages != null}">
+					<ul>
+						<li th:each="error : ${errorMessages}" th:text="${error}" style="color: red"></li>
+					</ul>
+				</th:block>
+
+				<th:block th:if="${message != null}">
+					<li style="color: green" th:text="${message}"></li>
+				</th:block>
+
+
+				<form class="form-detail" th:action="@{/register}" method="post" id="myform" th:object="${registerDTO}">
 					<div class="form-left">
 						<h2>Account Infomation</h2>
 						<div class="form-group">

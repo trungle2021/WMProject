@@ -102,49 +102,63 @@ public class AuthController {
         if(userIsCustomer){
             return "redirect:/customers/home";
         }
-        RegisterCustomerDTO registerCustomerDTO = new RegisterCustomerDTO();
-        model.addAttribute("registerCustomerDTO", registerCustomerDTO);
+        BindingResult result = (BindingResult) model.asMap().get("result");
+        if(result != null){
+            model.addAttribute("result",result);
+            model.addAttribute("registerDTO",model.asMap().get("registerDTO"));
+        }else{
+            model.addAttribute("message",model.asMap().get("message"));
+            RegisterCustomerDTO registerDTO = (RegisterCustomerDTO) model.asMap().get("registerDTO");
+            if(registerDTO != null){
+                model.addAttribute("registerDTO",registerDTO);
+            }else{
+                model.addAttribute("registerDTO",new RegisterCustomerDTO());
+            }
+        }
+
+        model.addAttribute("errorMessages",model.asMap().get("errorMessages"));
         return "register";
     }
 
     @PostMapping("/register")
-    public String registerCustomer(@Valid @ModelAttribute RegisterCustomerDTO registerCustomerDTO,HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, BindingResult result) throws IOException {
+    public String registerCustomer(@Valid @ModelAttribute RegisterCustomerDTO registerDTO,HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, BindingResult result) throws IOException {
+
         if (result.hasErrors()) {
-            return "register"; // return to the registration page with error messages
+            attributes.addFlashAttribute("result",result);
+            attributes.addFlashAttribute("registerDTO",registerDTO);
+            return "redirect:/register";
         }
+
         try {
-            RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerCustomerDTO, null, RegisterCustomerDTO.class);
+            RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerDTO, null, RegisterCustomerDTO.class);
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setUsername(responseRegister.getUsername());
             loginDTO.setPassword(responseRegister.getPassword());
             return callApiLogin(
                     api_customerLoginUrl,
-                    "/",
+                    "/customers/dashboard",
                     "/login",
                     loginDTO,
                     request,
                     response,
-                    redirectAttributes);
-        } catch (HttpClientErrorException e) {
-            String responseError = e.getResponseBodyAsString();
-            if (StringUtils.hasLength(responseError)) {
-                ObjectMapper mapper = new ObjectMapper();
-                Map<String, String> map = mapper.readValue(responseError, Map.class);
-                String message = map.get("message").toString();
-                String status = String.valueOf(e.getStatusCode().value());
-                switch (status) {
-                    case "401":
-                        return "redirect:/login";
-                    case "403":
-                        return "redirect:/access-denied";
-                    default:
-                        redirectAttributes.addFlashAttribute("errorMessage", message);
-                        return "redirect:/register";
-                }
-            }
-        }
+                    attributes);
+        } catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
 
-        return "redirect:/login";
+            final ObjectMapper objectMapper = new ObjectMapper();
+            String[] langs = objectMapper.readValue(message, String[].class);
+
+            if (result.hasErrors()) {
+                attributes.addFlashAttribute("result",result);
+            }
+            attributes.addFlashAttribute("registerDTO",registerDTO);
+            attributes.addFlashAttribute("errorMessages", langs);
+            return "redirect:/register";
+
+        }
     }
 
 

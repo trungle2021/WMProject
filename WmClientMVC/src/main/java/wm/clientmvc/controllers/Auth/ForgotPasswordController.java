@@ -43,7 +43,7 @@ public class ForgotPasswordController {
                     email,
                     null,
                     String.class);
-            redirectAttributes.addFlashAttribute("message", "We have sent a reset password link to your email.Please check");
+            redirectAttributes.addFlashAttribute("message", "We have sent a password reset link to your email. Please check your inbox and follow the instructions provided.");
             return "redirect:/forgot_password";
 
         } catch (HttpClientErrorException e) {

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import wm.clientmvc.DTO.ValidateCustom.Name;
+import wm.clientmvc.DTO.ValidateCustom.FullName;
 
 @Getter
 @Setter
@@ -15,7 +15,7 @@ public class RegisterDTO {
     private int id;
 
     @NotEmpty
-    @Name
+    @FullName
     @Size(min = 2, max = 50)
     private String name;
 
@@ -24,7 +24,7 @@ public class RegisterDTO {
     private String address;
 
     @NotEmpty(message = "Phone cannot be empty")
-    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Phone must be 10 numbers")
+    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Phone must be 10 numbers and starts with 0 or 84")
     private String phone;
 
     @NotEmpty

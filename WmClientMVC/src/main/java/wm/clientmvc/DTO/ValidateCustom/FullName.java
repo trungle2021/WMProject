@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
 @Pattern(regexp = "^([a-zA-Z]{2,}\\s[a-zA-Z]{1,}'?-?[a-zA-Z]{2,}\\s?([a-zA-Z]{1,})?)", message = "Invalid name format. Please enter a name with at least two letters for the first and last name, separated by a space. You may also include an apostrophe or hyphen in the last name.")
-public @interface Name {
+public @interface FullName {
     String message() default "Invalid name format. Please enter a name with at least two letters for the first and last name, separated by a space. You may also include an apostrophe or hyphen in the last name.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

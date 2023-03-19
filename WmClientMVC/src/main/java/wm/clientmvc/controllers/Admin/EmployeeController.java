@@ -174,9 +174,7 @@ public class EmployeeController {
                 return "redirect:/staff/employees/create";
 
         }
-//        catch(HttpServerErrorException e){
-//            return "redirect:/error";
-//        }
+
         attributes.addFlashAttribute("message","Create Employee Success");
         return "redirect:/staff/employees/create";
     }
@@ -256,7 +254,6 @@ public class EmployeeController {
                 ((CustomUserDetails) authentication.getPrincipal()).setFullName(response_.getName());
             }
 
-
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
@@ -270,10 +267,7 @@ public class EmployeeController {
                 attributes.addFlashAttribute("registerDTO",registerDTO);
                 attributes.addFlashAttribute("errorMessages", langs);
                 return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
-
         }
-
-
         attributes.addFlashAttribute("message","Update Employee Success");
         return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
     }

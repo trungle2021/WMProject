@@ -62,7 +62,7 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public String staffDelete(int id) {
         EmployeeAccountDTO employeeAccountDTO =  employeeAccountService.getEmployeeAccountByEmployeeId(id);
-        employeeService.delete(id);
+        employeeService.softDelete(id);
         employeeAccountService.delete(employeeAccountDTO.getId());
         return "Employee Deleted Successfully ";
     }
@@ -231,8 +231,6 @@ public class AuthServiceImpl implements AuthService {
         Integer isLeader = registerDTO.getIsLeader();
         int isLeader_intValue = isLeader != null ? isLeader : 0;
 
-
-
         Integer team_id = registerDTO.getTeam_id();
         int team_id_intValue = team_id != null ? team_id : 0;
 
@@ -341,7 +339,7 @@ public class AuthServiceImpl implements AuthService {
         String role = "";
 
         if (teamName.equals(SD.TEAM_ADMINISTRATOR)) {
-            if(empHasAccount.getRole() == SD.ROLE_ADMIN){
+            if(empHasAccount.getRole().equals(SD.ROLE_ADMIN)){
                 role = SD.ROLE_ADMIN;
             }else{
                 role = SD.ROLE_SALE;
