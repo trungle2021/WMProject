@@ -12,6 +12,7 @@ public class Static_Status {
     public static String foodTypeStarter="starter";
     public static String foodTypeMain="main";
     public static String foodTypeDessert="dessert";
+    public static String confirmCancel="I confirm to cancel this order";
 
     public static String teamAdmin="ADMINISTRATOR";
 
