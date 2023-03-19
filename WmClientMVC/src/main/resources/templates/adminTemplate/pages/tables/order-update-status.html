@@ -71,7 +71,7 @@
                             <div class="form-group row">
                                 <label for="customer" class="col-sm-2 col-form-label">Customer:</label>
                                 <div class="col-sm-8">
-                                    <input type="text" id="customer"  class="form-control" th:value="${orderDTO.getCustomerId()}" th:field="*{customerId}" >
+                                    <input type="text" id="customer" readonly class="form-control" th:value="${orderDTO.getCustomerId()}" th:field="*{customerId}" >
                                     <!--                  modal-dialog-->
 
                                 </div>
@@ -115,7 +115,7 @@
             <div class="modal-dialog" role="document">
                 <div class="container">
                     <div class="block information">
-                        <h1 th:text="${orderDTO.getCustomersByCustomerId().getFirstname()}+' '+${orderDTO.getCustomersByCustomerId().getLastname()}"></h1>
+                        <h1 th:text="${orderDTO.getCustomersByCustomerId().getFirst_name()}+' '+${orderDTO.getCustomersByCustomerId().getLast_name()}"></h1>
                         <p class="expertise" th:text="'Customer Id : '+${orderDTO.getCustomerId()}"></p>
                         <address th:text="'Address: '+ ${orderDTO.getCustomersByCustomerId().getAddress()}"></address>
                         <p th:text="'Gender: '+${orderDTO.getCustomersByCustomerId().getGender()}"></p>

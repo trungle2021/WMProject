@@ -313,12 +313,35 @@
                   </a>
                 </li>
 
-
+                <li class="nav-item">
+                  <a th:href="@{/staff/materials}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Material</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/orders/showall}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Order Management</p>
+                  </a>
+                </li>
               </th:block>
 
               <th:block th:if="${ #authorization.expression('hasRole(''ORGANIZE'')')}"}>
                 <li class="nav-item">
                   <a th:href="@{/staff/teams}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>ORDER</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/materials}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Material</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{staff/orders/showallorder/organize}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>ORDER</p>
                   </a>
@@ -332,21 +355,17 @@
                     <p>CUSTOMER</p>
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/orders/showall}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>ORDER MANAGEMENT</p>
+                  </a>
+                </li>
               </th:block>
 
 
             </ul>
 
-          </li>
-          <li class="nav-header">Organize Team</li>
-          <li class="nav-item">
-            <a th:href="@{staff/orders/showallorder/organize}" class="nav-link">
-              <i class="nav-icon far fa-calendar-alt"></i>
-              <p>
-
-                <span class="badge badge-info right">2</span>
-              </p>
-            </a>
           </li>
 
           <!-- page -->

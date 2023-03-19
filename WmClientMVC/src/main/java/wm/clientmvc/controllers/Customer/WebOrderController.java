@@ -323,12 +323,6 @@ public class WebOrderController {
 
 //getorder
 
-
-
-
-
-
-
         return ResponseEntity.ok("{\"message\": \"Congratulations on selecting a successful dish and service!\"}");
     }
 

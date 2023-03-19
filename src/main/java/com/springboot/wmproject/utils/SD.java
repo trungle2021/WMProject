@@ -22,5 +22,6 @@ public class SD {
     public static String orderStatusCanceled="canceled";
     public static String orderStatusWarning="warning";
     public static String orderStatusConfirm="confirm";
+    public static String orderStatusRefund="refunded";
 
 }

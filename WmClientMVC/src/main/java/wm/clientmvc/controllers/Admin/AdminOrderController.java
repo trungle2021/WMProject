@@ -2,6 +2,7 @@ package wm.clientmvc.controllers.Admin;
 
 
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.*;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
@@ -36,7 +38,7 @@ public class AdminOrderController {
 //RestTemplate restTemplate=new RestTemplate();
 
     @RequestMapping("/orders/showall")
-    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token)
+    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage)
     {
     model.addAttribute("warningSt", orderStatusWarning);
     model.addAttribute("cancelingSt", orderStatusCancel);
@@ -65,8 +67,15 @@ public class AdminOrderController {
         }
         else{
             return "redirect:staff/dashboard";
-
             }
+
+        if (!alertMessage.isEmpty()) {
+            model.addAttribute("alertMessage", alertMessage);
+        }
+        else {
+            model.addAttribute("alertMessage", null);
+        }
+
 
         return "adminTemplate/pages/tables/order";
 
@@ -77,6 +86,7 @@ public class AdminOrderController {
     }
 
 }
+
     @RequestMapping("/orders/showmyorder/{status}")
 
     public String showMyOrder(Model model,@PathVariable String status, @CookieValue(name = "token",defaultValue = "")String token)
@@ -113,6 +123,10 @@ public class AdminOrderController {
             return "adminTemplate/error";
         }
     }
+
+
+
+
 @RequestMapping("/orders/order-detail/{id}")
 public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
 {
@@ -154,8 +168,65 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
         }
 
     }
-@RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
-public String update(@Validated  OrderDTO order, BindingResult bindingResult, Model model, @CookieValue(name="token",defaultValue = "")String token) {
+
+    @RequestMapping(value = "/orders/order-refunded",method = RequestMethod.POST)
+    public String OrderRefunded(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes)
+    {
+        if(status.equalsIgnoreCase(orderStatusCancel)) {
+            String url = "http://localhost:8080/api/orders/updateStatus/"+orderId+"/"+orderStatusRefund;
+            try {
+                OrderDTO order = APIHelper.makeApiCall(
+                        url,
+                        HttpMethod.PUT,
+                        null,
+                        token,
+                        OrderDTO.class
+                );
+                model.addAttribute("orderDTO", order);
+                redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Refunded! ");
+                return "redirect:/staff/orders/showall";
+            } catch (IOException e) {
+                model.addAttribute("message", e.getMessage());
+                return "adminTemplate/error";
+            }
+        }
+        else {
+            model.addAttribute("message", "Something wrong! check and contact your leader!");
+            return "adminTemplate/error";
+        }
+        }
+
+        //completed
+        @RequestMapping(value = "/orders/order-completed",method = RequestMethod.POST)
+        public String OrderCompleted(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes)
+        {
+            if(status.equalsIgnoreCase(orderStatusConfirm)) {
+                String url = "http://localhost:8080/api/orders/updateStatus/"+orderId+"/"+orderStatusCompleted;
+                try {
+                    OrderDTO order = APIHelper.makeApiCall(
+                            url,
+                            HttpMethod.PUT,
+                            null,
+                            token,
+                            OrderDTO.class
+                    );
+                    model.addAttribute("orderDTO", order);
+                    redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Completed! ");
+                    return "redirect:/staff/orders/showall";
+                } catch (IOException e) {
+                    model.addAttribute("message", e.getMessage());
+                    return "adminTemplate/error";
+                }
+            }
+            else {
+                model.addAttribute("message", "Something wrong! check and contact your leader!");
+                return "adminTemplate/error";
+            }
+        }
+
+
+    @RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
+public String update(@Validated  OrderDTO order, BindingResult bindingResult, Model model, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes) {
     OrderDTO editOrder = new OrderDTO();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -209,8 +280,6 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
         editOrder.setOrderTotal(getTotal(findOrder,tbNum));
         Integer team=getTeam(findOrder,token);
         editOrder.setOrganizeTeam(team);
-
-
         editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
 
 
@@ -223,12 +292,12 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
                     token,
                     OrderDTO.class
             );
-
+            redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Deposited! ");
             return "redirect:/staff/orders/showall";
-        } catch (IOException e) {
-            model.addAttribute("message", e.getMessage());
-            return "adminTemplate/error";
-        }
+         } catch (IOException e) {
+                model.addAttribute("message", e.getMessage());
+                return "adminTemplate/error";
+            }
         }
     } else {
         model.addAttribute("message", "Oops!Have a Error! Check ordered status or contact your leader!");
@@ -238,7 +307,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
 }
 
 @RequestMapping(value = "/orders/order-confirm",method = RequestMethod.POST)
-public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult)
+public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult,RedirectAttributes redirectAttributes)
 {
     //tinh lại total amount and partime emp
     OrderDTO editOrder = new OrderDTO();
@@ -299,19 +368,16 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                     token,
                     OrderDTO.class
                  );
-
+                 redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order confirm! ");
                     return "redirect:/staff/orders/showall";
                 } catch (IOException e) {
                  model.addAttribute("message","Oops! Something Wrong:" + e.getMessage());
                  return "adminTemplate/error";
                 }
-
-
-
         }
 
     } else {
-        model.addAttribute("message", "Check Order Status Again! Something wrong! Contact your leader!");
+        model.addAttribute("message","Oops! Something Wrong! check your status again!");
         return "adminTemplate/error";
     }
 }
@@ -458,10 +524,6 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
              }
 
             }
-
-
-
-
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -491,8 +553,6 @@ ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTy
             throw new RuntimeException(e);
         }
     }
-
-
 
 
 }

@@ -18,10 +18,11 @@
     <section layout:fragment="content"  class="content-wrapper">
 
    <br><div class="content-header"> <h5>Order Management</h5>
+        <a th:href="@{/staff/orders/showall}" class="btn btn-success">All Order</a>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Deposited Order</a>
         <a th:href="@{/staff/orders/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Warning Order</a>
         <a th:href="@{/staff/orders/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Canceling Order</a>
-        <a th:href="@{/staff/orders/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Deposited Order</a>
-        <a th:href="@{/staff/orders/showall}" class="btn btn-success">All Order</a>
+
 
     </div>
 
@@ -70,8 +71,20 @@
                                 <td th:case="${orderedSt}"><a th:href="@{/staff/orders/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Order Detail</a> </td>
                                 <td th:case="${depositedSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
                                  <td th:case="${warningSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
-                                 <td th:case="${cancelingSt}"><a th:href="@{/staff/orders/order-refunded/{id}(id=${c.getId()})}" class="btn btn-danger">Refund Order</a> </td>
-                                <td th:case="${confirmSt}"><a th:href="@{/staff/orders/order-completed/{id}(id=${c.getId()})}" class="btn btn-success">Completed Order</a> </td>
+                                 <td th:case="${cancelingSt}">
+                                     <form th:action="@{/staff/orders/order-refunded}" method="post">
+                                         <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
+                                         <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
+                                         <button type="submit" class="btn btn-danger">Refund Order</button>
+                                     </form>
+                                 </td>
+                                <td th:case="${confirmSt}">
+                                    <form th:action="@{/staff/orders/order-completed}" method="post">
+                                        <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
+                                        <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
+                                        <button type="submit" class="btn btn-success">Complete Order</button>
+                                    </form>
+                                </td>
                                 <td th:case="*">None</td>
                             </th:block>
 
@@ -112,9 +125,24 @@
     <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
     <!-- Page specific script -->
     <script>
+
         $(document).ready(function () {
             $('table.display').DataTable();
         });
+
+    </script>
+    <script th:inline="javascript">
+
+        var message = [[${alertMessage}]];
+        console.log(message);
+           if(message!=null || message.length != 0);
+        {
+            swal({
+                title: "Message!",
+                text: message,
+                icon: "success",
+            });
+        }
     </script>
 </section>
 </body>

@@ -115,18 +115,16 @@ public class VenueServiceImpl implements VenueService {
         return venueDTO;
     }
 
-    public OrderDTO mapToDTO(Orders orders) {
-        OrderDTO orderDTO = modelMapper.map(orders, OrderDTO.class);
-        return orderDTO;
-    }
-
     public Venues mapToEntity(VenueDTO venueDTO) {
 
         Venues venue = modelMapper.map(venueDTO, Venues.class);
         venue.setActive(venueDTO.isActive());
         return venue;
     }
-
+    public OrderDTO mapToDTO(Orders orders) {
+        OrderDTO orderDTO = modelMapper.map(orders, OrderDTO.class);
+        return orderDTO;
+    }
     public Orders mapToEntity(OrderDTO orderDTO) {
         Orders orders = modelMapper.map(orderDTO, Orders.class);
         return orders;
