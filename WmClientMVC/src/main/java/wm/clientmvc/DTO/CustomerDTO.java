@@ -23,8 +23,6 @@ public class CustomerDTO {
     private String phone;
     private String email;
     private String gender;
-
-    private String email;
     @Basic(fetch = FetchType.LAZY)
     @JsonIgnore
     private String avatar;

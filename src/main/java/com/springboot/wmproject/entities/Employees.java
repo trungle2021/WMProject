@@ -57,9 +57,10 @@ public class Employees {
     @Column(name = "avatar", nullable = true)
     private String avatar;
 
+
     @Basic
-    @Column(name = "is_deleted", nullable = true, columnDefinition = "integer default 0")
-    private Integer is_deleted;
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean is_deleted;
 
 
     @OneToMany(mappedBy = "employeesByEmployeeId")

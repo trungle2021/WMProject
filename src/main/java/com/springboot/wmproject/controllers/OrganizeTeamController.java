@@ -69,8 +69,8 @@ public class OrganizeTeamController {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteOrganizeTeam(@Valid @PathVariable int id){
-        organizeTeamService.deleteOrganizeTeam(id);
+    public ResponseEntity<String> softDelete(@Valid @PathVariable int id){
+        organizeTeamService.softDelete(id);
         return ResponseEntity.ok("Organize Team has been deleted");
     }
 }
