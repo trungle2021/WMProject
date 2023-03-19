@@ -29,8 +29,7 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/customers/getAll">Customer Management</a></li>
+                                <li class="breadcrumb-item"><a href="/staff/dashboard">/Home</a></li>
                             </ol>
                         </div>
                     </div>
@@ -49,31 +48,20 @@
                     <li style="color: green" th:text="${message}"></li>
                 </th:block>
 
-                <form method="post" th:action="@{/staff/customers/update}" th:object="${registerDTO} "
+                <form method="post" th:action="@{/staff/employees/update}" th:object="${registerDTO} "
                       enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-row">
 
-                                <input type="hidden" class="form-control" th:field="*{id}" th:value="*{id}">
-                                <input type="hidden" class="form-control" th:field="*{customerId}" th:value="*{customerId}">
+                                <input type="hidden" class="form-control" th:field="*{employeeId}" th:value="*{employeeId}">
 
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">First Name:</label>
-                                    <input type="text" class="form-control" th:field="*{first_name}" th:value="*{first_name}" required>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Full Name:</label>
+                                    <input type="text" class="form-control" th:field="*{name}" th:value="*{name}" required>
                                     <ul>
                                         <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('first_name')}" th:text="${err.defaultMessage}" class="error" />
-                                        </th:block>
-                                    </ul>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Last Name:</label>
-                                    <input type="text" class="form-control" th:field="*{last_name}" th:value="*{last_name}" required>
-                                    <ul>
-                                        <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('last_name')}" th:text="${err.defaultMessage}" class="error" />
+                                            <li th:each="err : ${result.getFieldErrors('name')}" th:text="${err.defaultMessage}" class="error" />
                                         </th:block>
                                     </ul>
                                 </div>
@@ -97,6 +85,8 @@
 
                                 </div>
 
+
+
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">Phone:</label>
                                     <input type="text" class="form-control" th:field="*{phone}">
@@ -106,6 +96,47 @@
                                         </th:block>
                                     </ul>
                                 </div>
+
+
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Join date:</label>
+                                    <input type="date" class="form-control" th:field="*{joinDate}"  value="2013-03-08"  required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('joinDate')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+
+
+                                <th:block th:if="${#authorization.expression('hasAnyRole(''ORGANIZE'',''SALE'')')}">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label">Salary:</label>
+                                        <input type="text" class="form-control" th:field="*{salary}" readonly>
+                                        <ul>
+                                            <th:block th:if="${result != null}">
+                                                <li th:each="err : ${result.getFieldErrors('salary')}" th:text="${err.defaultMessage}" class="error" />
+                                            </th:block>
+                                        </ul>
+                                    </div>
+
+                                </th:block>
+
+                                <th:block th:if="${#authorization.expression('hasAnyRole(''ADMIN'')')}">
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label">Salary:</label>
+                                        <input type="text" class="form-control" th:field="*{salary}" required>
+                                        <ul>
+                                            <th:block th:if="${result != null}">
+                                                <li th:each="err : ${result.getFieldErrors('salary')}" th:text="${err.defaultMessage}" class="error" />
+                                            </th:block>
+                                        </ul>
+                                    </div>
+
+                                </th:block>
+
+
+
 
                                 <div class="form-group col-md-4 offset-1 mt-2">
                                     <label >Gender</label><br>
@@ -124,6 +155,47 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-row">
+
+                                <th:block th:if="${#authorization.expression('hasAnyRole(''ORGANIZE'',''SALE'')')}">
+
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label">Team:</label>
+                                        <select th:field="*{team_id}" class="form-control" disabled="disabled">
+                                            <th:block th:each="c:${teamList}">
+                                                <option  th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group col-md-4 offset-1 mt-2">
+                                        <label th:for="isLeader">Is Leader?</label><br>
+                                        <input type="radio" th:field="*{isLeader}" th:value="1" th:checked="${registerDTO.getIsLeader()}" th:disabled="${registerDTO.getIsLeader() == 0}"/> Yes
+                                        <input type="radio" th:field="*{isLeader}" th:value="0" th:checked="${registerDTO.getIsLeader()}"  th:disabled="${registerDTO.getIsLeader() == 1}"/> No
+                                    </div>
+                                </th:block>
+
+                                <th:block th:if="${#authorization.expression('hasAnyRole(''ADMIN'')')}">
+
+                                    <div class="form-group col-md-6">
+                                        <label class="col-form-label">Team:</label>
+                                        <select th:field="*{team_id}" class="form-control">
+                                            <th:block th:each="c:${teamList}">
+                                                <option  th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
+                                            </th:block>
+                                        </select>
+                                    </div>
+
+
+                                    <div class="form-group col-md-4 offset-1 mt-2">
+                                        <label th:for="isLeader">Is Leader?</label><br>
+                                        <input type="radio" th:field="*{isLeader}" th:value="1" th:checked="${registerDTO.getIsLeader()}"/> Yes
+                                        <input type="radio" th:field="*{isLeader}" th:value="0" th:checked="${registerDTO.getIsLeader()}"/> No
+                                    </div>
+                                </th:block>
+
+
+
 
                                 <div class="form-group col-md-12 mt-3">
                                     <label class="col-form-label">Username:</label>
@@ -144,7 +216,7 @@
                                     </ul>
                                 </div>
                                 <div class="modal-footer col-md-12">
-                                    <a th:href="'javascript:window.history.back()'" class="btn btn-secondary">Back</a>
+                                    <a th:href="'javascript:window.history.back()'" class="btn btn-primary">Back</a>
                                     <input type="submit" class="btn btn-primary" value="Update Profile">
                                 </div>
                             </div>

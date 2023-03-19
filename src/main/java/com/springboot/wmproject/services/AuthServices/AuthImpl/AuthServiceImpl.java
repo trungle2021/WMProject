@@ -3,6 +3,7 @@ package com.springboot.wmproject.services.AuthServices.AuthImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.*;
+import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
@@ -51,6 +52,20 @@ public class AuthServiceImpl implements AuthService {
         this.teamService = teamService;
     }
 
+
+    @Override
+    public String findRoleByEmployeeID(int empID) {
+        return employeeService.findRoleByEmployeeID(empID);
+    }
+
+    @Override
+    @Transactional
+    public String staffDelete(int id) {
+        EmployeeAccountDTO employeeAccountDTO =  employeeAccountService.getEmployeeAccountByEmployeeId(id);
+        employeeService.softDelete(id);
+        employeeAccountService.delete(employeeAccountDTO.getId());
+        return "Employee Deleted Successfully ";
+    }
 
     @Override
     public String employeeLogin(LoginDTO loginDTO) {
@@ -133,7 +148,7 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());
-        employeeDTO.setIs_deleted(0);
+        employeeDTO.set_deleted(false);
         EmployeeDTO empDTO = employeeService.create(employeeDTO);
         //getID after employee created -> then pass to employee account
 
@@ -211,14 +226,35 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException {
-        errors = new ArrayList<>();
-        EmployeeDTO employeeDTO = new EmployeeDTO();
-        EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
-        OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(registerDTO.getTeam_id());
-        String teamName = teamDTO.getTeamName();
+        String teamName = "";
+        OrganizeTeamDTO teamDTO = new OrganizeTeamDTO();
+        Integer isLeader = registerDTO.getIsLeader();
+        int isLeader_intValue = isLeader != null ? isLeader : 0;
+
+        Integer team_id = registerDTO.getTeam_id();
+        int team_id_intValue = team_id != null ? team_id : 0;
+
+
         //check emp exist by id
         EmployeeDTO empExist = employeeService.getEmployeeById(registerDTO.getEmployeeId());
         EmployeeAccountDTO empHasAccount = employeeAccountService.getEmployeeAccountByEmployeeId(registerDTO.getEmployeeId());
+
+
+
+        errors = new ArrayList<>();
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
+
+        if(team_id_intValue != 0){
+             teamDTO = teamService.getOneOrganizeTeamById(team_id_intValue);
+            teamName = teamDTO.getTeamName();
+            employeeDTO.setTeam_id(team_id_intValue);
+        }else{
+            teamDTO = teamService.getOneOrganizeTeamById(empExist.getTeam_id());
+            teamName = teamDTO.getTeamName();
+            employeeDTO.setTeam_id(teamDTO.getId());
+        }
+
 
         //Validate
         boolean isValidPhone = employeeService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
@@ -227,8 +263,8 @@ public class AuthServiceImpl implements AuthService {
         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
         boolean phoneHasChanged = !empExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !empExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
-        boolean userNameHasChanged = !empExist.getPhone().equalsIgnoreCase(registerDTO.getPhone());
-        boolean leaderHasChanged = empExist.getIsLeader() != registerDTO.getIsLeader();
+        boolean userNameHasChanged = !empHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername());
+        boolean leaderHasChanged = empExist.getIsLeader() != isLeader_intValue;
 
 
         if(phoneHasChanged){
@@ -252,9 +288,9 @@ public class AuthServiceImpl implements AuthService {
         }
 
        if(leaderHasChanged){
-           if (registerDTO.getIsLeader() == 1 ) {
-               List<EmployeeDTO> empInTeam = employeeService.findAllByTeamId(registerDTO.getTeam_id());
-               Boolean hasLeaderInTeam = empInTeam.stream().map(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
+           if (isLeader_intValue == 1 ) {
+               List<EmployeeDTO> empInTeam = employeeService.findAllByTeamId(team_id_intValue);
+               Boolean hasLeaderInTeam = empInTeam.stream().map(emp -> isLeader_intValue == 1).findFirst().isPresent();
                if (!hasLeaderInTeam) {
                    employeeDTO.setIsLeader(1);
                } else {
@@ -262,7 +298,7 @@ public class AuthServiceImpl implements AuthService {
                }
            }
        }else{
-           employeeDTO.setIsLeader(registerDTO.getIsLeader());
+           employeeDTO.setIsLeader(isLeader_intValue);
        }
 
         if(userNameHasChanged){
@@ -289,11 +325,11 @@ public class AuthServiceImpl implements AuthService {
 
         employeeDTO.setId(registerDTO.getEmployeeId());
         employeeDTO.setName(registerDTO.getName());
-        employeeDTO.setSalary(registerDTO.getSalary());
         employeeDTO.setAddress(registerDTO.getAddress());
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
-        employeeDTO.setIsLeader(registerDTO.getIsLeader());
-        employeeDTO.setTeam_id(registerDTO.getTeam_id());
+        employeeDTO.setSalary(registerDTO.getSalary());
+        employeeDTO.setIsLeader(isLeader_intValue);
+//        employeeDTO.setTeam_id(team_id_intValue);
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());
         employeeDTO.setId(empExist.getId());
@@ -303,7 +339,11 @@ public class AuthServiceImpl implements AuthService {
         String role = "";
 
         if (teamName.equals(SD.TEAM_ADMINISTRATOR)) {
-            role = SD.ROLE_SALE;
+            if(empHasAccount.getRole().equals(SD.ROLE_ADMIN)){
+                role = SD.ROLE_ADMIN;
+            }else{
+                role = SD.ROLE_SALE;
+            }
         } else {
             role = SD.ROLE_ORGANIZE;
         }
@@ -334,7 +374,7 @@ public class AuthServiceImpl implements AuthService {
         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
         boolean phoneHasChanged = !cusExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !cusExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
-        boolean userNameHasChanged = !cusExist.getPhone().equalsIgnoreCase(registerDTO.getPhone());
+        boolean userNameHasChanged = !cusHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername());
 
 
         if(phoneHasChanged){
@@ -401,6 +441,7 @@ public class AuthServiceImpl implements AuthService {
         EmployeeDTO employeeDTO = employeeService.getEmployeeById(empID);
         EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeId(empID);
         RegisterDTO registerDTO = new RegisterDTO();
+        registerDTO.setId(employeeDTO.getId());
         registerDTO.setName(employeeDTO.getName());
         registerDTO.setAddress(employeeDTO.getAddress());
         registerDTO.setPhone(employeeDTO.getPhone());
@@ -422,6 +463,7 @@ public class AuthServiceImpl implements AuthService {
         CustomerDTO customerDTO = customerService.getCustomerById(customerID);
         CustomerAccountDTO customerAccountDTO = customerAccountService.getAccountByCustomerId(customerID);
         RegisterCustomerDTO registerDTO = new RegisterCustomerDTO();
+        registerDTO.setId(customerDTO.getId());
         registerDTO.setFirst_name(customerDTO.getFirst_name());
         registerDTO.setLast_name(customerDTO.getLast_name());
         registerDTO.setAddress(customerDTO.getAddress());

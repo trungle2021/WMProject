@@ -73,11 +73,27 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @DeleteMapping(value = {"/employees/delete/{id}"})
+    public ResponseEntity<String> staffDelete(@PathVariable int id) throws JsonProcessingException {
+        String response = authService.staffDelete(id);
+        return ResponseEntity.ok(response);
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = {"/customers/update"})
     public ResponseEntity<RegisterCustomerDTO> customerUpdate(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
         RegisterCustomerDTO response = authService.customerUpdate(registerDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = {"/employees/findRoleByEmployeeID/{id}"})
+    public ResponseEntity<String> findRoleByEmployeeID(@PathVariable int id) throws JsonProcessingException {
+        String response = authService.findRoleByEmployeeID(id);
         return ResponseEntity.ok(response);
     }
 

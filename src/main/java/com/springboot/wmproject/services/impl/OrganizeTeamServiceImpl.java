@@ -37,7 +37,7 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
 
     @Override
     public List<OrganizeTeamDTO> getAllOrganizeTeam() {
-        return organizeTeamRepository.findAll().stream().map(organizeTeams -> mapToDTO(organizeTeams)).collect(Collectors.toList());
+        return organizeTeamRepository.findAll().stream().filter(team -> team.isIs_deleted() == false).map(organizeTeams -> mapToDTO(organizeTeams)).collect(Collectors.toList());
     }
 
     @Override
@@ -55,7 +55,6 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     @Override
     public OrganizeTeamDTO getOneOrganizeTeamById(int id) {
         OrganizeTeams organizeTeams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(id)));
-
         return mapToDTO(organizeTeams);
     }
 
@@ -78,19 +77,20 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
         int organizeTeamId=editOrganizeTeam.getId();
         OrganizeTeams checkOrganizeTeam=organizeTeamRepository.findById(organizeTeamId).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(organizeTeamId)));
         if(checkOrganizeTeam!=null){
-            OrganizeTeams organizeTeams=new OrganizeTeams();
-            organizeTeams.setId(editOrganizeTeam.getId());
-            organizeTeams.setTeamName(editOrganizeTeam.getTeamName());
-            organizeTeamRepository.save(organizeTeams);
-            return mapToDTO(organizeTeams);
+            checkOrganizeTeam.setTeamName(editOrganizeTeam.getTeamName());
+            return mapToDTO(organizeTeamRepository.save(checkOrganizeTeam));
         }
         return null;
     }
 
+
+
     @Override
-    public void deleteOrganizeTeam(int id)throws ResourceNotFoundException {
-        OrganizeTeams organizeTeams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","id",String.valueOf(id)));
-        organizeTeamRepository.delete(organizeTeams);
+    public void softDelete(int id)throws ResourceNotFoundException {
+
+        OrganizeTeams teams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","id",String.valueOf(id)));
+        teams.setIs_deleted(true);
+        organizeTeamRepository.save(teams);
     }
 
     @Override

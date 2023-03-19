@@ -29,15 +29,34 @@ import java.util.Map;
 @Controller
 public class HomeController {
 
-
     @GetMapping(value = {"/home","/customers/home","/"})
     public String home() {
         return "home";
+    }
+    @GetMapping(value = {"/customers/dashboard",})
+    public String dashboard() {
+        return "/customerTemplate/dashboard";
     }
 
     @GetMapping(value = {"/about","/customers/about"})
     public String about() {
         return "about";
+    }
+
+    @GetMapping(value = {"/login"})
+    public String customerLogin(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String role = authentication.getAuthorities().stream().findFirst().toString();
+
+        boolean userIsStaff = role.contains("ADMIN") || role.contains("SALE") || role.contains("ORGANIZE");
+        boolean userIsCustomer = role.contains("CUSTOMER");
+        boolean isAnonymous = role.contains("ANONYMOUS");
+        if (userIsCustomer) {
+            return "redirect:/customers/home";
+        }
+        model.addAttribute("loginDTO", new LoginDTO());
+        return "login";
     }
 
 

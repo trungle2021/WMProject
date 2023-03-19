@@ -9,6 +9,7 @@ import com.springboot.wmproject.services.AuthServices.EmployeeService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +28,25 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public String findRoleByEmployeeID(int empID) {
+        EmployeeDTO employeeDTO = getEmployeeById(empID);
+        return findRoleByEmployeeID(empID);
+    }
+
+    @Override
     public List<EmployeeDTO> getAllEmployees() {
         //find all
         List<Employees> employeesList = employeeRepository.findAll();
-        List<EmployeeDTO> employeeDTOList = employeesList.stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
+        List<EmployeeDTO> employeeDTOList = employeesList.stream().filter(employees -> employees.is_deleted() == false).map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
 
     @Override
     public EmployeeDTO getEmployeeById(int id) {
-        Employees employees = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(id)));
+        Employees employees = employeeRepository.getEmployeeById(id);
+        if(employees == null){
+              throw new ResourceNotFoundException("Employee", "id", String.valueOf(id));
+        }
         return mapToDto(employees);
     }
 
@@ -55,7 +65,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "Employee ID is required to update");
         }
         //check if employee exist
-        Employees checkEmployees = employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
+        Employees checkEmployees = employeeRepository.getEmployeeById(employeeId);
         checkEmployees.setName(dto.getName());
         checkEmployees.setAddress(dto.getAddress());
         checkEmployees.setPhone(dto.getPhone());
@@ -104,18 +114,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     @Transactional
-    public void delete(int employeeId) {
-        Employees employees = employeeRepository.findById(employeeId).orElseThrow(() -> new ResourceNotFoundException("Employee", "id", String.valueOf(employeeId)));
-        employeeRepository.delete(employees);
+    public void softDelete(int employeeId) {
+        Employees employees = employeeRepository.getEmployeeById(employeeId);
+        employees.setTeam_id(null);
+        employees.set_deleted(true);
+        employees.setIsLeader(0);
+        employeeRepository.save(employees);
     }
 
     public EmployeeDTO mapToDto(Employees employees) {
-        EmployeeDTO postDto = modelMapper.map(employees, EmployeeDTO.class);
-        return postDto;
+        EmployeeDTO employeeDTO = modelMapper.map(employees, EmployeeDTO.class);
+        employeeDTO.set_deleted(employees.is_deleted());
+        return employeeDTO;
     }
 
     public Employees mapToEntity(EmployeeDTO employeeDTO) {
         Employees employees = modelMapper.map(employeeDTO, Employees.class);
+        employees.set_deleted(employeeDTO.is_deleted());
         return employees;
     }
 }

@@ -95,7 +95,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         //check employee account exist
         CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
         //if exist update
-        customerAccounts.setUsername(customerAccountDTO.getUsername());
+        customerAccounts.setUsername(customerAccountDTO.getUsername().trim());
         if(!customerAccountDTO.getPassword().equals("") || !customerAccountDTO.getPassword().isEmpty() || !customerAccountDTO.getPassword().isBlank()){
             customerAccounts.setPassword(customerAccountDTO.getPassword());
         }
@@ -162,7 +162,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
        String recipient = email;
        String subject = "Reset Password - WM RESTAURANT" ;
-       String link = SD.DOMAIN_APP_CLIENT + "/changePassword?token=" + tokenCreated;
+       String link = SD.DOMAIN_APP_CLIENT + "changePassword?token=" + tokenCreated;
         String content =
                 "<p>Hello,</p>"
                 + "<p>You have requested to reset your password.</p>"

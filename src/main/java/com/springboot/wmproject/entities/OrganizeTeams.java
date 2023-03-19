@@ -18,6 +18,10 @@ public class OrganizeTeams {
     @Basic
     @Column(name = "team_name", nullable = true, length = 45)
     private String teamName;
+
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean is_deleted;
     @OneToMany(mappedBy = "organizeTeamsByTeamId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Employees> employeesById = new HashSet<>();
     @OneToMany(mappedBy = "organizeTeamsByOrganizeTeam",cascade = CascadeType.ALL,orphanRemoval = true)
@@ -66,5 +70,13 @@ public class OrganizeTeams {
 
     public void setOrdersById(Collection<Orders> ordersById) {
         this.ordersById = ordersById;
+    }
+
+    public boolean isIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
     }
 }

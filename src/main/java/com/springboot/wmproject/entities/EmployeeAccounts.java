@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Collection;
 import java.util.Objects;
 
 @Getter
@@ -34,4 +35,6 @@ public class EmployeeAccounts {
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Employees employeesByEmployeeId;
+
+
 }

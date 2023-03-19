@@ -61,7 +61,7 @@ public class EmployeeController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("delete/{id}")
     public ResponseEntity<String> deleteEmployee(@PathVariable int id){
-        employeeService.delete(id);
+        employeeService.softDelete(id);
         return ResponseEntity.ok("Employee has been deleted");
     }
 }

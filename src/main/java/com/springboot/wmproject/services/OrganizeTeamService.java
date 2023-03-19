@@ -13,7 +13,7 @@ public interface OrganizeTeamService {
     OrganizeTeamDTO getOneOrganizeTeamById(int id);
     OrganizeTeamDTO createOrganizeTeam(OrganizeTeamDTO newOrganizeTeam);
     OrganizeTeamDTO updateOrganizeTeam(OrganizeTeamDTO editOrganizeTeam);
-    void deleteOrganizeTeam(int id);
+    void softDelete(int id);
 
     List<TeamSummaryDTO> getSummaryTeamOrganization();
 

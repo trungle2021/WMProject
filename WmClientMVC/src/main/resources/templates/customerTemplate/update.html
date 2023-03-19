@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{adminTemplate/adminlayout}">
+      layout:decorate="~{customerTemplate/customerlayout}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -25,14 +25,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>UPDATE EMPLOYEE</h1>
+                            <h1>Update Profile</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/teams/">Employee
-                                    Management</a></li>
-                                <li class="breadcrumb-item active"><a href="/staff/employees/update">Update</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/customers/getAll">Customer Management</a></li>
                             </ol>
                         </div>
                     </div>
@@ -51,20 +49,31 @@
                     <li style="color: green" th:text="${message}"></li>
                 </th:block>
 
-                <form method="post" th:action="@{/staff/employees/update}" th:object="${registerDTO} "
+                <form method="post" th:action="@{/customers/update}" th:object="${registerDTO} "
                       enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-row">
 
-                                <input type="hidden" class="form-control" th:field="*{employeeId}" th:value="*{employeeId}">
+                                <input type="hidden" class="form-control" th:field="*{id}" th:value="*{id}">
+                                <input type="hidden" class="form-control" th:field="*{customerId}" th:value="*{customerId}">
 
-                                <div class="form-group col-md-12">
-                                    <label class="col-form-label">Full Name:</label>
-                                    <input type="text" class="form-control" th:field="*{name}" th:value="*{name}" required>
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">First Name:</label>
+                                    <input type="text" class="form-control" th:field="*{first_name}" th:value="*{first_name}" required>
                                     <ul>
                                         <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('name')}" th:text="${err.defaultMessage}" class="error" />
+                                            <li th:each="err : ${result.getFieldErrors('first_name')}" th:text="${err.defaultMessage}" class="error" />
+                                        </th:block>
+                                    </ul>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label class="col-form-label">Last Name:</label>
+                                    <input type="text" class="form-control" th:field="*{last_name}" th:value="*{last_name}" required>
+                                    <ul>
+                                        <th:block th:if="${result != null}">
+                                            <li th:each="err : ${result.getFieldErrors('last_name')}" th:text="${err.defaultMessage}" class="error" />
                                         </th:block>
                                     </ul>
                                 </div>
@@ -88,35 +97,12 @@
 
                                 </div>
 
-
-
                                 <div class="form-group col-md-6">
                                     <label class="col-form-label">Phone:</label>
                                     <input type="text" class="form-control" th:field="*{phone}">
                                     <ul >
                                         <th:block th:if="${result != null}">
                                             <li th:each="err : ${result.getFieldErrors('phone')}" th:text="${err.defaultMessage}" class="error" />
-                                        </th:block>
-                                    </ul>
-                                </div>
-
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Join date:</label>
-                                    <input type="date" class="form-control" th:field="*{joinDate}"  value="2013-03-08"  required>
-                                    <ul>
-                                        <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('joinDate')}" th:text="${err.defaultMessage}" class="error" />
-                                        </th:block>
-                                    </ul>
-                                </div>
-
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Salary:</label>
-                                    <input type="text" class="form-control" th:field="*{salary}" required>
-                                    <ul>
-                                        <th:block th:if="${result != null}">
-                                            <li th:each="err : ${result.getFieldErrors('salary')}" th:text="${err.defaultMessage}" class="error" />
                                         </th:block>
                                     </ul>
                                 </div>
@@ -138,20 +124,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label class="col-form-label">Team:</label>
-                                    <select th:field="*{team_id}" class="form-control">
-                                        <th:block th:each="c:${teamList}">
-                                            <option  th:value="${c.getId()}" th:text="${c.getTeamName()}"></option>
-                                        </th:block>
-                                    </select>
-                                </div>
 
-                                <div class="form-group col-md-4 offset-1 mt-2">
-                                    <label th:for="isLeader">Is Leader?</label><br>
-                                    <input type="radio" th:field="*{isLeader}" th:value="1" th:checked="${registerDTO.getIsLeader()}"/> Yes
-                                    <input type="radio" th:field="*{isLeader}" th:value="0" th:checked="${registerDTO.getIsLeader()}"/> No
-                                </div>
                                 <div class="form-group col-md-12 mt-3">
                                     <label class="col-form-label">Username:</label>
                                     <input type="text" class="form-control" th:field="*{username}" required>
@@ -171,9 +144,7 @@
                                     </ul>
                                 </div>
                                 <div class="modal-footer col-md-12">
-                                    <a th:href="@{/staff/teams}" class="btn btn-secondary ">
-                                        Back
-                                    </a>
+                                    <a th:href="'javascript:window.history.back()'" class="btn btn-secondary">Back</a>
                                     <input type="submit" class="btn btn-primary" value="Update Profile">
                                 </div>
                             </div>

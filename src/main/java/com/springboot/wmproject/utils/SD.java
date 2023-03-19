@@ -14,7 +14,7 @@ public class SD {
     public static final String ROLE_SALE = "ROLE_SALE";
     public static final String ROLE_ORGANIZE = "ROLE_ORGANIZE";
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
-    public static final String TEAM_ADMINISTRATOR = "TEAM_ADMINISTRATOR";
+    public static final String TEAM_ADMINISTRATOR = "TEAM ADMINISTRATOR";
 
     public  static String orderStatusOrdered ="ordered";
     public static String orderStatusDeposited="deposited";
