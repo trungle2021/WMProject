@@ -15,7 +15,6 @@ import wm.clientmvc.DTO.MaterialDTO;
 import wm.clientmvc.DTO.OrderDTO;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,6 +28,17 @@ import static wm.clientmvc.utils.Static_Status.orderStatusConfirm;
 @Controller
 @RequestMapping("/staff/materials")
 public class AdminMaterialController {
+
+    @RequestMapping
+    public String materialIndex(Model model)
+    {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime now =  LocalDateTime.now();
+        String today=now.format(formatter);
+        model.addAttribute("today",today);
+        return "adminTemplate/pages/organize/material-index";
+    }
+
 @RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
 public String showMaterialbyOrder(Model model, @PathVariable Integer id, @CookieValue(name="token",defaultValue = "")String token)
 {
