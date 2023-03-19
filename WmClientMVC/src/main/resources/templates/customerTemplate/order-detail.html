@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/customerTemplate/customerlayout}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Customer Profile</title>
+
+
+  <link rel="stylesheet" href="/css/khangcustomer.css">
+</head>
+<body>
+
+<section layout:fragment="content" class="content-wrapper">
+  <br>
+  <div class="content ">
+    <!-- Main content -->
+
+    <div class="d-flex">
+      <div class="col-8 offset-2">
+        <div id="orderInfo">
+          <h3>Booking Information</h3>
+          <svg viewBox="0 0 100 1">
+            <style>
+              .line {
+                stroke: #7bdcb5;
+                stroke-width: 5;
+                stroke-linecap: round;
+              }
+            </style>
+            <symbol id="horizontal-line">
+              <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+            </symbol>
+            <use xlink:href="#horizontal-line" />
+          </svg>
+          <div class="card-container">
+            <div class="info-container">
+              <label> Venue :</label>
+              <p th:text="${myOrder.getVenues().getVenueName()}"></p>
+            </div>
+            <div class="info-container">
+              <label>Booking Date :</label>
+              <p th:text="${myOrder.getOrderDate()}"></p>
+            </div>
+            <div class="info-container">
+              <label>Event Date:</label>
+              <p th:text="${myOrder.getTimeHappen()}"></p>
+            </div>
+            <div class="info-container">
+              <label>Booking Status :</label>
+              <p th:text="${myOrder.getOrderStatus()}"></p>
+            </div>
+            <div class="info-container">
+              <label>Number of Table :</label>
+            </div>
+
+            <div class="info-container">
+              <label>Order Time Line :</label>
+              <div class="mytimeline" id="timeline">
+
+                <div class="day-line today-line" id="today">
+                  <div class="event today">
+                    <div class="date" id=todayInfo>
+                    </div>
+                  </div>
+                </div>
+                <div class="day-line order-line" id="orderDay">
+                  <div class="event deposited">
+                    <div class="date">Deposit Period :
+                      <p id="depositPeriod"> </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="day-line deposited-line" id="depositDay">
+                  <div class="event warning">
+                    <div class="date">Update Infomation Period:
+                      <p id="updatePeriod"> </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="day-line warning-line" id="warningDay">
+                  <div class="event event">
+                    <div class="date">
+                      Warning Period:
+                      <p id="warningPeriod"> </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="day-line event-line" id="eventDay">
+                  <div class="event event">
+                    <div class="date">Event Confirmed
+                      <p id="confirmPeriod"> </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr>
+<!--          /-->
+<!--          ///-->
+          <svg viewBox="0 0 100 1">
+            <style>
+              .line {
+                stroke: #7bdcb5;
+                stroke-width: 5;
+                stroke-linecap: round;
+              }
+            </style>
+            <symbol id="horizontal-line">
+              <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+            </symbol>
+            <use xlink:href="#horizontal-line" />
+          </svg>
+          <div class="row title">
+            <div class="col">
+              <span>Your Ordered Food :</span><a type="button" data-toggle="collapse"
+                                                 data-target="#multiCollapseExample1" aria-expanded="false"
+                                                 aria-controls="multiCollapseExample1">click here</a>
+              <svg viewBox="0 0 100 1">
+                <style>
+                  .line {
+                    stroke: #7bdcb5;
+                    stroke-width: 5;
+                    stroke-linecap: round;
+                  }
+                </style>
+                <symbol id="horizontal-line">
+                  <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                </symbol>
+                <use xlink:href="#horizontal-line" />
+              </svg>
+
+              <div class="collapse multi-collapse" id="multiCollapseExample1">
+                <div class="card card-body">
+                  <table class="table">
+                    <thead>
+                    <tr>
+                      <th>Food Name</th>
+                      <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="f:${myOrder.getFoodDetailsById()}">
+                      <td scope="row" th:text="${f.getFoodByFoodId().getFoodName()}"></td>
+                      <td th:text="${f.getFoodByFoodId().getDescription()}" class="description"></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <div class="col">
+              <span>Your ordered service :</span> <a type="button" data-toggle="collapse"
+                                                     data-target="#multiCollapseExample2" aria-expanded="false"
+                                                     aria-controls="multiCollapseExample2">click here</a>
+              <svg viewBox="0 0 100 1">
+                <style>
+                  .line {
+                    stroke: #7bdcb5;
+                    stroke-width: 5;
+                    stroke-linecap: round;
+                  }
+                </style>
+                <symbol id="horizontal-line">
+                  <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                </symbol>
+                <use xlink:href="#horizontal-line" />
+              </svg>
+              <div class="collapse multi-collapse" id="multiCollapseExample2">
+                <div class="card card-body">
+                  <table class="table">
+                    <thead>
+                    <tr >
+                      <th>Service Name</th>
+                      <th>Description</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="s:${myOrder.getServiceDetailsById()}">
+                      <td scope="row" th:text="${s.getServicesByServiceId().getServiceName()}"></td>
+                      <td th:text="${s.getServicesByServiceId().getDescription()}" class="description"></td>
+                    </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+          </div>
+          <svg viewBox="0 0 100 1">
+            <style>
+              .line1 {
+                stroke: #0693e3;
+                stroke-width: 5;
+                stroke-linecap: round;
+              }
+            </style>
+            <symbol id="line">
+              <line x1="0" y1="0.5" x2="100" y2="0.5" class="line1" />
+            </symbol>
+            <use xlink:href="#line" />
+          </svg>
+
+          <div class="row action">
+            <div class="col" th:if="${myOrder.getOrderStatus().equalsIgnoreCase(depositedSt)} or ${myOrder.getOrderStatus().equalsIgnoreCase(warningSt)} ">
+              <button type="button" class="btn color2" data-toggle="modal" data-target="#exampleModal">
+                Cancel Your Booking<i class="fas fa-check-square"></i>
+              </button>
+
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Cancel Your Booking?</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="myForm" th:action="@{/customers/orders/myorder/order-cancel}" method="post" class="form-horizontal">
+                        <div class="card-body">
+
+                        <input hidden="hidden"  name="orderId" th:value="${myOrder.getId()}" >
+
+                        <div class="form-group row">
+                          <h5 class="alert">Are You Sure To Cancel This Booking?</h5>
+                          <p class="alert">Type "<span th:text="${confirmCancel}"></span>" to confirm cancel</p>
+                          <label for="mess" >Confirm Message</label>
+                          <div class="col-sm-10">
+                            <input id="mess" name="confirmMess">
+                            <br>
+                            <br>
+                            <p class="alert bg-danger">*Please note that the refund will be 50% your deposit!</p>
+                          </div>
+                        </div>
+                        <input hidden="hidden" name="status" th:value="${myOrder.getOrderStatus()}">
+
+
+                       </div>
+                      </form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                      <button type="submit" form="myForm" class="btn btn-primary">Save</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div th:if="${myOrder.getOrderStatus().equalsIgnoreCase(depositedSt)} or ${myOrder.getOrderStatus().equalsIgnoreCase(warningSt)}" class="col">
+              <button class="btn color1">Confirm Booking <i class="fas fa-check-square"></i></button>
+            </div>
+            <div th:if="${myOrder.getOrderStatus().equalsIgnoreCase(depositedSt)} or ${myOrder.getOrderStatus().equalsIgnoreCase(orderedSt)}" class="col">
+              <button class="btn color">Update Order <i class="fas fa-check-square"></i></button>
+            </div>
+          </div>
+
+<!--//-->
+
+
+<!--//-->
+        </div>
+
+      </div>
+
+    </div>
+
+
+  </div>
+  <br/>
+  <br/>
+</section>
+<section layout:fragment="optional">
+
+
+  <script th:inline="javascript">
+    var myOrder = [[${myOrder}]];
+  </script>
+
+  <script src="/js/khangcustomer.js"></script>
+
+<script> $('#myModal').on('shown.bs.modal', function () {
+  $('#myInput').trigger('focus');
+})
+</script>
+
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#myButton").click(function() {
+        $("#myForm").submit();
+      });
+    });
+  </script>
+
+</section>
+</body>
+</html>

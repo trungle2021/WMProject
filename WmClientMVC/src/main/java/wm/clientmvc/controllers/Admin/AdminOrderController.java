@@ -183,7 +183,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                         OrderDTO.class
                 );
                 model.addAttribute("orderDTO", order);
-                redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Refunded! ");
+                redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Refunded! ");
                 return "redirect:/staff/orders/showall";
             } catch (IOException e) {
                 model.addAttribute("message", e.getMessage());
@@ -292,7 +292,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
                     token,
                     OrderDTO.class
             );
-            redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Deposited! ");
+            redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Deposited! ");
             return "redirect:/staff/orders/showall";
          } catch (IOException e) {
                 model.addAttribute("message", e.getMessage());
@@ -479,7 +479,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
     Map<Integer,Integer> map=new HashMap<>();
             for (OrganizeTeamDTO team:teamList)
             {
-                if(!team.getTeamName().equalsIgnoreCase(teamAdmin)) {
+                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted()) {
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 

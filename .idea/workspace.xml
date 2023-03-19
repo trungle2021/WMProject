@@ -5,23 +5,27 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/css/khangcustomer.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/js/khangcustomer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/order-detail.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/MaterialDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/MaterialDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/OrganizeTeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/OrganizeTeamDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/utils/Static_Status.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/utils/Static_Status.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/css/khangstyleadmin.css" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/css/khangstyleadmin.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/order-update-confirm.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/order-update-confirm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/order-update-status.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/order-update-status.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/data.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/jsgrid.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/order.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/tables/order.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/VenueServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/VenueServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/utils/SD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/utils/SD.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/springboot/wmproject/services/impl/VenueServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/springboot/wmproject/services/impl/VenueServiceImpl.class" afterDir="false" />
-
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/customerlayout.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/customerlayout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/dashboard.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/dashboard.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/MaterialDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/MaterialDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/OrganizeTeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/OrganizeTeamDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/OrderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/entities/Materials.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/entities/Materials.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrganizeTeamServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrganizeTeamServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,12 +60,12 @@
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
         <option value="package.json" />
-        <option value="JavaScript File" />
-        <option value="CSS File" />
         <option value="Interface" />
         <option value="Class" />
         <option value="AnnotationType" />
         <option value="HTML File" />
+        <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -93,47 +97,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;JPA.DatabaseSchemaImportDialog&quot;: &quot;16953116-e2cc-4c35-8f3e-1c46994fc1aa&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/Desktop/wmproject/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers&quot;,
-
-    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.23551057&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-
-    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
-
-    &quot;spring.configuration.checksum&quot;: &quot;a6c1a72681bbf934af904fd11f4112a5&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_ADD_EXTERNAL_FILES": "true",
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JPA.DatabaseSchemaImportDialog": "16953116-e2cc-4c35-8f3e-1c46994fc1aa",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "jdk.selected.JAVA_MODULE": "17",
+    "last_opened_file_path": "C:/Users/admin/Desktop/wmproject/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers",
+    "list.type.of.created.stylesheet": "CSS",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.23551057",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "project.propCompiler",
+    "spring.configuration.checksum": "a6c1a72681bbf934af904fd11f4112a5",
+    "vue.rearranger.settings.migration": "true"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;mysql&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\customerTemplate" />
@@ -175,7 +175,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.WmprojectApplication">
+  <component name="RunManager" selected="Spring Boot.WmClientMvcApplication">
     <configuration name="WMProject" type="CompoundRunConfigurationType">
       <toRun name="WmClientMvcApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
@@ -262,7 +262,6 @@
       <workItem from="1678519077323" duration="38945000" />
       <workItem from="1678615262182" duration="3014000" />
       <workItem from="1678670890933" duration="31317000" />
-
       <workItem from="1678736699526" duration="4238000" />
       <workItem from="1678774605929" duration="39367000" />
       <workItem from="1678869364046" duration="23618000" />
@@ -274,7 +273,6 @@
       <workItem from="1679110472066" duration="40942000" />
       <workItem from="1679160396021" duration="1297000" />
       <workItem from="1679210649213" duration="28000" />
-
     </task>
     <servers />
   </component>
@@ -309,11 +307,9 @@
           <option name="timeStamp" value="22" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerServiceImpl.java</url>
           <line>97</line>
           <option name="timeStamp" value="204" />
-
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminCustomerController.java</url>
@@ -321,11 +317,9 @@
           <option name="timeStamp" value="271" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerServiceImpl.java</url>
           <line>90</line>
           <option name="timeStamp" value="208" />
-
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/securities/config/Interceptors/AuthenticationInterceptor.java</url>
@@ -333,7 +327,6 @@
           <option name="timeStamp" value="279" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
           <line>103</line>
           <option name="timeStamp" value="230" />
@@ -362,7 +355,36 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java</url>
           <line>218</line>
           <option name="timeStamp" value="249" />
-
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
+          <line>208</line>
+          <option name="timeStamp" value="281" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
+          <line>321</line>
+          <option name="timeStamp" value="284" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
+          <line>331</line>
+          <option name="timeStamp" value="286" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java</url>
+          <line>49</line>
+          <option name="timeStamp" value="287" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java</url>
+          <line>82</line>
+          <option name="timeStamp" value="289" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java</url>
+          <line>72</line>
+          <option name="timeStamp" value="290" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

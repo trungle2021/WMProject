@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //import com.google.gson.Gson;
+import jakarta.websocket.server.PathParam;
 import jakarta.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.*;
 
 import java.io.IOException;
@@ -39,21 +41,8 @@ import static wm.clientmvc.utils.Static_Status.*;
 public class WebOrderController {
 
     RestTemplate restTemplate = new RestTemplate();
-//    AuthService authService;
-
     String url = "http://localhost:8080/api/venues/allactive";
     String orderurl="http://localhost:8080/api/orders";
-
-
-//    public WebOrderController(AuthService authService) {
-//        this.authService = authService;
-//    }
-
-
-
-//    String login="http://localhost:8080/api/auth/employee/login";
-
-
 
         @GetMapping("")
         public String order(){
@@ -325,38 +314,87 @@ public class WebOrderController {
 
         return ResponseEntity.ok("{\"message\": \"Congratulations on selecting a successful dish and service!\"}");
     }
+//CANCELING
+    @RequestMapping(value = "/myorder/order-cancel",method = RequestMethod.POST)
+    public String OrderCancel(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status,@PathParam("confirmMess")String confirmMess, RedirectAttributes redirectAttributes)
+    {
+
+        if(confirmMess==null || !confirmMess.equalsIgnoreCase(confirmCancel))
+        {
+            redirectAttributes.addFlashAttribute("alertError", "Can't Cancel booking!Your confirm message incorrect!Try again");
+            //redirect
+            return "redirect:/customers/dashboard";
+        }
 
 
+        if(status.equalsIgnoreCase(orderStatusDeposited)|| status.equalsIgnoreCase(orderStatusWarning))
+        {
+            String url = "http://localhost:8080/api/orders/updateStatus/"+orderId+"/"+orderStatusCancel;
+            try {
+               APIHelper.makeApiCall(
+                        url,
+                        HttpMethod.PUT,
+                        null,
+                        token,
+                        OrderDTO.class
+                );
+//                model.addAttribute("orderDTO", order);
+                redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Your order canceling,wait for our employee accept!Or contact us to get refund!");
+                //return customer profile
+                return "redirect:/customers/dashboard";
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+                //redirect
+                return "redirect:/customers/dashboard";
+            }
+        }
+        else {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Make sure your order status is deposited or warning!");
+            return "redirect:/customers/dashboard";
+        }
+    }
+
+    //orderdetail
+    @RequestMapping(value = "/myorder/order-detail",method = RequestMethod.POST)
+    public String OrderDetail(Model model,@CookieValue(name="token",defaultValue = "")String token,@PathParam("orderId") Integer orderId,RedirectAttributes redirectAttributes)
+    {
+        model.addAttribute("warningSt",orderStatusWarning);
+        model.addAttribute("cancelingSt",orderStatusCancel);
+        model.addAttribute("confirmSt",orderStatusConfirm);
+        model.addAttribute("depositedSt",orderStatusDeposited);
+        model.addAttribute("orderedSt",orderStatusOrdered);
+        model.addAttribute("confirmCancel",confirmCancel);
+
+        String url="http://localhost:8080/api/orders/"+orderId;
+        try {
+            OrderDTO order=APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    OrderDTO.class
+            );
+            DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
-//call login for token test
-//public String getToken()
-//{
-//    RestTemplate restTemplate = new RestTemplate();
-//    String loginUrl = "http://localhost:8080/api/auth/employee/login";
-//    HttpHeaders headers = new HttpHeaders();
-//    headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//    LoginDTO loginRequest = new LoginDTO();
-//    loginRequest.setUsername("admin");
-//    loginRequest.setPassword("admin");
-//
-//    HttpEntity<LoginDTO> request = new HttpEntity<>(loginRequest, headers);
-//    ResponseEntity<JWTAuthResponse> response = restTemplate.postForEntity(loginUrl, request, JWTAuthResponse.class);
-//    JWTAuthResponse jwtAuthResponse = response.getBody();
-//    String token = jwtAuthResponse.getAccessToken();
-//    return token;
-//}
-//test
-//    public String checkVenueBooked(List<VenueDTO> venueList,OrderDTO order) {
-//
-//        for (VenueDTO venue : venueList) {
-//            if (venue.getId() == order.getVenueId()) {
-//
-//                return "afternoon";
-//            }
-//        }
-//        return "none";
+//            String orderDay = LocalDateTime.parse(order.getOrderDate(), formatter).toString();
+//            String eventDay=LocalDateTime.parse(order.getTimeHappen(),formatter).toString();
+            model.addAttribute("myOrder",order);
+//            String
+            return "customerTemplate/order-detail";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+            //redirect
+            return "redirect:/customers/dashboard";
+        }
+
+
+//        return "customerTemplate/order-detail";
+    }
+//    @RequestMapping("/test")
+//    public String test()
+//    {
+//        return ";
 //    }
 
     //toJson add Map and List of venue
