@@ -52,6 +52,7 @@
             </div>
             <div class="info-container">
               <label>Number of Table :</label>
+              <p th:text="${myOrder.getTableAmount()!=null}?${myOrder.getTableAmount()}:'N/A'"></p>
             </div>
 
             <div class="info-container">
@@ -254,7 +255,12 @@
               </div>
             </div>
             <div th:if="${myOrder.getOrderStatus().equalsIgnoreCase(depositedSt)} or ${myOrder.getOrderStatus().equalsIgnoreCase(warningSt)}" class="col">
-              <button class="btn color1">Confirm Booking <i class="fas fa-check-square"></i></button>
+
+
+              <form th:action="@{/customers/orders/myorder/order-confirm}" method="post">
+                <input hidden="hidden" name="orderId" th:value="${myOrder.getId()}" >
+                <button type="submit" class="btn color1">Confirm Booking <i class="fas fa-check-square"></i></button>
+              </form>
             </div>
             <div th:if="${myOrder.getOrderStatus().equalsIgnoreCase(depositedSt)} or ${myOrder.getOrderStatus().equalsIgnoreCase(orderedSt)}" class="col">
               <button class="btn color">Update Order <i class="fas fa-check-square"></i></button>
