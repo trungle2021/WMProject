@@ -100,7 +100,7 @@
                                                                         style="margin: 1px"
                                                                         onclick="highlight(this)"
                                                                         th:value="${mat.getId()}"
-                                                                        th:text="${mat.getMaterialName()}"></button>
+                                                                        th:text="${mat.getMaterialName()}+'(Code: '+${mat.getMaterialCode()}+')'"></button>
                                                             </th:block>
                                                             <!--                                        <button onclick="highlight(this)">Button 1</button>-->
                                                             <!--                                        <button onclick="highlight(this)">Button 2</button>-->
@@ -134,7 +134,7 @@
                                                 <input type="text" id="input-1-1" name="material1"/><br/><br/>
                                                 <label for="input-1-2">Unit:</label>
                                                 <input type="text" id="input-1-2" name="unit1"/><br/><br/>
-                                                <label for="input-1-3">Cost:</label>
+                                                <label for="input-1-3">Count:</label>
                                                 <input type="text" id="input-1-3" name="cost1"
                                                        th:id="txtPrice1"/><br/><br/>
                                             </div>
@@ -147,7 +147,7 @@
                                                 <input type="text" id="input-2-1" name="material2"/><br/><br/>
                                                 <label for="input-2-2">Unit:</label>
                                                 <input type="text" id="input-2-2" name="unit2"/><br/><br/>
-                                                <label for="input-2-3">Cost:</label>
+                                                <label for="input-2-3">Count:</label>
                                                 <input type="text" id="input-2-3" name="cost2"
                                                        th:id="txtPrice2"/><br/><br/>
                                             </div>
@@ -161,7 +161,7 @@
                                                 <input type="text" id="input-3-1" name="material3"/><br/><br/>
                                                 <label for="input-3-2">Unit:</label>
                                                 <input type="text" id="input-3-2" name="unit3"/><br/><br/>
-                                                <label for="input-3-3">Cost:</label>
+                                                <label for="input-3-3">Count:</label>
                                                 <input type="text" id="input-3-3" name="cost3"
                                                        th:id="txtPrice3"/><br/><br/>
                                             </div>
