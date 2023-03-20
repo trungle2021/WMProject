@@ -9,7 +9,6 @@ public class MaterialDTO {
     private String materialCode;
     private String materialName;
     private String unit;
-
     private int foodId;
 
     private Double count;

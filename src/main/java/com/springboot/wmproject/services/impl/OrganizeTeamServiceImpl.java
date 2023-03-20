@@ -125,11 +125,13 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     }
     public OrganizeTeams mapToEntity(OrganizeTeamDTO organizeTeamDTO) {
         OrganizeTeams organizeTeams = modelMapper.map(organizeTeamDTO, OrganizeTeams.class);
+        organizeTeams.setIs_deleted(organizeTeamDTO.is_deleted());
         return organizeTeams;
     }
 
     public OrganizeTeamDTO mapToDTO(OrganizeTeams organizeTeams) {
         OrganizeTeamDTO organizeTeamDTO = modelMapper.map(organizeTeams, OrganizeTeamDTO.class);
+        organizeTeamDTO.set_deleted(organizeTeams.isIs_deleted());
         return organizeTeamDTO;
     }
 

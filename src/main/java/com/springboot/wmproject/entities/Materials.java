@@ -25,7 +25,7 @@ public class Materials {
     private String materialName;
     @Basic
     @Column(name = "unit", nullable = true, length = 45)
-    private Double unit;
+    private String unit;
     @Basic
     @Column(name = "food_id", nullable = true)
     private int foodId;

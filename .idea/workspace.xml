@@ -5,6 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/customer-order-confirm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/OrganizeTeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/OrganizeTeamDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/ValidateCustom/FullName.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/ValidateCustom/FullName.java" afterDir="false" />
@@ -26,6 +28,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/utils/SD.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/utils/SD.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -60,11 +63,11 @@
       <list>
         <option value="com.haulmont.jpb.JpaEntity" />
         <option value="package.json" />
-        <option value="JavaScript File" />
-        <option value="CSS File" />
         <option value="Interface" />
         <option value="Class" />
         <option value="AnnotationType" />
+        <option value="CSS File" />
+        <option value="JavaScript File" />
         <option value="HTML File" />
       </list>
     </option>
@@ -176,6 +179,7 @@
     </option>
   </component>
   <component name="RunManager" selected="Spring Boot.MVC">
+
     <configuration name="WMProject" type="CompoundRunConfigurationType">
       <toRun name="WmClientMvcApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
@@ -273,6 +277,7 @@
       <workItem from="1679210649213" duration="28000" />
       <workItem from="1679251778465" duration="2143000" />
       <workItem from="1679277824290" duration="18756000" />
+
     </task>
     <servers />
   </component>
@@ -312,6 +317,7 @@
           <option name="timeStamp" value="204" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminCustomerController.java</url>
           <line>137</line>
           <option name="timeStamp" value="271" />
@@ -375,6 +381,7 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrganizeTeamServiceImpl.java</url>
           <line>78</line>
           <option name="timeStamp" value="299" />
+
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
