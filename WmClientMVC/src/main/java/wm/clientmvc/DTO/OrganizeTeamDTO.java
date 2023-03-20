@@ -13,6 +13,4 @@ public class OrganizeTeamDTO {
     @TeamName
     private String teamName;
     private boolean is_deleted;
-//    @JsonIgnore
-//    private List<EmployeeDTO> employeesById;
 }
