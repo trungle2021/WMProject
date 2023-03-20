@@ -94,6 +94,11 @@ public class AdminOrderController {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
         Long empId= empUserDetails.getUserId();
+        model.addAttribute("warningSt",orderStatusWarning);
+        model.addAttribute("cancelingSt",orderStatusCancel);
+        model.addAttribute("confirmSt",orderStatusConfirm);
+        model.addAttribute("depositedSt",orderStatusDeposited);
+        model.addAttribute("orderedSt",orderStatusOrdered);
         ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<>() {
         };
         String url="http://localhost:8080/api/orders/bybookingEmp/"+empId;
@@ -104,17 +109,16 @@ public class AdminOrderController {
                     token,
                     responseType);
 
-
-            List<OrderDTO> myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+            List<OrderDTO> myList= new ArrayList<>();
+            if(orderList!=null)
+                {
+             myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+                }
 
             model.addAttribute("list",myList);
 
 
-            model.addAttribute("warningSt",orderStatusWarning);
-            model.addAttribute("cancelingSt",orderStatusCancel);
-            model.addAttribute("confirmSt",orderStatusConfirm);
-            model.addAttribute("depositedSt",orderStatusDeposited);
-            model.addAttribute("orderedSt",orderStatusOrdered);
+
             return "adminTemplate/pages/tables/order";
         }
         catch (HttpClientErrorException | IOException ex)
