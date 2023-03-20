@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //import com.google.gson.Gson;
+import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import jakarta.ws.rs.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
@@ -12,9 +14,11 @@ import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.*;
 
 import java.io.IOException;
@@ -39,21 +43,8 @@ import static wm.clientmvc.utils.Static_Status.*;
 public class WebOrderController {
 
     RestTemplate restTemplate = new RestTemplate();
-//    AuthService authService;
-
     String url = "http://localhost:8080/api/venues/allactive";
     String orderurl="http://localhost:8080/api/orders";
-
-
-//    public WebOrderController(AuthService authService) {
-//        this.authService = authService;
-//    }
-
-
-
-//    String login="http://localhost:8080/api/auth/employee/login";
-
-
 
         @GetMapping("")
         public String order(){
@@ -325,38 +316,188 @@ public class WebOrderController {
 
         return ResponseEntity.ok("{\"message\": \"Congratulations on selecting a successful dish and service!\"}");
     }
+//CANCELING
+    @RequestMapping(value = "/myorder/order-cancel",method = RequestMethod.POST)
+    public String OrderCancel(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status,@PathParam("confirmMess")String confirmMess, RedirectAttributes redirectAttributes)
+    {
+
+        if(confirmMess==null || !confirmMess.equalsIgnoreCase(confirmCancel))
+        {
+            redirectAttributes.addFlashAttribute("alertError", "Can't Cancel booking!Your confirm message incorrect!Try again");
+            //redirect
+            return "redirect:/customers/dashboard";
+        }
 
 
+        if(status.equalsIgnoreCase(orderStatusDeposited)|| status.equalsIgnoreCase(orderStatusWarning))
+        {
+            String url = "http://localhost:8080/api/orders/updateStatus/"+orderId+"/"+orderStatusCancel;
+            try {
+               APIHelper.makeApiCall(
+                        url,
+                        HttpMethod.PUT,
+                        null,
+                        token,
+                        OrderDTO.class
+                );
+//                model.addAttribute("orderDTO", order);
+                redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Your order canceling,wait for our employee accept!Or contact us to get refund!");
+                //return customer profile
+                return "redirect:/customers/dashboard";
+            } catch (IOException e) {
+                redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+                //redirect
+                return "redirect:/customers/dashboard";
+            }
+        }
+        else {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Make sure your order status is deposited or warning!");
+            return "redirect:/customers/dashboard";
+        }
+    }
+//confirm order
+    @RequestMapping(value = "/myorder/order-confirm",method = RequestMethod.POST)
+    public String OrderConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, RedirectAttributes redirectAttributes)
+    {
+        String url="http://localhost:8080/api/orders/"+orderId;
+        try {
+            OrderDTO order= APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    OrderDTO.class
+            );
+            model.addAttribute("orderDTO",order);
+            return "customerTemplate/customer-order-confirm";
+        }catch (IOException e) {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+            //redirect
+            return "redirect:/customers/dashboard";
+        }
+
+    }
+    //update confirm
+    @RequestMapping(value = "/myorder/update-confirm",method = RequestMethod.POST)
+    public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+    {
+        //tinh lại total amount and partime emp
+        OrderDTO editOrder = new OrderDTO();
+//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//    CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        String orderUrl = "http://localhost:8080/api/orders/" + order.getId();
+        OrderDTO findOrder= new OrderDTO();
+        try {
+            findOrder = APIHelper.makeApiCall(
+                    orderUrl,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    OrderDTO.class
+            );
+        } catch (IOException e) {
+            model.addAttribute("message", e.getMessage());
+            return "adminTemplate/error";
+        }
+        if (order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited) && findOrder!=null || order.getOrderStatus().equalsIgnoreCase(orderStatusWarning) && findOrder!=null)
+        {
+            //check total amount
+            Integer tbNum=order.getTableAmount();
+            Integer min=findOrder.getVenues().getMinPeople() /10;
+            Integer max=findOrder.getVenues().getMaxPeople()/10;
+            if(tbNum!=null&&tbNum<min ||tbNum!=null&& tbNum> max)
+            {
+                bindingResult.rejectValue("tableAmount","tableAmount.range","Please enter table amount form "+min+"to "+ max );
+
+            }
+            if (bindingResult.hasErrors()) {
+                order.setVenues(findOrder.getVenues());
+                order.setCustomersByCustomerId(findOrder.getCustomersByCustomerId());
+                order.setOrganizeTeamsByOrganizeTeam(findOrder.getOrganizeTeamsByOrganizeTeam());
+                model.addAttribute("orderDTO",order);
+
+                return "customerTemplate/customer-order-confirm";
+
+            }
+            else {
+                // process the order
+                String url = "http://localhost:8080/api/orders/updateStatus";
+                editOrder.setId(order.getId());
+                editOrder.setOrderStatus(orderStatusConfirm);
+                editOrder.setBookingEmp(findOrder.getBookingEmp());
+                editOrder.setTableAmount(tbNum);
+                editOrder.setOrderTotal(getTotal(findOrder,tbNum));
+                Integer team=findOrder.getOrganizeTeam();
+                editOrder.setOrganizeTeam(team);
+                editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
+                //update
+                try {
+                    APIHelper.makeApiCall(
+                            url,
+                            HttpMethod.PUT,
+                            editOrder,
+                            token,
+                            OrderDTO.class
+                    );
+                    redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order confirm! ");
+
+                    return "redirect:/customers/dashboard";
+                } catch (IOException e) {
+                    redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+                    //redirect
+                    return "redirect:/customers/dashboard";
+                }
+            }
+
+        } else {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+            //redirect
+            return "redirect:/customers/dashboard";
+        }
+    }
+
+    //orderdetail
+    @RequestMapping(value = "/myorder/order-detail",method = RequestMethod.POST)
+    public String OrderDetail(Model model,@CookieValue(name="token",defaultValue = "")String token,@PathParam("orderId") Integer orderId,RedirectAttributes redirectAttributes)
+    {
+        model.addAttribute("warningSt",orderStatusWarning);
+        model.addAttribute("cancelingSt",orderStatusCancel);
+        model.addAttribute("confirmSt",orderStatusConfirm);
+        model.addAttribute("depositedSt",orderStatusDeposited);
+        model.addAttribute("orderedSt",orderStatusOrdered);
+        model.addAttribute("confirmCancel",confirmCancel);
+
+        String url="http://localhost:8080/api/orders/"+orderId;
+        try {
+            OrderDTO order=APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    OrderDTO.class
+            );
+            DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
-//call login for token test
-//public String getToken()
-//{
-//    RestTemplate restTemplate = new RestTemplate();
-//    String loginUrl = "http://localhost:8080/api/auth/employee/login";
-//    HttpHeaders headers = new HttpHeaders();
-//    headers.setContentType(MediaType.APPLICATION_JSON);
-//
-//    LoginDTO loginRequest = new LoginDTO();
-//    loginRequest.setUsername("admin");
-//    loginRequest.setPassword("admin");
-//
-//    HttpEntity<LoginDTO> request = new HttpEntity<>(loginRequest, headers);
-//    ResponseEntity<JWTAuthResponse> response = restTemplate.postForEntity(loginUrl, request, JWTAuthResponse.class);
-//    JWTAuthResponse jwtAuthResponse = response.getBody();
-//    String token = jwtAuthResponse.getAccessToken();
-//    return token;
-//}
-//test
-//    public String checkVenueBooked(List<VenueDTO> venueList,OrderDTO order) {
-//
-//        for (VenueDTO venue : venueList) {
-//            if (venue.getId() == order.getVenueId()) {
-//
-//                return "afternoon";
-//            }
-//        }
-//        return "none";
+//            String orderDay = LocalDateTime.parse(order.getOrderDate(), formatter).toString();
+//            String eventDay=LocalDateTime.parse(order.getTimeHappen(),formatter).toString();
+            model.addAttribute("myOrder",order);
+//            String
+            return "customerTemplate/order-detail";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+            //redirect
+            return "redirect:/customers/dashboard";
+        }
+
+
+//        return "customerTemplate/order-detail";
+    }
+//    @RequestMapping("/test")
+//    public String test()
+//    {
+//        return ";
 //    }
 
     //toJson add Map and List of venue
@@ -392,6 +533,43 @@ public class WebOrderController {
         }
     }
 
+    public Integer getPartTimeEmp(Integer teamId,Integer tableNum,String token)
+    {
+        String url="http://localhost:8080/api/employees/findByTeam/"+teamId;
+        ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTypeReference<List<EmployeeDTO>>() {};
+        try {
+            List<EmployeeDTO> empList =APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseType
+            );
+            Integer partTimeNum=0;
+            //defaul team leader +2 chef
+            if(tableNum/4 -empList.size()>0)
+            {partTimeNum= tableNum/4 -empList.size()+3;}
+            else{partTimeNum=3;}
+            return partTimeNum;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    public Double getTotal(OrderDTO order,Integer tbAmount)
+    {
+        Double foodPrice=0.0;
+        for (FoodDetailDTO food:order.getFoodDetailsById()) {
+            foodPrice += food.getFoodByFoodId().getPrice();
+        }
+        Double servicePrice=0.0;
+        for (ServiceDetailDTO servicedt :order.getServiceDetailsById())
+        {
+            servicePrice+=servicedt.getServicesByServiceId().getPrice();
+        }
+
+        Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
+        return total;
+    }
 
 
 

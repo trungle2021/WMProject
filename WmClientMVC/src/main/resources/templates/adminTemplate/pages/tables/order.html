@@ -22,19 +22,12 @@
         <a th:href="@{/staff/orders/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Deposited Order</a>
         <a th:href="@{/staff/orders/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Warning Order</a>
         <a th:href="@{/staff/orders/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Canceling Order</a>
-
-
     </div>
-
         <div class="content ">
             <!-- Main content -->
         <div class="container">
             <div class="row">
                 <div class="col-12">
-
-
-                    <!-- /.card-header -->
-
                     <table
                             class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
                             style="position: relative;width: 100%;" aria-describedby="example-info">
@@ -100,16 +93,7 @@
             </div>
         </div>
 </div>
-            <!-- /.content -->
 
-        <!-- /.content-wrapper -->
-        <!--create employee Modal-->
-
-        <!--create organize team Modal-->
-
-        <!-- Control Sidebar -->
-
-        <!-- /.control-sidebar -->
         <br/>
         <br/>
     </section>
@@ -133,9 +117,11 @@
     </script>
     <script th:inline="javascript">
 
+
         var message = [[${alertMessage}]];
         console.log(message);
-           if(message!=null || message.length != 0);
+
+           if(message!=null && message.length != 0)
         {
             swal({
                 title: "Message!",

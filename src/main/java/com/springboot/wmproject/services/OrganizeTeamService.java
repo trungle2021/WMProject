@@ -10,7 +10,7 @@ public interface OrganizeTeamService {
     List<OrganizeTeamDTO> getAllOrganizeTeam();
     List<OrganizeTeamDTO> searchOrganizeTeamByName(String name);
     List<OrganizeTeamDTO> getOrganizeTeamByName(String name);
-    OrganizeTeamDTO getOneOrganizeTeamById(int id);
+    OrganizeTeamDTO getOneOrganizeTeamById(Integer id);
     OrganizeTeamDTO createOrganizeTeam(OrganizeTeamDTO newOrganizeTeam);
     OrganizeTeamDTO updateOrganizeTeam(OrganizeTeamDTO editOrganizeTeam);
     void softDelete(int id);

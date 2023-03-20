@@ -44,14 +44,18 @@ public class TeamController {
                     responseTypeTeam
             );
 
-            if(errorMessage != null){
-                model.addAttribute("errorMessage",errorMessage);
-                model.addAttribute("teams", new OrganizeTeamDTO());
-                model.addAttribute("teamSummary", teamSummary);
-                return "adminTemplate/pages/teams/index";
-            }
             model.addAttribute("teamSummary", teamSummary);
             model.addAttribute("teams", new OrganizeTeamDTO());
+
+
+            BindingResult result = (BindingResult) model.asMap().get("result");
+            if(result != null || errorMessage != null){
+                model.addAttribute("errorMessage",errorMessage);
+                model.addAttribute("result",result);
+                return "adminTemplate/pages/teams/index";
+
+            }
+
         } catch (HttpClientErrorException  | HttpServerErrorException e) {
             String responseError = e.getResponseBodyAsString();
             String status = String.valueOf(e.getStatusCode().value());
@@ -83,17 +87,24 @@ public class TeamController {
 
     @PostMapping("/create")
     public String createTeam(@Valid @ModelAttribute OrganizeTeamDTO teamDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes) throws IOException {
+       String regexTeamName = "^TEAM\\s+(?!(?:administrator|admin|ADMINISTRATOR|ADMIN)\\b)[a-zA-Z]+(\\s+[^\\d\\s]+)*$";
         if(result.hasErrors()){
-            return "adminTemplate/pages/teams/index";
+                attributes.addFlashAttribute("result",result);
+                 return "redirect:/staff/teams/getAll";
+        }
+        if(teamDTO.getTeamName().matches(regexTeamName)){
+            model.addAttribute("errorMessage","Input must start with 'TEAM ' and have at least one letter after it and do not contain 'admin or administrator' word.");
+            return "redirect:/staff/teams/getAll";
         }
         try {
-            APIHelper.makeApiCall(
+         OrganizeTeamDTO organizeTeamDTO =   APIHelper.makeApiCall(
                     api_teams_create,
                     HttpMethod.POST,
                     teamDTO,
                     token,
                     OrganizeTeamDTO.class
             );
+
         }catch (HttpClientErrorException  | HttpServerErrorException e) {
             String message = "";
             String responseError = e.getResponseBodyAsString();
