@@ -36,8 +36,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<EmployeeDTO> getAllEmployees() {
         //find all
-        List<Employees> employeesList = employeeRepository.findAll();
-        List<EmployeeDTO> employeeDTOList = employeesList.stream().filter(employees -> employees.is_deleted() == false).map(employees -> mapToDto(employees)).collect(Collectors.toList());
+        List<Employees> employeesList = employeeRepository.findAllExceptAdmin();
+        List<EmployeeDTO> employeeDTOList = employeesList.stream()
+                .map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
 
@@ -66,18 +67,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         //check if employee exist
         Employees checkEmployees = employeeRepository.getEmployeeById(employeeId);
-        checkEmployees.setName(dto.getName());
-        checkEmployees.setAddress(dto.getAddress());
-        checkEmployees.setPhone(dto.getPhone());
-        checkEmployees.setJoinDate(dto.getJoinDate());
-        checkEmployees.setSalary(dto.getSalary());
-        checkEmployees.setGender(dto.getGender());
-        checkEmployees.setIsLeader(dto.getIsLeader());
-        if(dto.getAvatar() != null){
-            checkEmployees.setAvatar(dto.getAvatar());
-        }
-        checkEmployees.setEmail(dto.getEmail());
-        checkEmployees.setTeam_id(dto.getTeam_id());
+        checkEmployees.setName(dto.getName() != null ? dto.getName() : checkEmployees.getName());
+        checkEmployees.setAddress(dto.getAddress() != null ? dto.getAddress() : checkEmployees.getAddress());
+        checkEmployees.setPhone(dto.getPhone() != null ? dto.getPhone() : checkEmployees.getPhone());
+        checkEmployees.setJoinDate(dto.getJoinDate() != null ? dto.getJoinDate() : checkEmployees.getJoinDate());
+        checkEmployees.setSalary(dto.getSalary() != null ? dto.getSalary() : checkEmployees.getSalary());
+        checkEmployees.setGender(dto.getGender() != null ? dto.getGender() : checkEmployees.getGender());
+        checkEmployees.setIsLeader(dto.getIsLeader() != null ? dto.getIsLeader() : checkEmployees.getIsLeader());
+        checkEmployees.setAvatar(dto.getAvatar() != null ? dto.getAvatar() : checkEmployees.getAvatar());
+        checkEmployees.setTeam_id(dto.getTeam_id() != null ? dto.getTeam_id() : checkEmployees.getTeam_id());
+        checkEmployees.setEmail(dto.getEmail() != null ? dto.getEmail() : checkEmployees.getEmail());
         employeeRepository.save(checkEmployees);
         return mapToDto(checkEmployees);
 

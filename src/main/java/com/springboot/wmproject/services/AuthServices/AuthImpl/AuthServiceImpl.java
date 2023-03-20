@@ -91,15 +91,24 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterDTO employeeRegister(RegisterDTO registerDTO) throws JsonProcessingException {
         errors = new ArrayList<>();
-        OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(registerDTO.getTeam_id());
+        //valid team_id, if not found team by ID throw 404
+        Integer team_id = registerDTO.getTeam_id() == null ? 0 : registerDTO.getTeam_id();
+        OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(team_id);
+        String teamName = teamDTO.getTeamName();
+
         EmployeeDTO employeeDTO = new EmployeeDTO();
         EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
 
-        String teamName = teamDTO.getTeamName();
+        Integer isLeader = registerDTO.getIsLeader() == null ? 0 : registerDTO.getIsLeader();
+
+
+
         boolean isValidPhone = employeeService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
         boolean isValidEmail = employeeService.checkEmailExists(registerDTO.getEmail()).size() == 0;
         boolean isValidUsername = employeeAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
+
+        //VALID PHONE
 
         if (isValidPhone) {
             employeeDTO.setPhone(registerDTO.getPhone());
@@ -107,27 +116,41 @@ public class AuthServiceImpl implements AuthService {
             errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
         }
 
+        //VALID EMAIL
+
         if (isValidEmail) {
             employeeDTO.setEmail(registerDTO.getEmail());
         } else {
             errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
         }
 
-        if (registerDTO.getIsLeader() == 1) {
-            List<EmployeeDTO> empInTeam = employeeService.findAllByTeamId(registerDTO.getTeam_id());
-            Boolean hasLeaderInTeam = empInTeam.stream().map(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
-            if (!hasLeaderInTeam) {
+        //VALID LEADER
+
+        if (isLeader == 1) {
+            List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(isLeader);
+            if(allEmpInTeam != null){
+                Boolean hasLeaderInTeam = allEmpInTeam.stream().map(emp -> isLeader == 1).findFirst().isPresent();
+                if (!hasLeaderInTeam) {
+                    employeeDTO.setIsLeader(1);
+                } else {
+                    errors.add(teamDTO.getTeamName() + " already has a leader");
+                }
+            } else{
+                // Team has no members
                 employeeDTO.setIsLeader(1);
-            } else {
-                errors.add(teamDTO.getTeamName() + " already has a leader");
             }
+        }else{
+            // isLeader == 0
+            employeeDTO.setIsLeader(isLeader);
         }
 
+        //VALID USERNAME
         if (isValidUsername) {
             employeeAccountDTO.setUsername(registerDTO.getUsername());
         } else {
             errors.add("Username : " + registerDTO.getUsername() + " has already existed");
         }
+        //VALID PASSWORD
 
         if(isValidPassword){
             employeeAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
@@ -140,11 +163,11 @@ public class AuthServiceImpl implements AuthService {
             String responseError = objectMapper.writeValueAsString(errors);
             throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
         }
+
         employeeDTO.setName(registerDTO.getName());
         employeeDTO.setSalary(registerDTO.getSalary());
         employeeDTO.setAddress(registerDTO.getAddress());
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
-        employeeDTO.setIsLeader(registerDTO.getIsLeader());
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());
@@ -152,7 +175,7 @@ public class AuthServiceImpl implements AuthService {
         EmployeeDTO empDTO = employeeService.create(employeeDTO);
         //getID after employee created -> then pass to employee account
 
-        String role = "";
+        String role;
 
         if (teamName.equals(SD.TEAM_ADMINISTRATOR)) {
             role = SD.ROLE_SALE;
@@ -227,12 +250,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException {
         String teamName = "";
-        OrganizeTeamDTO teamDTO = new OrganizeTeamDTO();
-        Integer isLeader = registerDTO.getIsLeader();
-        int isLeader_intValue = isLeader != null ? isLeader : 0;
-
-        Integer team_id = registerDTO.getTeam_id();
-        int team_id_intValue = team_id != null ? team_id : 0;
+        OrganizeTeamDTO teamDTO;
+        Integer team_id = registerDTO.getTeam_id() == null ? 0 : registerDTO.getTeam_id();
+        Integer isLeader = registerDTO.getIsLeader() == null ? 0 : registerDTO.getIsLeader();
 
 
         //check emp exist by id
@@ -245,10 +265,10 @@ public class AuthServiceImpl implements AuthService {
         EmployeeDTO employeeDTO = new EmployeeDTO();
         EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
 
-        if(team_id_intValue != 0){
-             teamDTO = teamService.getOneOrganizeTeamById(team_id_intValue);
+        if(team_id != 0){
+             teamDTO = teamService.getOneOrganizeTeamById(team_id);
             teamName = teamDTO.getTeamName();
-            employeeDTO.setTeam_id(team_id_intValue);
+            employeeDTO.setTeam_id(team_id);
         }else{
             teamDTO = teamService.getOneOrganizeTeamById(empExist.getTeam_id());
             teamName = teamDTO.getTeamName();
@@ -264,7 +284,7 @@ public class AuthServiceImpl implements AuthService {
         boolean phoneHasChanged = !empExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !empExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
         boolean userNameHasChanged = !empHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername());
-        boolean leaderHasChanged = empExist.getIsLeader() != isLeader_intValue;
+        boolean leaderHasChanged = empExist.getIsLeader() != isLeader;
 
 
         if(phoneHasChanged){
@@ -288,17 +308,21 @@ public class AuthServiceImpl implements AuthService {
         }
 
        if(leaderHasChanged){
-           if (isLeader_intValue == 1 ) {
-               List<EmployeeDTO> empInTeam = employeeService.findAllByTeamId(team_id_intValue);
-               Boolean hasLeaderInTeam = empInTeam.stream().map(emp -> isLeader_intValue == 1).findFirst().isPresent();
-               if (!hasLeaderInTeam) {
+           if (isLeader == 1 ) {
+               List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(team_id);
+               if(allEmpInTeam != null){
+                   Boolean hasLeaderInTeam = allEmpInTeam.stream().map(emp -> isLeader == 1).findFirst().isPresent();
+                   if (!hasLeaderInTeam) {
+                       employeeDTO.setIsLeader(1);
+                   } else {
+                       errors.add(teamDTO.getTeamName() + " already has a leader");
+                   }
+               }else{
                    employeeDTO.setIsLeader(1);
-               } else {
-                   errors.add(teamDTO.getTeamName() + " already has a leader");
                }
            }
        }else{
-           employeeDTO.setIsLeader(isLeader_intValue);
+           employeeDTO.setIsLeader(isLeader);
        }
 
         if(userNameHasChanged){
@@ -328,7 +352,7 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setAddress(registerDTO.getAddress());
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setSalary(registerDTO.getSalary());
-        employeeDTO.setIsLeader(isLeader_intValue);
+        employeeDTO.setIsLeader(isLeader);
 //        employeeDTO.setTeam_id(team_id_intValue);
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());

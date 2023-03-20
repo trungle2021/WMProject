@@ -41,6 +41,14 @@ public class OrderController {
         return  ResponseEntity.ok(orderService.getAllByOrderStatus(status));
 
     }
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/bycustomerd/{id}")
+    public ResponseEntity<List<OrderDTO>> getAllOrderByCustomer(@PathVariable Integer id)
+    {
+        return  ResponseEntity.ok(orderService.getAllByCustomerId(id));
+
+    }
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/bybookingEmp/{empId}")

@@ -36,7 +36,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.findAllByName(name));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/findByTeam/{teamId}")
     public ResponseEntity<List<EmployeeDTO>> getAllByTeamID(@PathVariable Integer teamId){

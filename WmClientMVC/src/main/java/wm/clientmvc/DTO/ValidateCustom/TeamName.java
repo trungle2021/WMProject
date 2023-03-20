@@ -12,9 +12,9 @@ import java.lang.annotation.Target;
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = {})
-@Pattern(regexp = "^TEAM \\w+", message = "Input must start with 'TEAM ' and have at least one word after it")
+@Pattern(regexp = "^TEAM\\s+(?!(?:administrator|admin|ADMINISTRATOR|ADMIN)\\b)[a-zA-Z]+(\\s+[^\\d\\s]+)*$", message = "Input must start with 'TEAM ' and have at least one letter after it and do not contain 'admin or administrator' word.")
 public @interface TeamName {
-    String message() default "Input must start with 'TEAM ' and have at least one word after it";
+    String message() default "Input must start with 'TEAM ' and have at least one letter after it and do not contain 'admin or administrator' word.";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

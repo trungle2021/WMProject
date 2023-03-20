@@ -14,8 +14,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.springboot.wmproject.utils.SD.teamNameRegexDenied;
 
 @Service
 public class OrganizeTeamServiceImpl implements OrganizeTeamService {
@@ -53,32 +56,46 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     }
 
     @Override
-    public OrganizeTeamDTO getOneOrganizeTeamById(int id) {
+    public OrganizeTeamDTO getOneOrganizeTeamById(Integer id) {
         OrganizeTeams organizeTeams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(id)));
         return mapToDTO(organizeTeams);
     }
 
     @Override
     public OrganizeTeamDTO createOrganizeTeam(OrganizeTeamDTO newOrganizeTeam) throws ResourceNotFoundException{
-        String organizeName=newOrganizeTeam.getTeamName();
-        if(organizeName!=null){
-            List<OrganizeTeams> checkOrganizeTeam=organizeTeamRepository.getOrganizeTeamsByName(organizeName);
-            if(checkOrganizeTeam.isEmpty()){
-                OrganizeTeams teams=organizeTeamRepository.save(mapToEntity(newOrganizeTeam));
-                return mapToDTO(teams);
-            }
-        }
+        String teamName = newOrganizeTeam.getTeamName();
 
+
+        if(teamName!=null){
+            String validTeamName = teamName;
+            for (String regex: teamNameRegexDenied) {
+                validTeamName = validTeamName.replaceAll(regex,"");
+            }
+                newOrganizeTeam.setTeamName(validTeamName);
+                OrganizeTeams teams= organizeTeamRepository.save(mapToEntity(newOrganizeTeam));
+                String newName = teams.getTeamName() + teams.getId();
+                teams.setTeamName(newName);
+                OrganizeTeams teamUpdateName= organizeTeamRepository.save(teams);
+                return mapToDTO(teamUpdateName);
+        }
         return null;
     }
 
     @Override
     public OrganizeTeamDTO updateOrganizeTeam(OrganizeTeamDTO editOrganizeTeam)throws ResourceNotFoundException {
+
         int organizeTeamId=editOrganizeTeam.getId();
+
         OrganizeTeams checkOrganizeTeam=organizeTeamRepository.findById(organizeTeamId).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(organizeTeamId)));
         if(checkOrganizeTeam!=null){
-            checkOrganizeTeam.setTeamName(editOrganizeTeam.getTeamName());
-            return mapToDTO(organizeTeamRepository.save(checkOrganizeTeam));
+            String newName = editOrganizeTeam.getTeamName();
+            String validTeamName = newName;
+            for (String regex: teamNameRegexDenied) {
+                validTeamName = validTeamName.replaceAll(regex,"");
+            }
+            checkOrganizeTeam.setTeamName(validTeamName  + checkOrganizeTeam.getId());
+            OrganizeTeamDTO organizeTeamDTO = mapToDTO(organizeTeamRepository.save(checkOrganizeTeam));
+            return organizeTeamDTO;
         }
         return null;
     }
@@ -95,17 +112,26 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
 
     @Override
     public List<TeamSummaryDTO> getSummaryTeamOrganization() {
-        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization().stream().map(object -> mapToTeamSummaryDTO(mapToTeamSummaryEntity(object))).collect(Collectors.toList());
+        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization().stream()
+                .map(object -> {
+                    TeamSummary entity = mapToTeamSummaryEntity(object);
+                    if (entity.getTotal_members() == null) {
+                        entity.setTotal_members(0);
+                    }
+                    return mapToTeamSummaryDTO(entity);
+                })
+                .collect(Collectors.toList());
         return teamSummaries;
     }
-
     public OrganizeTeams mapToEntity(OrganizeTeamDTO organizeTeamDTO) {
         OrganizeTeams organizeTeams = modelMapper.map(organizeTeamDTO, OrganizeTeams.class);
+        organizeTeams.setIs_deleted(organizeTeamDTO.is_deleted());
         return organizeTeams;
     }
 
     public OrganizeTeamDTO mapToDTO(OrganizeTeams organizeTeams) {
         OrganizeTeamDTO organizeTeamDTO = modelMapper.map(organizeTeams, OrganizeTeamDTO.class);
+        organizeTeamDTO.set_deleted(organizeTeams.isIs_deleted());
         return organizeTeamDTO;
     }
 

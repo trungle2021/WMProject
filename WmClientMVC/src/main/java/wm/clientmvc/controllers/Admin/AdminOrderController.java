@@ -94,6 +94,11 @@ public class AdminOrderController {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
         Long empId= empUserDetails.getUserId();
+        model.addAttribute("warningSt",orderStatusWarning);
+        model.addAttribute("cancelingSt",orderStatusCancel);
+        model.addAttribute("confirmSt",orderStatusConfirm);
+        model.addAttribute("depositedSt",orderStatusDeposited);
+        model.addAttribute("orderedSt",orderStatusOrdered);
         ParameterizedTypeReference<List<OrderDTO>> responseType = new ParameterizedTypeReference<>() {
         };
         String url="http://localhost:8080/api/orders/bybookingEmp/"+empId;
@@ -104,17 +109,16 @@ public class AdminOrderController {
                     token,
                     responseType);
 
-
-            List<OrderDTO> myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+            List<OrderDTO> myList= new ArrayList<>();
+            if(orderList!=null)
+                {
+             myList= orderList.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(status)).collect(Collectors.toList());
+                }
 
             model.addAttribute("list",myList);
 
 
-            model.addAttribute("warningSt",orderStatusWarning);
-            model.addAttribute("cancelingSt",orderStatusCancel);
-            model.addAttribute("confirmSt",orderStatusConfirm);
-            model.addAttribute("depositedSt",orderStatusDeposited);
-            model.addAttribute("orderedSt",orderStatusOrdered);
+
             return "adminTemplate/pages/tables/order";
         }
         catch (HttpClientErrorException | IOException ex)
@@ -183,7 +187,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                         OrderDTO.class
                 );
                 model.addAttribute("orderDTO", order);
-                redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Refunded! ");
+                redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Refunded! ");
                 return "redirect:/staff/orders/showall";
             } catch (IOException e) {
                 model.addAttribute("message", e.getMessage());
@@ -292,7 +296,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
                     token,
                     OrderDTO.class
             );
-            redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order Deposited! ");
+            redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Deposited! ");
             return "redirect:/staff/orders/showall";
          } catch (IOException e) {
                 model.addAttribute("message", e.getMessage());
@@ -479,7 +483,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
     Map<Integer,Integer> map=new HashMap<>();
             for (OrganizeTeamDTO team:teamList)
             {
-                if(!team.getTeamName().equalsIgnoreCase(teamAdmin)) {
+                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted()) {
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 
