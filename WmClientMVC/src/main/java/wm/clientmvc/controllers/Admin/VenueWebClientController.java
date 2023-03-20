@@ -79,8 +79,6 @@ public class VenueWebClientController {
                     return "redirect:/404-not-found";
                 case "403":
                     return "redirect:/access-denied";
-                default:
-                    return "redirect:/staff/venues?msg="+message;
             }
         }
         return "adminTemplate/pages/gallery";
