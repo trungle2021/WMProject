@@ -85,7 +85,14 @@
                                                     <input class="teamid" type="hidden" th:attr="data-teamid=${i.getTeam_id()}" th:value="${i.getTeam_id()}">
                                                     <td th:text="${i.getTeam_name()}"></td>
                                                     <td th:text="${i.getTotal_members()}"></td>
-                                                    <td><a th:href="@{/staff/employees/update/{id}(id=${i.getEmp_id()})}" th:text="${i.getLeader_name()}"></a></td>
+                                                    <th:block th:if="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                        <td><span th:text="${i.getLeader_name()}"></span></td>
+                                                    </th:block>
+
+                                                    <th:block th:unless="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                        <td><a th:href="@{/staff/employees/update/{id}(id=${i.getEmp_id()})}" th:text="${i.getLeader_name()}"></a></td>
+                                                    </th:block>
+
                                                     <td>
                                                         <th:block th:if="${!i.team_name.equals('TEAM ADMINISTRATOR')}">
                                                             <button type="button"
@@ -98,10 +105,9 @@
                                                                 Update
                                                             </button>
                                                         </th:block>
-
-
+                                                        <button  style="margin-right: 1rem"  class="btn btn-outline-primary btnViewAll">Details</button>
                                                         <th:block th:if="${i.total_members == 0}">
-                                                            <button class="btn btn-outline-primary btnDeleteTeam">Delete</button>
+                                                            <button  style="margin-right: 1rem" class="btn btn-outline-primary btnDeleteTeam">Delete</button>
                                                         </th:block>
 
                                                     </td>
