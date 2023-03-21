@@ -28,7 +28,7 @@ serviceList.forEach((service)=>{
                 </option>`
 
 })
-
+        setDefault();
 function addMain() {
     let list = document.querySelectorAll("[data-main]");
     //add main
@@ -98,7 +98,7 @@ function addService() {
     <button onclick="deleteService(this)" class="btn btn-danger"><i class="fas fa-trash-alt"> </i> Remove</button>
   `
 
-            // <option th:each="service : ${serviceList}" th:value="${service.getId()}" th:text="${service.getServiceName()}"></option>
+        // <option th:each="service : ${serviceList}" th:value="${service.getId()}" th:text="${service.getServiceName()}"></option>
 
         var newContainer = document.createElement("div");
         newContainer.setAttribute("data-service", `${list.length}`);
@@ -288,7 +288,7 @@ function callAJAXnewOrder(){
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open("POST", "/customers/orders/create-order");
+    xhr.open("POST", "/customers/orders/myorder/order-detail/customer-update");
     xhr.setRequestHeader("Content-Type", "application/json");
     let response=null;
 
@@ -302,14 +302,14 @@ function callAJAXnewOrder(){
     //get serviceList
     let svIdList = [];
     let requestSvList=document.querySelectorAll("[data-serviceId]")
-     requestSvList.forEach((el) => {
+    requestSvList.forEach((el) => {
         let id = el.getAttribute("data-serviceId");
         svIdList.push(id);
     });
     // console.log(requestSvList);
     // console.log(requestFoodList);
-   let data = JSON.stringify({orderId: myOrder.id, foodList: foodIdList, serviceList: svIdList,table:tbCount});
-   console.log(data);
+    let data = JSON.stringify({orderId: myOrder.id, foodList: foodIdList, serviceList: svIdList,table:tbCount});
+    console.log(data);
     //
     xhr.onload = function() {
         // handle the response from the server
@@ -324,7 +324,7 @@ function callAJAXnewOrder(){
                 window.location.href = "/";
             }, 2000);
 
-                }
+        }
         else{
             console.error(xhr.statusText);
             // alert("Oops!Some thing Wrong!");
@@ -335,7 +335,7 @@ function callAJAXnewOrder(){
     };
 
     if(foodIdList.length>=6){
-    xhr.send(data);}
+        xhr.send(data);}
     else{
 
         swal("Warning!", "The minimum number of main dishes is 4!", "warning");
@@ -352,7 +352,7 @@ function reloadTotal()
     clearFood();
     clearService();
     myOrderList.forEach((order) => {
-       if (order.value !== "default" && order.getAttribute("data-index") === "food") {
+        if (order.value !== "default" && order.getAttribute("data-index") === "food") {
 
             foodValues.push(order.value);
 
@@ -372,7 +372,7 @@ function reloadTotal()
     // console.log(foodList);
 
     //get foodlist
-   let myNewfl=foodList.filter(food=>foodValues.includes(food.id.toString()));
+    let myNewfl=foodList.filter(food=>foodValues.includes(food.id.toString()));
     let myNewsl=serviceList.filter(service=>serviceValues.includes(service.id.toString()));
     //filter foodList
     console.log(myNewfl);
@@ -398,7 +398,7 @@ function changeTableAmount()
     {
         swal("Warning!", "The minimum required number of tables has not been reached yet!", "warning");
 
-    this.value=0;
+        this.value=0;
         reloadTotal();
     }
     else if(value>maxTable)
@@ -409,8 +409,104 @@ function changeTableAmount()
         this.value=0;
         reloadTotal();}
     else{
-       reloadTotal();
+        reloadTotal();
     }
+
+
+}
+
+
+function setDefault()
+{
+    debugger;
+myOrder.foodDetailsById.forEach((foodDetail)=>{
+    if(foodDetail.foodByFoodId.foodType==="main")
+    {
+        addMainupdate(foodDetail.foodByFoodId.id);
+    }
+    else if(foodDetail.foodByFoodId.foodType==="starter")
+    {
+       let starter= document.querySelector('select[data-index="food"][data-starter=""]');
+        starter.value= foodDetail.foodByFoodId.id;
+        getId(starter);
+    }
+    else if(foodDetail.foodByFoodId.foodType==="dessert")
+    {
+        let dessert= document.querySelector('select[data-index="food"][data-dessert=""]');
+        dessert.value= foodDetail.foodByFoodId.id;
+        getId(dessert);
+    }
+
+
+});
+    myOrder.serviceDetailsById.forEach((sDetail)=>{
+            addServiceUpdate(sDetail.servicesByServiceId.id);
+    });
+    tbCount=tableAmount.value;
+}
+
+function addMainupdate(foodId) {
+    let list = document.querySelectorAll("[data-main]");
+    //add main
+
+
+        const foodSelector = `
+        <label data-label="main" >Main dish  ${list.length + 1} :</label>
+        <select data-index="food" class="form-control select-box" onchange="getId(this)">
+        <option value="default"> Choose Dish </option>
+         ${foodOption}  
+
+        </select>
+        <button onclick="deleteMain(this)" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Remove</button>
+      `
+
+
+
+        let newContainer = document.createElement("div");
+        newContainer.setAttribute("data-main", `${list.length}`);
+        newContainer.setAttribute("class", "new-container");
+        // alert(newContainer);
+
+        newContainer.innerHTML = foodSelector;
+        debugger;
+
+        mainContainer.appendChild(newContainer);
+             let selectElement = newContainer.querySelector('select[data-index="food"]');
+             selectElement.value = foodId;
+             getId(selectElement);
+        // getOrderList();
+
+
+}
+
+
+function addServiceUpdate(serviceId) {
+
+    let list = document.querySelectorAll("[data-service]");
+
+        const serviceSelector = `
+    <label data-label="service">Service  ${list.length + 1} :</label>
+    <select data-index="service" class="form-control select-box" onchange="getId(this)" >
+    <option value="default"> Choose Service </option>
+        ${serviceOption}          
+    </select>
+    <button onclick="deleteService(this)" class="btn btn-danger"><i class="fas fa-trash-alt"> </i> Remove</button>
+  `
+
+        // <option th:each="service : ${serviceList}" th:value="${service.getId()}" th:text="${service.getServiceName()}"></option>
+
+        var newContainer = document.createElement("div");
+        newContainer.setAttribute("data-service", `${list.length}`);
+        newContainer.setAttribute("class", "new-container");
+
+
+        newContainer.innerHTML = serviceSelector;
+
+        serviceContaier.appendChild(newContainer);
+        // getOrderList();
+    let selectElement = newContainer.querySelector('select[data-index="service"]');
+    selectElement.value = serviceId;
+    getId(selectElement);
 
 
 }
