@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="">
+
       <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/js/khangupdateorder.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/customer-update-order.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -26,6 +27,7 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/repositories/ServiceDetailRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/repositories/ServiceDetailRepository.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/OrderService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -113,6 +115,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+
     &quot;last_opened_file_path&quot;: &quot;C:/Users/admin/Desktop/wmproject/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -136,11 +139,11 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\khoa.trinh\Documents\GitHub\wmproject\WmClientMVC\src\main\resources\templates" />
       <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\customerTemplate" />
       <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\adminTemplate\pages\teams" />
       <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\adminTemplate\pages\customers" />
       <recent name="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages" />
-      <recent name="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates" />
@@ -175,13 +178,14 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.WmClientMvcApplication">
+  <component name="RunManager" selected="Spring Boot.WmprojectApplication">
+
     <configuration name="WMProject" type="CompoundRunConfigurationType">
       <toRun name="WmClientMvcApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
       <method v="2" />
     </configuration>
-    <configuration name="WmClientMvcApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <configuration name="MVC" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
       <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <module name="ClientMVC" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="wm.clientmvc.WmClientMvcApplication" />
@@ -201,7 +205,7 @@
     </configuration>
     <list>
       <item itemvalue="Compound.WMProject" />
-      <item itemvalue="Spring Boot.WmClientMvcApplication" />
+      <item itemvalue="Spring Boot.MVC" />
       <item itemvalue="Spring Boot.WmprojectApplication" />
     </list>
   </component>
@@ -273,11 +277,13 @@
       <workItem from="1679110472066" duration="40942000" />
       <workItem from="1679160396021" duration="1297000" />
       <workItem from="1679210649213" duration="28000" />
+
       <workItem from="1679290542322" duration="6372000" />
       <workItem from="1679306437988" duration="1492000" />
       <workItem from="1679309220250" duration="4787000" />
       <workItem from="1679316359082" duration="1330000" />
       <workItem from="1679376896699" duration="33201000" />
+
     </task>
     <servers />
   </component>
@@ -303,13 +309,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
-          <line>57</line>
+          <line>61</line>
           <option name="timeStamp" value="19" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
           <line>36</line>
           <option name="timeStamp" value="22" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerServiceImpl.java</url>
+          <line>97</line>
+          <option name="timeStamp" value="204" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminCustomerController.java</url>
@@ -357,6 +368,7 @@
           <option name="timeStamp" value="302" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
+
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
           <line>176</line>
           <option name="timeStamp" value="303" />
@@ -395,6 +407,7 @@
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
           <line>591</line>
           <option name="timeStamp" value="320" />
+
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

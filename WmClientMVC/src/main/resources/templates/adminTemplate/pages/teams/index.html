@@ -34,6 +34,12 @@
                                 <li style="color: green" th:text="${message}"></li>
                             </th:block>
 
+                            <th:block th:if="${result != null}">
+                                <li style="color: red" th:text="${result.getFieldError().getDefaultMessage()}"></li>
+                            </th:block>
+
+
+
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
@@ -79,9 +85,16 @@
                                                     <input class="teamid" type="hidden" th:attr="data-teamid=${i.getTeam_id()}" th:value="${i.getTeam_id()}">
                                                     <td th:text="${i.getTeam_name()}"></td>
                                                     <td th:text="${i.getTotal_members()}"></td>
-                                                    <td><a th:href="@{/staff/employees/update/{id}(id=${i.getEmp_id()})}" th:text="${i.getLeader_name()}"></a></td>
+                                                    <th:block th:if="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                        <td><span th:text="${i.getLeader_name()}"></span></td>
+                                                    </th:block>
+
+                                                    <th:block th:unless="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                        <td><a th:href="@{/staff/employees/update/{id}(id=${i.getEmp_id()})}" th:text="${i.getLeader_name()}"></a></td>
+                                                    </th:block>
+
                                                     <td>
-                                                        <th:block th:if="${!i.team_name.equals('TEAM_ADMINISTRATOR')}">
+                                                        <th:block th:if="${!i.team_name.equals('TEAM ADMINISTRATOR')}">
                                                             <button type="button"
                                                                     class="btn btn-outline-primary "
                                                                     data-toggle="modal"
@@ -92,8 +105,9 @@
                                                                 Update
                                                             </button>
                                                         </th:block>
+                                                        <button  style="margin-right: 1rem"  class="btn btn-outline-primary btnViewAll">Details</button>
                                                         <th:block th:if="${i.total_members == 0}">
-                                                            <button class="btn btn-outline-primary btnDeleteTeam">Delete</button>
+                                                            <button  style="margin-right: 1rem" class="btn btn-outline-primary btnDeleteTeam">Delete</button>
                                                         </th:block>
 
                                                     </td>
@@ -130,15 +144,15 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="post" th:action="@{/staff/teams/create}" th:object="${teams}">
+                        <form method="post" th:action="@{/staff/teams/create}" >
                             <div class="form-group">
                                 <label class="col-form-label">Team name:</label>
-                                <input type="text" class="form-control" th:name="*{teamName}" required>
+                                <input type="text" class="form-control" name="teamName" required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                 </button>
-                                <input type="submit" class="btn btn-primary" value="Update">
+                                <input type="submit" class="btn btn-primary" value="Create">
                             </div>
                         </form>
                     </div>
@@ -162,7 +176,7 @@
                             <div class="form-group">
                                 <input type="hidden" th:field="*{id}">
                                 <label class="col-form-label">Team name:</label>
-                                <input type="text" class="form-control" th:field="*{teamName}" required>
+                                <input type="text" class="form-control" th:field="*{teamName}"  required>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
@@ -252,7 +266,7 @@
             // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
             var teamName = button.data('teamname')
             $('#id').val(recipient)
-            $('#teamName').val(teamName)
+            $('#teamName').val(teamName.replace(/[0-9]/g, ""))
         })
 
     </script>

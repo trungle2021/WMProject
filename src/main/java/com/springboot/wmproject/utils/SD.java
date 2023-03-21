@@ -3,6 +3,7 @@ package com.springboot.wmproject.utils;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SD {
@@ -15,6 +16,9 @@ public class SD {
     public static final String ROLE_ORGANIZE = "ROLE_ORGANIZE";
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
     public static final String TEAM_ADMINISTRATOR = "TEAM ADMINISTRATOR";
+
+    public static List<String> teamNameRegexDenied = Arrays.asList("[0-9]", "ADMINISTRATOR","ADMIN","admin","administrator");
+
 
     public  static String orderStatusOrdered ="ordered";
     public static String orderStatusDeposited="deposited";
