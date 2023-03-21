@@ -48,6 +48,9 @@ public class Orders {
     @Basic
     @Column(name = "part_time_emp_amount", nullable = true)
     private Integer partTimeEmpAmount;
+    @Basic
+    @Column(name = "contract", nullable = true, length = -1)
+    private String contract;
     @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<FoodDetails> foodDetailsById;
     @ManyToOne(fetch = FetchType.LAZY)

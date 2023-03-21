@@ -36,7 +36,25 @@ import static wm.clientmvc.utils.Static_Status.orderStatusOrdered;
 public class HomeController {
 
     @GetMapping(value = {"/home","/customers/home","/"})
-    public String home() {
+    public String home(Model model,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {
+
+
+//get alert
+
+        if (!alertMessage.isEmpty()) {
+            model.addAttribute("alertMessage", alertMessage);
+        }
+        else {
+            model.addAttribute("alertMessage", null);
+        }
+        if (!alertError.isEmpty()) {
+            model.addAttribute("alertError", alertError);
+        }
+        else {
+            model.addAttribute("alertError", null);
+        }
+
+
         return "home";
     }
     @GetMapping(value = {"/customers/dashboard",})

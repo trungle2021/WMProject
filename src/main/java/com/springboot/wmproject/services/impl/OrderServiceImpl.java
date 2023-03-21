@@ -1,22 +1,28 @@
 package com.springboot.wmproject.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
 import com.springboot.wmproject.entities.Employees;
+import com.springboot.wmproject.entities.FoodDetails;
 import com.springboot.wmproject.entities.Orders;
+import com.springboot.wmproject.entities.ServiceDetails;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
-import com.springboot.wmproject.repositories.EmployeeRepository;
-import com.springboot.wmproject.repositories.OrderRepository;
+import com.springboot.wmproject.repositories.*;
 import com.springboot.wmproject.services.OrderService;
 import com.springboot.wmproject.utils.SD;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.springboot.wmproject.utils.SD.*;
@@ -24,16 +30,22 @@ import static com.springboot.wmproject.utils.SD.*;
 @Service
 public class OrderServiceImpl implements OrderService {
      private OrderRepository orderRepository;
+    private FoodDetailRepository fRepository;
+    private ServiceDetailRepository sRepository;
 
     private ModelMapper modelMapper;
 
     private EmployeeRepository employeeRepository;
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, FoodDetailRepository fRepository, ServiceDetailRepository sRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
         this.orderRepository = orderRepository;
+        this.fRepository = fRepository;
+        this.sRepository = sRepository;
         this.modelMapper = modelMapper;
         this.employeeRepository = employeeRepository;
     }
+
+
 
 
 
@@ -260,6 +272,72 @@ public class OrderServiceImpl implements OrderService {
         }
         return null;
     }
+//nho transactional for delete query
+    @Override
+    @Transactional
+    public OrderDTO updateOrderDetailCustomer(String json) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String,Object> data= objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+
+            List<String> foodData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("foodList")), new TypeReference< List<String>>() {});
+
+            List<String> svData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("serviceList")), new TypeReference<List<String>>() {});
+
+
+            Integer orderId= Integer.parseInt((data.get("orderId")).toString());
+            Integer tableAmount= Integer.parseInt(data.get("table").toString());
+
+            Orders order= orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("OrderId","id",String.valueOf(orderId)));
+            order.setTableAmount(tableAmount);
+            orderRepository.save(order);
+           fRepository.deleteByOrderId(orderId);
+
+            sRepository.deleteByOrderId(orderId);
+            //delete all food and service detail of order.
+
+
+            //add new fd and order by food Id,
+
+//            newFoodDetail.setFoodId(Integer.parseInt(foodId));
+//            newFoodDetail.setOrderId(orderId);
+            if(foodData!=null) {
+            for (String foodId:foodData)
+            {
+                FoodDetails newFoodDetail= new FoodDetails();
+                newFoodDetail.setFoodId(Integer.parseInt(foodId));
+                newFoodDetail.setOrderId(orderId);
+                fRepository.save(newFoodDetail);
+            }
+            }
+
+            if(svData!=null) {
+                //service
+                for (String svId : svData) {
+                    ServiceDetails newServiceDetail = new ServiceDetails();
+                    newServiceDetail.setServiceId(Integer.parseInt(svId));
+                    newServiceDetail.setOrderId(orderId);
+                    sRepository.save(newServiceDetail);
+                }
+            }
+                        //lay orderdetail
+
+        return mapToDTO(order);
+
+
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+                 return null;
+        }
+
+
+
+    }
+
+
+
+
 
     @Override
     public void deleteOrder(int id) {

@@ -28,6 +28,7 @@ public class OrderDTO {
     @NotNull(message = "Table amount is required")
     private Integer tableAmount;
     private Integer partTimeEmpAmount;
+    private String contract;
 
     //    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;
