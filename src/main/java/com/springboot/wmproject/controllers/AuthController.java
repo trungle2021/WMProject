@@ -60,8 +60,8 @@ public class AuthController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = {"/customers/register"})
-    public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
-        RegisterCustomerDTO response = authService.customerRegister(registerDTO);
+    public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO, @RequestHeader("User-Agent") String userAgent) throws JsonProcessingException {
+        RegisterCustomerDTO response = authService.customerRegister(registerDTO,userAgent);
         return ResponseEntity.ok(response);
     }
 

@@ -192,7 +192,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException {
         errors = new ArrayList<>();
         boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
         boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
@@ -212,6 +212,13 @@ public class AuthServiceImpl implements AuthService {
             customerDTO.setEmail(registerDTO.getEmail().trim());
         } else {
             errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
+        }
+
+
+        if(userAgent.contains("okhttp") && errors.size() > 0){
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
         }
 
         if (isUsernameValid) {
