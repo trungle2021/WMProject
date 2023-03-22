@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import wm.clientmvc.DTO.ValidateCustom.FullName;
+import wm.clientmvc.utils.Regex;
 
 @Getter
 @Setter
@@ -24,13 +25,14 @@ public class RegisterDTO {
     private String address;
 
     @NotEmpty(message = "Phone cannot be empty")
-    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Phone must be 10 numbers and starts with 0 or 84")
+    @Pattern(regexp = Regex.phone_vietnamese,message = "Sorry, the phone number you entered does not match the expected format. Please enter a valid phone number where the first digit starts with 84 or 0 and is followed by 3, 5, 7, 8, or 9.")
     private String phone;
 
     @NotEmpty
     private String joinDate;
 
-    @Min(0)
+    @Min( value = 0, message = "Value must be greater than or equal to 0")
+    @Max(value = 1000000, message = "Value must be less than or equal to 1,000,000$")
     private Double salary;
 
     @NotEmpty
