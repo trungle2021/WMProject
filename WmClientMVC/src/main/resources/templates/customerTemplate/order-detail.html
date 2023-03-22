@@ -263,7 +263,13 @@
               </form>
             </div>
             <div th:if="${myOrder.getOrderStatus().equalsIgnoreCase(depositedSt)} or ${myOrder.getOrderStatus().equalsIgnoreCase(orderedSt)}" class="col">
-              <button class="btn color">Update Order <i class="fas fa-check-square"></i></button>
+
+
+              <form th:action="@{/customers/orders/myorder/order-detail/update}" method="post">
+                <input hidden="hidden" name="orderId" th:value="${myOrder.getId()}" >
+                <button type="submit" class="btn color">Update Order <i class="fas fa-check-square"></i></button>
+              </form>
+
             </div>
           </div>
 

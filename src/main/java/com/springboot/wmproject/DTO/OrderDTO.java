@@ -1,6 +1,8 @@
 package com.springboot.wmproject.DTO;
 
 import com.springboot.wmproject.entities.*;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +33,8 @@ public class OrderDTO {
 
     private Integer tableAmount;
     private Integer partTimeEmpAmount;
+
+    private String contract;
 
 //    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;
