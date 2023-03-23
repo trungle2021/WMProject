@@ -5,7 +5,6 @@ import com.springboot.wmproject.entities.CustomerAccounts;
 
 import java.text.ParseException;
 import java.util.List;
-import java.util.Optional;
 
 public interface CustomerAccountService {
     List<CustomerAccountDTO> findAll();
@@ -20,7 +19,9 @@ public interface CustomerAccountService {
 
     CustomerAccountDTO getByResetPasswordToken(String token);
     String updatePassword(String newPass,String token) throws ParseException;
-    String processForgotPassword(String email);
+    String updatePasswordMobile(String newPass,String token) throws ParseException;
+    String validToken(String token) throws ParseException;
+    String processForgotPassword(String email,String userAgent);
     CustomerAccountDTO findByEmail(String email);
 
     List<CustomerAccounts> checkUsernameExists(String username);

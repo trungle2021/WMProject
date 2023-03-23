@@ -9,6 +9,7 @@ import java.util.Calendar;
 
 public interface PasswordResetTokenService {
     String create(int customerAccountID);
+    String createTokenMobile(int customerAccountID);
     void delete(String token);
     String validatePasswordResetToken(String token) throws ParseException;
     boolean isTokenFound(PasswordResetToken passToken);

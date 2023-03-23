@@ -13,11 +13,14 @@ public interface AuthService {
     String customerLogin(LoginDTO loginDTO);
     RegisterDTO employeeRegister(RegisterDTO registerDTO) throws JsonProcessingException;
     RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
+    RegisterCustomerDTO customerPersonalValid(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
     RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException;
     RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
 
     RegisterDTO getOneRegisterEmp(int empID) throws JsonProcessingException;
     RegisterCustomerDTO getOneRegisterCustomer(int customerID) throws JsonProcessingException;
+
+
 
 
 
