@@ -32,6 +32,7 @@ public class SD_CLIENT {
     public static final String ROLE_CUSTOMER = "ROLE_CUSTOMER";
 //
 
+
     //LOGIN API
    public static final String api_customerLoginUrl = DOMAIN_APP_API + "/api/auth/customers/login";
    public static final  String api_customerRegisterUrl = DOMAIN_APP_API + "/api/auth/customers/register";
