@@ -57,6 +57,28 @@ public class HomeController {
 
         return "home";
     }
+    @GetMapping(value = {"/error"})
+    public String error(Model model,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {
+
+
+//get alert
+
+        if (!alertMessage.isEmpty()) {
+            model.addAttribute("alertMessage", alertMessage);
+        }
+        else {
+            model.addAttribute("alertMessage", null);
+        }
+        if (!alertError.isEmpty()) {
+            model.addAttribute("alertError", alertError);
+        }
+        else {
+            model.addAttribute("alertError", null);
+        }
+
+
+        return "404-not-found";
+    }
     @GetMapping(value = {"/customers/dashboard",})
     public String dashboard(Model model,@CookieValue(name="token",defaultValue = "")String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError) {
         model.addAttribute("warningSt",orderStatusWarning);
