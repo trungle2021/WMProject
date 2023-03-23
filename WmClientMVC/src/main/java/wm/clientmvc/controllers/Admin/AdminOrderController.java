@@ -13,10 +13,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.*;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
+import wm.clientmvc.utils.ClientUtilFunction;
+
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -228,7 +232,12 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
 
 
     @RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
-public String update(@Validated  OrderDTO order, BindingResult bindingResult, Model model, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes) {
+public String update(@Validated  OrderDTO order, BindingResult bindingResult, Model model, @CookieValue(name="token",defaultValue = "")String token,
+                     RedirectAttributes redirectAttributes, @PathParam("file") MultipartFile file) throws IOException {
+
+
+
+
     OrderDTO editOrder = new OrderDTO();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -260,6 +269,10 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
             bindingResult.rejectValue("tableAmount","tableAmount.range","Please enter table amount from "+min+" to "+ max );
 
         }
+
+        ClientUtilFunction utilFunction=new ClientUtilFunction();
+        String contract=utilFunction.AddFileEncrypted(file);
+
         if (bindingResult.hasErrors()) {
             order.setVenues(findOrder.getVenues());
             order.setCustomersByCustomerId(findOrder.getCustomersByCustomerId());
@@ -274,6 +287,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
         editOrder.setId(order.getId());
         editOrder.setOrderStatus(orderStatusDeposited);
         editOrder.setBookingEmp(employeeDetails.getUserId().intValue());
+        editOrder.setContract(contract);
 
 
         //update total amount if customer didn't set tt table
@@ -358,6 +372,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
         editOrder.setBookingEmp(findOrder.getBookingEmp());
         editOrder.setTableAmount(tbNum);
         editOrder.setOrderTotal(getTotal(findOrder,tbNum));
+        editOrder.setContract(findOrder.getContract());
         Integer team=findOrder.getOrganizeTeam();
         editOrder.setOrganizeTeam(team);
         editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
