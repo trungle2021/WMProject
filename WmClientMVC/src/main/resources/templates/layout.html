@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-  <title>Plataforma - Free Bootstrap 4 Template by Colorlib</title>
+  <title>KTK Wedding</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -29,13 +29,23 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <style>
+    .logo-container{
+      width: 100px;
+      height: 100px;
+      background-image: url("/video/weddinglogo.png");
+    }
+    .logo{
+      width: 100%;
+    }
+  </style>
 <!--  <th:block layout:fragment="optional"></th:block>-->
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
   <div class="container">
-    <a class="navbar-brand" href="/">Plataforma.</a>
+    <div class="logo-container"><a class="navbar-brand" href="/"><img class="logo" src="/video/weddinglogo.png"></a></div>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="oi oi-menu"></span> Menu
     </button>
@@ -86,7 +96,7 @@
 </nav>
 <!-- END nav -->
 
-<section layout:fragment="content">
+<section layout:fragment="content" style="margin-bottom: 30px">
 
 </section>
 <!--<h1>T</h1>-->
