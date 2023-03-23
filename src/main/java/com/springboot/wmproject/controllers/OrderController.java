@@ -116,8 +116,9 @@ public class OrderController {
         Double orderTotal=order.getOrderTotal();
         Integer part_time_emp_amount=order.getPartTimeEmpAmount();
         Integer table=order.getTableAmount();
+        String contract= order.getContract();
 
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount,table));
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount,table,contract));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")

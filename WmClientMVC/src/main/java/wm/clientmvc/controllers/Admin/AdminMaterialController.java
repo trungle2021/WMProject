@@ -7,10 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.MaterialDTO;
 import wm.clientmvc.DTO.OrderDTO;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
@@ -30,12 +28,19 @@ import static wm.clientmvc.utils.Static_Status.orderStatusConfirm;
 public class AdminMaterialController {
 
     @RequestMapping
-    public String materialIndex(Model model)
+    public String materialIndex(Model model,@ModelAttribute("alertMessage") String alertMessage)
     {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now =  LocalDateTime.now();
         String today=now.format(formatter);
         model.addAttribute("today",today);
+
+        if (!alertMessage.isEmpty()) {
+            model.addAttribute("alertMessage", alertMessage);
+        }
+        else {
+            model.addAttribute("alertMessage", null);
+        }
         return "adminTemplate/pages/organize/material-index";
     }
 
@@ -74,21 +79,25 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDateTime now =  LocalDateTime.now();
         String today=now.format(formatter);
-
+        if(materialList!=null){
+            for (MaterialDTO material:materialList)
+            {
+                material.setCount(material.getCount()*order.getTableAmount());
+            }}
 
 //        totalMaterial;
         model.addAttribute("today",today);
         model.addAttribute("orderList",list);
         model.addAttribute("materials",materialList);
         return "adminTemplate/pages/organize/material";
-        } catch (IOException e) {
+        } catch (Exception e) {
             model.addAttribute("message",e.getMessage());
             return "adminTemplate/error";
         }
     }
 
     @RequestMapping(value="/detail/searchId",method = RequestMethod.POST)
-    public String materialSearchId(Model model,@PathParam("orderId")Integer orderId, @CookieValue(name="token",defaultValue = "")String token)
+    public String materialSearchId(Model model,@PathParam("orderId")Integer orderId, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes)
     {
 //check team
 
@@ -110,12 +119,12 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 );
                 list.add(order);
             //get material
-            List<MaterialDTO> materialList=new ArrayList<>();
+
 
             ParameterizedTypeReference<List<MaterialDTO>> responseType=new ParameterizedTypeReference<List<MaterialDTO>>() {};
             String url="http://localhost:8080/api/materials/byorder/"+orderId;
 
-                materialList= APIHelper.makeApiCall(
+            List<MaterialDTO>   materialList= APIHelper.makeApiCall(
                     url,
                     HttpMethod.GET,
                     null,
@@ -129,9 +138,14 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDateTime now =  LocalDateTime.now();
             String today=now.format(formatter);
+            if(materialList!=null){
             for (MaterialDTO material:materialList)
             {
              material.setCount(material.getCount()*order.getTableAmount());
+            }
+            }else {
+                redirectAttributes.addFlashAttribute("alertMessage", "Cant found material!Try Again! ");
+                return "redirect:/staff/materials";
             }
 
 //        totalMaterial;
@@ -142,19 +156,17 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
 
 
         } catch (Exception e) {
-            model.addAttribute("message",e.getMessage());
-            return "adminTemplate/error";
+            redirectAttributes.addFlashAttribute("alertMessage", "Cant found material!Try Again! ");
+            return "redirect:/staff/materials";
         }
     }
 
     @RequestMapping(value="/detail/searchDate",method = RequestMethod.POST)
-    public String materialSearchDate(Model model,@PathParam("date")String date, @CookieValue(name="token",defaultValue = "")String token)
+    public String materialSearchDate(Model model, @PathParam("date")String date, @CookieValue(name="token",defaultValue = "")String token, RedirectAttributes redirectAttributes)
     {
         //check team
 
         //get order
-
-
         try {
 
             //getday
@@ -172,6 +184,11 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byStatus/confirm";
 
              List<OrderDTO> list=getOrderList(token,ourl,date);
+             if(list==null)
+             {
+                 redirectAttributes.addFlashAttribute("alertMessage", "No confirm order found in this day! ");
+                 return "redirect:/staff/materials";
+             }
 
                 //get material in day with count
           List<MaterialDTO> materialList=getMaterialList(token,list);
@@ -200,12 +217,13 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 return "adminTemplate/pages/organize/material";
             }
            else{
-                model.addAttribute("message","You not allow to Access this action!");
-                return "adminTemplate/error";
+                redirectAttributes.addFlashAttribute("alertMessage", "You not allow to Access this action! ");
+                return "redirect:/staff/materials";
+
             }
 
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             model.addAttribute("message",e.getMessage());
             return "adminTemplate/error";
         }
@@ -233,7 +251,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
         return list;
     }
 
-    public List<MaterialDTO> getMaterialList(String token,List<OrderDTO>list) throws IOException {
+    public List<MaterialDTO> getMaterialList(String token,List<OrderDTO>list) throws Exception {
         List<MaterialDTO> materialList=new ArrayList<>();
 
         for (OrderDTO order:list)

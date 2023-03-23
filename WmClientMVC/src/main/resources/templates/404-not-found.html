@@ -1,11 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>CodePen - 404 Not Found</title>
     <link rel="stylesheet" href="/css/404-not-found.css">
 </head>
 <body>
+<section layout:fragment="content">
 <section class="page_404">
     <div class="container">
         <div class="row">
@@ -29,6 +30,36 @@
             </div>
         </div>
     </div>
+</section>
+</section>
+<section layout:fragment="optional">
+<script th:inline="javascript">
+
+    var message = [[${alertMessage}]];
+    var error = [[${alertError}]];
+    console.log(error);
+    console.log(message);
+    if(message!=null && message.length != 0)
+    {
+        swal({
+            title: "Message!",
+            text: message,
+            icon: "success",
+        });
+
+    }
+    else if(error!=null && error.length != 0)
+    {
+        swal({
+            title: "Error!",
+            text: error,
+            icon: "error",
+        });
+    }
+
+
+
+</script>
 </section>
 </body>
 </html>

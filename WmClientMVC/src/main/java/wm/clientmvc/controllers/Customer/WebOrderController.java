@@ -396,9 +396,10 @@ public class WebOrderController {
                     token,
                     OrderDTO.class
             );
-        } catch (IOException e) {
-            model.addAttribute("message", e.getMessage());
-            return "adminTemplate/error";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+            //redirect
+            return "redirect:/customers/dashboard";
         }
         if (order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited) && findOrder!=null || order.getOrderStatus().equalsIgnoreCase(orderStatusWarning) && findOrder!=null)
         {
@@ -555,7 +556,7 @@ public class WebOrderController {
         }catch (Exception e)
         {
             redirectAttributes.addFlashAttribute("alertError", "Oops Some thing wrong!Can't connect to server! Try again!");
-            return "redirect:/";
+            return "redirect:/error";
         }
     }
 

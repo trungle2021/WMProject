@@ -19,7 +19,8 @@ public interface OrderService {
     OrderDTO updateOrder(OrderDTO orderDTO);
     void deleteOrder(int id);
     public OrderDTO updateOrderStatus(Integer orderDTOId,String status);
-    public OrderDTO updateOrderStatus(Integer orderDTOId,String status, Integer bookingEmp, Integer organizeTeam,Double orderTotal,Integer part_time_emp_amount,Integer table);
+    public OrderDTO updateOrderStatus(Integer orderDTOId,String status, Integer bookingEmp, Integer organizeTeam,Double orderTotal,
+                                      Integer part_time_emp_amount,Integer table,String contract);
     public OrderDTO updateOrderTable(Integer orderDTOId,Integer table);
     public OrderDTO updateOrderDetailCustomer(String json);
 
