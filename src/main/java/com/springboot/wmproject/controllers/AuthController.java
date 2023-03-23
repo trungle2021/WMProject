@@ -60,8 +60,15 @@ public class AuthController {
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = {"/customers/register"})
-    public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO, @RequestHeader("User-Agent") String userAgent) throws JsonProcessingException {
-        RegisterCustomerDTO response = authService.customerRegister(registerDTO,userAgent);
+    public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+        RegisterCustomerDTO response = authService.customerRegister(registerDTO);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PostMapping(value = {"/customers/register/validPhoneEmail"})
+    public ResponseEntity<RegisterCustomerDTO> customerValidPhoneEmail(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+        RegisterCustomerDTO response = authService.customerPersonalValid(registerDTO);
         return ResponseEntity.ok(response);
     }
 
@@ -114,8 +121,8 @@ public class AuthController {
     }
 
     @PostMapping("/customers/processForgotPassword")
-    public ResponseEntity<String> processForgotPassword(@RequestBody String email){
-        String response = accountService.processForgotPassword(email);
+    public ResponseEntity<String> processForgotPassword(@RequestBody String email,@RequestHeader("User-Agent") String userAgent){
+        String response = accountService.processForgotPassword(email,userAgent);
         return ResponseEntity.ok(response);
     }
 
@@ -125,9 +132,22 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @PostMapping("/customers/updatePasswordMobile")
+    public ResponseEntity<String> updatePasswordMobile(@RequestBody PasswordDTO passwordDTO) throws ParseException {
+        String response = accountService.updatePasswordMobile(passwordDTO.getNewPassword(),passwordDTO.getToken());
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/customers/validToken")
+    public ResponseEntity<String> validToken(@RequestBody String token) throws ParseException {
+        String response = accountService.validToken(token);
+        return ResponseEntity.ok(response);
+    }
+
     @PostMapping("/customers/createPWToken")
     public ResponseEntity<String> createPWToken(){
         String response = passwordResetTokenService.create(1);
         return ResponseEntity.ok(response);
     }
+
 }

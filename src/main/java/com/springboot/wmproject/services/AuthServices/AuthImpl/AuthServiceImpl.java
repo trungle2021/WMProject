@@ -192,12 +192,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException {
+    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
         errors = new ArrayList<>();
         boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
         boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
         boolean isUsernameValid = customerAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
-        boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
+        boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().isBlank();
 
         CustomerDTO customerDTO = new CustomerDTO();
         CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();
@@ -212,13 +212,6 @@ public class AuthServiceImpl implements AuthService {
             customerDTO.setEmail(registerDTO.getEmail().trim());
         } else {
             errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
-        }
-
-
-        if(userAgent.contains("okhttp") && errors.size() > 0){
-            ObjectMapper objectMapper = new ObjectMapper();
-            String responseError = objectMapper.writeValueAsString(errors);
-            throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
         }
 
         if (isUsernameValid) {
@@ -251,6 +244,29 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.create(customerAccountDTO);
         registerDTO.setCustomerId(cusDTO.getId());
+        return registerDTO;
+    }
+
+    @Override
+    public RegisterCustomerDTO customerPersonalValid(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+        errors = new ArrayList<>();
+        boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
+        boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
+
+
+        //valid
+        if (!isPhoneValid) {
+            errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
+        }
+        if (!isEmailValid) {
+            errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
+        }
+
+        if (errors.size() != 0) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
+        }
         return registerDTO;
     }
 
