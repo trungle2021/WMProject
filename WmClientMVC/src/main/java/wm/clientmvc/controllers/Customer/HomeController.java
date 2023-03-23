@@ -17,15 +17,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import wm.clientmvc.DTO.CustomerDTO;
-import wm.clientmvc.DTO.JWTAuthResponse;
-import wm.clientmvc.DTO.LoginDTO;
-import wm.clientmvc.DTO.OrderDTO;
+import wm.clientmvc.DTO.*;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.SD_CLIENT;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,7 +34,58 @@ import static wm.clientmvc.utils.Static_Status.orderStatusOrdered;
 public class HomeController {
 
     @GetMapping(value = {"/home","/customers/home","/"})
-    public String home(Model model,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {
+    public String home(Model model,@CookieValue(name="token",defaultValue = "")String token,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {
+//get venue image
+            ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenueImg=new ParameterizedTypeReference<List<VenueImgDTO>>() {};
+        try {
+            List<VenueImgDTO> venueImgDTOList = APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/venuesImgs/all",
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseTypeVenueImg
+            );
+
+            List<VenueImgDTO> venuesImages= new ArrayList<>();
+            if(venueImgDTOList.size()>4 && venueImgDTOList.size()<8)
+            {
+                for (int i = 0; i <4; i++) {
+                    venuesImages.add(venueImgDTOList.get(i));
+                }
+            }
+            else if(venueImgDTOList.size()<4)
+            {
+                return null;
+            }
+            else{
+                for (int i = 0; i <8; i++) {
+                    venuesImages.add(venueImgDTOList.get(i));
+                }
+
+            }
+
+//get food image
+        ParameterizedTypeReference<List<FoodDTO>> foodReference= new ParameterizedTypeReference<List<FoodDTO>>() {};
+        List<FoodDTO> fList= APIHelper.makeApiCall(
+          SD_CLIENT.DOMAIN_APP_API+"/api/food/all",
+          HttpMethod.GET,
+          null,
+          token,
+          foodReference);
+        List<FoodDTO>foodList= new ArrayList<>();
+        if(fList!=null && fList.size()>8)
+        {
+            for (int i = 0; i <8; i++) {
+                foodList.add(fList.get(i));
+            }
+        }
+        else{
+         foodList=fList;
+        }
+
+
+        model.addAttribute("foodList",foodList);
+        model.addAttribute("venuesImages",venuesImages);
 
 
 //get alert
@@ -54,8 +103,10 @@ public class HomeController {
             model.addAttribute("alertError", null);
         }
 
-
         return "home";
+        } catch (Exception e) {
+            return "redirect:/error";
+        }
     }
     @GetMapping(value = {"/error"})
     public String error(Model model,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {

@@ -43,6 +43,7 @@
                             <th>Organize Team</th>
                             <th>Order Status</th>
                             <th>Event Date</th>
+                            <th>Number of Team employee:</th>
                             <th>Number of collaborators:</th>
                             <th>Booking Date</th>
                             <th>Total Amount:</th>
@@ -59,8 +60,8 @@
                             <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'">N/A</td>
                             <td th:text="${c.getOrderStatus()}"></td>
                             <td th:text="${c.getTimeHappen()}"></td>
+                            <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamsize()}:'N/A'">N/A</td>
                             <td th:text="${c.getPartTimeEmpAmount()}"></td>
-
                             <td th:text="${c.getOrderDate()}"></td>
                             <td th:text="${c.getOrderTotal()}"></td>
                             <td><button type="button" class="btn color1" th:data-orderId="${c.getId()}" onclick="getContract(this)">
@@ -90,7 +91,6 @@
 
                         </tbody>
                     </table>
-
                 </div>
                 <!-- contract image                           -->
                  <div id="contract-container" class="contract-container">
