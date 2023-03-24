@@ -17,7 +17,9 @@
 <body>
 <section layout:fragment="content">
     <div class="hero-wrap"  data-stellar-background-ratio="0.5">
-        <video width="100%" id="myVideo" autoplay mute loop src="/video/weddingvideo.mp4"></video>
+        <video width="100%" id="myVideo" autoplay loop preload="auto" >
+            <source src="/video/weddingvideo.mp4" type="video/mp4">
+        </video>
     </div>
 
     <section class="ftco-section services-section bg-primary">
