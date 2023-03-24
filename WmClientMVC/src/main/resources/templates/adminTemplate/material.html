@@ -83,7 +83,7 @@
                                                            th:value="${c.getDescription()}" required>
                                                 </div>
                                                 <div class="form-group col-md-6">
-                                                    <label class="col-form-label">Price:</label>
+                                                    <label class="col-form-label">Price (1-500.000.000):</label>
                                                     <input type="text" class="form-control" name="price" id="txtPrice"
                                                            th:value="${c.getPrice()}" required>
                                                 </div>
@@ -129,27 +129,35 @@
                                                     class="btn btn-outline-primary">
                                                 Add material
                                             </button>
+
                                             <div id="input-group-1" class="input-group">
-                                                <label for="input-1-1">Material name:</label>
+                                                <span>*All field must be fill or it will not added*</span><br>
+                                                <label for="input-1-1">Material name:</label><br/>
                                                 <input type="text" id="input-1-1" name="material1"/><br/><br/>
-                                                <label for="input-1-2">Unit:</label>
+                                                <label for="input-1-2">Unit:</label><br/>
                                                 <input type="text" id="input-1-2" name="unit1"/><br/><br/>
-                                                <label for="input-1-3">Count:</label>
-                                                <input type="text" id="input-1-3" name="cost1"
+                                                <label for="input-1-3">Count:</label><br/>
+                                                <input type="text" id="input-1-3" name="cost1"min="1"
                                                        th:id="txtPrice1"/><br/><br/>
+                                                <label for="input-1-4">Code:</label><br/>
+                                                <input type="text" id="input-1-4" name="code1"/><br/><br/>
                                             </div>
                                             <button type="button" onclick="toggle('input-group-2')"
                                                     class="btn btn-outline-primary">
                                                 Add material
                                             </button>
                                             <div id="input-group-2" class="input-group">
-                                                <label for="input-2-1">Material name:</label>
+                                                <span>*All field must be fill or it will not added*</span><br>
+
+                                                <label for="input-2-1">Material name:</label><br/>
                                                 <input type="text" id="input-2-1" name="material2"/><br/><br/>
-                                                <label for="input-2-2">Unit:</label>
+                                                <label for="input-2-2">Unit:</label><br/>
                                                 <input type="text" id="input-2-2" name="unit2"/><br/><br/>
-                                                <label for="input-2-3">Count:</label>
+                                                <label for="input-2-3">Count:</label><br/>
                                                 <input type="text" id="input-2-3" name="cost2"
-                                                       th:id="txtPrice2"/><br/><br/>
+                                                       th:id="txtPrice2" min="1"/><br/><br/>
+                                                <label for="input-2-4">Code:</label><br/>
+                                                <input type="text" id="input-2-4" name="code2"/><br/><br/>
                                             </div>
                                             <button type="button" onclick="toggle('input-group-3')"
                                                     class="btn btn-outline-primary">
@@ -157,13 +165,16 @@
                                             </button>
 
                                             <div id="input-group-3" class="input-group">
-                                                <label for="input-3-1">Material name:</label>
+                                                <span>*All field must be fill or it will not added*</span><br>
+                                                <label for="input-3-1">Material name:</label><br/>
                                                 <input type="text" id="input-3-1" name="material3"/><br/><br/>
-                                                <label for="input-3-2">Unit:</label>
+                                                <label for="input-3-2">Unit:</label><br/>
                                                 <input type="text" id="input-3-2" name="unit3"/><br/><br/>
-                                                <label for="input-3-3">Count:</label>
-                                                <input type="text" id="input-3-3" name="cost3"
+                                                <label for="input-3-3">Count:</label><br/>
+                                                <input type="text" id="input-3-3" name="cost3"min="1"
                                                        th:id="txtPrice3"/><br/><br/>
+                                                <label for="input-3-4">Code:</label><br/>
+                                                <input type="text" id="input-3-4" name="code3"/><br/><br/>
                                             </div>
                                             <input type="hidden" id="removeMaterial" name="removeMaterial">
 
@@ -247,15 +258,15 @@
                 var inputPrice1 = $('#txtPrice1').val()
                 var inputPrice2 = $('#txtPrice2').val()
                 var inputPrice3 = $('#txtPrice3').val()
-                var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+                var regex = /^(?!0*(\.0+)?$)([1-4]?\d{0,8}|500000000)(\.\d+)?$/;
                 if (!regex.test(inputPrice)) {
-                    alert("Please enter a valid number between 1 and 500000000.");
+                    alert("Please enter a valid number between 0 and 500000000.");
                 }else if(!regex.test(inputPrice1) && inputPrice1!=""){
-                    alert("Please enter a valid number between 1 and 500000000.");
+                    alert("Please enter a valid number between 0 and 500000000.");
                 }else if(!regex.test(inputPrice2) && inputPrice2!=""){
-                    alert("Please enter a valid number between 1 and 500000000.");
+                    alert("Please enter a valid number between 0 and 500000000.");
                 }else if(!regex.test(inputPrice3) && inputPrice3!=""){
-                    alert("Please enter a valid number between 1 and 500000000.");
+                    alert("Please enter a valid number between 0 and 500000000.");
                 }
                 else {
                     var form = document.getElementById("formDetail");

@@ -133,7 +133,7 @@
                                     <input type="text" class="form-control" name="description" required>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="col-form-label">Price:</label>
+                                    <label class="col-form-label">Price (1-500.000.000):</label>
                                     <input type="text" class="form-control" name="price" id="txtPrice" required>
                                 </div>
                                 <div class="modal-footer col-md-12">
@@ -160,14 +160,24 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         msg = '[[${message}]]';
-        if (msg) {
-            Swal.fire({
-                title: 'Notification',
-                text: msg,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
+        if(msg){
+            if (msg==="Success") {
+                Swal.fire({
+                    title: 'Notification',
+                    text: msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }else {
+                Swal.fire({
+                    title: 'Notification',
+                    text: "Food name has been existed",
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
         }
+
     </script>
     <script>
         $(document).ready(function () {
@@ -187,7 +197,7 @@
     <script>
         $(function (){
             $("#createFoodModal").submit(function (e){
-                var txtPrice=$('txtPrice').val()
+                var txtPrice=$('#txtPrice').val()
                 var regex=/^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
                 if (!regex.test(txtPrice)) {
                     alert("Please enter a valid number between 1 and 500000000.");
