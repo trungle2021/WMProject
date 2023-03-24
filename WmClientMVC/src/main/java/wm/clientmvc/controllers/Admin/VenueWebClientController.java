@@ -3,6 +3,7 @@ package wm.clientmvc.controllers.Admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
@@ -61,6 +62,11 @@ public class VenueWebClientController {
                     token,
                     responseTypeVenueImg
             );
+            for (VenueDTO item : venueDTOList
+            ) {
+                item.setVenueImagesById(null);
+            }
+
             model.addAttribute("list", venueDTOList);
             model.addAttribute("imgList", venueImgDTOList);
         } catch (HttpClientErrorException ex) {
@@ -129,7 +135,7 @@ public class VenueWebClientController {
                     token,
                     VenueDTO.class
             );
-            if(data==null){
+            if (data == null) {
                 return "redirect:/staff/venues?msg=Fail";
             }
         } catch (HttpClientErrorException ex) {
@@ -209,14 +215,14 @@ public class VenueWebClientController {
             venueDTO.setActive(checkActive);
         }
         try {
-            VenueDTO data=APIHelper.makeApiCall(
+            VenueDTO data = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venues/update",
                     HttpMethod.PUT,
                     venueDTO,
                     token,
                     VenueDTO.class
             );
-            if(data==null){
+            if (data == null) {
                 return "redirect:/staff/venues?msg=Fail";
             }
         } catch (HttpClientErrorException ex) {
