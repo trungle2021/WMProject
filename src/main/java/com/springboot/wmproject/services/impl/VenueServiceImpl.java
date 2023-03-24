@@ -36,19 +36,17 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    public List<VenueDTO> getAllVenue()throws ResourceNotFoundException {
+    public List<VenueDTO> getAllVenue() throws ResourceNotFoundException {
         return venueRepository.findAll().stream().map(venue -> mapToDTO(venue)).collect(Collectors.toList());
     }
 
     @Override
     public List<VenueDTO> getAllVenueActive() {
-        List<Venues>list=venueRepository.findAll();
-        List<VenueDTO>venues= list.stream().map(venue -> mapToDTO(venue)).collect(Collectors.toList());
-        List<VenueDTO> newList=new ArrayList<>();
-        for (VenueDTO venue:venues)
-        {
-            if(venue.isActive())
-            {
+        List<Venues> list = venueRepository.findAll();
+        List<VenueDTO> venues = list.stream().map(venue -> mapToDTO(venue)).collect(Collectors.toList());
+        List<VenueDTO> newList = new ArrayList<>();
+        for (VenueDTO venue : venues) {
+            if (venue.isActive()) {
                 newList.add(venue);
             }
         }
@@ -57,27 +55,27 @@ public class VenueServiceImpl implements VenueService {
 
     @Override
     public VenueDTO getOneVenueById(int id) {
-        Venues venues=venueRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Venue","id",String.valueOf(id)));
+        Venues venues = venueRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Venue", "id", String.valueOf(id)));
         return mapToDTO(venues);
     }
 
     @Override
-    public List<VenueDTO> getAllVenueByOrderId(Integer orderId)throws ResourceNotFoundException {
+    public List<VenueDTO> getAllVenueByOrderId(Integer orderId) throws ResourceNotFoundException {
         return venueRepository.getAllByOrderId(orderId).stream().map(venue -> mapToDTO(venue)).collect(Collectors.toList());
 
     }
 
     @Override
-    public List<VenueDTO> getVenueByName(String name)throws ResourceNotFoundException {
+    public List<VenueDTO> getVenueByName(String name) throws ResourceNotFoundException {
         return venueRepository.getAllVenuesByName(name).stream().map(venues -> mapToDTO(venues)).collect(Collectors.toList());
     }
 
     @Override
-    public VenueDTO createVenue(VenueDTO venueDTO) throws ResourceNotFoundException{
+    public VenueDTO createVenue(VenueDTO venueDTO) throws ResourceNotFoundException {
         String venueName = venueDTO.getVenueName();
         if (venueName != null) {
             List<Venues> checkVenues = venueRepository.validVenueByName(venueName);
-            if(checkVenues.size() == 0){
+            if (checkVenues.size() == 0) {
                 Venues newVenues = venueRepository.save(mapToEntity(venueDTO));
                 return mapToDTO(newVenues);
             }
@@ -86,11 +84,11 @@ public class VenueServiceImpl implements VenueService {
     }
 
     @Override
-    public VenueDTO updateVenue(VenueDTO venueDTO) throws ResourceNotFoundException{
-        int venueId = venueDTO.getId();
-        if (venueId != 0) {
-            Venues checkVenue = venueRepository.findById(venueId).orElseThrow(() -> new ResourceNotFoundException("Venues", "id", String.valueOf(venueId)));
-            if (checkVenue != null) {
+    public VenueDTO updateVenue(VenueDTO venueDTO) throws ResourceNotFoundException {
+        String venueName = venueDTO.getVenueName();
+        if (venueName != null) {
+            Venues checkVenue = venueRepository.findById(venueDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Venues", "id", String.valueOf(venueDTO.getId())));
+            if (checkVenue.getVenueName().equals( venueDTO.getVenueName())) {
                 checkVenue.setVenueName(venueDTO.getVenueName());
                 checkVenue.setMinPeople(venueDTO.getMinPeople());
                 checkVenue.setMaxPeople(venueDTO.getMaxPeople());
@@ -98,14 +96,27 @@ public class VenueServiceImpl implements VenueService {
                 checkVenue.setActive(venueDTO.isActive());
                 venueRepository.save(checkVenue);
                 return mapToDTO(checkVenue);
+            } else {
+                List<Venues> checkValid = venueRepository.validVenueByName(venueName);
+                if (!checkValid.isEmpty()) {
+                    return null;
+                }else {
+                    checkVenue.setVenueName(venueDTO.getVenueName());
+                    checkVenue.setMinPeople(venueDTO.getMinPeople());
+                    checkVenue.setMaxPeople(venueDTO.getMaxPeople());
+                    checkVenue.setPrice(venueDTO.getPrice());
+                    checkVenue.setActive(venueDTO.isActive());
+                    venueRepository.save(checkVenue);
+                    return mapToDTO(checkVenue);
+                }
             }
         }
         return null;
     }
 
     @Override
-    public void deleteVenue(int venueId)throws ResourceNotFoundException {
-        Venues venues=venueRepository.findById(venueId).orElseThrow(()->new ResourceNotFoundException("Venue","Id",String.valueOf(venueId)));
+    public void deleteVenue(int venueId) throws ResourceNotFoundException {
+        Venues venues = venueRepository.findById(venueId).orElseThrow(() -> new ResourceNotFoundException("Venue", "Id", String.valueOf(venueId)));
         venueRepository.delete(venues);
     }
 
@@ -121,10 +132,12 @@ public class VenueServiceImpl implements VenueService {
         venue.setActive(venueDTO.isActive());
         return venue;
     }
+
     public OrderDTO mapToDTO(Orders orders) {
         OrderDTO orderDTO = modelMapper.map(orders, OrderDTO.class);
         return orderDTO;
     }
+
     public Orders mapToEntity(OrderDTO orderDTO) {
         Orders orders = modelMapper.map(orderDTO, Orders.class);
         return orders;
