@@ -171,10 +171,20 @@ function appendDay(day, calendarDaysElement) {
 }
 
 function appendVenue(venue) {
+debugger;
+    let venueimages= venue.venueImagesById;
+    let myVenueImg;
+    if(Array.isArray(venueimages) && venueimages.length!==0)
+    {
+        myVenueImg=venueimages[0].url;
+    }
+    else{
+        myVenueImg="/video/weddinglogo.png";
+    }
 
     let venueCard =
         `<div class="card">
-                    <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+                    <img src="data:image/png;base64,${myVenueImg}" alt="Placeholder Image">
                     <div class="info">
                         <h2>${venue.venueName}</h2>
                         <p> Capacity: 

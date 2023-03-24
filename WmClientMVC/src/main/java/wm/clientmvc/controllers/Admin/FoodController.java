@@ -107,7 +107,7 @@ public class FoodController {
         return "redirect:/staff/food/index?msg=Success";
     }
     @PostMapping("/update/material")
-    public String updateFood(@ModelAttribute FoodDTO foodDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, String material1, String unit1, String cost1, String material2, String unit2, String cost2, String material3, String unit3, String cost3, String removeMaterial) throws IOException {
+    public String updateFood(@ModelAttribute FoodDTO foodDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, String material1, String unit1, String cost1, String material2, String unit2, String cost2, String material3, String unit3, String cost3,String code1,String code2,String code3, String removeMaterial) throws IOException {
 
         if(removeMaterial!=null){
             String[] arr=removeMaterial.split(",");
@@ -142,13 +142,14 @@ public class FoodController {
                 }
             }
         }
-         if(!material1.isEmpty() && !unit1.isEmpty() && !cost1.isEmpty()){
+         if(!material1.isEmpty() && !unit1.isEmpty() && !cost1.isEmpty() && !code1.isEmpty()){
             try {
                 MaterialDTO materialDTO=new MaterialDTO();
                 materialDTO.setMaterialName(material1);
                 materialDTO.setCount(Double.parseDouble(cost1));
                 materialDTO.setUnit(unit1);
                 materialDTO.setFoodId(foodDTO.getId());
+                materialDTO.setMaterialCode(code1);
                 APIHelper.makeApiCall(
                         SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
                         HttpMethod.POST,
@@ -177,13 +178,15 @@ public class FoodController {
                 }
             }
         }
-         if(!material2.isEmpty() && !unit2.isEmpty() && !cost2.isEmpty()){
+         if(!material2.isEmpty() && !unit2.isEmpty() && !cost2.isEmpty()&& !code2.isEmpty()){
             try {
                 MaterialDTO materialDTO=new MaterialDTO();
                 materialDTO.setMaterialName(material2);
                 materialDTO.setCount(Double.parseDouble(cost2));
                 materialDTO.setUnit(unit2);
                 materialDTO.setFoodId(foodDTO.getId());
+                materialDTO.setMaterialCode(code2);
+
                 APIHelper.makeApiCall(
                         SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
                         HttpMethod.POST,
@@ -212,13 +215,15 @@ public class FoodController {
                 }
             }
         }
-         if(!material3.isEmpty() && !unit3.isEmpty() && !cost3.isEmpty()){
+         if(!material3.isEmpty() && !unit3.isEmpty() && !cost3.isEmpty() && !code3.isEmpty()){
             try {
                 MaterialDTO materialDTO=new MaterialDTO();
                 materialDTO.setMaterialName(material3);
                 materialDTO.setCount(Double.parseDouble(cost3));
                 materialDTO.setUnit(unit3);
                 materialDTO.setFoodId(foodDTO.getId());
+                materialDTO.setMaterialCode(code3);
+
                 APIHelper.makeApiCall(
                         SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
                         HttpMethod.POST,
@@ -248,13 +253,17 @@ public class FoodController {
             }
         }
         try {
-            APIHelper.makeApiCall(
+
+            FoodDTO data=APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/food/update",
                     HttpMethod.PUT,
                     foodDTO,
                     token,
                     FoodDTO.class
             );
+            if(data==null){
+                return "redirect:/staff/food/index?msg=Fail";
+            }
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
@@ -327,13 +336,16 @@ public class FoodController {
     @PostMapping("/create")
     public String createFood(@ModelAttribute FoodDTO foodDTO,@CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         try {
-            APIHelper.makeApiCall(
+            FoodDTO data=APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/food/create",
                     HttpMethod.POST,
                     foodDTO,
                     token,
                     FoodDTO.class
             );
+            if(data==null){
+                return "redirect:/staff/food/index?msg=Fail";
+            }
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();

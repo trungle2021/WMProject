@@ -4,58 +4,27 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Auth/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Auth/AuthController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+=======
+    <list default="true" id="7969de41-937d-46a0-b2ee-651450bef708" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
+>>>>>>> origin/develop
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="CompilerWorkspaceConfiguration">
-    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
-  </component>
-  <component name="ExternalProjectsData">
-    <projectState path="$PROJECT_DIR$/MVC">
-      <ProjectState />
-    </projectState>
-    <projectState path="$PROJECT_DIR$/demo1">
-      <ProjectState />
-    </projectState>
-  </component>
-  <component name="ExternalProjectsManager">
-    <system id="GRADLE">
-      <state>
-        <projects_view>
-          <tree_state>
-            <expand />
-            <select />
-          </tree_state>
-        </projects_view>
-      </state>
-    </system>
-  </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="com.haulmont.jpb.JpaEntity" />
-        <option value="package.json" />
-        <option value="Interface" />
-        <option value="AnnotationType" />
-        <option value="Class" />
-        <option value="HTML File" />
-        <option value="JavaScript File" />
-        <option value="CSS File" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< HEAD
   <component name="JpbToolWindowState">
     <option name="isToolWindowVisible" value="false" />
   </component>
@@ -163,34 +132,42 @@
     <configuration name="WMProject" type="CompoundRunConfigurationType">
       <toRun name="WmClientMvcApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
+=======
+  <component name="RunManager" selected="Compound.all">
+    <configuration name="all" type="CompoundRunConfigurationType">
+      <toRun name="api" type="SpringBootApplicationConfigurationType" />
+      <toRun name="mvc" type="SpringBootApplicationConfigurationType" />
+>>>>>>> origin/develop
       <method v="2" />
     </configuration>
-    <configuration name="MVC" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="ClientMVC" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="wm.clientmvc.WmClientMvcApplication" />
-      <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <configuration name="api" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" />
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <module name="wmproject" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.springboot.wmproject.WmprojectApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="WmprojectApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="wmproject" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.springboot.wmproject.WmprojectApplication" />
-      <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <configuration name="mvc" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="ACTIVE_PROFILES" />
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <module name="ClientMVC" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="wm.clientmvc.WmClientMvcApplication" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <list>
-      <item itemvalue="Compound.WMProject" />
-      <item itemvalue="Spring Boot.MVC" />
-      <item itemvalue="Spring Boot.WmprojectApplication" />
+      <item itemvalue="Compound.all" />
+      <item itemvalue="Spring Boot.api" />
+      <item itemvalue="Spring Boot.mvc" />
     </list>
   </component>
-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
+<<<<<<< HEAD
     <task active="true" id="Default" summary="Default task">
       <changelist id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="" />
       <created>1675613826093</created>
@@ -386,4 +363,8 @@
       </pinned-members>
     </pin-to-top-manager>
   </component>
+=======
+    <servers />
+  </component>
+>>>>>>> origin/develop
 </project>
