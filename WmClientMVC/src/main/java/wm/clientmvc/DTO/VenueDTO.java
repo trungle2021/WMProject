@@ -5,6 +5,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 
 public class VenueDTO {
@@ -22,4 +24,5 @@ public class VenueDTO {
     private Double price;
     private boolean isActive;
 //    private Set<OrderDTO> orderDTOS;
+    private List<VenueImgDTO> venueImagesById;
 }

@@ -320,7 +320,9 @@ function callAJAXnewOrder(){
             response = JSON.parse(xhr.responseText);
             swal("Success!", response.message, "success");
 
-            window.location.href="/";
+            setTimeout(function() {
+                window.location.href = "/";
+            }, 2000);
 
                 }
         else{

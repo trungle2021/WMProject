@@ -57,12 +57,15 @@
                                             <th>Name</th>
                                             <th>Address</th>
                                             <th>Phone</th>
-                                            <th>Join Date</th>
-                                            <th>Salary</th>
                                             <th>Team</th>
+                                            <th>Type</th>
                                             <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                                                 <th>Detail</th>
                                             </th:block>
+                                            <th>Email</th>
+                                            <th>Join Date</th>
+                                            <th>Salary</th>
+
 
 
                                         </tr>
@@ -73,15 +76,32 @@
                                             <td th:text="${c.name}"></td>
                                             <td th:text="${c.address}"></td>
                                             <td th:text="${c.phone}"></td>
+
+                                            <td th:text="${c.organizeTeamsByTeamId.teamName}"></td>.
+
+                                            <th:block th:if="${c.organizeTeamsByTeamId.teamName.equals('TEAM ADMINISTRATOR')}">
+                                                <td th:text="SALER"></td>
+                                            </th:block>
+
+                                            <th:block th:unless="${c.organizeTeamsByTeamId.teamName.equals('TEAM ADMINISTRATOR')}">
+                                                <td th:text="ORGANIZER"></td>
+                                            </th:block>
+
+
+                                            <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                                <td>
+                                                    <a th:href="@{/staff/employees/update/{empId}(empId=${c.getId()})}" class=" btn btn-outline-primary ">
+                                                        Update
+                                                    </a>
+
+                                                        <button class="btn btn-outline-primary btnDeleteEmp">Delete</button>
+
+                                                </td>
+                                            </th:block>
+                                            <td th:text="${c.email}"></td>
                                             <td th:text="${c.joinDate}"></td>
                                             <td th:text="${c.salary}"></td>
 
-                                            <td th:text="${c.organizeTeamsByTeamId.teamName}"></td>
-                                            <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                                                <th:block th:if="${c.r}">
-
-                                                </th:block>
-                                            </th:block>
 
                                         </tr>
 

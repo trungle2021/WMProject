@@ -370,7 +370,7 @@ public class WebOrderController {
             );
             model.addAttribute("orderDTO",order);
             return "customerTemplate/customer-order-confirm";
-        }catch (IOException e) {
+        }catch (Exception e) {
             redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
             //redirect
             return "redirect:/customers/dashboard";
@@ -396,9 +396,10 @@ public class WebOrderController {
                     token,
                     OrderDTO.class
             );
-        } catch (IOException e) {
-            model.addAttribute("message", e.getMessage());
-            return "adminTemplate/error";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
+            //redirect
+            return "redirect:/customers/dashboard";
         }
         if (order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited) && findOrder!=null || order.getOrderStatus().equalsIgnoreCase(orderStatusWarning) && findOrder!=null)
         {
@@ -494,6 +495,117 @@ public class WebOrderController {
 
 //        return "customerTemplate/order-detail";
     }
+
+    //order detail update page
+    @RequestMapping(value="/myorder/order-detail/update",method = RequestMethod.POST)
+    public String updateDetail(Model model, @RequestParam("orderId") int orderId ,@CookieValue(name="token",defaultValue = "") String token,RedirectAttributes redirectAttributes) {
+        String orderUrl="http://localhost:8080/api/orders/"+orderId;
+//        model.addAttribute("orderId",orderId);
+
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<?> entity = new HttpEntity<>(headers);
+//getorder
+        OrderDTO myOrder= new OrderDTO();
+        try {
+    ResponseEntity<OrderDTO> response = restTemplate.exchange(
+            orderUrl,
+            HttpMethod.GET,
+            entity,
+            new ParameterizedTypeReference<OrderDTO>() {
+            }
+
+    );
+        myOrder=response.getBody();
+
+        List<FoodDTO> foodList= new ArrayList<>();
+        //get foodlist
+
+            String foodUrl = "http://localhost:8080/api/food/allactive";
+            ResponseEntity<List<FoodDTO>> foodResponse = restTemplate.exchange(
+                    foodUrl,
+                    HttpMethod.GET,
+                    entity,
+                    new ParameterizedTypeReference<List<FoodDTO>>() {
+                    }
+
+            );
+             foodList = foodResponse.getBody();
+
+        //get serviceList
+        List<ServiceDTO> serviceList= new ArrayList<>();
+
+            String serviceUrl = "http://localhost:8080/api/services/allactive";
+            ResponseEntity<List<ServiceDTO>> serviceResponse = restTemplate.exchange(
+                    serviceUrl,
+                    HttpMethod.GET,
+                    entity,
+                    new ParameterizedTypeReference<List<ServiceDTO>>() {
+                    }
+
+            );
+           serviceList = serviceResponse.getBody();
+
+//        model.addAttribute("alertError", null);
+
+        model.addAttribute("myOrder",myOrder);
+        model.addAttribute("foodList",foodList);
+        model.addAttribute("serviceList",serviceList);
+        return "customerTemplate/customer-update-order";
+        }catch (Exception e)
+        {
+            redirectAttributes.addFlashAttribute("alertError", "Oops Some thing wrong!Can't connect to server! Try again!");
+            return "redirect:/error";
+        }
+    }
+
+    //update the order
+    @RequestMapping(value="/myorder/order-detail/customer-update", method=RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> updateDetailOrder(@RequestBody String jsonData,@CookieValue(name="token",defaultValue = "") String token) throws IOException {
+        // Process the request data here...
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        //get JSON from ajax
+        Map<String, Object> data = objectMapper.readValue(jsonData, new TypeReference<Map<String,Object>>(){});
+        // Return a response indicating success or failure
+        Integer tableAmount= Integer.parseInt(data.get("table").toString());
+
+
+
+        if(tableAmount<=0)
+        {
+            return new ResponseEntity<>("Choose the number of table!",HttpStatus.BAD_REQUEST);
+        }
+
+        //truyền order vào co' food id,service Id //xoa hết detail cu gắn với order. tạo mới lại orderdetai;
+//     call api
+        String url="http://localhost:8080/api/orders/update/order-detail/customer";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<?> entity = new HttpEntity<>(jsonData, headers);
+        ResponseEntity<String> response = restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                new ParameterizedTypeReference<String>() {
+                }
+
+        );
+
+//getorder
+        if(response.getStatusCode().is2xxSuccessful()) {
+            return ResponseEntity.ok("{\"message\": \"Congratulations on updating a successful dish and service!\"}");
+        }
+        else {
+            return new ResponseEntity<>("fail!",HttpStatus.BAD_REQUEST);
+
+            }
+        }
+
+
+
 //    @RequestMapping("/test")
 //    public String test()
 //    {

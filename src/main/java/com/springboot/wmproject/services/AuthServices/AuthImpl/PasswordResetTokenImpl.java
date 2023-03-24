@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.springboot.wmproject.utils.OTPGenerator.generateOTP;
+
 @Service
 public class PasswordResetTokenImpl implements PasswordResetTokenService {
     private PasswordResetTokenRepository passwordResetTokenRepository;
@@ -52,6 +54,26 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
     @Override
     @Transactional
 
+    public String createTokenMobile(int customerAccountId) {
+        //create token
+        String token = generateOTP();
+//        c56a5c3f-cfaf-487c-ac25-ddcef5ccc5f0
+
+        LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(5);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String expiry_date = expiryDateTime.format(formatter);
+
+        PasswordResetToken passwordResetToken = new PasswordResetToken();
+        passwordResetToken.setToken(token);
+        passwordResetToken.setCustomerAccountsId(customerAccountId);
+        passwordResetToken.setExpiryDate(expiry_date);
+        passwordResetTokenRepository.save(passwordResetToken);
+        return token;
+    }
+
+    @Override
+    @Transactional
+
     public void delete(String token) {
          PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token).orElseThrow(() -> new ResourceNotFoundException("PasswordToken","token",token));
         if(resetToken != null){
@@ -60,7 +82,7 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
     }
     @Override
     public String validatePasswordResetToken(String token) throws ParseException {
-          PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token).orElseThrow(() -> new ResourceNotFoundException("PasswordToken","token",token));
+          PasswordResetToken resetToken = passwordResetTokenRepository.findByToken(token).orElseThrow(() -> new ResourceNotFoundException("Password Token ","token",token));
          return !isTokenFound(resetToken) ? "Invalid Token" :isTokenExpired(resetToken) ? "Expired" :"Valid";
     }
 

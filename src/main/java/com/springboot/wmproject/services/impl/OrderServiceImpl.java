@@ -1,22 +1,29 @@
 package com.springboot.wmproject.services.impl;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
-import com.springboot.wmproject.entities.Employees;
-import com.springboot.wmproject.entities.Orders;
+import com.springboot.wmproject.entities.*;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
-import com.springboot.wmproject.repositories.EmployeeRepository;
-import com.springboot.wmproject.repositories.OrderRepository;
+import com.springboot.wmproject.repositories.*;
 import com.springboot.wmproject.services.OrderService;
+import com.springboot.wmproject.utils.EmailSender;
+import com.springboot.wmproject.utils.MailContent;
 import com.springboot.wmproject.utils.SD;
+import jakarta.mail.MessagingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.springboot.wmproject.utils.SD.*;
@@ -24,16 +31,36 @@ import static com.springboot.wmproject.utils.SD.*;
 @Service
 public class OrderServiceImpl implements OrderService {
      private OrderRepository orderRepository;
+    private FoodDetailRepository fRepository;
+    private ServiceDetailRepository sRepository;
+    private VenueRepository venueRepository;
+    private CustomerRepository customerRepository;
+    private EmailSender mailSender;
 
     private ModelMapper modelMapper;
 
     private EmployeeRepository employeeRepository;
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, FoodDetailRepository fRepository, ServiceDetailRepository sRepository, VenueRepository venueRepository, CustomerRepository customerRepository, EmailSender mailSender, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
         this.orderRepository = orderRepository;
+        this.fRepository = fRepository;
+        this.sRepository = sRepository;
+        this.venueRepository = venueRepository;
+        this.customerRepository = customerRepository;
+        this.mailSender = mailSender;
         this.modelMapper = modelMapper;
         this.employeeRepository = employeeRepository;
     }
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -175,8 +202,28 @@ public class OrderServiceImpl implements OrderService {
             }
             if(!booked) {
                 Orders orders = orderRepository.save(mapToEntity(orderDTO));
-                Orders newOrder = orderRepository.findById(orders.getId()).orElseThrow();
+                Orders newOrder = orderRepository.findById(orders.getId()).orElseThrow(()->new ResourceNotFoundException("Order","Id",String.valueOf(orders.getId())));
+            //set cung
+                Venues venues=venueRepository.findById(newOrder.getVenueId()).orElseThrow(() -> new ResourceNotFoundException("venueId","id",String.valueOf(newOrder.getVenueId())));
+                Customers  customeObject=customerRepository.findById(newOrder.getCustomerId()).orElseThrow(() -> new ResourceNotFoundException("customerId","id",String.valueOf(newOrder.getCustomerId())));
 
+                String to="khangkhangbl@gmail.com";
+//                String to= newOrder.getCustomersByCustomerId().getEmail();
+//                if(to==null){to="khangkhangbl@gmail.com";}
+
+                String company="KTK-Wedding";
+                String customer="Customer " +customeObject.getFirst_name();
+                String content= MailContent.getContent(customer,String.valueOf(newOrder.getId()),venues.getVenueName(),
+                        newOrder.getOrderDate(),newOrder.getTimeHappen(),
+                        newOrder.getOrderStatus(),company);
+                try {
+                    mailSender.sendEmail(to,"Your order booking success", content);
+                    } catch (MessagingException e) {
+
+                    throw new RuntimeException(e);
+                }
+
+                //send mail
                 return mapToDTO(newOrder);
             }
             else{
@@ -217,6 +264,22 @@ public class OrderServiceImpl implements OrderService {
             if(orders!=null){
 
                 orders.setOrderStatus(status);
+                if(status.equalsIgnoreCase(orderStatusRefund))
+                {
+                    String to="khangkhangbl@gmail.com";
+//                String to= newOrder.getCustomersByCustomerId().getEmail();
+//                if(to==null){to="khangkhangbl@gmail.com";}
+
+                    String company="KTK-Wedding";
+                    String customer="Customer " +orders.getCustomersByCustomerId().getFirst_name();
+                    String content= MailContent.getRefundMail(customer,orders.getVenues().getVenueName(),orders.getOrderDate(),orders.getTimeHappen(),String.valueOf(orders.getOrderTotal()/20));
+                    try {
+                        mailSender.sendEmail(to,"Your canceling request accepted!", content);
+                    } catch (MessagingException e) {
+
+                        throw new RuntimeException(e);
+                    }
+                }
 
                 orderRepository.save(orders);
                 return mapToDTO(orders);
@@ -226,7 +289,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderDTO updateOrderStatus(Integer orderDTOId, String status, Integer bookingEmp, Integer organizeTeam, Double orderTotal, Integer part_time_emp_amount,Integer table) {
+    public OrderDTO updateOrderStatus(Integer orderDTOId, String status, Integer bookingEmp, Integer organizeTeam, Double orderTotal, Integer part_time_emp_amount,Integer table,String contract) {
 
         if(orderDTOId!=0){
             Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
@@ -238,6 +301,7 @@ public class OrderServiceImpl implements OrderService {
                 orders.setOrderTotal(orderTotal);
                 orders.setPartTimeEmpAmount(part_time_emp_amount);
                 orders.setTableAmount(table);
+                orders.setContract(contract);
 
                 orderRepository.save(orders);
                 return mapToDTO(orders);
@@ -260,6 +324,72 @@ public class OrderServiceImpl implements OrderService {
         }
         return null;
     }
+//nho transactional for delete query
+    @Override
+    @Transactional
+    public OrderDTO updateOrderDetailCustomer(String json) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            Map<String,Object> data= objectMapper.readValue(json, new TypeReference<Map<String, Object>>() {});
+
+            List<String> foodData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("foodList")), new TypeReference< List<String>>() {});
+
+            List<String> svData=objectMapper.readValue(objectMapper.writeValueAsString(data.get("serviceList")), new TypeReference<List<String>>() {});
+
+
+            Integer orderId= Integer.parseInt((data.get("orderId")).toString());
+            Integer tableAmount= Integer.parseInt(data.get("table").toString());
+
+            Orders order= orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("OrderId","id",String.valueOf(orderId)));
+            order.setTableAmount(tableAmount);
+            orderRepository.save(order);
+           fRepository.deleteByOrderId(orderId);
+
+            sRepository.deleteByOrderId(orderId);
+            //delete all food and service detail of order.
+
+
+            //add new fd and order by food Id,
+
+//            newFoodDetail.setFoodId(Integer.parseInt(foodId));
+//            newFoodDetail.setOrderId(orderId);
+            if(foodData!=null) {
+            for (String foodId:foodData)
+            {
+                FoodDetails newFoodDetail= new FoodDetails();
+                newFoodDetail.setFoodId(Integer.parseInt(foodId));
+                newFoodDetail.setOrderId(orderId);
+                fRepository.save(newFoodDetail);
+            }
+            }
+
+            if(svData!=null) {
+                //service
+                for (String svId : svData) {
+                    ServiceDetails newServiceDetail = new ServiceDetails();
+                    newServiceDetail.setServiceId(Integer.parseInt(svId));
+                    newServiceDetail.setOrderId(orderId);
+                    sRepository.save(newServiceDetail);
+                }
+            }
+                        //lay orderdetail
+
+        return mapToDTO(order);
+
+
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+                 return null;
+        }
+
+
+
+    }
+
+
+
+
 
     @Override
     public void deleteOrder(int id) {

@@ -142,10 +142,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     @Override
     public String updatePassword(String newPass,String token) throws ParseException {
         CustomerAccountDTO accountDTO = getByResetPasswordToken(token);
-       String checkToken =  passwordResetTokenService.validatePasswordResetToken(token);
-        if(!checkToken.equals("Valid")){
-            throw new WmAPIException(HttpStatus.BAD_REQUEST,checkToken);
-        }
+        validToken(token);
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPass = passwordEncoder.encode(newPass);
         CustomerAccounts accounts = mapToEntity(accountDTO);
@@ -156,24 +153,58 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     }
 
     @Override
-    public String processForgotPassword(String email) {
-       CustomerAccountDTO customerAccountDTO = findByEmail(email);
-       String tokenCreated = passwordResetTokenService.create(customerAccountDTO.getCustomerId());
+    public String validToken(String token) throws ParseException {
+        String checkToken =  passwordResetTokenService.validatePasswordResetToken(token);
+        if(!checkToken.equals("Valid")){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,checkToken);
+        }
+        return token;
+    }
 
-       String recipient = email;
-       String subject = "Reset Password - WM RESTAURANT" ;
-       String link = SD.DOMAIN_APP_CLIENT + "changePassword?token=" + tokenCreated;
-        String content =
-                "<p>Hello,</p>"
-                + "<p>You have requested to reset your password.</p>"
-                + "<p>Click the link below to change your password:</p>"
-                + "<p><a href=\"" + link + "\">Change my password</a></p>"
-                + "<br>"
-                + "<p>Ignore this email if you do remember your password, "
-                + "or you have not made the request.</p>";
+    @Override
+    public String updatePasswordMobile(String newPass,String token) throws ParseException {
+        CustomerAccountDTO accountDTO = getByResetPasswordToken(token);
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPass = passwordEncoder.encode(newPass);
+        CustomerAccounts accounts = mapToEntity(accountDTO);
+        accounts.setPassword(encodedPass);
+        passwordResetTokenService.delete(token);
+        customerAccountRepository.save(accounts);
+        return "Your Password Has Been Updated";
+    }
+
+
+    @Override
+    public String processForgotPassword(String email,String userAgent) {
+       CustomerAccountDTO customerAccountDTO = findByEmail(email);
+        String recipient = email;
+        String subject = "Reset Password - WM RESTAURANT" ;
+        String content;
+       String tokenCreated;
+       if(userAgent.contains("okhttp")){
+            tokenCreated = passwordResetTokenService.createTokenMobile(customerAccountDTO.getCustomerId());
+            content = "<p>Hello,</p>"
+                    + "<p>You have requested to reset your password.</p>"
+                    + "<p>Use OTP Code below to change your password:</p>"
+                    + "<p>"+ tokenCreated +"</p>"
+                    + "<br>"
+                    + "<p>Ignore this email if you do remember your password, "
+                    + "or you have not made the request.</p>";
+       }else{
+            tokenCreated = passwordResetTokenService.create(customerAccountDTO.getCustomerId());
+           String link = SD.DOMAIN_APP_CLIENT + "changePassword?token=" + tokenCreated;
+            content =
+                   "<p>Hello,</p>"
+                           + "<p>You have requested to reset your password.</p>"
+                           + "<p>Click the link below to change your password:</p>"
+                           + "<p><a href=\"" + link + "\">Change my password</a></p>"
+                           + "<br>"
+                           + "<p>Ignore this email if you do remember your password, "
+                           + "or you have not made the request.</p>";
+       }
        try{
            sender.sendEmail(recipient,subject,content);
-           return "The Email Has Been Sent";
+           return tokenCreated;
        }catch(Exception e){
            return "Unable to send email!";
        }

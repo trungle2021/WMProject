@@ -5,6 +5,7 @@ import com.springboot.wmproject.DTO.OrderDTO;
 import com.springboot.wmproject.services.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.websocket.server.PathParam;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,8 +116,9 @@ public class OrderController {
         Double orderTotal=order.getOrderTotal();
         Integer part_time_emp_amount=order.getPartTimeEmpAmount();
         Integer table=order.getTableAmount();
+        String contract= order.getContract();
 
-        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount,table));
+        return ResponseEntity.ok(orderService.updateOrderStatus(orderId,status,bookingEmp,organizeTeam,orderTotal,part_time_emp_amount,table,contract));
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
@@ -136,4 +138,21 @@ public class OrderController {
     {
         return ResponseEntity.ok(orderService.getOneOrderByOrderId(id));
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/update/order-detail/customer")
+    public ResponseEntity<String> updateOrderDetailCustomer(@RequestBody String json)
+    {
+
+        OrderDTO order= orderService.updateOrderDetailCustomer(json);
+        if(order!=null) {
+
+            return ResponseEntity.ok("Update order detail Success");
+        }
+        else{ return new ResponseEntity<> ("Update order fail!",HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 }

@@ -39,7 +39,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form th:action="@{/staff/orders/order-update}" th:object="${orderDTO}" method="post" class="form-horizontal">
+                    <form th:action="@{/staff/orders/order-update}" th:object="${orderDTO}" method="post"  enctype="multipart/form-data" class="form-horizontal">
 
                         <div class="card-body">
                             <div class="form-group row">
@@ -97,9 +97,14 @@
                                     <input type="text" th:value="${orderDTO.getOrderStatus()}" th:field="*{orderStatus}"  class="form-control" id="status" placeholder="" readonly>
                                 </div>
                             </div>
-
+                            <div class="form-group row">
+                                <label for="contract" class="col-sm-2 col-form-label">Update Contract</label>
+                                <div class="col-sm-10">
+                                    <input type="file" id="contract" class="form-control" name="file" required>
+                                </div>
+                            </div>
                             <div class="card-footer">
-                                <button  type="submit" class="btn btn-info">Confirm Event</button>
+                                <button  type="submit" class="btn btn-info">Confirm Deposit</button>
                                 <a th:href="@{/staff/orders/showall}" class="btn btn-default float-right">Back</a>
                             </div>
                         </div>

@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/khangcustomer.css">
+    <link rel="stylesheet" href="/css/khangadminorder.css">
 </head>
 <body>
 
@@ -41,9 +43,11 @@
                             <th>Organize Team</th>
                             <th>Order Status</th>
                             <th>Event Date</th>
+                            <th>Number of Team employee:</th>
                             <th>Number of collaborators:</th>
                             <th>Booking Date</th>
                             <th>Total Amount:</th>
+                            <th>Contract:</th>
                             <th>Action:</th>
                         </tr>
                         </thead>
@@ -56,10 +60,13 @@
                             <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'">N/A</td>
                             <td th:text="${c.getOrderStatus()}"></td>
                             <td th:text="${c.getTimeHappen()}"></td>
+                            <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamsize()}:'N/A'">N/A</td>
                             <td th:text="${c.getPartTimeEmpAmount()}"></td>
-
                             <td th:text="${c.getOrderDate()}"></td>
                             <td th:text="${c.getOrderTotal()}"></td>
+                            <td><button type="button" class="btn color1" th:data-orderId="${c.getId()}" onclick="getContract(this)">
+                                Contract Detail<i class="fas fa-check-square"></i>
+                            </button></td>
                              <th:block th:switch="${c.getOrderStatus()}">
                                 <td th:case="${orderedSt}"><a th:href="@{/staff/orders/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Order Detail</a> </td>
                                 <td th:case="${depositedSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
@@ -80,19 +87,18 @@
                                 </td>
                                 <td th:case="*">None</td>
                             </th:block>
-
                         </tr>
 
                         </tbody>
                     </table>
+                </div>
+                <!-- contract image                           -->
+                 <div id="contract-container" class="contract-container">
 
                 </div>
-                <!--                           -->
-
-
             </div>
         </div>
-</div>
+        </div>
 
         <br/>
         <br/>
@@ -113,6 +119,13 @@
         $(document).ready(function () {
             $('table.display').DataTable();
         });
+
+    </script>
+    <script th:inline="javascript">
+        var orderList = [[${list}]];
+
+    </script>
+    <script src="/js/khangcontract.js" >
 
     </script>
     <script th:inline="javascript">

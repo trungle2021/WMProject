@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import wm.clientmvc.utils.Regex;
 
 @Getter
 @Setter
@@ -18,23 +19,23 @@ public class RegisterCustomerDTO {
 
     @NotEmpty
     @Size(max = 45)
-    @Pattern(regexp = "\\b[A-Z][a-z]*([ ]+[A-Z][a-z]*)*\\b",message = "This field only allows letters and spaces. Please do not include any numbers in your input.")
+    @Pattern(regexp = Regex.name_vietnamese,message = "This field only allows letters and spaces. Please do not include any numbers in your input.")
     private String first_name;
     @NotEmpty
     @Size(max = 45)
-    @Pattern(regexp = "\\b[A-Z][a-z]*([ ]+[A-Z][a-z]*)*\\b",message = "This field only allows letters and spaces. Please do not include any numbers in your input.")
+    @Pattern(regexp = Regex.name_vietnamese,message = "This field only allows letters and spaces. Please do not include any numbers in your input.")
     private String last_name;
     @NotEmpty
     @Size(max = 100)
     private String address;
     @NotEmpty
-    @Pattern(regexp = "(84|0[3|5|7|8|9])+([0-9]{8})\\b",message = "Phone must be 10 numbers, starts with 0 or 84")
+    @Pattern(regexp = Regex.phone_vietnamese,message = "Sorry, the phone number you entered does not match the expected format. Please enter a valid phone number where the first digit starts with 84 or 0 and is followed by 3, 5, 7, 8, or 9.")
     private String phone;
     @NotEmpty
     @Pattern(regexp = "Male|Female|Other")
     private String gender;
     @NotEmpty
-    @Pattern(regexp = "[a-z0-9._-]+@[a-z0-9.-]+\\.[a-z]{2,}$")
+    @Pattern(regexp = Regex.email,message = "Please enter a valid email address in the format yourname@example.com. The email address should contain an '@' symbol and a domain name such as 'example.com'. ")
     @Size(max = 30)
     private String email;
     private String avatar;

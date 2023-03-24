@@ -94,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         //valid team_id, if not found team by ID throw 404
         Integer team_id = registerDTO.getTeam_id() == null ? 0 : registerDTO.getTeam_id();
         OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(team_id);
-        String teamName = teamDTO.getTeamName();
+        String teamName = teamDTO.getTeamName().trim();
 
         EmployeeDTO employeeDTO = new EmployeeDTO();
         EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
@@ -119,7 +119,7 @@ public class AuthServiceImpl implements AuthService {
         //VALID EMAIL
 
         if (isValidEmail) {
-            employeeDTO.setEmail(registerDTO.getEmail());
+            employeeDTO.setEmail(registerDTO.getEmail().trim());
         } else {
             errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
         }
@@ -146,7 +146,7 @@ public class AuthServiceImpl implements AuthService {
 
         //VALID USERNAME
         if (isValidUsername) {
-            employeeAccountDTO.setUsername(registerDTO.getUsername());
+            employeeAccountDTO.setUsername(registerDTO.getUsername().trim());
         } else {
             errors.add("Username : " + registerDTO.getUsername() + " has already existed");
         }
@@ -164,9 +164,9 @@ public class AuthServiceImpl implements AuthService {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
         }
 
-        employeeDTO.setName(registerDTO.getName());
+        employeeDTO.setName(registerDTO.getName().trim());
         employeeDTO.setSalary(registerDTO.getSalary());
-        employeeDTO.setAddress(registerDTO.getAddress());
+        employeeDTO.setAddress(registerDTO.getAddress().trim());
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setTeam_id(registerDTO.getTeam_id());
         employeeDTO.setGender(registerDTO.getGender());
@@ -197,7 +197,7 @@ public class AuthServiceImpl implements AuthService {
         boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
         boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
         boolean isUsernameValid = customerAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
-        boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
+        boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().isBlank();
 
         CustomerDTO customerDTO = new CustomerDTO();
         CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();
@@ -209,7 +209,7 @@ public class AuthServiceImpl implements AuthService {
             errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
         }
         if (isEmailValid) {
-            customerDTO.setEmail(registerDTO.getEmail());
+            customerDTO.setEmail(registerDTO.getEmail().trim());
         } else {
             errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
         }
@@ -232,9 +232,9 @@ public class AuthServiceImpl implements AuthService {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
         }
 
-        customerDTO.setFirst_name(registerDTO.getFirst_name());
-        customerDTO.setLast_name(registerDTO.getLast_name());
-        customerDTO.setAddress(registerDTO.getAddress());
+        customerDTO.setFirst_name(registerDTO.getFirst_name().trim());
+        customerDTO.setLast_name(registerDTO.getLast_name().trim());
+        customerDTO.setAddress(registerDTO.getAddress().trim());
         customerDTO.setGender(registerDTO.getGender());
         customerDTO.setAvatar(registerDTO.getAvatar());
         CustomerDTO cusDTO = customerService.create(customerDTO);
@@ -244,6 +244,29 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.create(customerAccountDTO);
         registerDTO.setCustomerId(cusDTO.getId());
+        return registerDTO;
+    }
+
+    @Override
+    public RegisterCustomerDTO customerPersonalValid(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+        errors = new ArrayList<>();
+        boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
+        boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
+
+
+        //valid
+        if (!isPhoneValid) {
+            errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
+        }
+        if (!isEmailValid) {
+            errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
+        }
+
+        if (errors.size() != 0) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
+        }
         return registerDTO;
     }
 
@@ -267,11 +290,11 @@ public class AuthServiceImpl implements AuthService {
 
         if(team_id != 0){
              teamDTO = teamService.getOneOrganizeTeamById(team_id);
-            teamName = teamDTO.getTeamName();
+            teamName = teamDTO.getTeamName().trim();
             employeeDTO.setTeam_id(team_id);
         }else{
             teamDTO = teamService.getOneOrganizeTeamById(empExist.getTeam_id());
-            teamName = teamDTO.getTeamName();
+            teamName = teamDTO.getTeamName().trim();
             employeeDTO.setTeam_id(teamDTO.getId());
         }
 
@@ -299,12 +322,12 @@ public class AuthServiceImpl implements AuthService {
 
         if(emailHasChanged){
             if (isValidEmail) {
-                employeeDTO.setEmail(registerDTO.getEmail());
+                employeeDTO.setEmail(registerDTO.getEmail().trim());
             } else {
                 errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
             }
         }else{
-            employeeDTO.setEmail(registerDTO.getEmail());
+            employeeDTO.setEmail(registerDTO.getEmail().trim());
         }
 
        if(leaderHasChanged){
@@ -327,12 +350,12 @@ public class AuthServiceImpl implements AuthService {
 
         if(userNameHasChanged){
             if (isValidUsername) {
-                employeeAccountDTO.setUsername(registerDTO.getUsername());
+                employeeAccountDTO.setUsername(registerDTO.getUsername().trim());
             } else {
                 errors.add("Username : " + registerDTO.getUsername() + " has already existed");
             }
         }else{
-            employeeAccountDTO.setUsername(empHasAccount.getUsername());
+            employeeAccountDTO.setUsername(empHasAccount.getUsername().trim());
         }
 
         if(isValidPassword){
@@ -348,8 +371,8 @@ public class AuthServiceImpl implements AuthService {
         }
 
         employeeDTO.setId(registerDTO.getEmployeeId());
-        employeeDTO.setName(registerDTO.getName());
-        employeeDTO.setAddress(registerDTO.getAddress());
+        employeeDTO.setName(registerDTO.getName().trim());
+        employeeDTO.setAddress(registerDTO.getAddress().trim());
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setSalary(registerDTO.getSalary());
         employeeDTO.setIsLeader(isLeader);
@@ -392,13 +415,13 @@ public class AuthServiceImpl implements AuthService {
         CustomerAccountDTO cusHasAccount = customerAccountService.getAccountByCustomerId(registerDTO.getCustomerId());
 
         //Validate
-        boolean isValidPhone = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
-        boolean isValidEmail = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
-        boolean isValidUsername = customerAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
-        boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
+        boolean isValidPhone = customerService.checkPhoneExists(registerDTO.getPhone().trim()).size() == 0;
+        boolean isValidEmail = customerService.checkEmailExists(registerDTO.getEmail().trim()).size() == 0;
+        boolean isValidUsername = customerAccountService.checkUsernameExists(registerDTO.getUsername().trim()).size() == 0;
+        boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().isBlank();
         boolean phoneHasChanged = !cusExist.getPhone().equals(registerDTO.getPhone());
         boolean emailHasChanged = !cusExist.getEmail().equalsIgnoreCase(registerDTO.getEmail().trim());
-        boolean userNameHasChanged = !cusHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername());
+        boolean userNameHasChanged = !cusHasAccount.getUsername().equalsIgnoreCase(registerDTO.getUsername().trim());
 
 
         if(phoneHasChanged){
@@ -413,22 +436,22 @@ public class AuthServiceImpl implements AuthService {
 
         if(emailHasChanged){
             if (isValidEmail) {
-                customerDTO.setEmail(registerDTO.getEmail());
+                customerDTO.setEmail(registerDTO.getEmail().trim());
             } else {
                 errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
             }
         }else{
-            customerDTO.setEmail(registerDTO.getEmail());
+            customerDTO.setEmail(registerDTO.getEmail().trim());
         }
 
         if(userNameHasChanged){
             if (isValidUsername) {
-                customerAccountDTO.setUsername(registerDTO.getUsername());
+                customerAccountDTO.setUsername(registerDTO.getUsername().trim());
             } else {
                 errors.add("Username : " + registerDTO.getUsername() + " has already existed");
             }
         }else{
-            customerAccountDTO.setUsername(cusHasAccount.getUsername());
+            customerAccountDTO.setUsername(cusHasAccount.getUsername().trim());
         }
 
         if(isValidPassword){
