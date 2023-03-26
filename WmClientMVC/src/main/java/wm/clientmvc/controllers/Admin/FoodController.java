@@ -42,12 +42,12 @@ public class FoodController {
                     token,
                     responseTypeFood
             );
-            Static_Status static_status=new Static_Status();
-            List<String> foodType=new ArrayList<>();
+            Static_Status static_status = new Static_Status();
+            List<String> foodType = new ArrayList<>();
             foodType.add(static_status.foodTypeMain);
             foodType.add(static_status.foodTypeStarter);
             foodType.add(static_status.foodTypeDessert);
-            model.addAttribute("foodTypeList",foodType);
+            model.addAttribute("foodTypeList", foodType);
             model.addAttribute("foodList", foodDTOS);
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -66,15 +66,16 @@ public class FoodController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/food/index?msg="+message;
+                    return "redirect:/staff/food/index?msg=" + message;
             }
         }
         return "adminTemplate/food";
     }
+
     @GetMapping("/deleteImg")
     public String deleteFoodImg(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
-        int id=Integer.parseInt(request.getParameter("imgId"));
-        if(id != 0){
+        int id = Integer.parseInt(request.getParameter("imgId"));
+        if (id != 0) {
             try {
                 APIHelper.makeApiCall(
                         SD_CLIENT.DOMAIN_APP_API + "/api/foodImgs/delete/" + id,
@@ -100,18 +101,21 @@ public class FoodController {
                     case "403":
                         return "redirect:/access-denied";
                     default:
-                        return "redirect:/staff/food/index?msg="+message;
+                        return "redirect:/staff/food/index?msg=" + message;
                 }
             }
         }
         return "redirect:/staff/food/index?msg=Success";
     }
-    @PostMapping("/update/material")
-    public String updateFood(@ModelAttribute FoodDTO foodDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, String material1, String unit1, String cost1, String material2, String unit2, String cost2, String material3, String unit3, String cost3,String code1,String code2,String code3, String removeMaterial) throws IOException {
 
-        if(removeMaterial!=null){
-            String[] arr=removeMaterial.split(",");
-            for (int i=1;i<arr.length;i++){
+    @PostMapping("/update/material")
+    public String updateFood(@RequestParam("check") Boolean check, @ModelAttribute FoodDTO foodDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, String material1, String unit1, String cost1, String material2, String unit2, String cost2, String material3, String unit3, String cost3, String code1, String code2, String code3, String removeMaterial) throws IOException {
+        if (check != null) {
+            foodDTO.setActive(check);
+        }
+        if (removeMaterial != null) {
+            String[] arr = removeMaterial.split(",");
+            for (int i = 1; i < arr.length; i++) {
                 try {
                     APIHelper.makeApiCall(
                             SD_CLIENT.DOMAIN_APP_API + "/api/materials/delete/" + arr[i],
@@ -137,14 +141,14 @@ public class FoodController {
                         case "403":
                             return "redirect:/access-denied";
                         default:
-                            return "redirect:/staff/food/index?msg="+message;
+                            return "redirect:/staff/food/index?msg=" + message;
                     }
                 }
             }
         }
-         if(!material1.isEmpty() && !unit1.isEmpty() && !cost1.isEmpty() && !code1.isEmpty()){
+        if (!material1.isEmpty() && !unit1.isEmpty() && !cost1.isEmpty() && !code1.isEmpty()) {
             try {
-                MaterialDTO materialDTO=new MaterialDTO();
+                MaterialDTO materialDTO = new MaterialDTO();
                 materialDTO.setMaterialName(material1);
                 materialDTO.setCount(Double.parseDouble(cost1));
                 materialDTO.setUnit(unit1);
@@ -174,13 +178,13 @@ public class FoodController {
                     case "403":
                         return "redirect:/access-denied";
                     default:
-                        return "redirect:/staff/food/index?msg="+message;
+                        return "redirect:/staff/food/index?msg=" + message;
                 }
             }
         }
-         if(!material2.isEmpty() && !unit2.isEmpty() && !cost2.isEmpty()&& !code2.isEmpty()){
+        if (!material2.isEmpty() && !unit2.isEmpty() && !cost2.isEmpty() && !code2.isEmpty()) {
             try {
-                MaterialDTO materialDTO=new MaterialDTO();
+                MaterialDTO materialDTO = new MaterialDTO();
                 materialDTO.setMaterialName(material2);
                 materialDTO.setCount(Double.parseDouble(cost2));
                 materialDTO.setUnit(unit2);
@@ -211,13 +215,13 @@ public class FoodController {
                     case "403":
                         return "redirect:/access-denied";
                     default:
-                        return "redirect:/staff/food/index?msg="+message;
+                        return "redirect:/staff/food/index?msg=" + message;
                 }
             }
         }
-         if(!material3.isEmpty() && !unit3.isEmpty() && !cost3.isEmpty() && !code3.isEmpty()){
+        if (!material3.isEmpty() && !unit3.isEmpty() && !cost3.isEmpty() && !code3.isEmpty()) {
             try {
-                MaterialDTO materialDTO=new MaterialDTO();
+                MaterialDTO materialDTO = new MaterialDTO();
                 materialDTO.setMaterialName(material3);
                 materialDTO.setCount(Double.parseDouble(cost3));
                 materialDTO.setUnit(unit3);
@@ -248,20 +252,20 @@ public class FoodController {
                     case "403":
                         return "redirect:/access-denied";
                     default:
-                        return "redirect:/staff/food/index?msg="+message;
+                        return "redirect:/staff/food/index?msg=" + message;
                 }
             }
         }
         try {
 
-            FoodDTO data=APIHelper.makeApiCall(
+            FoodDTO data = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/food/update",
                     HttpMethod.PUT,
                     foodDTO,
                     token,
                     FoodDTO.class
             );
-            if(data==null){
+            if (data == null) {
                 return "redirect:/staff/food/index?msg=Fail";
             }
         } catch (HttpClientErrorException ex) {
@@ -281,21 +285,22 @@ public class FoodController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/food/index?msg="+message;
+                    return "redirect:/staff/food/index?msg=" + message;
             }
         }
 
         return "redirect:/staff/food/index?msg=Success";
     }
+
     @PostMapping("/foodImg/create")
-    public String createFoodImg(@RequestParam("imagePageId")String foodImageDTO,@CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("foodImgFiles") MultipartFile[] files) throws IOException {
-        ClientUtilFunction utilFunction=new ClientUtilFunction();
-        List<String> foodImgUrls=utilFunction.AddMultipleFilesEncrypted(files);
-        List<FoodImageDTO> newList=new ArrayList<>();
-        if(foodImageDTO!=null){
-            for (String item:foodImgUrls
-                 ) {
-                FoodImageDTO newFoodImageDTO=new FoodImageDTO();
+    public String createFoodImg(@RequestParam("imagePageId") String foodImageDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("foodImgFiles") MultipartFile[] files) throws IOException {
+        ClientUtilFunction utilFunction = new ClientUtilFunction();
+        List<String> foodImgUrls = utilFunction.AddMultipleFilesEncrypted(files);
+        List<FoodImageDTO> newList = new ArrayList<>();
+        if (foodImageDTO != null) {
+            for (String item : foodImgUrls
+            ) {
+                FoodImageDTO newFoodImageDTO = new FoodImageDTO();
                 newFoodImageDTO.setUrl(item);
                 newFoodImageDTO.setFoodId(Integer.parseInt(foodImageDTO));
                 newList.add(newFoodImageDTO);
@@ -328,22 +333,26 @@ public class FoodController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/food/index?msg="+message;
+                    return "redirect:/staff/food/index?msg=" + message;
             }
         }
         return "redirect:/staff/food/index?msg=Success";
     }
+
     @PostMapping("/create")
-    public String createFood(@ModelAttribute FoodDTO foodDTO,@CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+    public String createFood(@RequestParam("check") Boolean check, @ModelAttribute FoodDTO foodDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        if (check != null) {
+            foodDTO.setActive(check);
+        }
         try {
-            FoodDTO data=APIHelper.makeApiCall(
+            FoodDTO data = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/food/create",
                     HttpMethod.POST,
                     foodDTO,
                     token,
                     FoodDTO.class
             );
-            if(data==null){
+            if (data == null) {
                 return "redirect:/staff/food/index?msg=Fail";
             }
         } catch (HttpClientErrorException ex) {
@@ -363,14 +372,15 @@ public class FoodController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/food/index?msg="+message;
+                    return "redirect:/staff/food/index?msg=" + message;
             }
         }
         return "redirect:/staff/food/index?msg=Success";
     }
+
     @GetMapping("/material")
-    public String materialDetail(@RequestParam("foodId")String id,Model model,@CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
-        model.addAttribute("foodId",id);
+    public String materialDetail(@RequestParam("foodId") String id, Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        model.addAttribute("foodId", id);
         ParameterizedTypeReference<List<FoodDTO>> responseTypeFood = new ParameterizedTypeReference<List<FoodDTO>>() {
         };
         try {
@@ -381,13 +391,13 @@ public class FoodController {
                     token,
                     responseTypeFood
             );
-            Static_Status static_status=new Static_Status();
-            List<String> foodType=new ArrayList<>();
+            Static_Status static_status = new Static_Status();
+            List<String> foodType = new ArrayList<>();
             foodType.add(static_status.foodTypeMain);
             foodType.add(static_status.foodTypeStarter);
             foodType.add(static_status.foodTypeDessert);
-            model.addAttribute("foodId",Integer.parseInt(id));
-            model.addAttribute("foodTypeList",foodType);
+            model.addAttribute("foodId", Integer.parseInt(id));
+            model.addAttribute("foodTypeList", foodType);
             model.addAttribute("foodList", foodDTOS);
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -406,14 +416,15 @@ public class FoodController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/food/index?msg="+message;
+                    return "redirect:/staff/food/index?msg=" + message;
             }
         }
         return "adminTemplate/material";
     }
+
     @GetMapping("/foodImg")
-    public String foodImg(@RequestParam("foodId")String id,Model model,@CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
-        model.addAttribute("foodId",id);
+    public String foodImg(@RequestParam("foodId") String id, Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        model.addAttribute("foodId", id);
         ParameterizedTypeReference<List<FoodDTO>> responseTypeFood = new ParameterizedTypeReference<List<FoodDTO>>() {
         };
         try {
@@ -424,7 +435,7 @@ public class FoodController {
                     token,
                     responseTypeFood
             );
-            model.addAttribute("foodId",Integer.parseInt(id));
+            model.addAttribute("foodId", Integer.parseInt(id));
             model.addAttribute("foodList", foodDTOS);
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -443,7 +454,7 @@ public class FoodController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/food/index?msg="+message;
+                    return "redirect:/staff/food/index?msg=" + message;
             }
         }
         return "adminTemplate/foodpic";

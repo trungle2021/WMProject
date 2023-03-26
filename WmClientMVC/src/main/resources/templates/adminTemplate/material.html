@@ -87,6 +87,26 @@
                                                     <input type="text" class="form-control" name="price" id="txtPrice"
                                                            th:value="${c.getPrice()}" required>
                                                 </div>
+                                                <th:block th:if="${c.isActive()==true}">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Is active:</label>
+                                                        <select class="form-control update-food-active"
+                                                                name="check">
+                                                            <option th:text="No" value="false"></option>
+                                                            <option th:text="Yes" value="true" selected></option>
+                                                        </select>
+                                                    </div>
+                                                </th:block>
+                                                <th:block th:if="${c.isActive()==false}">
+                                                    <div class="form-group">
+                                                        <label class="col-form-label">Is active:</label>
+                                                        <select class="form-control update-food-active"
+                                                                name="check">
+                                                            <option th:text="No" value="false"selected></option>
+                                                            <option th:text="Yes" value="true" ></option>
+                                                        </select>
+                                                    </div>
+                                                </th:block>
                                             </th:block>
                                             <div class="form-group col-md-12">
                                                 <label class="col-form-label">Materials:</label>
@@ -137,7 +157,7 @@
                                                 <label for="input-1-2">Unit:</label><br/>
                                                 <input type="text" id="input-1-2" name="unit1"/><br/><br/>
                                                 <label for="input-1-3">Count:</label><br/>
-                                                <input type="text" id="input-1-3" name="cost1"min="1"
+                                                <input type="text" id="input-1-3" name="cost1" min="1"
                                                        th:id="txtPrice1"/><br/><br/>
                                                 <label for="input-1-4">Code:</label><br/>
                                                 <input type="text" id="input-1-4" name="code1"/><br/><br/>
@@ -171,7 +191,7 @@
                                                 <label for="input-3-2">Unit:</label><br/>
                                                 <input type="text" id="input-3-2" name="unit3"/><br/><br/>
                                                 <label for="input-3-3">Count:</label><br/>
-                                                <input type="text" id="input-3-3" name="cost3"min="1"
+                                                <input type="text" id="input-3-3" name="cost3" min="1"
                                                        th:id="txtPrice3"/><br/><br/>
                                                 <label for="input-3-4">Code:</label><br/>
                                                 <input type="text" id="input-3-4" name="code3"/><br/><br/>
@@ -211,85 +231,84 @@
     <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
     <script>
 
-            function deleteButtons() {
-                var box1 = document.getElementById("box1");
+        function deleteButtons() {
+            var box1 = document.getElementById("box1");
+            var box2 = document.getElementById("box2");
+
+            var highlightedButtons = box1.querySelectorAll(".highlight");
+
+            highlightedButtons.forEach(function (button) {
+                box1.removeChild(button);
+                box2.appendChild(button);
+                button.classList.remove("highlight");
+            });
+        }
+
+        function highlight(button) {
+            button.classList.toggle("highlight");
+        }
+
+        function toggle(id) {
+            var group = document.getElementById(id);
+            if (group.style.display === "none") {
+                group.style.display = "block";
+            } else {
+                group.style.display = "none";
+            }
+        }
+
+        function addButton() {
+            var box1 = document.getElementById("box1");
+            var box2 = document.getElementById("box2");
+
+            var highlightedButtons = box2.querySelectorAll(".highlight");
+
+            highlightedButtons.forEach(function (button) {
+                box2.removeChild(button);
+                box1.appendChild(button);
+                button.classList.remove("highlight");
+            });
+        }
+
+        var formDetail = document.getElementById("formDetail");
+
+        formDetail.addEventListener('submit', (e) => {
+            e.preventDefault();
+            var inputPrice = $('#txtPrice').val()
+            var inputPrice1 = $('#txtPrice1').val()
+            var inputPrice2 = $('#txtPrice2').val()
+            var inputPrice3 = $('#txtPrice3').val()
+            var regex = /^(?!0*(\.0+)?$)([1-4]?\d{0,8}|500000000)(\.\d+)?$/;
+            if (!regex.test(inputPrice)) {
+                alert("Please enter a valid number between 0 and 500000000.");
+            } else if (!regex.test(inputPrice1) && inputPrice1 != "") {
+                alert("Please enter a valid number between 0 and 500000000.");
+            } else if (!regex.test(inputPrice2) && inputPrice2 != "") {
+                alert("Please enter a valid number between 0 and 500000000.");
+            } else if (!regex.test(inputPrice3) && inputPrice3 != "") {
+                alert("Please enter a valid number between 0 and 500000000.");
+            } else {
+                var form = document.getElementById("formDetail");
                 var box2 = document.getElementById("box2");
 
-                var highlightedButtons = box1.querySelectorAll(".highlight");
-
-                highlightedButtons.forEach(function (button) {
-                    box1.removeChild(button);
-                    box2.appendChild(button);
-                    button.classList.remove("highlight");
+                var allBox2Btn = box2.querySelectorAll('button');
+                console.log(allBox2Btn)
+                var input = document.getElementById("removeMaterial");
+                allBox2Btn.forEach(function (button) {
+                    console.log(button)
+                    input.value = input.value + "," + button.value;
                 });
+                form.submit();
             }
-
-            function highlight(button) {
-                button.classList.toggle("highlight");
-            }
-
-            function toggle(id) {
-                var group = document.getElementById(id);
-                if (group.style.display === "none") {
-                    group.style.display = "block";
-                } else {
-                    group.style.display = "none";
-                }
-            }
-
-            function addButton() {
-                var box1 = document.getElementById("box1");
-                var box2 = document.getElementById("box2");
-
-                var highlightedButtons = box2.querySelectorAll(".highlight");
-
-                highlightedButtons.forEach(function (button) {
-                    box2.removeChild(button);
-                    box1.appendChild(button);
-                    button.classList.remove("highlight");
-                });
-            }
-
-            var formDetail = document.getElementById("formDetail");
-
-            formDetail.addEventListener('submit', (e) => {
-                e.preventDefault();
-                var inputPrice = $('#txtPrice').val()
-                var inputPrice1 = $('#txtPrice1').val()
-                var inputPrice2 = $('#txtPrice2').val()
-                var inputPrice3 = $('#txtPrice3').val()
-                var regex = /^(?!0*(\.0+)?$)([1-4]?\d{0,8}|500000000)(\.\d+)?$/;
-                if (!regex.test(inputPrice)) {
-                    alert("Please enter a valid number between 0 and 500000000.");
-                }else if(!regex.test(inputPrice1) && inputPrice1!=""){
-                    alert("Please enter a valid number between 0 and 500000000.");
-                }else if(!regex.test(inputPrice2) && inputPrice2!=""){
-                    alert("Please enter a valid number between 0 and 500000000.");
-                }else if(!regex.test(inputPrice3) && inputPrice3!=""){
-                    alert("Please enter a valid number between 0 and 500000000.");
-                }
-                else {
-                    var form = document.getElementById("formDetail");
-                    var box2 = document.getElementById("box2");
-
-                    var allBox2Btn = box2.querySelectorAll('button');
-                    console.log(allBox2Btn)
-                    var input = document.getElementById("removeMaterial");
-                    allBox2Btn.forEach(function (button) {
-                        console.log(button)
-                        input.value = input.value + "," + button.value;
-                    });
-                    form.submit();
+        })
+        var hiddenType = document.getElementById("hiddenType").value;
+        $(document).ready(function () {
+            $("#foodType option").each(function () {
+                var value = $(this).val();
+                if (value === hiddenType) {
+                    $(this).prop('selected', true);
                 }
             })
-            var hiddenType = document.getElementById("hiddenType").value;
-            $(document).ready(function () {
-                $("#foodType option").each(function () {
-                    var value = $(this).val();
-                    if (value === hiddenType) {
-                        $(this).prop('selected', true);
-                    }
-                })
         })
 
     </script>
