@@ -173,7 +173,7 @@
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
         <div class="image">
-          <img th:src="${#authentication.getPrincipal().getAvatar()}" class="img-circle elevation-2" alt="User Image">
+          <img th:src="'data:image/jpeg;base64,'+${#authentication.getPrincipal().getAvatar()}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a th:href="@{/customers/update/{id}(id=${#authentication.getPrincipal().getUserId()})}" class="d-block" th:text="${#authentication.getPrincipal().getFullName()}"></a>

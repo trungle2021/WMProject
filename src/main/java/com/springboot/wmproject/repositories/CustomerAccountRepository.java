@@ -19,7 +19,7 @@ public interface CustomerAccountRepository extends JpaRepository<CustomerAccount
     @Query("select ca FROM CustomerAccounts ca JOIN Customers c ON ca.customerId = c.id where c.email =:email")
     CustomerAccounts findByEmail(String email);
 
-    @Query("select ca FROM CustomerAccounts ca JOIN PasswordResetToken p ON ca.customerId = p.customerAccountsId where p.token =:token")
+    @Query("select ca FROM CustomerAccounts ca JOIN PasswordResetToken p ON ca.id = p.customerAccountsId where p.token =:token")
     CustomerAccounts getByResetPasswordToken(String token);
 
     @Query("select c from CustomerAccounts c where c.username = :username")

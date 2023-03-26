@@ -88,7 +88,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     @Override
     @Transactional
     public CustomerAccountDTO update(CustomerAccountDTO customerAccountDTO) {
-        int customerAccountID = customerAccountDTO.getCustomerId();
+        int customerAccountID = customerAccountDTO.getId();
         if(customerAccountID == 0){
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "CustomerAccount ID is required to update");
         }
@@ -194,7 +194,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         String content;
        String tokenCreated;
        if(userAgent.contains("okhttp")){
-            tokenCreated = passwordResetTokenService.createTokenMobile(customerAccountDTO.getCustomerId());
+            tokenCreated = passwordResetTokenService.createTokenMobile(customerAccountDTO.getId());
             content = "<p>Hello,</p>"
                     + "<p>You have requested to reset your password.</p>"
                     + "<p>Use OTP Code below to change your password:</p>"
@@ -203,7 +203,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
                     + "<p>Ignore this email if you do remember your password, "
                     + "or you have not made the request.</p>";
        }else{
-            tokenCreated = passwordResetTokenService.create(customerAccountDTO.getCustomerId());
+            tokenCreated = passwordResetTokenService.create(customerAccountDTO.getId());
            String link = SD.DOMAIN_APP_CLIENT + "changePassword?token=" + tokenCreated;
             content =
                    "<p>Hello,</p>"

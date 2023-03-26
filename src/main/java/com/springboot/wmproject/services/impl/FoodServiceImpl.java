@@ -55,7 +55,7 @@ public class FoodServiceImpl implements FoodService {
         String foodName = newFoodDTO.getFoodName();
         if (foodName != null) {
             List<Food> checkValid = foodRepository.checkValidFoodName(foodName);
-            if (checkValid != null) {
+            if (checkValid.size()!=0) {
                 return null;
             }
         }
