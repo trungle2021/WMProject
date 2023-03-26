@@ -12,6 +12,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -58,7 +59,9 @@ public class Service_ServiceImpl implements Service_Service {
         if (serviceName != null) {
             List<Services> checkService = SRepository.validServiceByName(serviceName);
             if(checkService.size() == 0){
+                newServiceDTO.setActive(true);
                 Services newService = SRepository.save(maptoEntity(newServiceDTO));
+
                 return maptoDTO(newService);
             }
         }
@@ -67,13 +70,30 @@ public class Service_ServiceImpl implements Service_Service {
 
     @Override
     public ServiceDTO updateService(ServiceDTO editServiceDTO) {
-        Services checkService= SRepository.getById(editServiceDTO.getId());
+        Services checkService= SRepository.findById(editServiceDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("service","id",String.valueOf(editServiceDTO.getId())));
+
         if(checkService !=null)
         {
-            Services editService= maptoEntity(editServiceDTO);
+            checkService.setServiceName(editServiceDTO.getServiceName());
+            checkService.setDescription(editServiceDTO.getDescription());
+            checkService.setPrice(BigDecimal.valueOf(editServiceDTO.getPrice()));
+            checkService.setActive(true);
+            SRepository.save(checkService);
+            return maptoDTO(checkService);
+        }
 
-            SRepository.save(editService);
-            return maptoDTO(editService);
+        return null;
+    }
+    @Override
+    public ServiceDTO softDeleteService(Integer serviceId) {
+        Services checkService= SRepository.findById(serviceId).orElseThrow(() -> new ResourceNotFoundException("service","id",String.valueOf(serviceId)));
+
+        if(checkService !=null)
+        {
+           checkService.setActive(false);
+
+           SRepository.save(checkService);
+            return maptoDTO(checkService);
         }
 
         return null;

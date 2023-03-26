@@ -5,26 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="">
-<<<<<<< Updated upstream
-
-      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/video/wedding.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/video/weddinglogo.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/video/weddinglogo.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/video/weddingvideo.mp4" afterDir="false" />
-=======
-      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/video/khoa.jpg" afterDir="false" />
->>>>>>> Stashed changes
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/ServiceController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/Services/add_service.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/Services/detail_service.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/Services/show_service.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/VenueDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/VenueDTO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/css/khangstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/css/khangstyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/ServiceDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/ServiceDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/js/khangcalendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/js/khangcalendar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/home.html" afterDir="false" />
-<<<<<<< Updated upstream
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/layout.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/layout.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/OrganizeTeamDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/DTO/OrganizeTeamDTO.java" afterDir="false" />
-
-=======
->>>>>>> Stashed changes
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/ServiceController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/ServiceController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/Service_Service.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/Service_Service.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/Service_ServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/Service_ServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -61,10 +56,10 @@
         <option value="package.json" />
         <option value="Interface" />
         <option value="AnnotationType" />
-        <option value="Class" />
-        <option value="HTML File" />
         <option value="CSS File" />
         <option value="JavaScript File" />
+        <option value="Class" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -96,40 +91,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-<<<<<<< Updated upstream
-
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "JPA.DatabaseSchemaImportDialog": "16953116-e2cc-4c35-8f3e-1c46994fc1aa",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "17",
-    "last_opened_file_path": "/Users/lance/Documents/projectWM/wmproject/WmClientMVC/src/main/resources/static/video",
-    "list.type.of.created.stylesheet": "CSS",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.23551057",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "project.propCompiler",
-    "spring.configuration.checksum": "a6c1a72681bbf934af904fd11f4112a5",
-    "vue.rearranger.settings.migration": "true"
-
-=======
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
@@ -160,7 +121,6 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
     &quot;spring.configuration.checksum&quot;: &quot;a6c1a72681bbf934af904fd11f4112a5&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
->>>>>>> Stashed changes
   },
   &quot;keyToStringList&quot;: {
     &quot;DatabaseDriversLRU&quot;: [
@@ -209,7 +169,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.API">
+  <component name="RunManager" selected="Spring Boot.MVC">
     <configuration name="WMProject" type="CompoundRunConfigurationType">
       <toRun name="WmClientMvcApplication" type="SpringBootApplicationConfigurationType" />
       <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
@@ -307,22 +267,23 @@
       <workItem from="1679110472066" duration="40942000" />
       <workItem from="1679160396021" duration="1297000" />
       <workItem from="1679210649213" duration="28000" />
-
       <workItem from="1679290542322" duration="6372000" />
       <workItem from="1679306437988" duration="1492000" />
       <workItem from="1679309220250" duration="4787000" />
       <workItem from="1679316359082" duration="1330000" />
       <workItem from="1679376896699" duration="37993000" />
       <workItem from="1679463253068" duration="22413000" />
-<<<<<<< Updated upstream
-      <workItem from="1679562317261" duration="19215000" />
-
-=======
       <workItem from="1679562317261" duration="30141000" />
       <workItem from="1679611994170" duration="382000" />
       <workItem from="1679612426817" duration="6752000" />
       <workItem from="1679639304222" duration="4381000" />
->>>>>>> Stashed changes
+      <workItem from="1679684332672" duration="399000" />
+      <workItem from="1679690803458" duration="320000" />
+      <workItem from="1679693338932" duration="333000" />
+      <workItem from="1679730248145" duration="300000" />
+      <workItem from="1679739808350" duration="1522000" />
+      <workItem from="1679742134729" duration="1410000" />
+      <workItem from="1679805557226" duration="20655000" />
     </task>
     <servers />
   </component>
@@ -438,18 +399,36 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java</url>
-          <line>204</line>
+          <line>193</line>
           <properties>
             <option name="lambda-ordinal" value="-1" />
           </properties>
           <option name="timeStamp" value="331" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java</url>
           <line>40</line>
           <option name="timeStamp" value="334" />
-
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/ServiceController.java</url>
+          <line>46</line>
+          <option name="timeStamp" value="335" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/ServiceController.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="343" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/Service_ServiceImpl.java</url>
+          <line>90</line>
+          <option name="timeStamp" value="347" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/ServiceController.java</url>
+          <line>140</line>
+          <option name="timeStamp" value="350" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -458,6 +437,5 @@
         <PinnedItemInfo parentTag="org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest" memberName="request" />
       </pinned-members>
     </pin-to-top-manager>
-
   </component>
 </project>

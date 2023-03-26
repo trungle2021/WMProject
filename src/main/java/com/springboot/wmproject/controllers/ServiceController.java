@@ -33,6 +33,14 @@ public class ServiceController {
         return ResponseEntity.ok(service.getAllService());
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("getOne/{id}")
+    public ResponseEntity<ServiceDTO> getOne(@PathVariable int id)
+    {
+        return ResponseEntity.ok(service.getOneService(id));
+    }
+
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allactive")
@@ -53,6 +61,12 @@ public class ServiceController {
     @PutMapping(value = "/update")
     public ResponseEntity<ServiceDTO> update(@RequestBody ServiceDTO serviceDTO){
         return ResponseEntity.ok(service.updateService(serviceDTO));
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = "/soft_delete/{id}")
+    public ResponseEntity<ServiceDTO> softDelete(@PathVariable int id){
+        return ResponseEntity.ok(service.softDeleteService(id));
     }
 
 

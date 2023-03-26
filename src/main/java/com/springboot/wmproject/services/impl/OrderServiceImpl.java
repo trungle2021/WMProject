@@ -55,17 +55,6 @@ public class OrderServiceImpl implements OrderService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public List<OrderDTO> getAllOrder() throws ResourceNotFoundException {
         return orderRepository.findAll().stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
@@ -207,9 +196,9 @@ public class OrderServiceImpl implements OrderService {
                 Venues venues=venueRepository.findById(newOrder.getVenueId()).orElseThrow(() -> new ResourceNotFoundException("venueId","id",String.valueOf(newOrder.getVenueId())));
                 Customers  customeObject=customerRepository.findById(newOrder.getCustomerId()).orElseThrow(() -> new ResourceNotFoundException("customerId","id",String.valueOf(newOrder.getCustomerId())));
 
-                String to="khangkhangbl@gmail.com";
-//                String to= newOrder.getCustomersByCustomerId().getEmail();
-//                if(to==null){to="khangkhangbl@gmail.com";}
+//                String to="khangkhangbl@gmail.com";
+                String to= customeObject.getEmail();
+                if(to==null){to="khangkhangbl@gmail.com";}
 
                 String company="KTK-Wedding";
                 String customer="Customer " +customeObject.getFirst_name();
@@ -266,9 +255,9 @@ public class OrderServiceImpl implements OrderService {
                 orders.setOrderStatus(status);
                 if(status.equalsIgnoreCase(orderStatusRefund))
                 {
-                    String to="khangkhangbl@gmail.com";
-//                String to= newOrder.getCustomersByCustomerId().getEmail();
-//                if(to==null){to="khangkhangbl@gmail.com";}
+//                    String to="khangkhangbl@gmail.com";
+                String to= orders.getCustomersByCustomerId().getEmail();
+                if(to==null){to="khangkhangbl@gmail.com";}
 
                     String company="KTK-Wedding";
                     String customer="Customer " +orders.getCustomersByCustomerId().getFirst_name();

@@ -10,7 +10,7 @@ public interface Service_Service {
 
     List<ServiceDTO> getAllService();
     List<ServiceDTO> getAllServiceActive();
-
+    public ServiceDTO softDeleteService(Integer serviceId);
     ServiceDTO getOneService(int serviceId);
     ServiceDTO createService(ServiceDTO newServiceDTO);
     ServiceDTO updateService(ServiceDTO editServiceDTO);
