@@ -411,7 +411,7 @@ public class AuthServiceImpl implements AuthService {
         CustomerDTO customerDTO = new CustomerDTO();
         CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();
         //check cus exist by id
-        CustomerDTO cusExist = customerService.getCustomerById(registerDTO.getId());
+        CustomerDTO cusExist = customerService.getCustomerById(registerDTO.getCustomerId());
         CustomerAccountDTO cusHasAccount = customerAccountService.getAccountByCustomerId(registerDTO.getCustomerId());
 
         //Validate

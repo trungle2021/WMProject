@@ -93,11 +93,23 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "CustomerAccount ID is required to update");
         }
         //check employee account exist
+//        CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
+//        //if exist update
+//        customerAccounts.setUsername(customerAccountDTO.getUsername().trim());
+//        if(!customerAccountDTO.getPassword().equals("") || !customerAccountDTO.getPassword().isEmpty() || !customerAccountDTO.getPassword().isBlank()){
+//            customerAccounts.setPassword(customerAccountDTO.getPassword());
+//        }
+
         CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
-        //if exist update
-        customerAccounts.setUsername(customerAccountDTO.getUsername().trim());
-        if(!customerAccountDTO.getPassword().equals("") || !customerAccountDTO.getPassword().isEmpty() || !customerAccountDTO.getPassword().isBlank()){
-            customerAccounts.setPassword(customerAccountDTO.getPassword());
+
+        String trimmedUsername = customerAccountDTO.getUsername().trim();
+        if (!trimmedUsername.equals(customerAccounts.getUsername())) {
+            customerAccounts.setUsername(trimmedUsername);
+        }
+
+        String password = customerAccountDTO.getPassword();
+        if (password != null && !password.isEmpty()) {
+            customerAccounts.setPassword(password);
         }
             return mapToDto(customerAccountRepository.save(customerAccounts));
     }

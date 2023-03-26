@@ -99,11 +99,13 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
             throw new WmAPIException(HttpStatus.BAD_REQUEST,"EmployeeAccount ID is required to update");
         }
         //check employee account exist
-        EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId).orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
-            checkEmployeeAccount.setUsername(employeeAccountDTO.getUsername());
-            checkEmployeeAccount.setPassword(employeeAccountDTO.getPassword());
-            checkEmployeeAccount.setRole(employeeAccountDTO.getRole());
-            empAccRepo.save(checkEmployeeAccount);
+        EmployeeAccounts checkEmployeeAccount = empAccRepo.findById(employeeAccountId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee Account", "id", String.valueOf(employeeAccountId)));
+        checkEmployeeAccount.setUsername(employeeAccountDTO.getUsername() != null ? employeeAccountDTO.getUsername() : checkEmployeeAccount.getUsername());
+        checkEmployeeAccount.setPassword(employeeAccountDTO.getPassword() != null ? employeeAccountDTO.getPassword() : checkEmployeeAccount.getPassword());
+        checkEmployeeAccount.setRole(employeeAccountDTO.getRole() != null ? employeeAccountDTO.getRole() : checkEmployeeAccount.getRole());
+
+        empAccRepo.save(checkEmployeeAccount);
             return mapToDto(checkEmployeeAccount);
     }
 
