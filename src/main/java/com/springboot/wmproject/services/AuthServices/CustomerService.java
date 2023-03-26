@@ -10,6 +10,7 @@ public interface CustomerService{
     CustomerDTO getCustomerById(int id);
     CustomerDTO create(CustomerDTO customerDTO);
     CustomerDTO update(CustomerDTO customerDTO);
+    CustomerDTO updateAvatar(CustomerDTO customerDTO);
     void delete(int id);
 
     List<Customers> checkEmailExists(String email);

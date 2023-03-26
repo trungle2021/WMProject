@@ -62,12 +62,13 @@
                                         </select>
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-default" data-toggle="modal"
-                                                             data-target="#createModal" data-whatever="@mdo">Create
-                                        </button>
+                                                    data-target="#createModal" data-whatever="@mdo">Create
+                                            </button>
                                             <button type="button" class="btn btn-default" id="updateBtn"
                                                     data-toggle="modal" data-target="#updateModal" data-whatever="@mdo">
                                                 Update
                                             </button>
+
                                             <form id="add-picture-form" method="post"
                                                   th:action="@{/staff/venues/venueImgs/create}" enctype="multipart/form-data">
                                                 <div class="input-group mb-3" style="margin-top: 1rem">
@@ -90,18 +91,18 @@
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row" >
+                                    <div class="row">
                                         <th:block th:each="i:${imgList}">
-                                        <div class="col-sm-2 venue-img" th:attr="data-venue=${i.getVenueId()}">
-                                            <a th:href="'data:image/jpeg;base64,'+${i.getUrl()}"
-                                               th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/staff/venues/delete?imgId='+${i.getId()}+'>Delete</a>'"
-                                               data-toggle="lightbox"
-                                               th:attrappend="data-title='Venue '+${i.getVenueId()}"
-                                               data-gallery="gallery">
-                                                <img th:src="'data:image/jpeg;base64,'+${i.getUrl()}"
-                                                     class="img-fluid mb-2" th:alt="Venue +${i.getVenueId()}"/>
-                                            </a>
-                                        </div>
+                                            <div class="col-sm-2 venue-img" th:attr="data-venue=${i.getVenueId()}">
+                                                <a th:href="'data:image/jpeg;base64,'+${i.getUrl()}"
+                                                   th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/staff/venues/delete?imgId='+${i.getId()}+'>Delete</a>'"
+                                                   data-toggle="lightbox"
+                                                   th:attrappend="data-title='Venue '+${i.getVenueId()}"
+                                                   data-gallery="gallery">
+                                                    <img th:src="'data:image/jpeg;base64,'+${i.getUrl()}"
+                                                         class="img-fluid mb-2" th:alt="Venue +${i.getVenueId()}"/>
+                                                </a>
+                                            </div>
                                         </th:block>
                                     </div>
                                 </div>
@@ -123,20 +124,32 @@
                             <div class="modal-body">
                                 <form method="post" th:action="@{/staff/venues/create}" id="createForm">
                                     <div class="form-group">
-                                        <label class="col-form-label">Venue name:</label>
-                                        <input type="text" class="form-control" name="venueName" required>
+                                        <label class="col-form-label">Venue name(venue+ uppercase(word) +
+                                            number):</label>
+                                        <input type="text" class="form-control" name="venueName" required
+                                               pattern="^venue[A-Z][0-9]+$">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-form-label">Min People:</label>
-                                        <input type="number" class="form-control" name="minPeople" required min="1" max="3000">
+                                        <label class="col-form-label">Min People (1-3000):</label>
+                                        <input type="number" class="form-control" name="minPeople" required min="1"
+                                               max="3000">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-form-label">Max People:</label>
-                                        <input type="number" class="form-control" name="maxPeople" required min="1" max="3000">
+                                        <label class="col-form-label">Max People (1-3000):</label>
+                                        <input type="number" class="form-control" name="maxPeople" required min="1"
+                                               max="3000">
                                     </div>
                                     <div class="form-group">
-                                        <label class="col-form-label">Price:</label>
-                                        <input type="text" class="form-control" name="price" required id="txtPriceCreateVenue">
+                                        <label class="col-form-label">Price (1- 500.000.000):</label>
+                                        <input type="text" class="form-control" name="price" required
+                                               id="txtPriceCreateVenue">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price" class="col-form-label">Is active:</label>
+                                        <select class="form-control" name="checkCreate">
+                                            <option th:text="No" value="false"></option>
+                                            <option th:text="Yes" value="true" selected></option>
+                                        </select>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
@@ -165,24 +178,25 @@
                                 <form method="post" th:action="@{/staff/venues/update}" id="updateForm">
                                     <input type="text" class="update-venue-id" name="id" hidden>
                                     <div class="form-group">
-                                        <label for="venueName" class="col-form-label">Venue Name:</label>
+                                        <label for="venueName" class="col-form-label">Venue name(venue+ uppercase(word)
+                                            + number):</label>
                                         <input type="text" required class="form-control update-venue-name"
-                                               name="venueName" id="venueName">
+                                               name="venueName" id="venueName" pattern="^venue[A-Z][0-9]+$">
                                     </div>
                                     <div class="form-group">
-                                        <label for="minPeople" class="col-form-label">Min People:</label>
+                                        <label for="minPeople" class="col-form-label">Min People (1-3000):</label>
                                         <input type="number" class="form-control update-venue-min" id="minPeople"
                                                required
                                                name="minPeople" min="1" max="3000">
                                     </div>
                                     <div class="form-group">
-                                        <label for="maxPeople" class="col-form-label">Max People:</label>
+                                        <label for="maxPeople" class="col-form-label">Max People (1-3000):</label>
                                         <input type="number" class="form-control update-venue-max" id="maxPeople"
                                                required
                                                name="maxPeople" min="1" max="3000">
                                     </div>
                                     <div class="form-group">
-                                        <label for="price" class="col-form-label">Price:</label>
+                                        <label for="price" class="col-form-label">Price (1-500.000.000):</label>
                                         <input class="form-control update-venue-price" id="price" name="price" required>
                                     </div>
                                     <div class="form-group">
@@ -232,14 +246,25 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         msg = '[[${message}]]';
-        if (msg) {
-            Swal.fire({
-                title: 'Notification',
-                text: msg,
-                icon: 'success',
-                confirmButtonText: 'OK'
-            });
+        if(msg){
+            if (msg === "Success") {
+                Swal.fire({
+                    title: 'Notification',
+                    text: msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Notification',
+                    text: 'Venue name has been existed',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
         }
+
+
     </script>
     <script>
         function myConfirm() {
@@ -247,8 +272,12 @@
         }
     </script>
     <!-- Ekko Lightbox -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js" integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js" integrity="sha512-YibiFIKqwi6sZFfPm5HNHQYemJwFbyyYHjrr3UT+VobMt/YBo1kBxgui5RWc4C3B4RJMYCdCAJkbXHt+irKfSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"
+            integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"
+            integrity="sha512-YibiFIKqwi6sZFfPm5HNHQYemJwFbyyYHjrr3UT+VobMt/YBo1kBxgui5RWc4C3B4RJMYCdCAJkbXHt+irKfSA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
 
         $(document).ready(function () {
@@ -273,10 +302,9 @@
                             min.val(item.minPeople)
                             max.val(item.maxPeople)
                             price.val(item.price)
-                            $('.update-venue-active option').each(function (){
-                                var value=$(this).val();
-                                if(value===item.isActive)
-                                {
+                            $('.update-venue-active option').each(function () {
+                                var value = $(this).val();
+                                if (value === item.isActive) {
                                     $(this).prop('selected', true);
                                 }
                             })
@@ -298,16 +326,16 @@
                 $('#add-picture-form').hide();
             }
         })
-        $('.update-venue-active').on('change',function (){
-            var selected=$(this).find('option:selected').val();
+        $('.update-venue-active').on('change', function () {
+            var selected = $(this).find('option:selected').val();
             $(this).val(selected);
         })
     </script>
     <script>
 
         $(function () {
-            $("#createForm").submit(function (e){
-               var inputPrice=$('#txtPriceCreateVenue').val()
+            $("#createForm").submit(function (e) {
+                var inputPrice = $('#txtPriceCreateVenue').val()
                 var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
 
                 if (!regex.test(inputPrice)) {
@@ -315,9 +343,9 @@
                     e.preventDefault(); // prevent form submission
                 }
             });
-            $("#updateForm").submit(function (e){
-                var inputPrice=$('.update-venue-price').val()
-                var regex =/^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+            $("#updateForm").submit(function (e) {
+                var inputPrice = $('.update-venue-price').val()
+                var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
 
                 if (!regex.test(inputPrice)) {
                     alert("Please enter a valid number between 1 and 500000000.");
@@ -348,17 +376,16 @@
                         min.val(item.minPeople)
                         max.val(item.maxPeople)
                         price.val(item.price)
-                        $('.update-venue-active option').each(function (){
-                            var value=$(this).val();
-                            if(value===item.isActive)
-                            {
+                        $('.update-venue-active option').each(function () {
+                            var value = $(this).val();
+                            if (value === item.isActive) {
                                 $(this).prop('selected', true);
                             }
                         })
                     }
                 })
-                $('.update-venue-active').on('change',function (){
-                    var selected=$(this).find('option:selected').val();
+                $('.update-venue-active').on('change', function () {
+                    var selected = $(this).find('option:selected').val();
                     $(this).val(selected);
                 })
                 $('div[data-venue]').each(function () {

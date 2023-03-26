@@ -82,16 +82,13 @@ public class AuthController {
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 api_customerLoginUrl,
-                "/customers/dashboard",
+                "/customers/home",
                 "/login",
                 loginDTO,
                 request,
                 response,
                 redirectAttributes);
     }
-
-
-
     @GetMapping("/register")
     public String registerCustomer(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

@@ -3,6 +3,7 @@ package wm.clientmvc.controllers.Admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.websocket.server.PathParam;
@@ -61,6 +62,11 @@ public class VenueWebClientController {
                     token,
                     responseTypeVenueImg
             );
+            for (VenueDTO item : venueDTOList
+            ) {
+                item.setVenueImagesById(null);
+            }
+
             model.addAttribute("list", venueDTOList);
             model.addAttribute("imgList", venueImgDTOList);
         } catch (HttpClientErrorException ex) {
@@ -113,22 +119,28 @@ public class VenueWebClientController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/venues?msg="+message;
+                    return "redirect:/staff/venues?msg=" + message;
             }
         }
         return "redirect:/staff/venues?msg=Success";
     }
 
     @PostMapping("/create")
-    public String createVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+    public String createVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("checkCreate") Boolean checkCreate) throws IOException {
+        if (checkCreate != null) {
+            venueDTO.setActive(checkCreate);
+        }
         try {
-            APIHelper.makeApiCall(
+            VenueDTO data = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venues/create",
                     HttpMethod.POST,
                     venueDTO,
                     token,
                     VenueDTO.class
             );
+            if (data == null) {
+                return "redirect:/staff/venues?msg=Fail";
+            }
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
@@ -146,8 +158,9 @@ public class VenueWebClientController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/venues?msg="+message;
+                    return "redirect:/staff/venues?msg=" + message;
             }
+
         }
         return "redirect:/staff/venues?msg=Success";
     }
@@ -194,25 +207,28 @@ public class VenueWebClientController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/venues?msg="+message;
+                    return "redirect:/staff/venues?msg=" + message;
             }
         }
         return "redirect:/staff/venues?msg=Success";
     }
 
     @PostMapping("/update")
-    public String updateVenue(@RequestParam("check")Boolean checkActive,@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
-        if(checkActive!=null){
+    public String updateVenue(@RequestParam("check") Boolean checkActive, @ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        if (checkActive != null) {
             venueDTO.setActive(checkActive);
         }
         try {
-            APIHelper.makeApiCall(
+            VenueDTO data = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venues/update",
                     HttpMethod.PUT,
                     venueDTO,
                     token,
                     VenueDTO.class
             );
+            if (data == null) {
+                return "redirect:/staff/venues?msg=Fail";
+            }
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
@@ -230,7 +246,7 @@ public class VenueWebClientController {
                 case "403":
                     return "redirect:/access-denied";
                 default:
-                    return "redirect:/staff/venues?msg="+message;
+                    return "redirect:/staff/venues?msg=" + message;
             }
         }
         return "redirect:/staff/venues?msg=Success";

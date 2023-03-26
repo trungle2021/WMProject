@@ -5,6 +5,7 @@ import com.springboot.wmproject.DTO.BookingDTO;
 import com.springboot.wmproject.DTO.VenueDTO;
 import com.springboot.wmproject.services.BookingService;
 import com.springboot.wmproject.services.OrderService;
+import com.springboot.wmproject.services.VenueImgService;
 import com.springboot.wmproject.services.VenueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -88,6 +89,7 @@ public class VenueController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "delete/{id}")
     public ResponseEntity<String> deleteVenue(@Valid @PathVariable int id){
+
         venueService.deleteVenue(id);
         return ResponseEntity.ok("Venue has been deleted");
     }
