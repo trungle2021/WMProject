@@ -236,8 +236,6 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
                      RedirectAttributes redirectAttributes, @PathParam("file") MultipartFile file) throws IOException {
 
 
-
-
     OrderDTO editOrder = new OrderDTO();
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();

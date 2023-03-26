@@ -55,17 +55,6 @@ public class OrderServiceImpl implements OrderService {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
     @Override
     public List<OrderDTO> getAllOrder() throws ResourceNotFoundException {
         return orderRepository.findAll().stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
