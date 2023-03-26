@@ -173,7 +173,7 @@
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
 
         <div class="image">
-          <img th:src="${#authentication.getPrincipal().getAvatar()}" class="img-circle elevation-2" alt="User Image">
+          <img th:src="'data:image/jpeg;base64,'+${#authentication.getPrincipal().getAvatar()}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
           <a th:href="@{/staff/employees/update/{id}(id=${#authentication.getPrincipal().getUserId()})}" class="d-block" th:text="${#authentication.getPrincipal().getFullName()}"></a>
@@ -330,6 +330,18 @@
                   <a th:href="@{/staff/customers/getAll}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Customers</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/food/index}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Menu</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/venues}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Venue</p>
                   </a>
                 </li>
               </th:block>
