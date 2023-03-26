@@ -83,6 +83,7 @@ public class FoodServiceImpl implements FoodService {
                 checkNameChangeOrNot.setFoodType(editFoodDTO.getFoodType());
                 checkNameChangeOrNot.setDescription(editFoodDTO.getDescription());
                 checkNameChangeOrNot.setPrice(editFoodDTO.getPrice());
+                checkNameChangeOrNot.setActive(editFoodDTO.isActive());
                 Food updateFood = foodRepository.save(checkNameChangeOrNot);
                 return mapToDTO(updateFood);
             } else {
@@ -94,6 +95,7 @@ public class FoodServiceImpl implements FoodService {
                     checkNameChangeOrNot.setFoodType(editFoodDTO.getFoodType());
                     checkNameChangeOrNot.setDescription(editFoodDTO.getDescription());
                     checkNameChangeOrNot.setPrice(editFoodDTO.getPrice());
+                    checkNameChangeOrNot.setActive(editFoodDTO.isActive());
                     Food updateFood = foodRepository.save(checkNameChangeOrNot);
                     return mapToDTO(updateFood);
                 }
