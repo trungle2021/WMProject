@@ -134,12 +134,21 @@
         var message = [[${alertMessage}]];
         console.log(message);
 
-           if(message!=null && message.length != 0)
+        if(message!=null && message.length != 0)
         {
             swal({
                 title: "Message!",
                 text: message,
                 icon: "success",
+            });
+
+        }
+        else if(error!=null && error.length != 0)
+        {
+            swal({
+                title: "Error!",
+                text: error,
+                icon: "error",
             });
         }
     </script>
