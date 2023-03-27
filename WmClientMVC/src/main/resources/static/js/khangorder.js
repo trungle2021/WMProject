@@ -338,7 +338,7 @@ function callAJAXnewOrder(){
     xhr.send(data);}
     else{
 
-        swal("Warning!", "The minimum number of main dishes is 4!", "warning");
+        swal("Warning!", "Menu Have choose at least 6 dish include starter and dessert!!", "warning");
     }
 
 }

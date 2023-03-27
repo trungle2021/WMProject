@@ -16,7 +16,7 @@ public class FoodDTO {
     private String foodType;
     @NotEmpty
     private String description;
-    private boolean isActive;
+    private boolean active;
     @Min(1)
     private Double price;
     private Set<MaterialDTO> materialsById;
