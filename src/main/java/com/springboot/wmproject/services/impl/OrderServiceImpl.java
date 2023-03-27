@@ -198,7 +198,7 @@ public class OrderServiceImpl implements OrderService {
 
 //                String to="khangkhangbl@gmail.com";
                 String to= customeObject.getEmail();
-                if(to==null){to="khangkhangbl@gmail.com";}
+                if(to==null|| to.isEmpty()){to="khangkhangbl@gmail.com";}
 
                 String company="KTK-Wedding";
                 String customer="Customer " +customeObject.getFirst_name();
@@ -257,7 +257,7 @@ public class OrderServiceImpl implements OrderService {
                 {
 //                    String to="khangkhangbl@gmail.com";
                 String to= orders.getCustomersByCustomerId().getEmail();
-                if(to==null){to="khangkhangbl@gmail.com";}
+                if(to==null|| to.isEmpty()){to="khangkhangbl@gmail.com";}
 
                     String company="KTK-Wedding";
                     String customer="Customer " +orders.getCustomersByCustomerId().getFirst_name();
@@ -282,6 +282,8 @@ public class OrderServiceImpl implements OrderService {
 
         if(orderDTOId!=0){
             Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
+            //check xem co order food detail chua.
+
             if(orders!=null){
 
                 orders.setOrderStatus(status);
