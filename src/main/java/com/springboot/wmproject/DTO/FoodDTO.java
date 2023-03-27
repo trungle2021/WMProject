@@ -20,7 +20,7 @@ public class FoodDTO {
     private String description;
     @Min(1)
     private Double price;
-    private boolean isActive;
+    private boolean active;
 
     private Set<MaterialDTO> materialsById;
     private Set<FoodImageDTO> foodImagesById;
