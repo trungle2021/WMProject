@@ -37,7 +37,7 @@ public class Venues {
     private Double price;
     @Basic
     @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
-    private boolean active;
+    private boolean isActive;
     @OneToMany(mappedBy = "venues", cascade = CascadeType.ALL, orphanRemoval = true)
     private Collection<Orders> ordersById=new HashSet<>();
     @OneToMany(mappedBy = "venues", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -84,11 +84,11 @@ public class Venues {
     }
 
     public boolean isActive() {
-        return active;
+        return isActive;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
+    public void setActive(boolean isActive) {
+        this.isActive = isActive;
     }
 
     @Override

@@ -89,9 +89,23 @@
                 </div>
             </div>
             <div  class="row" >
-                <div  th:each="v:${venuesImages}" class="col-md-3 ftco-animate ">
+                <div th:if="${venuesImages!=null}" th:each="v:${venuesImages}" class="col-md-3 ftco-animate ">
                     <a th:href="@{/customers/orders}" >
                         <img class="gallery image-popup img d-flex align-items-center myimg" th:src="'data:image/png;base64,'+ ${v.getUrl()}" />
+                    </a>
+                </div>
+                <div th:else>
+                    <a th:href="@{/customers/orders}" >
+                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
+                    </a>
+                    <a th:href="@{/customers/orders}" >
+                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
+                    </a>
+                    <a th:href="@{/customers/orders}" >
+                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
+                    </a>
+                    <a th:href="@{/customers/orders}" >
+                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
                     </a>
                 </div>
             </div>

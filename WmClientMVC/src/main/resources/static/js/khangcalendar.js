@@ -171,7 +171,7 @@ function appendDay(day, calendarDaysElement) {
 }
 
 function appendVenue(venue) {
-debugger;
+
     let venueimages= venue.venueImagesById;
     let myVenueImg;
     if(Array.isArray(venueimages) && venueimages.length!==0)

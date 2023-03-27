@@ -52,10 +52,14 @@ public class HomeController {
                 for (int i = 0; i < 4; i++) {
                     venuesImages.add(venueImgDTOList.get(i));
                 }
-            } else if (venueImgDTOList.size() < 4) {
-                return null;
-            } else {
-                for (int i = 0; i < 8; i++) {
+
+            }
+            else if(venueImgDTOList.size()<4)
+            {
+                venuesImages=null;
+            }
+            else{
+                for (int i = 0; i <8; i++) {
                     venuesImages.add(venueImgDTOList.get(i));
                 }
 

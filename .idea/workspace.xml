@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e62b1270-7cea-4dab-94a7-db7781e0414c" name="Changes" comment="">
+    <list default="true" id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterCustomerDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterCustomerDTO.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterDTO.java" afterDir="false" />
@@ -32,40 +32,150 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/CustomerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CompilerWorkspaceConfiguration">
+    <option name="MAKE_PROJECT_ON_SAVE" value="true" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/MVC">
+      <ProjectState />
+    </projectState>
+    <projectState path="$PROJECT_DIR$/demo1">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view>
+          <tree_state>
+            <expand />
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="com.haulmont.jpb.JpaEntity" />
+        <option value="package.json" />
+        <option value="Interface" />
+        <option value="AnnotationType" />
+        <option value="CSS File" />
+        <option value="JavaScript File" />
+        <option value="Class" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="JpbToolWindowState">
+    <option name="isToolWindowVisible" value="false" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2NUpvGft9kMqBdE6Nonxs5SjCib" />
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="Use Maven wrapper" />
+        <option name="useMavenConfig" value="true" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectId" id="2LKJQgC2vLbXTWTS8R7YiJs3LX0" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JPA.DatabaseSchemaImportDialog&quot;: &quot;16953116-e2cc-4c35-8f3e-1c46994fc1aa&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
     &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
     &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
     &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
     &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/lance/Documents/projectWM/wmproject/WmClientMVC/src/main/resources/static/video&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;ed049b57b5c80a2a9381a536731a729a&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.23551057&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;project.propCompiler&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;a6c1a72681bbf934af904fd11f4112a5&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  },
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
+    ]
   }
 }</component>
+
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/video" />
+      <recent name="C:\Users\khoa.trinh\Documents\GitHub\wmproject\WmClientMVC\src\main\resources\templates" />
+      <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\customerTemplate" />
+      <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\adminTemplate\pages\teams" />
+      <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\adminTemplate\pages\customers" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates" />
+      <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\adminTemplate" />
+      <recent name="C:\Users\admin\Desktop\wmproject\WmClientMVC\src\main\resources\templates\adminTemplate\pages\team_employee" />
+      <recent name="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates" />
+      <recent name="$PROJECT_DIR$/WmClientMVC/src/main/resources/static" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="wm.clientmvc.DTO" />
+      <recent name="com.springboot.wmproject.entities" />
+      <recent name="com.springboot.wmproject.security" />
+      <recent name="com.springboot.wmproject.config.Custom" />
+      <recent name="com.springboot.wmproject.config" />
+    </key>
+    <key name="ImportMappingsDialog.RecentPackages">
+      <recent name="" />
+      <recent name="com.springboot.wmproject.en" />
+      <recent name="com.springboot.wmproject.entities" />
+      <recent name="com.springboot.wmproject.entities.te" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn install" />
+    </option>
+  </component>
   <component name="RunDashboard">
     <option name="configurationTypes">
       <set>
@@ -76,6 +186,7 @@
   <component name="RunManager" selected="Spring Boot.MVC">
     <configuration name="WM" type="CompoundRunConfigurationType">
       <toRun name="MVC" type="SpringBootApplicationConfigurationType" />
+
       <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
       <method v="2" />
     </configuration>
@@ -101,23 +212,115 @@
       <item itemvalue="Compound.WM" />
       <item itemvalue="Spring Boot.WmprojectApplication" />
       <item itemvalue="Spring Boot.MVC" />
+
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="e62b1270-7cea-4dab-94a7-db7781e0414c" name="Changes" comment="" />
-      <created>1679728752149</created>
+      <changelist id="ce306881-761a-4866-b5c8-31004bcf30e2" name="Changes" comment="" />
+      <created>1675613826093</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1679728752149</updated>
-      <workItem from="1679728756483" duration="3034000" />
-      <workItem from="1679811382246" duration="3273000" />
+      <updated>1675613826093</updated>
+      <workItem from="1675613828105" duration="6939000" />
+      <workItem from="1675669415985" duration="2621000" />
+      <workItem from="1675735287516" duration="739000" />
+      <workItem from="1675742527767" duration="325000" />
+      <workItem from="1675768968708" duration="4512000" />
+      <workItem from="1675825988461" duration="7859000" />
+      <workItem from="1675845669173" duration="1256000" />
+      <workItem from="1675852200283" duration="2562000" />
+      <workItem from="1675854784786" duration="74000" />
+      <workItem from="1675855633927" duration="10506000" />
+      <workItem from="1675920778904" duration="5452000" />
+      <workItem from="1675956688434" duration="1681000" />
+      <workItem from="1676018803491" duration="114000" />
+      <workItem from="1676082141823" duration="1263000" />
+      <workItem from="1676173973425" duration="13617000" />
+      <workItem from="1676199462019" duration="501000" />
+      <workItem from="1676294250063" duration="5562000" />
+      <workItem from="1676343257294" duration="5354000" />
+      <workItem from="1676370433548" duration="5853000" />
+      <workItem from="1676709554032" duration="4587000" />
+      <workItem from="1676861915415" duration="4738000" />
+      <workItem from="1676889550912" duration="6853000" />
+      <workItem from="1677041677253" duration="4393000" />
+      <workItem from="1677060338937" duration="599000" />
+      <workItem from="1677290550017" duration="4128000" />
+      <workItem from="1677355922245" duration="247000" />
+      <workItem from="1677357305226" duration="448000" />
+      <workItem from="1677391955966" duration="303000" />
+      <workItem from="1677392346046" duration="3000" />
+      <workItem from="1677494878236" duration="8738000" />
+      <workItem from="1677755855003" duration="202000" />
+      <workItem from="1677756103583" duration="261000" />
+      <workItem from="1677756613968" duration="182000" />
+      <workItem from="1677772085946" duration="3268000" />
+      <workItem from="1677807679321" duration="7219000" />
+      <workItem from="1677839723053" duration="1685000" />
+      <workItem from="1677854491826" duration="2921000" />
+      <workItem from="1677927538898" duration="32811000" />
+      <workItem from="1678160081696" duration="854000" />
+      <workItem from="1678204476289" duration="2709000" />
+      <workItem from="1678313787952" duration="3055000" />
+      <workItem from="1678341960104" duration="4384000" />
+      <workItem from="1678355323232" duration="20907000" />
+      <workItem from="1678383944819" duration="8070000" />
+      <workItem from="1678440296244" duration="32116000" />
+      <workItem from="1678488510535" duration="13102000" />
+      <workItem from="1678519077323" duration="38945000" />
+      <workItem from="1678615262182" duration="3014000" />
+      <workItem from="1678670890933" duration="31317000" />
+      <workItem from="1678736699526" duration="4238000" />
+      <workItem from="1678774605929" duration="39367000" />
+      <workItem from="1678869364046" duration="23618000" />
+      <workItem from="1678939041852" duration="31298000" />
+      <workItem from="1679003015991" duration="969000" />
+      <workItem from="1679033733711" duration="6294000" />
+      <workItem from="1679042701635" duration="212000" />
+      <workItem from="1679044603073" duration="1294000" />
+      <workItem from="1679110472066" duration="40942000" />
+      <workItem from="1679160396021" duration="1297000" />
+      <workItem from="1679210649213" duration="28000" />
+      <workItem from="1679290542322" duration="6372000" />
+      <workItem from="1679306437988" duration="1492000" />
+      <workItem from="1679309220250" duration="4787000" />
+      <workItem from="1679316359082" duration="1330000" />
+      <workItem from="1679376896699" duration="37993000" />
+      <workItem from="1679463253068" duration="22413000" />
+      <workItem from="1679562317261" duration="30141000" />
+      <workItem from="1679611994170" duration="382000" />
+      <workItem from="1679612426817" duration="6752000" />
+      <workItem from="1679639304222" duration="4381000" />
+      <workItem from="1679684332672" duration="399000" />
+      <workItem from="1679690803458" duration="320000" />
+      <workItem from="1679693338932" duration="333000" />
+      <workItem from="1679730248145" duration="300000" />
+      <workItem from="1679739808350" duration="1522000" />
+      <workItem from="1679742134729" duration="1410000" />
+      <workItem from="1679805557226" duration="27161000" />
+      <workItem from="1679878259307" duration="2664000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -139,5 +342,6 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+
   </component>
 </project>

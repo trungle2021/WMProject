@@ -126,7 +126,10 @@ public class VenueWebClientController {
     }
 
     @PostMapping("/create")
-    public String createVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+    public String createVenue(@ModelAttribute VenueDTO venueDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, @RequestParam("checkCreate") Boolean checkCreate) throws IOException {
+        if (checkCreate != null) {
+            venueDTO.setActive(checkCreate);
+        }
         try {
             VenueDTO data = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venues/create",
@@ -157,6 +160,7 @@ public class VenueWebClientController {
                 default:
                     return "redirect:/staff/venues?msg=" + message;
             }
+
         }
         return "redirect:/staff/venues?msg=Success";
     }

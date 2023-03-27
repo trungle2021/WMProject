@@ -403,6 +403,12 @@ public class WebOrderController {
         }
         if (order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited) && findOrder!=null || order.getOrderStatus().equalsIgnoreCase(orderStatusWarning) && findOrder!=null)
         {
+
+            if(findOrder.getFoodDetailsById()==null)
+            {
+                redirectAttributes.addFlashAttribute("alertError", "Oops Make Sure That Your Food Menu have been chosen! ");
+                return "redirect:/customers/dashboard";
+            }
             //check total amount
             Integer tbNum=order.getTableAmount();
             Integer min=findOrder.getVenues().getMinPeople() /10;
@@ -670,14 +676,18 @@ public class WebOrderController {
     public Double getTotal(OrderDTO order,Integer tbAmount)
     {
         Double foodPrice=0.0;
+        Double servicePrice=0.0;
+        if(order.getFoodDetailsById()!=null){
         for (FoodDetailDTO food:order.getFoodDetailsById()) {
             foodPrice += food.getFoodByFoodId().getPrice();
         }
-        Double servicePrice=0.0;
+        }
+       if(order.getServiceDetailsById()!=null){
         for (ServiceDetailDTO servicedt :order.getServiceDetailsById())
         {
             servicePrice+=servicedt.getServicesByServiceId().getPrice();
         }
+       }
 
         Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
         return total;
