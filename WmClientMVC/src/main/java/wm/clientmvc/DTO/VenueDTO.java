@@ -22,7 +22,7 @@ public class VenueDTO {
     private Integer maxPeople;
     @Min(1)
     private Double price;
-    private boolean active;
+    private boolean isActive;
 //    private Set<OrderDTO> orderDTOS;
     private List<VenueImgDTO> venueImagesById;
 }

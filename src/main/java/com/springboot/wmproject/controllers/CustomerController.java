@@ -39,14 +39,22 @@ public class CustomerController {
 
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<CustomerDTO> update(@RequestBody CustomerDTO customerDTO){
         return new ResponseEntity<CustomerDTO>(service.update(customerDTO), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/updateAvatar")
+    public ResponseEntity<CustomerDTO> updateAvatar(@RequestBody CustomerDTO customerDTO){
+        return new ResponseEntity<CustomerDTO>(service.updateAvatar(customerDTO), HttpStatus.OK);
+    }
+
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("delete/{id}")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<String> delete(@PathVariable int id){
         service.delete(id);
         return ResponseEntity.ok("Deleted Customer Successfully");
