@@ -24,7 +24,7 @@ public class VenueDTO {
     private Double price;
 
 
-    private boolean isActive;
+    private boolean active;
     private List<VenueImgDTO> venueImagesById;
 
 
