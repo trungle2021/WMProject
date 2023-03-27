@@ -55,7 +55,7 @@ public class HomeController {
             }
             else if(venueImgDTOList.size()<4)
             {
-                return null;
+                venuesImages=null;
             }
             else{
                 for (int i = 0; i <8; i++) {

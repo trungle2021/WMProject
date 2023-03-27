@@ -40,7 +40,7 @@ public class AdminOrderController {
 //RestTemplate restTemplate=new RestTemplate();
 
     @RequestMapping("/orders/showall")
-    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage)
+    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError)
     {
     model.addAttribute("warningSt", orderStatusWarning);
     model.addAttribute("cancelingSt", orderStatusCancel);
@@ -76,6 +76,12 @@ public class AdminOrderController {
         }
         else {
             model.addAttribute("alertMessage", null);
+        }
+        if (!alertError.isEmpty()) {
+            model.addAttribute("alertError", alertError);
+        }
+        else {
+            model.addAttribute("alertError", null);
         }
 
 
@@ -344,6 +350,12 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
     }
     if (order.getOrderStatus().equalsIgnoreCase(orderStatusDeposited) && findOrder!=null || order.getOrderStatus().equalsIgnoreCase(orderStatusWarning) && findOrder!=null)
     {
+
+        if(findOrder.getFoodDetailsById()==null)
+        {
+            redirectAttributes.addFlashAttribute("alertError", "Oops Make Sure That The Menu was selected!Contact Customer ");
+            return "redirect:/staff/orders/showall";
+        }
         //check total amount
         Integer tbNum=order.getTableAmount();
         Integer min=findOrder.getVenues().getMinPeople() /10;
@@ -437,16 +449,19 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
 
     public Double getTotal(OrderDTO order,Integer tbAmount)
     {
-            Double foodPrice=0.0;
+        Double foodPrice=0.0;
+        Double servicePrice = 0.0;
+        if(order.getFoodDetailsById()!=null){
+
             for (FoodDetailDTO food:order.getFoodDetailsById()) {
                 foodPrice += food.getFoodByFoodId().getPrice();
             }
-            Double servicePrice=0.0;
-            for (ServiceDetailDTO servicedt:order.getServiceDetailsById())
-            {
-                servicePrice+=servicedt.getServicesByServiceId().getPrice();
+        }
+        if(order.getServiceDetailsById()!=null) {
+            for (ServiceDetailDTO servicedt : order.getServiceDetailsById()) {
+                servicePrice += servicedt.getServicesByServiceId().getPrice();
             }
-
+        }
             Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
             return total;
     }
