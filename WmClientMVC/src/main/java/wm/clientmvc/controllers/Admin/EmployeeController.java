@@ -181,6 +181,14 @@ public class EmployeeController {
 
     @GetMapping("/update/{id}")
     public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails= (CustomUserDetails) authentication.getPrincipal();
+        boolean isAdmin = authentication.getAuthorities().stream().findFirst().toString().contains("ROLE_ADMIN");
+        Long empId= customUserDetails.getUserId();
+        if(empId != id && !isAdmin){
+            return "access-denied";
+        }
+
         ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTypeTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
         BindingResult result = (BindingResult) model.asMap().get("result");
         if(result != null){
@@ -234,11 +242,28 @@ public class EmployeeController {
             return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
         }
         //xu ly avatar
+        String contentType = file.getContentType();
+        ArrayList<String> validateErrors = new ArrayList();
+
+        //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
+
         if(!file.isEmpty()){
+            if (file.getSize() > 2 * 1024 * 1024) {
+                validateErrors.add("The file size must be less than 2MB");
+            }
+            else if (!contentType.startsWith("image/")) {
+                validateErrors.add("The file must be an image");
+            }
+            if(validateErrors.size() > 0){
+                attributes.addFlashAttribute("errorMessages", validateErrors);
+                return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
+            }
             String avatar = utilFunction.AddFileEncrypted(file);
             registerDTO.setAvatar(avatar);
         }
+
+
 
         try {
             RegisterDTO response_ =  APIHelper.makeApiCall(
@@ -252,6 +277,7 @@ public class EmployeeController {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
             if(response_.getEmployeeId() == customUserDetails.getUserId().intValue()){
                 ((CustomUserDetails) authentication.getPrincipal()).setFullName(response_.getName());
+                ((CustomUserDetails) authentication.getPrincipal()).setAvatar(response_.getAvatar());
             }
 
         }catch (HttpClientErrorException ex) {

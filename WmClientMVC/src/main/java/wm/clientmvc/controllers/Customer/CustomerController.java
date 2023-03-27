@@ -27,6 +27,7 @@ import wm.clientmvc.utils.ClientUtilFunction;
 import wm.clientmvc.utils.SD_CLIENT;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,12 @@ public class CustomerController {
     @GetMapping("/update/{id}")
     public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
 
+        Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails customUserDetails= (CustomUserDetails) authentication.getPrincipal();
+        Long customerID= customUserDetails.getUserId();
+        if(customerID != id){
+            return "access-denied";
+        }
         BindingResult result = (BindingResult) model.asMap().get("result");
         if(result != null){
             model.addAttribute("result",result);
@@ -92,12 +99,32 @@ public class CustomerController {
             attributes.addFlashAttribute("registerDTO",registerDTO);
             return "redirect:/customers/update/" + registerDTO.getCustomerId();
         }
+        String contentType = file.getContentType();
+        ArrayList<String> validateErrors = new ArrayList();
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
+
+
+
         if(!file.isEmpty()){
+            if (file.getSize() > 2 * 1024 * 1024) {
+                validateErrors.add("The file size must be less than 2MB");
+            }
+            else if (!contentType.startsWith("image/")) {
+                validateErrors.add("The file must be an image");
+            }
+
+            if(validateErrors.size() > 0){
+                attributes.addFlashAttribute("errorMessages", validateErrors);
+                return "redirect:/customers/update/" + registerDTO.getCustomerId();
+            }
+            
             String avatar = utilFunction.AddFileEncrypted(file);
             registerDTO.setAvatar(avatar);
+
+
         }
+
 
         try {
             RegisterCustomerDTO response_ =  APIHelper.makeApiCall(
@@ -112,27 +139,22 @@ public class CustomerController {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
             if(response_.getCustomerId() == customUserDetails.getUserId().intValue()){
                 ((CustomUserDetails) authentication.getPrincipal()).setFullName(response_.getFirst_name() + " " + response_.getLast_name());
+                ((CustomUserDetails) authentication.getPrincipal()).setAvatar(response_.getAvatar());
             }
-
-
-
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(responseError, Map.class);
             String message = map.get("message").toString();
             final ObjectMapper objectMapper = new ObjectMapper();
-            String[] langs = objectMapper.readValue(message, String[].class);
+           String[] langs = objectMapper.readValue(message, String[].class);
             if (result.hasErrors()) {
                 attributes.addFlashAttribute("result",result);
             }
             attributes.addFlashAttribute("registerDTO",registerDTO);
             attributes.addFlashAttribute("errorMessages", langs);
             return "redirect:/customers/update/" + registerDTO.getCustomerId();
-
         }
-
-
         attributes.addFlashAttribute("message","Update Profile Success");
         return "redirect:/customers/update/" + registerDTO.getCustomerId();
     }

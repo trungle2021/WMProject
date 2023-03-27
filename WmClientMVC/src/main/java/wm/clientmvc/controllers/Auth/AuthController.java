@@ -118,7 +118,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String registerCustomer(@Valid @ModelAttribute RegisterCustomerDTO registerDTO,HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, BindingResult result) throws IOException {
+    public String registerCustomer(@Valid @ModelAttribute RegisterCustomerDTO registerDTO,BindingResult result,HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
 
         if (result.hasErrors()) {
             attributes.addFlashAttribute("result",result);
@@ -133,7 +133,7 @@ public class AuthController {
             loginDTO.setPassword(responseRegister.getPassword());
             return callApiLogin(
                     api_customerLoginUrl,
-                    "/customers/dashboard",
+                    "/customers/home",
                     "/login",
                     loginDTO,
                     request,
