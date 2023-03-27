@@ -108,27 +108,3 @@ public class MVCSecurity {
     }
 }
 
-
-
-//    @Bean
-//    public SessionManagementFilter sessionManagementFilter() {
-//        SessionManagementFilter sessionManagementFilter = new SessionManagementFilter(httpSessionSecurityContextRepository());
-//        sessionManagementFilter.setInvalidSessionStrategy(invalidSessionStrategy());
-//        sessionManagementFilter.setInvalidSessionStrategy((InvalidSessionStrategy) sessionInformationExpiredStrategy());
-//        return sessionManagementFilter;
-//    }
-//
-//    @Bean
-//    public InvalidSessionStrategy invalidSessionStrategy() {
-//        return new CustomInvalidSessionStrategy("/login");
-//    }
-//
-//    @Bean
-//    public SessionInformationExpiredStrategy sessionInformationExpiredStrategy() {
-//        return new CustomSessionInformationExpiredStrategy("/login");
-//    }
-//
-//    @Bean
-//    public HttpSessionSecurityContextRepository httpSessionSecurityContextRepository() {
-//        return new HttpSessionSecurityContextRepository();
-//    }

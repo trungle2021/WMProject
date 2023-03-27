@@ -33,10 +33,11 @@ import static wm.clientmvc.utils.Static_Status.orderStatusOrdered;
 @Controller
 public class HomeController {
 
-    @GetMapping(value = {"/home","/customers/home","/"})
-    public String home(Model model,@CookieValue(name="token",defaultValue = "")String token,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {
+    @GetMapping(value = {"/home", "/customers/home", "/"})
+    public String home(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertError") String alertError, @ModelAttribute("alertMessage") String alertMessage) {
 //get venue image
-            ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenueImg=new ParameterizedTypeReference<List<VenueImgDTO>>() {};
+        ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenueImg = new ParameterizedTypeReference<List<VenueImgDTO>>() {
+        };
         try {
             List<VenueImgDTO> venueImgDTOList = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venuesImgs/all",
@@ -46,105 +47,99 @@ public class HomeController {
                     responseTypeVenueImg
             );
 
-            List<VenueImgDTO> venuesImages= new ArrayList<>();
-            if(venueImgDTOList.size()>4 && venueImgDTOList.size()<8)
-            {
-                for (int i = 0; i <4; i++) {
+            List<VenueImgDTO> venuesImages = new ArrayList<>();
+            if (venueImgDTOList.size() > 4 && venueImgDTOList.size() < 8) {
+                for (int i = 0; i < 4; i++) {
                     venuesImages.add(venueImgDTOList.get(i));
                 }
-            }
-            else if(venueImgDTOList.size()<4)
-            {
+            } else if (venueImgDTOList.size() < 4) {
                 return null;
-            }
-            else{
-                for (int i = 0; i <8; i++) {
+            } else {
+                for (int i = 0; i < 8; i++) {
                     venuesImages.add(venueImgDTOList.get(i));
                 }
 
             }
 
 //get food image
-        ParameterizedTypeReference<List<FoodDTO>> foodReference= new ParameterizedTypeReference<List<FoodDTO>>() {};
-        List<FoodDTO> fList= APIHelper.makeApiCall(
-          SD_CLIENT.DOMAIN_APP_API+"/api/food/all",
-          HttpMethod.GET,
-          null,
-          token,
-          foodReference);
-        List<FoodDTO>foodList= new ArrayList<>();
-        if(fList!=null && fList.size()>8)
-        {
-            for (int i = 0; i <8; i++) {
-                foodList.add(fList.get(i));
+            ParameterizedTypeReference<List<FoodDTO>> foodReference = new ParameterizedTypeReference<List<FoodDTO>>() {
+            };
+            List<FoodDTO> fList = APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API + "/api/food/all",
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    foodReference);
+            List<FoodDTO> foodList = new ArrayList<>();
+            if (fList != null && fList.size() > 8) {
+                for (int i = 0; i < 8; i++) {
+                    foodList.add(fList.get(i));
+                }
+            } else {
+                foodList = fList;
             }
-        }
-        else{
-         foodList=fList;
-        }
 
 
-        model.addAttribute("foodList",foodList);
-        model.addAttribute("venuesImages",venuesImages);
+            model.addAttribute("foodList", foodList);
+            model.addAttribute("venuesImages", venuesImages);
 
 
 //get alert
 
-        if (!alertMessage.isEmpty()) {
-            model.addAttribute("alertMessage", alertMessage);
-        }
-        else {
-            model.addAttribute("alertMessage", null);
-        }
-        if (!alertError.isEmpty()) {
-            model.addAttribute("alertError", alertError);
-        }
-        else {
-            model.addAttribute("alertError", null);
-        }
+            if (!alertMessage.isEmpty()) {
+                model.addAttribute("alertMessage", alertMessage);
+            } else {
+                model.addAttribute("alertMessage", null);
+            }
+            if (!alertError.isEmpty()) {
+                model.addAttribute("alertError", alertError);
+            } else {
+                model.addAttribute("alertError", null);
+            }
 
-        return "home";
+            return "home";
         } catch (Exception e) {
             return "redirect:/error";
         }
     }
+
     @GetMapping(value = {"/error"})
-    public String error(Model model,@ModelAttribute("alertError")String alertError,@ModelAttribute("alertMessage")String alertMessage) {
+    public String error(Model model, @ModelAttribute("alertError") String alertError, @ModelAttribute("alertMessage") String alertMessage) {
 
 
 //get alert
 
         if (!alertMessage.isEmpty()) {
             model.addAttribute("alertMessage", alertMessage);
-        }
-        else {
+        } else {
             model.addAttribute("alertMessage", null);
         }
         if (!alertError.isEmpty()) {
             model.addAttribute("alertError", alertError);
-        }
-        else {
+        } else {
             model.addAttribute("alertError", null);
         }
 
 
         return "404-not-found";
     }
-    @GetMapping(value = {"/customers/dashboard",})
-    public String dashboard(Model model,@CookieValue(name="token",defaultValue = "")String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError) {
-        model.addAttribute("warningSt",orderStatusWarning);
-        model.addAttribute("cancelingSt",orderStatusCancel);
-        model.addAttribute("confirmSt",orderStatusConfirm);
-        model.addAttribute("depositedSt",orderStatusDeposited);
-        model.addAttribute("orderedSt",orderStatusOrdered);
 
-        Authentication authentication=SecurityContextHolder.getContext().getAuthentication();
-        CustomUserDetails custUserDetails= (CustomUserDetails) authentication.getPrincipal();
-        Long customerId= custUserDetails.getUserId();
-        String url="http://localhost:8080/api/orders/bycustomerd/"+customerId;
-        ParameterizedTypeReference<List<OrderDTO>> typeReference=new ParameterizedTypeReference<List<OrderDTO>>() {};
+    @GetMapping(value = {"/customers/dashboard",})
+    public String dashboard(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage, @ModelAttribute("alertError") String alertError) {
+        model.addAttribute("warningSt", orderStatusWarning);
+        model.addAttribute("cancelingSt", orderStatusCancel);
+        model.addAttribute("confirmSt", orderStatusConfirm);
+        model.addAttribute("depositedSt", orderStatusDeposited);
+        model.addAttribute("orderedSt", orderStatusOrdered);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CustomUserDetails custUserDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long customerId = custUserDetails.getUserId();
+        String url = "http://localhost:8080/api/orders/bycustomerd/" + customerId;
+        ParameterizedTypeReference<List<OrderDTO>> typeReference = new ParameterizedTypeReference<List<OrderDTO>>() {
+        };
         try {
-            List<OrderDTO> list= APIHelper.makeApiCall(
+            List<OrderDTO> list = APIHelper.makeApiCall(
                     url,
                     HttpMethod.GET,
                     null,
@@ -152,12 +147,11 @@ public class HomeController {
                     typeReference
 
             );
-            model.addAttribute("list",list);
+            model.addAttribute("list", list);
         } catch (IOException e) {
             model.addAttribute("alertError", "Can't load your order infomation!Please try again ");
             return "/customerTemplate/dashboard";
         }
-
 
 
         //get list order of customer
@@ -166,14 +160,12 @@ public class HomeController {
 //            model.addAttribute("confirmMess",confirmCancel);
         if (!alertMessage.isEmpty()) {
             model.addAttribute("alertMessage", alertMessage);
-        }
-        else {
+        } else {
             model.addAttribute("alertMessage", null);
         }
         if (!alertError.isEmpty()) {
             model.addAttribute("alertError", alertError);
-        }
-        else {
+        } else {
             model.addAttribute("alertError", null);
         }
 
@@ -181,7 +173,7 @@ public class HomeController {
         return "/customerTemplate/dashboard";
     }
 
-    @GetMapping(value = {"/about","/customers/about"})
+    @GetMapping(value = {"/about", "/customers/about"})
     public String about() {
         return "about";
     }

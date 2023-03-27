@@ -22,10 +22,11 @@ public class RegisterDTO {
 
     @NotEmpty
     @Size(min = 2, max = 50)
+    @Pattern(regexp = Regex.address_simple,message = Regex.address_simple_message)
     private String address;
 
     @NotEmpty(message = "Phone cannot be empty")
-    @Pattern(regexp = Regex.phone_vietnamese,message = "Sorry, the phone number you entered does not match the expected format. Please enter a valid phone number where the first digit starts with 84 or 0 and is followed by 3, 5, 7, 8, or 9.")
+    @Pattern(regexp = Regex.phone_vietnamese,message = Regex.phone_vietnamese_message)
     private String phone;
 
     @NotEmpty
@@ -36,7 +37,8 @@ public class RegisterDTO {
     private Double salary;
 
     @NotEmpty
-    @Email
+    @Pattern(regexp = Regex.email,message = Regex.email_message)
+    @Size(max = 30)
     private String email;
 
     private Integer isLeader;
@@ -55,11 +57,9 @@ public class RegisterDTO {
 
     private String password;
 
-//    @NotNull
     @Size(min = 3, max = 10)
     private String role;
 
     private Integer employeeId;
 
-    // getters and setters
 }

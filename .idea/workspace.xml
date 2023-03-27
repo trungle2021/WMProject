@@ -6,9 +6,27 @@
   <component name="ChangeListManager">
     <list default="true" id="e62b1270-7cea-4dab-94a7-db7781e0414c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterCustomerDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterCustomerDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/RegisterDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/EmployeeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/EmployeeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Auth/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Auth/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/securities/config/MVCSecurity.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/securities/config/MVCSecurity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/utils/Regex.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/utils/Regex.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/login.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers/create.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers/update.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/customers/update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/create.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/create.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/update.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/changePasswordForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/changePasswordForm.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/update.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/customerTemplate/update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/forgot_password_form.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/forgot_password_form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/register.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/CustomerController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerAccountServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerAccountServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/CustomerServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/EmployeeAccountServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/EmployeeAccountServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/CustomerService.java" afterDir="false" />
@@ -48,14 +66,42 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager">
-    <configuration name="WmprojectApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <module name="wmproject" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.springboot.wmproject.WmprojectApplication" />
+  <component name="RunDashboard">
+    <option name="configurationTypes">
+      <set>
+        <option value="SpringBootApplicationConfigurationType" />
+      </set>
+    </option>
+  </component>
+  <component name="RunManager" selected="Spring Boot.MVC">
+    <configuration name="WM" type="CompoundRunConfigurationType">
+      <toRun name="MVC" type="SpringBootApplicationConfigurationType" />
+      <toRun name="WmprojectApplication" type="SpringBootApplicationConfigurationType" />
+      <method v="2" />
+    </configuration>
+    <configuration name="MVC" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="ClientMVC" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="wm.clientmvc.WmClientMvcApplication" />
+      <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="WmprojectApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <module name="wmproject" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.springboot.wmproject.WmprojectApplication" />
+      <option name="UPDATE_ACTION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Compound.WM" />
+      <item itemvalue="Spring Boot.WmprojectApplication" />
+      <item itemvalue="Spring Boot.MVC" />
+    </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -72,5 +118,26 @@
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/CustomerController.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="11" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Auth/AuthController.java</url>
+          <line>122</line>
+          <option name="timeStamp" value="13" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/HomeController.java</url>
+          <line>38</line>
+          <option name="timeStamp" value="23" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

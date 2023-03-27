@@ -28,21 +28,34 @@
 				</th:block>
 
 
+				<th:block th:if="${result != null}">
+					<ul>
+						<li th:each="err : ${result.getFieldErrors('username')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('password')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('first_name')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('last_name')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('address')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('gender')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('phone')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('email')}" th:text="${err.defaultMessage}" style="color: red" />
+						
+					</ul>
+				</th:block>
+
 				<form class="form-detail" th:action="@{/register}" method="post" id="myform" th:object="${registerDTO}">
+
+
 					<div class="form-left">
 						<h2>Account Infomation</h2>
 						<div class="form-group">
 							<div class="form-row form-row-3">
 								<input type="text" th:field="*{username}" class="business" placeholder="Username" required>
 							</div>
-							<div th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
 						</div>
 
 						<div class="form-group">
 							<div class="form-row form-row-3">
-								<input type="password" th:field="*{password}" class="business" placeholder="Password" required>
-								<div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-
+								<input type="password" th:field="*{password}" class="business" placeholder="Password" minlength="5" required>
 							</div>
 						</div>
 					</div>
@@ -53,20 +66,15 @@
 						<div class="form-group">
 							<div class="form-row form-row-1">
 								<input type="text" th:field="*{first_name}" class="input-text" placeholder="First Name" required>
-								<div th:if="${#fields.hasErrors('first_name')}" th:errors="*{first_name}"></div>
-
 							</div>
 							<div class="form-row form-row-2">
 								<input type="text" th:field="*{last_name}" class="input-text" placeholder="Last Name" required>
-								<div th:if="${#fields.hasErrors('last_name')}" th:errors="*{last_name}"></div>
-
 							</div>
 						</div>
 
 
 						<div class="form-row">
 							<input type="text" th:field="*{address}" class="street"  placeholder="Address" required>
-							<div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
 
 						</div>
 
@@ -78,19 +86,19 @@
 									<option th:value="Male" th:text="Male"></option>
 									<option th:value="Female" th:text="Female">Female</option>
 								</select>
+
 								<span class="select-btn">
 						  			<i class="zmdi zmdi-chevron-down"></i>
 								</span>
 							</div>
 							<div class="form-row form-row-2">
-								<input type="text"  class="phone" th:field="*{phone}" pattern="(84|0[3|5|7|8|9])+([0-9]{8})\b" placeholder="Phone Number" required>
-								<div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+								<input type="text"  class="phone" th:field="*{phone}" pattern="^(0|(84)|(\+84)?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$" placeholder="Phone Number" required>
 
 							</div>
 						</div>
 						<div class="form-row">
-							<input type="text" th:field="*{email}" class="input-text" required pattern="[a-z0-9._-]+@[a-z0-9.-]+\.[a-z]{2,}$" placeholder="Your Email">
-							<div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+							<input type="text" th:field="*{email}" class="input-text" required pattern="^[a-z0-9._-]+@[a-z0-9-]+\.[a-z]{2,}\.?[a-z]{0,}$" placeholder="Your Email">
+
 
 						</div>
 						<div class="form-checkbox">
