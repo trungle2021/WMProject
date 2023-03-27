@@ -30,10 +30,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String role = authentication.getAuthorities().stream().findFirst().toString();
 
-
-
-
-
         boolean isAnonymous = role.contains("ANONYMOUS");
         boolean isSale = role.contains("SALE");
         boolean isOrganize = role.contains("ORGANIZE");
@@ -54,23 +50,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return false;
             }
         }
-//        else{
-//            String token = APIHelper.getCookie(request,"token");
-//            if(token!=null){
-//                String roleCurrentDB = APIHelper.makeApiCall(SD_CLIENT.api_employee_findRoleByEmpID, HttpMethod.GET,token,null,String.class);
-//                if(roleCurrentDB != role){
-//                    CustomUserDetails principals = (CustomUserDetails) authentication.getPrincipal();
-//
-//                    SecurityContext securityContext = SecurityContextHolder.getContext();
-//                    Set<GrantedAuthority> authorities = new HashSet<>();
-//                    authorities.add(new SimpleGrantedAuthority(roleCurrentDB));
-//
-//                    CustomUserDetails customerUserDetails = new CustomUserDetails(principals.getUsername(), principals.getPassword(), principals.getUserId(), principals.getFullName(), principals.getAvatar(), authorities);
-//                    Authentication newAuthentication = new UsernamePasswordAuthenticationToken(customerUserDetails, principals.getPassword(), authorities);
-//                    securityContext.setAuthentication(newAuthentication);
-//                }
-//            }
-//        }
+
         return true;
     }
 

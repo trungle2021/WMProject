@@ -122,7 +122,6 @@ public class CustomerController {
             String avatar = utilFunction.AddFileEncrypted(file);
             registerDTO.setAvatar(avatar);
 
-
         }
 
 

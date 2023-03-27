@@ -5,6 +5,7 @@ import com.springboot.wmproject.entities.Employees;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public interface EmployeeService {
     String findRoleByEmployeeID(int empID);
@@ -20,6 +21,8 @@ public interface EmployeeService {
     List<EmployeeDTO> findAllByTeamId(Integer teamId);
 
     void softDelete(int employeeId);
+     List<EmployeeDTO> getAllEmployeeByTeamId(Integer empId);
+
 
 
 }

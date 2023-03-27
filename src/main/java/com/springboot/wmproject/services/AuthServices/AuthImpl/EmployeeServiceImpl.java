@@ -121,6 +121,12 @@ public class EmployeeServiceImpl implements EmployeeService {
         employeeRepository.save(employees);
     }
 
+    @Override
+    public List<EmployeeDTO> getAllEmployeeByTeamId(Integer empId) {
+        List<EmployeeDTO> employeeDTOList = employeeRepository.getAllEmployeeByTeamId(empId).stream().map(emp->mapToDto(emp)).collect(Collectors.toList());
+        return employeeDTOList;
+    }
+
     public EmployeeDTO mapToDto(Employees employees) {
         EmployeeDTO employeeDTO = modelMapper.map(employees, EmployeeDTO.class);
         employeeDTO.set_deleted(employees.is_deleted());

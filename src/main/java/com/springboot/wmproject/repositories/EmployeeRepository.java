@@ -1,5 +1,6 @@
 package com.springboot.wmproject.repositories;
 
+import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.entities.Employees;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +30,8 @@ public interface EmployeeRepository extends JpaRepository<Employees,Integer> {
     @Query("select e from Employees e join EmployeeAccounts ea on e.id = ea.employeeId where e.is_deleted = false and ea.role <> 'ROLE_ADMIN' ")
 
     List<Employees> findAllExceptAdmin();
+
+    @Query("Select e from OrganizeTeams t join Employees e on t.id = e.team_id where e.team_id =:empId and e.is_deleted = false")
+    List<Employees> getAllEmployeeByTeamId(Integer empId);
 
 }

@@ -105,7 +105,8 @@
                                                                 Update
                                                             </button>
                                                         </th:block>
-                                                        <button  style="margin-right: 1rem"  class="btn btn-outline-primary btnViewAll">Details</button>
+                                                        <a th:href="@{/staff/teams/getAllEmployeeByTeamId/{id}(id=${i.getTeam_id()})}" th:text="Details"></a>
+
                                                         <th:block th:if="${i.total_members == 0}">
                                                             <button  style="margin-right: 1rem" class="btn btn-outline-primary btnDeleteTeam">Delete</button>
                                                         </th:block>

@@ -1,7 +1,9 @@
 package com.springboot.wmproject.services.impl;
 
+import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.OrganizeTeamDTO;
 import com.springboot.wmproject.DTO.TeamSummaryDTO;
+import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.entities.OrganizeTeams;
 import com.springboot.wmproject.entities.TeamSummary;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
@@ -42,6 +44,8 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     public List<OrganizeTeamDTO> getAllOrganizeTeam() {
         return organizeTeamRepository.findAll().stream().filter(team -> team.isIs_deleted() == false).map(organizeTeams -> mapToDTO(organizeTeams)).collect(Collectors.toList());
     }
+
+
 
     @Override
     public List<OrganizeTeamDTO> searchOrganizeTeamByName(String name)throws ResourceNotFoundException {

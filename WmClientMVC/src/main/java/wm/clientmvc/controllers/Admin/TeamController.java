@@ -83,6 +83,21 @@ public class TeamController {
         return "adminTemplate/pages/teams/index";
     }
 
+    @GetMapping(value = {"/getAllEmployeeByTeamId/{id}"})
+    public String getAllEmployeeByTeamId(Model model, @CookieValue(name = "token", defaultValue = "") String token,@PathVariable("id") int id) throws IOException {
+
+        ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTypeReference<List<EmployeeDTO>>() {};
+        List<EmployeeDTO> employeeList = APIHelper.makeApiCall(
+                api_employees_getAllEmployeeByTeamId + id,
+                HttpMethod.GET,
+                null,
+                token,
+                responseType
+        );
+        model.addAttribute("employeeList",employeeList);
+
+        return "adminTemplate/pages/teams/details";
+    }
 
 
     @PostMapping("/create")
