@@ -75,7 +75,6 @@
                                                 <input class="employee-id" type="hidden" th:attr="data-empid=${c.id}" th:value="${c.id}">
                                             <td th:text="${c.id}"></td>
                                             <td th:text="${c.name}"></td>
-                                            <td th:text="${c.address}"></td>
                                             <td th:text="${c.phone}"></td>
 
                                             <td th:text="${c.organizeTeamsByTeamId.teamName}"></td>.
@@ -99,9 +98,12 @@
 
                                                 </td>
                                             </th:block>
-                                            <td th:text="${c.email}"></td>
+
                                             <td th:text="${c.joinDate}"></td>
                                             <td th:text="${c.salary}"></td>
+                                            <td th:text="${c.address}"></td>
+                                            <td th:text="${c.email}"></td>
+
 
 
                                         </tr>
@@ -139,7 +141,9 @@
 
             $('table.display').DataTable();
             $('.btnDeleteEmp').on('click',function (event) {
+
                 let emp_id = $(this).closest('tr').find('.employee-id').data('empid');
+                console.log(emp_id);
                 var token = $("#token").val();
 
                 Swal.fire({

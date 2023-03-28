@@ -298,6 +298,36 @@ public class EmployeeController {
         return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
     }
 
+    @PostMapping(value = {"/updateTeamLeader/{empId}/{status}"},produces = "application/json")
+    @ResponseBody
+    public Map<String, Object> updateTeamLeader(@PathVariable("empId") int empId,@PathVariable("status") int status,@CookieValue(name = "token", defaultValue = "") String token) throws IOException {
+        Map<String, Object> response = new HashMap<>();
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        employeeDTO.setId(empId);
+        employeeDTO.setIsLeader(status);
+        try {
+            EmployeeDTO response_ =  APIHelper.makeApiCall(
+                    api_employee_object_update,
+                    HttpMethod.PUT,
+                    employeeDTO,
+                    token,
+                    EmployeeDTO.class
+            );
+            response.put("result", "success");
+            response.put("statusCode", 200);
+            response.put("message", response_);
+        }catch (HttpClientErrorException ex) {
+            String responseError = ex.getResponseBodyAsString();
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(responseError, Map.class);
+            String message = map.get("message").toString();
+            response.put("result", "success");
+            response.put("statusCode", ex.getStatusCode());
+            response.put("message",message);
+        }
+        return response;
+    }
+
     @PostMapping(value = "/delete/{id}",produces = "application/json")
     @ResponseBody
     public Map<String, Object> delete(@PathVariable int id, @CookieValue(name = "token", defaultValue = "") String token) throws IOException {

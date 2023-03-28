@@ -63,6 +63,8 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.update(employeeDTO));
     }
 
+
+
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping("delete/{id}")

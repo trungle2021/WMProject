@@ -21,6 +21,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static wm.clientmvc.utils.SD_CLIENT.*;
 
@@ -94,8 +96,14 @@ public class TeamController {
                 token,
                 responseType
         );
+        int amountMember =employeeList.size();
+        String teamName = employeeList.stream().findFirst().get().getOrganizeTeamsByTeamId().getTeamName();
+        int team_id = employeeList.stream().findFirst().get().getTeam_id();
         model.addAttribute("employeeList",employeeList);
-
+        model.addAttribute("amountMember",amountMember);
+        model.addAttribute("teamName",teamName);
+        model.addAttribute("team_id",team_id);
+        model.addAttribute("token",token);
         return "adminTemplate/pages/teams/details";
     }
 
