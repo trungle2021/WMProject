@@ -135,6 +135,8 @@ public class HomeController {
         model.addAttribute("confirmSt", orderStatusConfirm);
         model.addAttribute("depositedSt", orderStatusDeposited);
         model.addAttribute("orderedSt", orderStatusOrdered);
+        model.addAttribute("completedSt",orderStatusCompleted);
+        model.addAttribute("refundSt",orderStatusRefund);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails custUserDetails = (CustomUserDetails) authentication.getPrincipal();

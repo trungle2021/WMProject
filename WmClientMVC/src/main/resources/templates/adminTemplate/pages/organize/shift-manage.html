@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Order Management</title>
+  <title>Shift Management</title>
 
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -18,18 +18,17 @@
 
 <section layout:fragment="content"  class="content-wrapper">
 
-  <br><div class="content-header"> <h5>My Booking</h5>
+  <br><div class="content-header"> <h5>Shift Management</h5>
 
 
 </div>
-
   <div class="content ">
     <!-- Main content -->
     <div class="container">
       <div class="row">
         <div class="col-12">
           <div class="form-container">
-            <form class="form" th:action="@{/staff/teams/showallorder/organize/search}" th:method="post">
+            <form class="form" th:action="@{/staff/teams/shift-manage/search}" th:method="post">
               <div class="combobox">
                 <label for="year">Year:</label>
                 <select id="year" name="year">
@@ -44,6 +43,8 @@
               </div>
               <div class="buttons">
                 <input type="submit" class="submit" value="Search">
+                <a class="btn btn-primary btn-all" th:href="@{/staff/teams/shiftChange}">Change Shift</a>
+                <a class="btn btn-success btn-all" th:href="@{/staff/teams/shift-manage}">This Month</a>
               </div>
             </form>
           </div>
@@ -51,44 +52,23 @@
           <table
                   class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
                   style="position: relative;width: 100%;" aria-describedby="example-info">
-
             <thead>
             <tr>
-              <th>Order Id</th>
-              <th>Venue</th>
-              <th>Table Amount</th>
-              <th>Organize Team</th>
-              <th>Order Status</th>
-              <th>Event Date</th>
-              <th>Number of collaborators:</th>
-              <th>Action:</th>
+              <th>Team Name</th>
+              <th>Team Leader</th>
+              <th>Number of Member</th>
+              <th>Number of Shift in Month</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="c:${list}">
-              <td th:text="${c.getId()}"></td>
-              <td th:text="${c.getVenues().getVenueName()}"></td>
-              <td th:text="${c.getTableAmount()}"></td>
-               <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'"></td>
-              <td th:text="${c.getOrderStatus()}"></td>
-              <td th:text="${c.getTimeHappen()}"></td>
-              <td th:text="${c.getPartTimeEmpAmount()!=null}?${c.getPartTimeEmpAmount()}:'N/A'"></td>
-              <td>
-                <a th:href="@{/staff/materials/detail/{id}(id=${c.getId()})}" class="btn btn-success">Material Detail</a>
-               </br>
-                <th:block>
-                  <form th:action="@{/staff/orders/order-completed}" method="post">
-                    <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
-                    <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
-                    <button type="submit" class="btn btn-success">Complete Order</button>
-                  </form>
-                </th:block>
-
-              </td>
+              <td th:text="${c.getTeamName()}"></td>
+              <td th:text="${c.getTeamLeader()}"></td>
+              <td th:text="${c.getTeamsize()}"></td>
+              <td th:text="${c.getNumberOfShift()}"></td>
             </tr>
             </tbody>
           </table>
-
         </div>
       </div>
     </div>
@@ -122,9 +102,10 @@
       $('table.display').DataTable();
     });
   </script>
+  </script>
   <script th:inline="javascript">
 
-    var error = [[${alertError}]];
+
     var message = [[${alertMessage}]];
     console.log(message);
 

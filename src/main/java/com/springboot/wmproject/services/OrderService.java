@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface OrderService {
     List<OrderDTO> getAllOrder();
+    List<OrderDTO>getAllOrderHaveShift();
+
     List<OrderDTO> getAllByOrderDate(String orderDate);
     List<OrderDTO> getAllByTimeHappen(String time);
     List<OrderDTO> getAllByVenueId(int id);

@@ -43,7 +43,6 @@
         <form class="p-2" th:action="@{/staff/materials/detail/searchDate}" method="post">
             <input type="date" name="date">
             <input type="submit" value="Search">
-
         </form>
         </div>
         <div class="row">
@@ -71,18 +70,18 @@
                         <tr th:each="f:${o.getFoodDetailsById()}">
                             <td th:text="${f.getFoodByFoodId().getFoodName()}"></td>
                             <td th:text="${f.getFoodByFoodId().getFoodType()}"></td>
-                            <td th:text="${f.getFoodByFoodId().getDescription()}"></td>
+                            <td class="description-container" th:text="${f.getFoodByFoodId().getDescription()}"></td>
                         </tr>
                     </table>
                     <hr>
                     <table th:boder="1">
                         <tr>
                             <th>Service Name</th>
-                            <th>Service Description</th>
-                        </tr>
-                        <tr th:each="s:${o.getServiceDetailsById()}">
+                            <th >Service Description</th>
+                        </tr >
+                        <tr  th:each="s:${o.getServiceDetailsById()}">
                             <td th:text="${s.getServicesByServiceId().getServiceName()}"></td>
-                            <td th:text="${s.getServicesByServiceId().getDescription()}"></td>
+                            <td class="description-container" th:text="${s.getServicesByServiceId().getDescription()}"></td>
                         </tr>
                     </table>
 
