@@ -41,8 +41,6 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="card">
-<!--                               -->
-                                <!-- /.card-header -->
                                 <div class="card-body">
                                     <input type="hidden" id="token" th:value="${token}">
                                     <table
@@ -53,18 +51,20 @@
                                         </a>
                                         <thead>
                                         <tr>
-                                            <th style="display: none">ID</th>
+                                            <th>ID</th>
+                                            <th>Avatar</th>
                                             <th>Name</th>
-                                            <th>Address</th>
                                             <th>Phone</th>
                                             <th>Team</th>
                                             <th>Type</th>
                                             <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
-                                                <th>Detail</th>
+                                                <th>Action</th>
                                             </th:block>
-                                            <th>Email</th>
                                             <th>Join Date</th>
-                                            <th>Salary</th>
+                                            <th>Salary ($)</th>
+                                            <th>Address</th>
+                                            <th>Email</th>
+
 
 
 
@@ -74,10 +74,14 @@
                                         <tr th:each="c:${employeeList}">
                                                 <input class="employee-id" type="hidden" th:attr="data-empid=${c.id}" th:value="${c.id}">
                                             <td th:text="${c.id}"></td>
+                                            <td>
+                                                <img class="d-block w-50 rounded"
+                                                     th:src="'data:image/jpeg;base64,'+${c.getAvatar()}">
+                                            </td>
                                             <td th:text="${c.name}"></td>
                                             <td th:text="${c.phone}"></td>
 
-                                            <td th:text="${c.organizeTeamsByTeamId.teamName}"></td>.
+                                            <td th:text="${c.organizeTeamsByTeamId.teamName}"></td>
 
                                             <th:block th:if="${c.organizeTeamsByTeamId.teamName.equals('TEAM ADMINISTRATOR')}">
                                                 <td th:text="SALER"></td>
@@ -138,6 +142,8 @@
         var domain = "http://localhost:9999"
         var api_delete_emp = domain + "/staff/employees/delete/";
         $(document).ready(function () {
+
+
 
             $('table.display').DataTable();
             $('.btnDeleteEmp').on('click',function (event) {

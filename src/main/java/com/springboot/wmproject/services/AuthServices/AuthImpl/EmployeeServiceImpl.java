@@ -65,6 +65,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (employeeId == 0) {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "Employee ID is required to update");
         }
+        int isLeader = dto.getIsLeader() == null ? 0 : dto.getIsLeader();
+
+
         //check if employee exist
         Employees checkEmployees = employeeRepository.getEmployeeById(employeeId);
         checkEmployees.setName(dto.getName() != null ? dto.getName() : checkEmployees.getName());
@@ -73,8 +76,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         checkEmployees.setJoinDate(dto.getJoinDate() != null ? dto.getJoinDate() : checkEmployees.getJoinDate());
         checkEmployees.setSalary(dto.getSalary() != null ? dto.getSalary() : checkEmployees.getSalary());
         checkEmployees.setGender(dto.getGender() != null ? dto.getGender() : checkEmployees.getGender());
-        checkEmployees.setIsLeader(dto.getIsLeader() != null ? dto.getIsLeader() : checkEmployees.getIsLeader());
+
         checkEmployees.setAvatar(dto.getAvatar() != null ? dto.getAvatar() : checkEmployees.getAvatar());
+
+        if(isLeader != checkEmployees.getIsLeader())
+        {
+            if (isLeader == 1 ) {
+                List<EmployeeDTO> allEmpInTeam = findAllByTeamId(checkEmployees.getTeam_id());
+                if(allEmpInTeam != null){
+                    Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
+                    if (!hasLeaderInTeam) {
+                        checkEmployees.setIsLeader(1);
+                    } else {
+                        throw new WmAPIException(HttpStatus.BAD_REQUEST, checkEmployees.getOrganizeTeamsByTeamId().getTeamName() +  " already has a leader");
+                    }
+                }else{
+                    checkEmployees.setIsLeader(1);
+                }
+            }else{
+                checkEmployees.setIsLeader(0);
+            }
+        }else{
+            checkEmployees.setIsLeader(isLeader);
+        }
+
+
         checkEmployees.setTeam_id(dto.getTeam_id() != null ? dto.getTeam_id() : checkEmployees.getTeam_id());
         checkEmployees.setEmail(dto.getEmail() != null ? dto.getEmail() : checkEmployees.getEmail());
         employeeRepository.save(checkEmployees);

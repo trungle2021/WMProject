@@ -114,7 +114,7 @@
                                 <!--                               -->
                                 <!-- /.card-header -->
                                 <div class="card-body">
-                                    <input type="text" id="token" th:value="${token}">
+                                    <input type="hidden" id="token" th:value="${token}">
                                     <input type="hidden" id="team_id" th:value="${team_id}">
                                     <table
                                             class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
@@ -137,7 +137,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr th:each="c:${employeeList}" >
+                                        <tr th:each="c:${employeeList}" class="employee-id" th:attr="data-empid=${c.id}" th:value="${c.id}">
                                             <td th:text="${c.id}"></td>
                                             <td th:text="${c.name}"></td>
                                             <td th:text="${c.phone}"></td>
@@ -154,10 +154,11 @@
                                                 </th:block>
                                             </th:block>
 
-                                            <td class="employee-id" th:attr="data-empid=${c.id}" th:value="${c.id}">
-                                                <input type="hidden" class="form-control" id="isLeader" th:value="*{c.getIsLeader()}">
+                                            <td>
+                                                <input type="hidden" class="form-control isLeader" th:value="*{c.getIsLeader()}">
+
                                                 <label class="switch">
-                                                    <input type="checkbox" id="switch">
+                                                    <input type="checkbox">
                                                     <span class="slider round"></span>
                                                 </label>
                                             </td>
@@ -171,13 +172,9 @@
                                                     <button class="btn btn-outline-primary btnDeleteEmp">Delete</button>
                                                 </td>
                                             </th:block>
-
                                             <td th:text="${c.address}"></td>
                                             <td th:text="${c.email}"></td>
                                             <td th:text="${c.joinDate}"></td>
-
-
-
                                         </tr>
                                         </tbody>
                                     </table>
@@ -210,35 +207,44 @@
         var api_update_emp = domain + "/staff/employees/updateTeamLeader/";
         var token = $("#token").val();
         var team_id = $("#team_id").val();
+        var alreadyHasLeader;
+        var userAlreadyLeader;
         $(document).ready(function () {
+
             toggleSwitch()
 
-                $('.switch input').on('click', function () {
-                    let emp_id = $(this).closest('td').find('.employee-id').data('empid');
-                    // let emp_id = $(this).closest('tr').find('.employee-id').val();
-                    console.log(emp_id);
-                    if ($(this).is(':checked')) {
-                        // Switch is ON
-                        updateIsLeader(api_update_emp,token,emp_id,1)
+            function toggleSwitch() {
+                $('table tr').each(function() {
+                    let isLeader = $(this).find('td:eq(4) input').val();
+                    if (isLeader == 0) {
+                        $(this).find('td:eq(4) input').prop('checked', false);
                     } else {
-                        // Switch is OFF
-                        updateIsLeader(api_update_emp,token,emp_id,0)
-
-                        alert('Switch is OFF');
+                        $(this).find('td:eq(4) input').prop('checked', true);
                     }
                 });
-            function toggleSwitch() {
-                if ($('#isLeader').is(':checked')) {
-                    // isLeader is true, enable the switch button
-                    $('#switch').prop('checked', false);
-                } else {
-                    // isLeader is false, disable the switch button
-                    $('#switch').prop('checked', true);
-                }
             }
-            function updateIsLeader(url,token,emp_id,isLeader){
 
-                $.ajax({
+
+
+
+
+
+            $('.switch input[type="checkbox"]').on('click', function (event) {
+                event.preventDefault();
+                var emp_id = $(this).closest('tr.employee-id').data('empid');
+                var checkbox = $(this);
+                if ($(this).is(':checked')) {
+                    // Switch is OFF TO ON
+                   updateIsLeader(api_update_emp,token,emp_id,1,$(this))
+
+                 } else {
+                    // Switch is ON TO OFF
+                   updateIsLeader(api_update_emp,token,emp_id,0,$(this))
+                }
+            });
+            function updateIsLeader(url,token,emp_id,isLeader,obj){
+
+               $.ajax({
                     type: "POST",
                     url:  api_update_emp + emp_id + "/" + isLeader,
                     dataType: "json",
@@ -248,24 +254,36 @@
                     },
                     data: {
                         id :emp_id,
-                        is_leader: 1
+                        is_leader: isLeader
                     },
                     success: function (response) {
                         console.log(response);
+                        let alreadyHasLeader = response.message['isLeader'];
                         if (response.statusCode == 200) {
-                            Swal.fire(
-                                'Success!',
-                                'Change Team Leader Successfully',
-                                'success'
-                            )
-                            $('#switch').prop('checked', false);
-                            window.location.href = '/staff/teams/getAllEmployeeByTeamId/' + team_id;
+
+                            if(alreadyHasLeader == 0){
+                                obj.prop('checked',false)
+                            }else{
+
+                                obj.prop('checked',true)
+                            }
+                        }else{
+                            if(alreadyHasLeader == 0){
+                                obj.prop('checked',true)
+                            }else{
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: "Please ensure that the current leader is removed before adding a new one.",
+                                })
+                                obj.prop('checked',false)
+
+                            }
+
                         }
-                        // Do something with the response data
                     },
                     error: function (xhr, textStatus, errorThrown) {
                         console.log(xhr.responseText);
-                        // Handle error
                     }
                 });
             }
@@ -273,7 +291,6 @@
             $('table.display').DataTable();
             $('.btnDeleteEmp').on('click', function (event) {
                 let emp_id = $(this).closest('tr').find('.employee-id').data('empid');
-                console.log(emp_id);
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",

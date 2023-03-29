@@ -129,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
         if (isLeader == 1) {
             List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(isLeader);
             if(allEmpInTeam != null){
-                Boolean hasLeaderInTeam = allEmpInTeam.stream().map(emp -> isLeader == 1).findFirst().isPresent();
+                Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
                 if (!hasLeaderInTeam) {
                     employeeDTO.setIsLeader(1);
                 } else {
@@ -334,7 +334,7 @@ public class AuthServiceImpl implements AuthService {
            if (isLeader == 1 ) {
                List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(team_id);
                if(allEmpInTeam != null){
-                   Boolean hasLeaderInTeam = allEmpInTeam.stream().map(emp -> isLeader == 1).findFirst().isPresent();
+                   Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
                    if (!hasLeaderInTeam) {
                        employeeDTO.setIsLeader(1);
                    } else {

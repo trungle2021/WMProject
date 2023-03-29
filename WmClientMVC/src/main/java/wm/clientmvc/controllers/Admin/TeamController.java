@@ -115,7 +115,7 @@ public class TeamController {
                 attributes.addFlashAttribute("result",result);
                  return "redirect:/staff/teams/getAll";
         }
-        if(!teamDTO.getTeamName().matches(regexTeamName)){
+        if(!teamDTO.getTeamName().trim().matches(regexTeamName)){
             model.addAttribute("errorMessage","Input must start with 'TEAM ' and have at least one letter after it and do not contain 'admin or administrator' word.");
             return "redirect:/staff/teams/getAll";
         }

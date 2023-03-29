@@ -7,6 +7,7 @@ import com.springboot.wmproject.entities.Employees;
 import com.springboot.wmproject.entities.OrganizeTeams;
 import com.springboot.wmproject.entities.TeamSummary;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
+import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.EmployeeRepository;
 import com.springboot.wmproject.repositories.OrderRepository;
 import com.springboot.wmproject.repositories.OrganizeTeamRepository;
@@ -14,6 +15,7 @@ import com.springboot.wmproject.repositories.TeamSummaryRepository;
 import com.springboot.wmproject.services.OrganizeTeamService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -67,7 +69,7 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
 
     @Override
     public OrganizeTeamDTO createOrganizeTeam(OrganizeTeamDTO newOrganizeTeam) throws ResourceNotFoundException{
-        String teamName = newOrganizeTeam.getTeamName();
+        String teamName = newOrganizeTeam.getTeamName().trim();
 
 
         if(teamName!=null){
@@ -77,8 +79,8 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
             }
                 newOrganizeTeam.setTeamName(validTeamName);
                 OrganizeTeams teams= organizeTeamRepository.save(mapToEntity(newOrganizeTeam));
-                String newName = teams.getTeamName() + teams.getId();
-                teams.setTeamName(newName);
+                String newName = teams.getTeamName() + " " + teams.getId();
+                teams.setTeamName(newName.toUpperCase());
                 OrganizeTeams teamUpdateName= organizeTeamRepository.save(teams);
                 return mapToDTO(teamUpdateName);
         }
@@ -92,12 +94,13 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
 
         OrganizeTeams checkOrganizeTeam=organizeTeamRepository.findById(organizeTeamId).orElseThrow(()->new ResourceNotFoundException("Organize Team","Id",String.valueOf(organizeTeamId)));
         if(checkOrganizeTeam!=null){
-            String newName = editOrganizeTeam.getTeamName();
+            String newName = editOrganizeTeam.getTeamName().trim();
             String validTeamName = newName;
             for (String regex: teamNameRegexDenied) {
                 validTeamName = validTeamName.replaceAll(regex,"");
             }
-            checkOrganizeTeam.setTeamName(validTeamName  + checkOrganizeTeam.getId());
+            String finalName = (validTeamName  +" "+ checkOrganizeTeam.getId()).toUpperCase();
+            checkOrganizeTeam.setTeamName(finalName);
             OrganizeTeamDTO organizeTeamDTO = mapToDTO(organizeTeamRepository.save(checkOrganizeTeam));
             return organizeTeamDTO;
         }
@@ -109,14 +112,22 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
     @Override
     public void softDelete(int id)throws ResourceNotFoundException {
 
-        OrganizeTeams teams=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","id",String.valueOf(id)));
-        teams.setIs_deleted(true);
-        organizeTeamRepository.save(teams);
+        OrganizeTeams team=organizeTeamRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Organize Team","id",String.valueOf(id)));
+        boolean teamNotAbleToDelete = team.getOrdersById()
+                .stream()
+                .filter(order -> order.getOrderStatus().equals("confirm"))
+                .findAny().isPresent();
+        if(teamNotAbleToDelete){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,"Team deletion is not allowed with unconfirmed orders present!");
+        }
+        team.setIs_deleted(true);
+        organizeTeamRepository.save(team);
     }
 
     @Override
     public List<TeamSummaryDTO> getSummaryTeamOrganization() {
-        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization().stream()
+        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization()
+                .stream()
                 .map(object -> {
                     TeamSummary entity = mapToTeamSummaryEntity(object);
                     if (entity.getTotal_members() == null) {
@@ -125,6 +136,18 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
                     return mapToTeamSummaryDTO(entity);
                 })
                 .collect(Collectors.toList());
+
+        teamSummaries
+                .stream()
+                .map(object -> {
+                    if (object.getAbleToDelete() == null) {
+                        object.setAbleToDelete(false);
+                    }else{
+                        object.setAbleToDelete(true);
+                    }
+                    return object;
+                }).collect(Collectors.toList());
+
         return teamSummaries;
     }
     public OrganizeTeams mapToEntity(OrganizeTeamDTO organizeTeamDTO) {

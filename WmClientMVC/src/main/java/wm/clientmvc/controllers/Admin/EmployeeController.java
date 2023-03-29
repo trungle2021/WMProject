@@ -322,8 +322,9 @@ public class EmployeeController {
             Map<String, Object> map = mapper.readValue(responseError, Map.class);
             String message = map.get("message").toString();
             response.put("result", "success");
-            response.put("statusCode", ex.getStatusCode());
+            response.put("statusCode", 400);
             response.put("message",message);
+            response.put("isLeader",1);
         }
         return response;
     }
