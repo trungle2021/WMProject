@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Management</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/khangform.css">
+    <link rel="stylesheet" href="/css/khangadminorder.css">
+</head>
+<body>
+
+
+
+<section layout:fragment="content"  class="content-wrapper">
+
+    <br><div class="content-header"> <h5>My Booking</h5>
+
+
+</div>
+
+    <div class="content ">
+        <!-- Main content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <table
+                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                            style="position: relative;width: 100%;" aria-describedby="example-info">
+
+                        <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Venue</th>
+                            <th>Organize Team</th>
+                            <th>Event Date</th>
+                            <th>Number of collaborators:</th>
+                            <th>Action:</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${orders}">
+                            <td th:text="${c.getId()}"></td>
+                            <td th:text="${c.getVenues().getVenueName()}"></td>
+                            <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'"></td>
+                            <td th:text="${c.getTimeHappen()}"></td>
+                            <td th:text="${c.getPartTimeEmpAmount()!=null}?${c.getPartTimeEmpAmount()}:'N/A'"></td>
+                            <td>
+                                </br>
+                                <th:block>
+                                    <div class="container">
+                                        <button type="button" class="btn btn-primary btn-all" data-toggle="collapse" th:data-target="'#btn-change'+${c.getId()}">Change Team</button>
+                                        <br>
+                                        <br>
+                                        <div th:id="'btn-change'+${c.getId()}" class="collapse">
+                                            <form th:action="@{/staff/teams/shift-change-team}" method="post">
+                                                <div class="combobox">
+                                                    <label for="OrganizeTeam">OrganizeTeam:</label>
+                                                <select id="OrganizeTeam" name="teamId">
+                                                    <option th:each="t:${teams}" th:value="${t.getId()}" th:text="${t.getTeamName()}"></option>
+                                                </select>
+                                                </div>
+                                                <input hidden="hidden" name="orderId" th:value="${c.getId()}">
+                                                <br>
+                                                <button type="submit" class="btn btn-success">Change Shift</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </th:block>
+
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+        $(document).ready(function () {
+            $('table.display').DataTable();
+        });
+    </script>
+    <script th:inline="javascript">
+
+        var error = [[${alertError}]];
+        var message = [[${alertMessage}]];
+        console.log(message);
+
+        if(message!=null && message.length != 0)
+        {
+            swal({
+                title: "Message!",
+                text: message,
+                icon: "success",
+            });
+
+        }
+        else if(error!=null && error.length != 0)
+        {
+            swal({
+                title: "Error!",
+                text: error,
+                icon: "error",
+            });
+        }
+    </script>
+</section>
+</body>
+</html>

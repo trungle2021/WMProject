@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.OrderDTO;
+import com.springboot.wmproject.DTO.OrganizeTeamDTO;
 import com.springboot.wmproject.entities.*;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
@@ -16,11 +17,17 @@ import com.springboot.wmproject.utils.SD;
 import jakarta.mail.MessagingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,22 +42,26 @@ public class OrderServiceImpl implements OrderService {
     private ServiceDetailRepository sRepository;
     private VenueRepository venueRepository;
     private CustomerRepository customerRepository;
+    private OrganizeTeamRepository teamRepository;
     private EmailSender mailSender;
 
     private ModelMapper modelMapper;
 
     private EmployeeRepository employeeRepository;
+
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, FoodDetailRepository fRepository, ServiceDetailRepository sRepository, VenueRepository venueRepository, CustomerRepository customerRepository, EmailSender mailSender, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, FoodDetailRepository fRepository, ServiceDetailRepository sRepository, VenueRepository venueRepository, CustomerRepository customerRepository, OrganizeTeamRepository teamRepository, EmailSender mailSender, ModelMapper modelMapper, EmployeeRepository employeeRepository) {
         this.orderRepository = orderRepository;
         this.fRepository = fRepository;
         this.sRepository = sRepository;
         this.venueRepository = venueRepository;
         this.customerRepository = customerRepository;
+        this.teamRepository = teamRepository;
         this.mailSender = mailSender;
         this.modelMapper = modelMapper;
         this.employeeRepository = employeeRepository;
     }
+
 
 
 
@@ -298,7 +309,7 @@ public class OrderServiceImpl implements OrderService {
                 return mapToDTO(orders);
             }
         }
-        return null;
+        throw new WmAPIException(HttpStatus.BAD_REQUEST,"OrderId required!");
     }
 
     @Override
@@ -323,24 +334,57 @@ public class OrderServiceImpl implements OrderService {
                 return mapToDTO(orders);
             }
         }
-        return null;
+        throw new WmAPIException(HttpStatus.BAD_REQUEST,"OrderId required!");
     }
 
     @Override
     public OrderDTO updateOrderTable(Integer orderDTOId, Integer table) {
         if(orderDTOId!=0){
-            Orders orders=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
-            if(orders!=null){
-
-                orders.setTableAmount(table);
-
-                orderRepository.save(orders);
-                return mapToDTO(orders);
+            Orders order=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
+            if(order!=null){
+                order.setTableAmount(table);
+                orderRepository.save(order);
+                return mapToDTO(order);
             }
         }
-        return null;
+        throw new WmAPIException(HttpStatus.BAD_REQUEST,"OrderId required!");
     }
-//nho transactional for delete query
+
+    @Override
+    public OrderDTO updateOrderTeam(Integer orderDTOId, Integer teamId) {
+       if(orderDTOId!=0)
+       {
+           OrganizeTeams myTeam= teamRepository.findById(teamId).orElseThrow(()->new ResourceNotFoundException("Team","id",String.valueOf(teamId)));
+           Orders order=orderRepository.findById(orderDTOId).orElseThrow(()->new ResourceNotFoundException("Order","id",String.valueOf(orderDTOId)));
+          if(myTeam==null)
+          {
+           throw new WmAPIException(HttpStatus.BAD_REQUEST,"Team not found!");
+          }
+
+          //check team admin
+          if(myTeam.getTeamName().equalsIgnoreCase(TEAM_ADMINISTRATOR))
+          {
+              throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cant choose ADMINISTRATOR team");
+          }
+           if(order!=null && order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm) && order.getOrganizeTeam()!=teamId) {
+               //change partime emp
+               DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+               LocalDateTime event=LocalDateTime.parse(order.getTimeHappen(),formatter);
+              LocalDateTime now= LocalDateTime.now();
+              if(now.isAfter(event)){
+                  throw new WmAPIException(HttpStatus.BAD_REQUEST,"You can't change the shift after event organized!");
+              }
+               order.setPartTimeEmpAmount(getPartimeEmp(teamId, order.getTableAmount()));
+               order.setOrganizeTeam(teamId);
+               orderRepository.save(order);
+               return mapToDTO(order);
+           }
+           throw new WmAPIException(HttpStatus.BAD_REQUEST,"Make sure your order confirmed and dont choose a same team!");
+       }
+        throw new WmAPIException(HttpStatus.BAD_REQUEST,"OrderId required!");
+    }
+
+    //nho transactional for delete query
     @Override
     @Transactional
     public OrderDTO updateOrderDetailCustomer(String json) {
@@ -424,6 +468,22 @@ public class OrderServiceImpl implements OrderService {
         Orders order = modelMapper.map(orderDTO, Orders.class);
         return order;
 
+    }
+
+    public Integer getPartimeEmp(Integer teamId,Integer tableNum)
+    {
+            List<Employees> list= employeeRepository.findAll();
+            List<Employees>empList= list.stream().filter(employee -> employee.getTeam_id()==teamId).collect(Collectors.toList());
+            Integer partTimeNum=0;
+            //defaul team leader
+            if(tableNum/4 - empList.size()>0)
+            {
+                partTimeNum= tableNum/4 -empList.size()+1;
+            }
+            else{
+                partTimeNum=1;
+            }
+            return partTimeNum;
     }
 
 }
