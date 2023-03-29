@@ -5,10 +5,262 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Tabbed IFrames</title>
-
+  <link href="">
 </head>
 <body>
   <section layout:fragment="content">
+    <div class="content-wrapper">
+      <section class="content">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">
+              <!-- AREA CHART -->
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title" id="revenueYear"></h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Area Chart</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <canvas id="myChart1" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+              <!-- /.card -->
+
+
+            </div>
+            <!-- /.col (LEFT) -->
+            <div class="col-md-6">
+              <!-- LINE CHART -->
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Area Chart</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <canvas id="myChart2" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+
+              <div class="card card-primary">
+                <div class="card-header">
+                  <h3 class="card-title">Area Chart</h3>
+
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="chart">
+                    <canvas id="myChart3" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                </div>
+                <!-- /.card-body -->
+              </div>
+
+            </div>
+            <!-- /.col (RIGHT) -->
+          </div>
+          <!-- /.row -->
+        </div><!-- /.container-fluid -->
+      </section>
+      <input type="hidden" id="token" th:value="${token}">
+
+    </div>
+
+
+
+
+
+
   </section>
 </body>
+
+<section layout:fragment="optional">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    $(function(){
+      let token = $('#token').val();
+      let currentYear = (new Date()).getFullYear()
+      console.log(currentYear)
+      let DOMAIN_APP_API = "http://localhost:9999";
+      let api_getRevenueByYear = DOMAIN_APP_API + "/staff/revenues/getRevenueByYear/";
+      loadRevenueByYear(currentYear);
+
+      function loadRevenueByYear(currentYear){
+        console.log(currentYear)
+
+        $.ajax({
+          type: "GET",
+          url: api_getRevenueByYear + currentYear,
+          dataType: "json",
+          contentType: "application/json",
+          headers: {
+            "Authorization": "Bearer " + token
+          },
+          data: { },
+          success: function(response) {
+            console.log(response);
+            if(response.statusCode == 200){
+              $("#revenueYear").text("Monthly Revenue Report for " + currentYear)
+              const monthsArray = [];
+              const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+              const revenueInYearArray = [];
+
+              response.message['revenueMonthList'].map(item => {
+                const monthName = monthNames[item.month - 1];
+                revenueInYearArray.push(item.revenueInMonth);
+                monthsArray.push(monthName);
+              });
+
+              const ctx = document.getElementById('myChart');
+              new Chart(ctx, {
+                type: 'bar',
+                data: {
+                  labels: monthsArray, //month
+                  datasets: [{
+                    label: 'Revenue',
+                    data: revenueInYearArray, //revenue
+                    borderWidth: 1
+                  }]
+                },
+                options: {
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }
+              });
+
+
+            }
+            // Do something with the response data
+          },
+          error: function(xhr, textStatus, errorThrown) {
+            // Handle error
+          }
+        });
+      }
+
+    });
+
+
+
+
+
+
+
+
+
+
+
+    const ctx1 = document.getElementById('myChart1');
+    const ctx2 = document.getElementById('myChart2');
+    const ctx3 = document.getElementById('myChart3');
+
+    new Chart(ctx1, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    new Chart(ctx2, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+    new Chart(ctx3, {
+      type: 'bar',
+      data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+          label: '# of Votes',
+          data: [12, 19, 3, 5, 2, 3],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+  </script>
+</section>
 </html>

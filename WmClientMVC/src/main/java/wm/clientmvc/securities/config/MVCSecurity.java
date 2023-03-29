@@ -80,7 +80,8 @@ public class MVCSecurity {
                 .requestMatchers("/staff/venues/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //MATERIAL
                 .requestMatchers("/staff/materials/**").hasAnyRole("ADMIN","ANONYMOUS")
-
+                //REVENUE
+                .requestMatchers("/staff/revenues/**").hasAnyRole("ADMIN","SALE","ANONYMOUS")
                 //PERSONAL PERMISSION
                 .requestMatchers("/staff/organize/**").hasAnyRole("ORGANIZE","ANONYMOUS")
                 .requestMatchers("/staff/sale/**").hasAnyRole("SALE","ANONYMOUS")

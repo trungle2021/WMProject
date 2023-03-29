@@ -24,6 +24,7 @@ public interface OrderService {
     public OrderDTO updateOrderTable(Integer orderDTOId,Integer table);
     public OrderDTO updateOrderDetailCustomer(String json);
 
+
     //test autoUpdate
 //   public String updateOrderStatusAuto(OrderDTO order);
 }
