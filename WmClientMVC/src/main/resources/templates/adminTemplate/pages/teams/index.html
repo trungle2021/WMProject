@@ -303,7 +303,9 @@
                                                                 Update
                                                             </button>
                                                         </th:block>
-                                                        <a th:href="@{/staff/teams/getAllEmployeeByTeamId/{id}(id=${i.getTeam_id()})}" class="button-3" th:text="Details"></a>
+                                                        <th:block th:if="${i.total_members > 0}">
+                                                            <a th:href="@{/staff/teams/getAllEmployeeByTeamId/{id}(id=${i.getTeam_id()})}" class="button-3" th:text="Details"></a>
+                                                        </th:block>
 
                                                         <th:block th:if="${i.total_members == 0 && i.getAbleToDelete() == false}">
                                                             <button  style="margin-right: 1rem" class="button-4 btnDeleteTeam">Delete</button>

@@ -64,10 +64,13 @@ public class RevenueServiceImpl implements RevenueService {
 
     @Override
     public RevenueYearDTO getRevenueByYear(int year) {
-        int[] monthInYear = {1,2,3,4,5,6,7,8,9,10,11,12};
+        YearMonth currentYearMonth = YearMonth.now();
+        Month currentMonth = currentYearMonth.getMonth();
+        int currentMonthValue = currentMonth.getValue();
+
         RevenueYearDTO result = new RevenueYearDTO();
         List<RevenueMonthDTO> revenueByYear = new ArrayList<>();
-        for (int i = 1; i <= monthInYear.length; i++) {
+        for (int i = 1; i <= currentMonthValue; i++) {
            RevenueMonthDTO revenueByMonth = getRevenueByMonth(year,i);
             revenueByYear.add(revenueByMonth);
         }
@@ -99,49 +102,200 @@ public class RevenueServiceImpl implements RevenueService {
                 })
                 .collect(Collectors.groupingBy(OrderDTO::getOrderStatus, Collectors.counting()));
 
+        int countOrderCompleted = orderStatusCounts.containsKey("completed") ? orderStatusCounts.get("completed").intValue() : 0;
+        int countOrderRefund = orderStatusCounts.containsKey("refund") ? orderStatusCounts.get("refund").intValue() : 0;
+        int countOrderCancel = orderStatusCounts.containsKey("cancel")? orderStatusCounts.get("cancel").intValue() : 0;
+        int countOrderUnCompleted = orderStatusCounts.containsKey("uncompleted") ? orderStatusCounts.get("uncompleted").intValue() : 0;
+
+
+
         OrderInMonthDTO orderInMonthDTO = new OrderInMonthDTO();
         orderInMonthDTO.setMonth(month);
         orderInMonthDTO.setYear(year);
-        orderInMonthDTO.setCountOrderCompleted(orderStatusCounts.get("completed").intValue());
-        orderInMonthDTO.setCountOrderRefund(orderStatusCounts.get("refund").intValue());
-        orderInMonthDTO.setCountOrderCancel(orderStatusCounts.get("cancel").intValue());
-        orderInMonthDTO.setCountOrderUnCompleted(orderStatusCounts.get("uncompleted").intValue());
+        orderInMonthDTO.setCountOrderCompleted(countOrderCompleted);
+        orderInMonthDTO.setCountOrderRefund(countOrderRefund);
+        orderInMonthDTO.setCountOrderCancel(countOrderCancel);
+        orderInMonthDTO.setCountOrderUnCompleted(countOrderUnCompleted);
 
         return orderInMonthDTO;
     }
 
     @Override
     public OrderIn3MonthDTO getOrderCount3Month(int year) {
-        int[] threeMonthsRecent = new int[3];
+        int[] threeMonthsRecent;
+        OrderIn3MonthDTO result;
         YearMonth currentYearMonth = YearMonth.now();
         Month currentMonth = currentYearMonth.getMonth();
         int currentMonthValue = currentMonth.getValue();
         int oneBeforeCurrentMonth = currentMonthValue - 1;
         int twoBeforeCurrentMonth = currentMonthValue - 2;
-        if(oneBeforeCurrentMonth == 0 && twoBeforeCurrentMonth <0){
+
+
+        if(currentMonthValue == 1){
             //currentMonth is 1
-            threeMonthsRecent = new int[]{currentMonthValue};
-        }else if(oneBeforeCurrentMonth == 1 && twoBeforeCurrentMonth ==0){
-             threeMonthsRecent = new int[]{oneBeforeCurrentMonth, currentMonthValue};
+            List<OrderInMonthDTO> orderIn3Month = new ArrayList<>();
+
+            OrderInMonthDTO orderInMonth = getOrderCountByMonth(year,currentMonthValue);
+            orderIn3Month.add(orderInMonth);
+            orderInMonth = getOrderCountByMonth(year-1,12);
+            orderIn3Month.add(orderInMonth);
+            orderInMonth = getOrderCountByMonth(year-1,11);
+            orderIn3Month.add(orderInMonth);
+
+//            int totalOrderCompleted = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderCompleted)
+//                    .sum();
+//
+//            int totalOrderRefund = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderRefund)
+//                    .sum();
+//
+//            int totalOrderCancel = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderCancel)
+//                    .sum();
+//
+//            int totalOrderUnCompleted = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderUnCompleted)
+//                    .sum();
+            int[] totals = orderIn3Month.stream()
+                    .reduce(new int[4],
+                            (acc, order) -> {
+                                acc[0] += order.getCountOrderCompleted();
+                                acc[1] += order.getCountOrderRefund();
+                                acc[2] += order.getCountOrderCancel();
+                                acc[3] += order.getCountOrderUnCompleted();
+                                return acc;
+                            },
+                            (acc1, acc2) -> {
+                                acc1[0] += acc2[0];
+                                acc1[1] += acc2[1];
+                                acc1[2] += acc2[2];
+                                acc1[3] += acc2[3];
+                                return acc1;
+                            });
+
+            int totalOrderCompleted = totals[0];
+            int totalOrderRefund = totals[1];
+            int totalOrderCancel = totals[2];
+            int totalOrderUnCompleted = totals[3];
+
+             result = new OrderIn3MonthDTO();
+            result.setOrderIn3Month(orderIn3Month);
+            result.setTotalOrderCompleted(totalOrderCompleted);
+            result.setTotalOrderRefund(totalOrderRefund);
+            result.setTotalOrderCancel(totalOrderCancel);
+            result.setTotalOrderUncompleted(totalOrderUnCompleted);
+            return result;
+
+        }else if(currentMonthValue == 2){
+            List<OrderInMonthDTO> orderIn3Month = new ArrayList<>();
+
+            OrderInMonthDTO orderInMonth = getOrderCountByMonth(year,currentMonthValue);
+            orderIn3Month.add(orderInMonth);
+            orderInMonth = getOrderCountByMonth(year-1,1);
+            orderIn3Month.add(orderInMonth);
+            orderInMonth = getOrderCountByMonth(year-1,12);
+            orderIn3Month.add(orderInMonth);
+
+//            int totalOrderCompleted = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderCompleted)
+//                    .sum();
+//
+//            int totalOrderRefund = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderRefund)
+//                    .sum();
+//
+//            int totalOrderCancel = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderCancel)
+//                    .sum();
+//
+//            int totalOrderUnCompleted = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderUnCompleted)
+//                    .sum();
+            int[] totals = orderIn3Month.stream()
+                    .reduce(new int[4],
+                            (acc, order) -> {
+                                acc[0] += order.getCountOrderCompleted();
+                                acc[1] += order.getCountOrderRefund();
+                                acc[2] += order.getCountOrderCancel();
+                                acc[3] += order.getCountOrderUnCompleted();
+                                return acc;
+                            },
+                            (acc1, acc2) -> {
+                                acc1[0] += acc2[0];
+                                acc1[1] += acc2[1];
+                                acc1[2] += acc2[2];
+                                acc1[3] += acc2[3];
+                                return acc1;
+                            });
+
+            int totalOrderCompleted = totals[0];
+            int totalOrderRefund = totals[1];
+            int totalOrderCancel = totals[2];
+            int totalOrderUnCompleted = totals[3];
+
+            result = new OrderIn3MonthDTO();
+            result.setOrderIn3Month(orderIn3Month);
+            result.setTotalOrderCompleted(totalOrderCompleted);
+            result.setTotalOrderRefund(totalOrderRefund);
+            result.setTotalOrderCancel(totalOrderCancel);
+            result.setTotalOrderUncompleted(totalOrderUnCompleted);
+            return result;
+
         }else{
-            threeMonthsRecent = new int[]{oneBeforeCurrentMonth, currentMonthValue};
+            threeMonthsRecent = new int[]{twoBeforeCurrentMonth,oneBeforeCurrentMonth, currentMonthValue};
+            List<OrderInMonthDTO> orderIn3Month = new ArrayList<>();
+
+            for (int i = 0; i < threeMonthsRecent.length; i++) {
+                OrderInMonthDTO orderInMonth = getOrderCountByMonth(year,threeMonthsRecent[i]);
+                orderIn3Month.add(orderInMonth);
+            }
+
+//            int totalOrderCompleted = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderCompleted)
+//                    .sum();
+//
+//            int totalOrderRefund = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderRefund)
+//                    .sum();
+//
+//            int totalOrderCancel = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderCancel)
+//                    .sum();
+//
+//            int totalOrderUnCompleted = orderInYear.stream()
+//                    .mapToInt(order -> order.countOrderUnCompleted)
+//                    .sum();
+            int[] totals = orderIn3Month.stream()
+                    .reduce(new int[4],
+                            (acc, order) -> {
+                                acc[0] += order.getCountOrderCompleted();
+                                acc[1] += order.getCountOrderRefund();
+                                acc[2] += order.getCountOrderCancel();
+                                acc[3] += order.getCountOrderUnCompleted();
+                                return acc;
+                            },
+                            (acc1, acc2) -> {
+                                acc1[0] += acc2[0];
+                                acc1[1] += acc2[1];
+                                acc1[2] += acc2[2];
+                                acc1[3] += acc2[3];
+                                return acc1;
+                            });
+
+            int totalOrderCompleted = totals[0];
+            int totalOrderRefund = totals[1];
+            int totalOrderCancel = totals[2];
+            int totalOrderUnCompleted = totals[3];
+
+            result = new OrderIn3MonthDTO();
+            result.setOrderIn3Month(orderIn3Month);
+            result.setTotalOrderCompleted(totalOrderCompleted);
+            result.setTotalOrderRefund(totalOrderRefund);
+            result.setTotalOrderCancel(totalOrderCancel);
+            result.setTotalOrderUncompleted(totalOrderUnCompleted);
+            return result;
         }
-
-        ///// CHUAW LAM XONG
-
-        RevenueYearDTO result = new RevenueYearDTO();
-        List<RevenueMonthDTO> revenueByYear = new ArrayList<>();
-        for (int i = 0; i < threeMonthsRecent.length; i++) {
-            RevenueMonthDTO revenueByMonth = getRevenueByMonth(year,i);
-            revenueByYear.add(revenueByMonth);
-        }
-        double totalRevenueInYear = revenueByYear.stream()
-                .mapToDouble(revenueInMonth -> revenueInMonth.revenueInMonth)
-                .sum();
-
-        result.setRevenueMonthList(revenueByYear);
-        result.setTotalRevenueYear(totalRevenueInYear);
-        return null;
     }
 
     public Map<Integer, Integer> getYearAndMonth(String dateString) throws ParseException {

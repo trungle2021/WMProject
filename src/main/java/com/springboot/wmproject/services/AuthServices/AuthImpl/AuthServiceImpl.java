@@ -479,7 +479,7 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.update(customerAccountDTO);
         registerDTO.setCustomerId(cusDTO.getId());
-
+        registerDTO.setAvatar(cusDTO.getAvatar());
         return registerDTO;
     }
 

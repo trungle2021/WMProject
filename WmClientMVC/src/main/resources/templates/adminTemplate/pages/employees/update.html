@@ -64,9 +64,6 @@
 
 
     <section layout:fragment="content">
-
-
-
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
@@ -144,7 +141,7 @@
                                     <!-- Form Group (last name)-->
                                     <div class="col-md-6">
                                         <label class="small mb-1">Password: </label>
-                                        <input type="text" class="form-control" th:field="*{password}" placeholder="Change your password here">
+                                        <input type="password" class="form-control" th:field="*{password}" placeholder="Change your password here">
                                         <ul>
                                             <th:block th:if="${result != null}">
                                                 <li th:each="err : ${result.getFieldErrors('password')}" th:text="${err.defaultMessage}" class="error" />
@@ -159,6 +156,11 @@
                                         <div class="col-md-6">
                                             <label class="small mb-1">Full Name: </label>
                                             <input type="text" class="form-control" th:field="*{name}" th:value="*{name}" required>
+                                            <ul>
+                                                <th:block th:if="${result != null}">
+                                                    <li th:each="err : ${result.getFieldErrors('name')}" th:text="${err.defaultMessage}" class="error" />
+                                                </th:block>
+                                            </ul>
                                         </div>
                                         <!-- Form Group (last name)-->
                                         <div class="col-md-6">
@@ -301,6 +303,25 @@
 <!-- ./wrapper -->
 <section layout:fragment="optional">
     <script type="text/javascript">
+        const fileInput = document.getElementById('file-upload');
+
+        fileInput.addEventListener('change', event => {
+            const file = event.target.files[0];
+            const fileSize = file.size; // in bytes
+            const maxSize = 1048576; // 1MB in bytes
+
+            if (fileSize > maxSize) {
+                // File size exceeds maximum limit
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'File size exceeds the maximum limit of 2MB.!',
+                })
+                alert('');
+                event.target.value = ''; // Clear the file input value
+            }
+        });
+
         $('#file-upload').change(function() {
             var i = $(this).prev('label').clone();
             var file = $('#file-upload')[0].files[0].name;

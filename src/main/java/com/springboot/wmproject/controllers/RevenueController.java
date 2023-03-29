@@ -1,5 +1,6 @@
 package com.springboot.wmproject.controllers;
 
+import com.springboot.wmproject.DTO.OrderIn3MonthDTO;
 import com.springboot.wmproject.DTO.OrderInMonthDTO;
 import com.springboot.wmproject.DTO.RevenueMonthDTO;
 import com.springboot.wmproject.DTO.RevenueYearDTO;
@@ -40,6 +41,15 @@ public class RevenueController {
         OrderInMonthDTO orderCountByMonth = revenueService.getOrderCountByMonth(year,month);
         return ResponseEntity.ok(orderCountByMonth);
     }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/getOrderCount3Month/{year}")
+    public ResponseEntity<OrderIn3MonthDTO> getOrderCount3Month(@PathVariable("year") int year){
+        OrderIn3MonthDTO orderIn3MonthDTO = revenueService.getOrderCount3Month(year);
+        return ResponseEntity.ok(orderIn3MonthDTO);
+    }
+
 
     @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))

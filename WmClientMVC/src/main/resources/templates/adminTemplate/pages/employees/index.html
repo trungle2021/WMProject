@@ -97,19 +97,13 @@
                                                     <a th:href="@{/staff/employees/update/{empId}(empId=${c.getId()})}" class=" btn btn-outline-primary ">
                                                         Update
                                                     </a>
-
                                                         <button class="btn btn-outline-primary btnDeleteEmp">Delete</button>
-
                                                 </td>
                                             </th:block>
-
                                             <td th:text="${c.joinDate}"></td>
                                             <td th:text="${c.salary}"></td>
                                             <td th:text="${c.address}"></td>
                                             <td th:text="${c.email}"></td>
-
-
-
                                         </tr>
 
                                         </tbody>
@@ -135,15 +129,10 @@
 </div>
 <!-- ./wrapper -->
 <section layout:fragment="optional">
-
-
-
     <script>
         var domain = "http://localhost:9999"
         var api_delete_emp = domain + "/staff/employees/delete/";
         $(document).ready(function () {
-
-
 
             $('table.display').DataTable();
             $('.btnDeleteEmp').on('click',function (event) {

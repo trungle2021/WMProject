@@ -97,6 +97,9 @@ public class TeamController {
                 responseType
         );
         int amountMember =employeeList.size();
+        if(amountMember == 0){
+            return "redirect:/staff/teams/getAll";
+        }
         String teamName = employeeList.stream().findFirst().get().getOrganizeTeamsByTeamId().getTeamName();
         int team_id = employeeList.stream().findFirst().get().getTeam_id();
         model.addAttribute("employeeList",employeeList);
