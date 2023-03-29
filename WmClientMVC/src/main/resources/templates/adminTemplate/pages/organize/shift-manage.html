@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/css/khangform.css">
+  <link rel="stylesheet" href="/css/khangadminorder.css">
 </head>
 <body>
 
@@ -43,7 +44,7 @@
               </div>
               <div class="buttons">
                 <input type="submit" class="submit" value="Search">
-                <a class="btn btn-primary btn-all" th:href="@{/staff/teams/shiftChange}">Change Shift</a>
+
                 <a class="btn btn-success btn-all" th:href="@{/staff/teams/shift-manage}">This Month</a>
               </div>
             </form>
@@ -58,6 +59,8 @@
               <th>Team Leader</th>
               <th>Number of Member</th>
               <th>Number of Shift in Month</th>
+              <th>Number of Upcoming Shift </th>
+              <th>Detail not completed shift</th>
             </tr>
             </thead>
             <tbody>
@@ -66,6 +69,13 @@
               <td th:text="${c.getTeamLeader()}"></td>
               <td th:text="${c.getTeamsize()}"></td>
               <td th:text="${c.getNumberOfShift()}"></td>
+              <td th:text="${c.getNumberOfUpcomingShift()}"></td>
+              <td> <form th:action="@{/staff/teams/shift-by-team}" method="post">
+                <input hidden="hidden" name="teamId" th:value="${c.getId()}" >
+                <input hidden="hidden" name="choosenMonth" th:value="${chosenMonth}">
+                <input hidden="hidden" name="choosenYear" th:value="${chosenYear}">
+                <button type="submit" class="btn btn-success">See all confirm shift</button>
+              </form></td>
             </tr>
             </tbody>
           </table>
@@ -106,6 +116,7 @@
   <script th:inline="javascript">
 
 
+    var error = [[${alertError}]];
     var message = [[${alertMessage}]];
     console.log(message);
 

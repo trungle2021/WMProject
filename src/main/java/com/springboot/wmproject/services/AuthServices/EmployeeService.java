@@ -19,6 +19,8 @@ public interface EmployeeService {
     List<EmployeeDTO> findAllByName(String empType);
     List<EmployeeDTO> findAllByTeamId(Integer teamId);
 
+
+
     void softDelete(int employeeId);
 
 
