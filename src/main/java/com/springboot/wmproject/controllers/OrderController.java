@@ -3,6 +3,7 @@ package com.springboot.wmproject.controllers;
 import com.springboot.wmproject.DTO.OrderDTO;
 
 import com.springboot.wmproject.services.OrderService;
+import com.springboot.wmproject.utils.SD;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.websocket.server.PathParam;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -66,6 +68,15 @@ public class OrderController {
         return  ResponseEntity.ok(orderService.getAllByTeamEmpId(empId));
 
     }
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/have-shift-order")
+    public ResponseEntity<List<OrderDTO>> getAllOrderConfirm()
+    {
+
+        return  ResponseEntity.ok(orderService.getAllOrderHaveShift());
+
+    }
 
 //    @PreAuthorize("hasAnyRole('ADMIN','EMPLOYEE')")
 //    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
@@ -89,7 +100,7 @@ public class OrderController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/updateStatus/{orderId}/{status}")
     public ResponseEntity<OrderDTO> update(@PathVariable Integer orderId,@PathVariable String status)
@@ -104,7 +115,7 @@ public class OrderController {
     {
         return ResponseEntity.ok(orderService.updateOrderTable(orderId,table));
     }
-    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/updateStatus")
     public ResponseEntity<OrderDTO> updateStatus(@RequestBody OrderDTO order)

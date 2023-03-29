@@ -61,6 +61,28 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDTO> getAllOrderHaveShift() {
+        List<OrderDTO> confirmList=orderRepository.findByOrderStatus(orderStatusConfirm).stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
+        List<OrderDTO> completedList=orderRepository.findByOrderStatus(orderStatusCompleted).stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
+        List<OrderDTO> uncompletedList=orderRepository.findByOrderStatus(orderStatusUncompleted).stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
+        List<OrderDTO> responseList=new ArrayList<>();
+        responseList.addAll(confirmList);
+        responseList.addAll(completedList);
+        responseList.addAll(uncompletedList);
+        if(responseList!=null)
+        {return responseList;}
+        else {return null;}
+    }
+
+//    @Override
+//    public List<OrderDTO> getAllOrderConfirm() {
+//       List<Orders> listConfirm= orderRepository.findAll();
+//       listConfirm.stream().filter(order->order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm)).collect(Collectors.toList());
+//       return listConfirm.stream().map(orders->mapToDTO(orders)).collect(Collectors.toList());;
+//    }
+
+
+    @Override
     public List<OrderDTO> getAllByOrderDate(String orderDate) throws ResourceNotFoundException {
         List<OrderDTO> orders = new ArrayList<>();
             if (orderDate != null) {
@@ -264,13 +286,15 @@ public class OrderServiceImpl implements OrderService {
                     String content= MailContent.getRefundMail(customer,orders.getVenues().getVenueName(),orders.getOrderDate(),orders.getTimeHappen(),String.valueOf(orders.getOrderTotal()/20));
                     try {
                         mailSender.sendEmail(to,"Your canceling request accepted!", content);
+                        orderRepository.save(orders);
                     } catch (MessagingException e) {
 
                         throw new RuntimeException(e);
                     }
                 }
 
-                orderRepository.save(orders);
+
+
                 return mapToDTO(orders);
             }
         }
@@ -295,6 +319,7 @@ public class OrderServiceImpl implements OrderService {
                 orders.setContract(contract);
 
                 orderRepository.save(orders);
+
                 return mapToDTO(orders);
             }
         }

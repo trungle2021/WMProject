@@ -31,7 +31,7 @@
                             <th>Event Date</th>
                             <th>Booking Date</th>
                             <th>Order Status</th>
-                            <th>Temporary price</th>
+                            <th>Payment</th>
                             <th>Action:</th>
                         </tr>
                         </thead>
@@ -41,7 +41,9 @@
                             <td th:text="${c.getTimeHappen()}"></td>
                             <td th:text="${c.getOrderDate()}"></td>
                             <td th:text="${c.getOrderStatus()}"></td>
-                            <td th:text="${c.getOrderTotal()}"></td>
+                            <td th:if="${c.getOrderStatus().equalsIgnoreCase(refundSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.1 : null}"></td>
+                            <td th:if="${c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal()}"></td>
+                            <td th:unless="${c.getOrderStatus().equalsIgnoreCase(refundSt) or c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.4 : null}" ></td>
                             <td>
                                 <form th:action="@{/customers/orders/myorder/order-detail}" method="post">
                                 <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
@@ -79,7 +81,21 @@
         $('#myModal').on('shown.bs.modal', function () {
             $('#myInput').trigger('focus')
         })
+        //format
 
+        const elements=document.querySelectorAll('[data-money]');
+        elements.forEach((element) => {
+            const moneyValue = parseFloat(element.dataset.money);
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+            });
+            const formattedAmount = formatter.format(moneyValue);
+            element.textContent = formattedAmount;
+        });
     </script>
 <script th:inline="javascript">
 
