@@ -43,6 +43,16 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public CustomerDTO getByCustomerAccountId(int id) {
+        Customers customers = customerRepository.getByCustomerAccountId(id);
+        if(customers == null){
+
+            throw new ResourceNotFoundException("Customer", "id", String.valueOf(id));
+        }
+        return mapToDto(customers);
+    }
+
+    @Override
     @Transactional
     public CustomerDTO create(CustomerDTO customerDTO) {
         Customers customers = new Customers();

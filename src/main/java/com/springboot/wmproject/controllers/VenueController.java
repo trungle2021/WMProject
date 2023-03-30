@@ -32,14 +32,12 @@ public class VenueController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueDTO>> getAll() {
         return ResponseEntity.ok(venueService.getAllVenue());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/allactive"})
     public ResponseEntity<List<VenueDTO>> getAllActive() {
@@ -47,21 +45,18 @@ public class VenueController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/orders/{id}"})
     public ResponseEntity<List<VenueDTO>> getAllByOrderId(@Valid @PathVariable int id) {
         return ResponseEntity.ok(venueService.getAllVenueByOrderId(id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/one/{id}"})
     public ResponseEntity<VenueDTO> getOneById(@Valid @PathVariable int id) {
         return ResponseEntity.ok(venueService.getOneVenueById(id));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/{name}"})
     public ResponseEntity<List<VenueDTO>> getAllByName(@Valid @PathVariable String name) {

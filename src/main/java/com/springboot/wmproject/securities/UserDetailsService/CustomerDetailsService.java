@@ -34,9 +34,9 @@ public class CustomerDetailsService implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username){
         String avatar = "";
-       CustomerAccounts customerAccounts = customerAccountRepository.findByUsername(username).orElseThrow(()->new UserNotFoundException("Invalid username or password"));
+       CustomerAccounts customerAccounts = customerAccountRepository.findByUsername(username).orElseThrow(()->new UsernameNotFoundException("Invalid username or password"));
         CustomerDTO customers = customerService.getCustomerById(customerAccounts.getCustomerId());
         if(!customers.is_verified()){
             throw new WmAPIException(HttpStatus.BAD_REQUEST,"The user has not yet verified their email");

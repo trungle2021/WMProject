@@ -24,6 +24,7 @@ public interface CustomerAccountService {
     String processForgotPassword(String email,String userAgent);
     String sendVerifyEmail(String email, String userAgent);
     String verifyEmailRegister(String token) throws ParseException;
+    void ExpiredTokenChecker() throws ParseException;
 
     CustomerAccountDTO findByEmail(String email);
 

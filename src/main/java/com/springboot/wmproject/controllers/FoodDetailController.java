@@ -23,7 +23,6 @@ public class FoodDetailController {
         this.service = service;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byfood/{foodId}")
     public ResponseEntity<List<FoodDetailDTO>> getAllDetailByFoodId(@PathVariable int foodId)
@@ -31,7 +30,6 @@ public class FoodDetailController {
         return ResponseEntity.ok(service.getAllDetailByFoodId(foodId));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byorder/{orderId}")
     public ResponseEntity<List<FoodDetailDTO>> getAllDetailByOrderId(@PathVariable int orderId)

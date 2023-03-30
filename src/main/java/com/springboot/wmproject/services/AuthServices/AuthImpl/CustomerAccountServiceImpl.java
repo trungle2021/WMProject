@@ -4,6 +4,7 @@ import com.springboot.wmproject.DTO.CustomerAccountDTO;
 import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.Customers;
+import com.springboot.wmproject.entities.PasswordResetToken;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
@@ -16,11 +17,13 @@ import com.springboot.wmproject.utils.SD;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -93,14 +96,6 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         if(customerAccountID == 0){
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "CustomerAccount ID is required to update");
         }
-        //check employee account exist
-//        CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
-//        //if exist update
-//        customerAccounts.setUsername(customerAccountDTO.getUsername().trim());
-//        if(!customerAccountDTO.getPassword().equals("") || !customerAccountDTO.getPassword().isEmpty() || !customerAccountDTO.getPassword().isBlank()){
-//            customerAccounts.setPassword(customerAccountDTO.getPassword());
-//        }
-
         CustomerAccounts customerAccounts = customerAccountRepository.findById(customerAccountID).orElseThrow(() -> new ResourceNotFoundException("Customer Account", "id", String.valueOf(customerAccountID)));
 
         String trimmedUsername = customerAccountDTO.getUsername().trim();
@@ -261,6 +256,13 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         customerDTO.set_verified(true);
         customerRepository.save(customerDTO);
         return "Your Email Has Been Verified";
+    }
+
+    @Override
+    @Scheduled(fixedDelay = 60000)
+    public void ExpiredTokenChecker() throws ParseException {
+        passwordResetTokenService.deleteExpiredTokens();
+
     }
 
     @Override

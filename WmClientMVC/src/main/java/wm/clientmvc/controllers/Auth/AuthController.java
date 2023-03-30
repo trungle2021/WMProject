@@ -256,8 +256,6 @@ public class AuthController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
-//            SecurityContextHolder.clearContext();
-//            model.asMap().clear();
         }
         return "redirect:" + logoutSuccessUrl + "?logout";
     }
