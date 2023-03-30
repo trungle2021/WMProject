@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <section layout:fragment="content">
+        <div class="content-wrapper">
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>DataTables</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">DataTables</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Review</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table
+                                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                                            id="reviewTable" style="width:100%" aria-describedby="example-info">
+                                        <thead>
+                                        <tr>
+                                            <th>Rating</th>
+                                            <th>Content</th>
+                                            <th>Date Post</th>
+                                            <th>Active</th>
+                                            <th>Author Account</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="c:${reviewList}">
+                                            <td th:text="${c.rating}"></td>
+                                            <td>
+                                                <button type="button" class="btn btn-outline-primary"
+                                                        data-toggle="modal"
+                                                        data-target="#contentModal" th:attr="data-content=${c.getContent()}">See all content
+                                                </button>
+                                            </td>
+                                            <td th:text="${c.datePost}"></td>
+                                            <td th:text="${c.active}"></td>
+                                            <td th:text="${c.getReviewByCustomerAccountId().getUsername()}"></td>
+                                            <td>
+                                                <th:block th:if="${c.active==false}">
+                                                <a type="button"
+                                                   class="btn btn-outline-primary " onclick="return confirm('Are you sure to confirm it ?')"
+                                                   th:href="@{/staff/review/confirm(reviewId=${c.getId()},ratingScore=${c.getRating()})}"
+                                                >Confirm
+                                                </a>
+                                                </th:block>
+                                                <a type="button"
+                                                   class="btn btn-outline-primary " onclick="return confirm('Are you sure to delete ?')"
+                                                   th:href="@{/staff/review/delete(reviewId=${c.getId()})}"
+                                                >Delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--content Modal-->
+                <div class="modal fade" id="contentModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Content</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <span></span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </section>
+        </div>
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </section>
+</div>
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#reviewTable').DataTable();
+        });
+        $('#contentModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('content') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+            modal.find('.modal-body span').text(recipient)
+        })
+        msg = '[[${message}]]';
+        if(msg){
+            if(msg==="Success"){
+                Swal.fire({
+                    title: 'Notification',
+                    text: msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }else if(msg==="rating"){
+                Swal.fire({
+                    title: 'Notification',
+                    text: 'Rating too low to confirm, must be better >= 3',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+
+    </script>
+</section>
+</body>
+</html>

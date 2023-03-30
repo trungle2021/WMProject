@@ -29,7 +29,12 @@ public class CustomerAccountController {
     public ResponseEntity<List<CustomerAccountDTO>> getAll(){
         return ResponseEntity.ok(customerAccountService.findAll());
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/customer/{id}")
+    public ResponseEntity<CustomerAccountDTO> getCustomerAccountByCustomerId(@PathVariable int id){
+        return ResponseEntity.ok(customerAccountService.getAccountByCustomerId(id));
+    }
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/{id}")
