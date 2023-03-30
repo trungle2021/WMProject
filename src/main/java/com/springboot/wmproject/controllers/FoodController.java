@@ -23,7 +23,7 @@ public class FoodController {
         this.foodService = foodService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE','ANONYMOUS')")
+
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/all")
     public ResponseEntity<List<FoodDTO>> getAll()

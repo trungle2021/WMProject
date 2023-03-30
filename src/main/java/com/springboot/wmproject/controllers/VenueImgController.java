@@ -26,7 +26,6 @@ public class VenueImgController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<VenueImgDTO>> getAll() {

@@ -85,7 +85,7 @@ public class AuthController {
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 api_customerLoginUrl,
-                "/sendVerifyEmail",
+                "/customers/home",
                 "/login",
                 loginDTO,
                 request,
