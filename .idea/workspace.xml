@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e5093d72-84d8-4536-bd62-db26931cefba" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/organize/shift-detail.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/TeamShift.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/DTO/TeamShift.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/organize/order-organize-manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/organize/order-organize-manage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/organize/shift-manage.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/organize/shift-manage.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/OrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/OrderController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/EmployeeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/EmployeeService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/OrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/OrderService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/OrderServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="e5093d72-84d8-4536-bd62-db26931cefba" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +91,7 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;17&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/lance/Documents/projectWM/wmproject/WmClientMVC/src/main/resources/static/video&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/khangproject/wmproject&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -283,6 +272,9 @@
       <workItem from="1679931041533" duration="2460000" />
       <workItem from="1679973609047" duration="50129000" />
       <workItem from="1680080288268" duration="22375000" />
+      <workItem from="1680112236226" duration="4944000" />
+      <workItem from="1680118836565" duration="5000" />
+      <workItem from="1680161590143" duration="13456000" />
     </task>
     <servers />
   </component>
@@ -317,16 +309,6 @@
           <option name="timeStamp" value="13" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
-          <line>173</line>
-          <option name="timeStamp" value="353" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
-          <line>122</line>
-          <option name="timeStamp" value="354" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
           <line>153</line>
           <option name="timeStamp" value="355" />
@@ -353,43 +335,58 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
-          <line>332</line>
-          <option name="timeStamp" value="365" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
           <line>409</line>
           <option name="timeStamp" value="370" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java</url>
-          <line>499</line>
+          <line>500</line>
           <option name="timeStamp" value="373" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java</url>
-          <line>52</line>
-          <option name="timeStamp" value="375" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java</url>
-          <line>474</line>
+          <line>475</line>
           <option name="timeStamp" value="380" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
-          <line>172</line>
-          <option name="timeStamp" value="381" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
-          <line>258</line>
+          <line>267</line>
           <option name="timeStamp" value="382" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/OrderController.java</url>
           <line>99</line>
           <option name="timeStamp" value="383" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/FoodController.java</url>
+          <line>359</line>
+          <option name="timeStamp" value="387" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/FoodController.java</url>
+          <line>344</line>
+          <option name="timeStamp" value="388" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
+          <line>243</line>
+          <option name="timeStamp" value="389" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminMaterialController.java</url>
+          <line>241</line>
+          <option name="timeStamp" value="390" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
+          <line>506</line>
+          <option name="timeStamp" value="394" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/TeamController.java</url>
+          <line>343</line>
+          <option name="timeStamp" value="396" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -398,5 +395,10 @@
         <PinnedItemInfo parentTag="org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest" memberName="request" />
       </pinned-members>
     </pin-to-top-manager>
+    <watches-manager>
+      <configuration name="SpringBootApplicationConfigurationType">
+        <watch expression="alertError" />
+      </configuration>
+    </watches-manager>
   </component>
 </project>

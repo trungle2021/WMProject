@@ -120,6 +120,7 @@ public class WebOrderController {
                 }
              }
             }
+
             String json = toJson(venueList,bookeds);
 
             return ResponseEntity.ok(json);}
@@ -191,7 +192,7 @@ public class WebOrderController {
                     return new ResponseEntity<>("Oops! Some thing wrong! This venues already booked!",HttpStatus.BAD_REQUEST);
                 }
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                return new ResponseEntity<>("Oops! Some thing wrong!Try again",HttpStatus.BAD_REQUEST);
             }
 //            ResponseEntity<OrderDTO> responseEntity = restTemplate.postForEntity("http://localhost:8080/api/orders/create", requestEntity, OrderDTO.class);
 
@@ -727,7 +728,7 @@ public class WebOrderController {
             Map<Integer,Integer> map=new HashMap<>();
             for (OrganizeTeamDTO team:teamList)
             {
-                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted()) {
+                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted() && team.getTeamsize()!=0) {
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 
