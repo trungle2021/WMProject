@@ -3,6 +3,7 @@ package com.springboot.wmproject.controllers;
 import com.springboot.wmproject.DTO.OrderDTO;
 
 import com.springboot.wmproject.services.OrderService;
+import com.springboot.wmproject.utils.SD;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.websocket.server.PathParam;
@@ -13,7 +14,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/orders")
@@ -61,9 +66,40 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/byTeam/empId/{empId}")
-    public ResponseEntity<List<OrderDTO>> getAllOrderbyTeam(@PathVariable Integer empId)
+    public ResponseEntity<List<OrderDTO>> getAllOrderbyEmpTeam(@PathVariable Integer empId)
     {
         return  ResponseEntity.ok(orderService.getAllByTeamEmpId(empId));
+
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/byTeam/time/{teamId}/{month}/{year}")
+    public ResponseEntity<List<OrderDTO>> getAllOrderbyTeamConfirm(@PathVariable Integer teamId,@PathVariable Integer month,@PathVariable Integer year)
+    {
+        List<OrderDTO>orderList=orderService.getAllByOrganizeTeam(teamId);
+        if(orderList!=null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            List<OrderDTO> responseList = new ArrayList<>();
+            for (OrderDTO obj : orderList) {
+                LocalDateTime event = LocalDateTime.parse(obj.getTimeHappen(), formatter);
+                if (event.getMonth().getValue() == month && event.getYear() == year && obj.getOrderStatus().equalsIgnoreCase(SD.orderStatusConfirm)) {
+                    responseList.add(obj);
+                }
+            }
+            return  ResponseEntity.ok(responseList);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        }
+
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/have-shift-order")
+    public ResponseEntity<List<OrderDTO>> getAllOrderConfirm()
+    {
+
+        return  ResponseEntity.ok(orderService.getAllOrderHaveShift());
 
     }
 
@@ -89,7 +125,7 @@ public class OrderController {
 
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/updateStatus/{orderId}/{status}")
     public ResponseEntity<OrderDTO> update(@PathVariable Integer orderId,@PathVariable String status)
@@ -100,11 +136,19 @@ public class OrderController {
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/updateTable/{orderId}/{table}")
-    public ResponseEntity<OrderDTO> update(@PathVariable Integer orderId,@PathVariable Integer table)
+    public ResponseEntity<OrderDTO> updateOrderTable(@PathVariable Integer orderId,@PathVariable Integer table)
     {
         return ResponseEntity.ok(orderService.updateOrderTable(orderId,table));
     }
-    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER','SALE')")
+
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping("/update/changeTeam/{orderId}/{teamId}")
+    public ResponseEntity<OrderDTO> updateOrderTeam(@PathVariable Integer orderId,@PathVariable Integer teamId)
+    {
+        return ResponseEntity.ok(orderService.updateOrderTeam(orderId,teamId));
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','CUSTOMER','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping("/updateStatus")
     public ResponseEntity<OrderDTO> updateStatus(@RequestBody OrderDTO order)

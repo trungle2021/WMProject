@@ -119,7 +119,7 @@ td {
     text-align: left;
     padding: 5px;
     border-bottom: 1px solid #ddd;
-    width: 70%;
+   min-width: 100px;
 }
 
 th {
@@ -218,5 +218,12 @@ th {
 .description
 {
     overflow: scroll;
+
+}
+.description-container{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: auto;
 
 }

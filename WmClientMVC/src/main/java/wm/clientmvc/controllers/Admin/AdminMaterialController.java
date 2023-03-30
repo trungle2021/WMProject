@@ -206,7 +206,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
 //
 //get list of today
-                List<OrderDTO>list=getOrderList(token,ourl,today);
+                List<OrderDTO>list=getOrderList(token,ourl,date);
 
                 List<MaterialDTO> materialList=getMaterialList(token,list);
 

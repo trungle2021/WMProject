@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -434,9 +435,13 @@ public class WebOrderController {
                 editOrder.setOrderStatus(orderStatusConfirm);
                 editOrder.setBookingEmp(findOrder.getBookingEmp());
                 editOrder.setTableAmount(tbNum);
-                editOrder.setOrderTotal(getTotal(findOrder,tbNum));
-                Integer team=findOrder.getOrganizeTeam();
+                //no update amount when confirm
+                editOrder.setOrderTotal(findOrder.getOrderTotal());
+                editOrder.setContract(findOrder.getContract());
+                //get team
+                Integer team=getTeam(findOrder,token);
                 editOrder.setOrganizeTeam(team);
+                //render number of partime
                 editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
                 //update
                 try {
@@ -484,7 +489,7 @@ public class WebOrderController {
                     token,
                     OrderDTO.class
             );
-            DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+//            DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 
 //            String orderDay = LocalDateTime.parse(order.getOrderDate(), formatter).toString();
@@ -673,26 +678,106 @@ public class WebOrderController {
             throw new RuntimeException(e);
         }
     }
-    public Double getTotal(OrderDTO order,Integer tbAmount)
+
+
+    public Integer getTeam(OrderDTO order,String token)
     {
-        Double foodPrice=0.0;
-        Double servicePrice=0.0;
-        if(order.getFoodDetailsById()!=null){
-        for (FoodDetailDTO food:order.getFoodDetailsById()) {
-            foodPrice += food.getFoodByFoodId().getPrice();
-        }
-        }
-       if(order.getServiceDetailsById()!=null){
-        for (ServiceDetailDTO servicedt :order.getServiceDetailsById())
-        {
-            servicePrice+=servicedt.getServicesByServiceId().getPrice();
-        }
-       }
+        Integer teamId;
+        String myTimeHappend=order.getTimeHappen();
+        Integer myVenueId=order.getVenueId();
+        ParameterizedTypeReference<List<OrderDTO>> reponseOrder=new ParameterizedTypeReference<List<OrderDTO>>() {};
+        ParameterizedTypeReference<List<OrganizeTeamDTO>> responseTeam = new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
 
-        Double total= order.getVenues().getPrice()+servicePrice+foodPrice*tbAmount;
-        return total;
+        String orderlistUrl= "http://localhost:8080/api/orders";
+
+        String teamUrl="http://localhost:8080/api/teams/all";
+        try {
+            List<OrderDTO> orderList=APIHelper.makeApiCall(
+                    orderlistUrl,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    reponseOrder
+            );
+
+            List<OrganizeTeamDTO> teamList= APIHelper.makeApiCall(
+                    teamUrl,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    responseTeam
+            );
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime timeHappen =  LocalDateTime.parse(order.getTimeHappen(),formatter);
+            Month happenMonth=timeHappen.getMonth();
+            //get order in month happen
+
+            //fix
+            List<OrderDTO> ordersInMonth= new ArrayList<>();
+            for (OrderDTO od:orderList)
+            {
+                if(
+                        LocalDateTime.parse(od.getTimeHappen(),formatter).getMonth().compareTo(happenMonth)==0 && od.getOrderStatus().equals(orderStatusConfirm)
+                                ||  LocalDateTime.parse(od.getTimeHappen(),formatter).getMonth().compareTo(happenMonth)==0 && od.getOrderStatus().equals(orderStatusCompleted)
+                                ||  LocalDateTime.parse(od.getTimeHappen(),formatter).getMonth().compareTo(happenMonth)==0 && od.getOrderStatus().equals(orderStatusUncompleted)
+                )
+                {ordersInMonth.add(od);}
+            }
+            Map<Integer,Integer> map=new HashMap<>();
+            for (OrganizeTeamDTO team:teamList)
+            {
+                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted()) {
+                    int count = 0;
+                    for (OrderDTO obj : ordersInMonth) {
+
+                        if (obj.getOrganizeTeam()!=null && team.getId() == obj.getOrganizeTeam()) {
+                            count += 1;
+                        }
+                    }
+                    map.put(team.getId(), count);
+
+                }
+            }
+
+            //lấy giá trị lớn nhất và lớn nhì
+            Map.Entry<Integer, Integer> minEntry = null;
+            Map.Entry<Integer, Integer> secondMinEntry = null;
+            for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+                if (minEntry == null || entry.getValue().compareTo(minEntry.getValue()) < 0) {
+                    secondMinEntry = minEntry;
+                    minEntry = entry;
+                } else if ((secondMinEntry == null || entry.getValue().compareTo(secondMinEntry.getValue()) < 0)
+                        && entry != minEntry) {
+                    secondMinEntry = entry;
+                }
+            }
+//            LocalDateTime orderHappend =LocalDateTime.parse(myTimeHappend,formatter);
+            //filter orderList happend in orderHappend
+            List<OrderDTO> orderHappendList=new ArrayList<>();
+            for (OrderDTO o:ordersInMonth) {
+                if(o.getTimeHappen().equals(myTimeHappend))
+                {
+                    orderHappendList.add(o);
+                }
+
+            }
+            teamId= minEntry.getKey();
+            for (OrderDTO obj:orderHappendList)
+            {
+                if(obj.getOrganizeTeam() == minEntry.getKey())
+                {
+                    teamId= secondMinEntry.getKey();
+                    break;
+                }
+
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return teamId;
     }
-
 
 
 }

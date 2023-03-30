@@ -147,7 +147,7 @@
                     <tbody>
                     <tr th:each="f:${myOrder.getFoodDetailsById()}">
                       <td scope="row" th:text="${f.getFoodByFoodId().getFoodName()}"></td>
-                      <td th:text="${f.getFoodByFoodId().getDescription()}" class="description"></td>
+                      <td th:text="${f.getFoodByFoodId().getDescription()}" class="description-container"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -184,7 +184,7 @@
                     <tbody>
                     <tr th:each="s:${myOrder.getServiceDetailsById()}">
                       <td scope="row" th:text="${s.getServicesByServiceId().getServiceName()}"></td>
-                      <td th:text="${s.getServicesByServiceId().getDescription()}" class="description"></td>
+                      <td th:text="${s.getServicesByServiceId().getDescription()}" class="description-container"></td>
                     </tr>
                     </tbody>
                   </table>
@@ -237,7 +237,7 @@
                             <input id="mess" name="confirmMess">
                             <br>
                             <br>
-                            <p class="alert bg-danger">*Please note that the refund will be 50% your deposit!</p>
+                            <p class="alert bg-danger">*Please note that the refund will be 25% your deposit!</p>
                           </div>
                         </div>
                         <input hidden="hidden" name="status" th:value="${myOrder.getOrderStatus()}">

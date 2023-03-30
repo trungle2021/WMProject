@@ -297,7 +297,6 @@
 
             <ul class="nav nav-treeview">
 
-
               <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}"}>
                 <li class="nav-item">
                   <a th:href="@{/staff/employees/getAll}" class="nav-link">
@@ -356,11 +355,19 @@
                     <p>Review</p>
                   </a>
                 </li>
-              </th:block>
+
+                <li class="nav-item">
+                  <a th:href="@{/staff/teams/shift-manage}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Shift Manage</p>
+                  </a>
+                </li>
 
               </th:block>
 
-              <th:block th:if="${ #authorization.expression('hasRole(''SALE'')')}"}>
+              </th:block>
+
+              <th:block th:if="${#authorization.expression('hasRole(''SALE'')')}"}>
                 <li class="nav-item">
                   <a th:href="@{/staff/customers/getAll}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
@@ -396,9 +403,9 @@
                 </li>
 
                 <li class="nav-item">
-                  <a th:href="@{staff/orders/showallorder/organize}" class="nav-link">
+                  <a th:href="@{/staff/teams/showallorder/organize}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
-                    <p>ORDER</p>
+                    <p>Event Manage</p>
                   </a>
                 </li>
 

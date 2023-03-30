@@ -41,6 +41,14 @@
             height: 200px;
             padding-top: 2px;
         }
+        .description-container-home{
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: auto;
+
+        }
+
     </style>
 </head>
 <body>
@@ -139,9 +147,9 @@
                     </a>
                 </div>
                 <div th:unless="${venuesImages!=null}">
-                    <a th:href="@{/customers/orders}">
-                        <img class="gallery image-popup img d-flex align-items-center myimg"
-                             src="/video/weddinglogo.png">
+
+                    <a th:href="@{/customers/orders}" >
+                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
                     </a>
                     <a th:href="@{/customers/orders}">
                         <img class="gallery image-popup img d-flex align-items-center myimg"
@@ -178,8 +186,9 @@
                                          th:src="'data:image/png;base64,'+ ${f.getFoodImagesById()[0].getUrl()}">
                                 </th:block>
                                 <div class="text pt-4">
-                                    <p class="mb-4" th:text="${f.getDescription()}"></p>
-                                    <p class="name" th:text="${f.getFoodName()}"></p>
+
+                                    <p  class="mb-4 description-container-home"th:text="${f.getDescription()}"></p>
+                                    <p class="name"th:text="${f.getFoodName()}"></p>
 
                                 </div>
                             </div>
