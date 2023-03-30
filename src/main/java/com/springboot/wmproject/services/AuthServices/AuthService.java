@@ -15,7 +15,7 @@ public interface AuthService {
     RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException;
     RegisterCustomerDTO customerPersonalValid(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
     RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException;
-    RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
+    RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException;
 
     RegisterDTO getOneRegisterEmp(int empID) throws JsonProcessingException;
     RegisterCustomerDTO getOneRegisterCustomer(int customerID) throws JsonProcessingException;

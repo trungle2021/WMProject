@@ -411,7 +411,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+    public RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException {
         errors = new ArrayList<>();
         CustomerDTO customerDTO = new CustomerDTO();
         CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();

@@ -91,8 +91,8 @@ public class AuthController {
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = {"/customers/update"})
-    public ResponseEntity<RegisterCustomerDTO> customerUpdate(@RequestBody RegisterCustomerDTO registerDTO) throws JsonProcessingException {
-        RegisterCustomerDTO response = authService.customerUpdate(registerDTO);
+    public ResponseEntity<RegisterCustomerDTO> customerUpdate(@RequestBody RegisterCustomerDTO registerDTO,@RequestHeader("User-Agent") String userAgent) throws JsonProcessingException {
+        RegisterCustomerDTO response = authService.customerUpdate(registerDTO,userAgent);
         return ResponseEntity.ok(response);
     }
 
