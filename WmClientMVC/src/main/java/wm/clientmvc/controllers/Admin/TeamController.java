@@ -591,12 +591,9 @@ public class TeamController {
             }
             return "redirect:/staff/teams/shift-manage";
         }
-
-
     }
     private List<TeamShift> getShiftList(List<TeamSummaryDTO> teams,List<OrderDTO> haveShiftList)
     {
-
         List<TeamShift> teamShifts=new ArrayList<>();
         if(teams!=null){
         for (TeamSummaryDTO team:teams)
@@ -604,6 +601,8 @@ public class TeamController {
                 if(!team.getTeam_name().equalsIgnoreCase(teamAdmin)){
                 TeamShift newShift = new TeamShift();
                 newShift.setId(team.getTeam_id());
+                newShift.setTeamName(team.getTeam_name());
+                newShift.setTeamLeader(team.getLeader_name());
                 newShift.setTeamsize(team.getTotal_members());
                 Map<String,Integer> map= getNumberOfShift(haveShiftList,team.getTeam_id());
                 Integer numberShift=map.get("total");
@@ -614,7 +613,6 @@ public class TeamController {
                 }
         }
             }
-
         return teamShifts;
     }
     private Map<String, Integer> getNumberOfShift(List<OrderDTO>listOrder, Integer teamId)
@@ -627,13 +625,11 @@ public class TeamController {
                 confirm++;
                 total++;
             } else if (order.getOrganizeTeam() == teamId && order.getOrderStatus().equalsIgnoreCase(orderStatusCompleted) ||
-                    order.getOrganizeTeam() == teamId && order.getOrderStatus().equalsIgnoreCase(orderStatusUncompleted)) {
+                    order.getOrganizeTeam() == teamId && order.getOrderStatus().equalsIgnoreCase(orderStatusUncompleted))
+            {
                 total++;
             }
-
         }
-
-
         map.put("confirm", confirm);
         map.put("total", total);
         return map;

@@ -129,7 +129,7 @@
 
                                     </div>
 
-                                    <div class="row gx-3 mb-3">
+                                    <div class="row gx-3 mb-3" style="display:none">
                                         <!-- Form Group (first name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1">Username</label>
@@ -216,14 +216,12 @@
                                             <label class="small mb-1">Gender: </label><br>
                                             <input type="radio" th:field="*{gender}" th:value="Male" th:checked="${registerDTO.getGender()}"/> Male
                                             <input type="radio" th:field="*{gender}" th:value="Female" th:checked="${registerDTO.getGender()}"/> Female
-
-
                                         </div>
                                     </div>
                                     <!-- Form Row-->
                                     <!-- Save changes button-->
                                     <div style="float: right">
-                                        <a th:href="'javascript:window.history.back()'" class="btn btn-primary">Back</a>
+                                        <a th:href="@{/staff/customers/getAll}" class="btn btn-primary">Back</a>
                                         <input type="submit" class="btn btn-primary" value="Update Profile">
                                     </div>
 

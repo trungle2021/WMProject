@@ -24,21 +24,21 @@ public class ReviewController {
         this.reviewService = reviewService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<ReviewDTO>> GetAllReview() {
         return ResponseEntity.ok(reviewService.getAllReview());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+//    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/allActive"})
     public ResponseEntity<List<ReviewDTO>> GetAllReviewActive() {
         return ResponseEntity.ok(reviewService.getAllReviewActive());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+//    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = {"/confirm/{id}"})
     public ResponseEntity<String> ConfirmReview(@Valid @PathVariable int id) {

@@ -33,9 +33,10 @@
 
   <h5 class="p-2">To day is: <p th:text="${today}"></p></h5>
   <div class="d-flex flex-row">
-    <form class="p-2" th:action="@{/staff/materials/detail/searchId}" method="post">
+    <form th:if="${#authorization.expression('hasRole(''ADMIN'')')}"  class="p-2"  th:action="@{/staff/materials/detail/searchId}" method="post">
       <input type="text" name="orderId">
       <input type="submit" value="Search">
+
     </form>
 
     <form class="p-2" th:action="@{/staff/materials/detail/searchDate}" method="post">

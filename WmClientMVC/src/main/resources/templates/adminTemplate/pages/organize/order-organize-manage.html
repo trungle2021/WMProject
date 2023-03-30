@@ -76,6 +76,7 @@
               <td>
                 <a th:href="@{/staff/materials/detail/{id}(id=${c.getId()})}" class="btn btn-success">Material Detail</a>
                </br>
+                <br>
                 <th:block>
                   <form th:action="@{/staff/orders/order-completed}" method="post">
                     <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
