@@ -529,11 +529,9 @@ public class TeamController {
            model.addAttribute("teams",teamsList);
            return "adminTemplate/pages/organize/shift-detail";
         } catch (HttpClientErrorException e) {
-            String responseError = e.getResponseBodyAsString();
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = mapper.readValue(responseError, Map.class);
-            String message = map.get("message").toString();
-            redirectAttributes.addFlashAttribute("alertError",message);
+
+                redirectAttributes.addFlashAttribute("alertError","No upcoming shift found !");
+
             return "redirect:/staff/teams/shift-manage";
         }
     }
@@ -554,11 +552,15 @@ public class TeamController {
             return "redirect:/staff/teams/shift-manage";
 
         } catch (HttpClientErrorException e) {
+            String message = "";
             String responseError = e.getResponseBodyAsString();
-            ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = mapper.readValue(responseError, Map.class);
-            String message = map.get("message").toString();
-            redirectAttributes.addFlashAttribute("alertError",message);
+            String status = String.valueOf(e.getStatusCode().value());
+            if(!responseError.isEmpty()){
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> map = mapper.readValue(responseError, Map.class);
+                message = map.get("message").toString();
+                redirectAttributes.addFlashAttribute("alertError",message);
+            }
             return "redirect:/staff/teams/shift-manage";
         }
 
@@ -574,8 +576,6 @@ public class TeamController {
                 if(!team.getTeam_name().equalsIgnoreCase(teamAdmin)){
                 TeamShift newShift = new TeamShift();
                 newShift.setId(team.getTeam_id());
-                newShift.setTeamName(team.getTeam_name());
-                newShift.setTeamLeader(team.getLeader_name());
                 newShift.setTeamsize(team.getTotal_members());
                 Map<String,Integer> map= getNumberOfShift(haveShiftList,team.getTeam_id());
                 Integer numberShift=map.get("total");

@@ -258,7 +258,7 @@ function getOrderLink(day) {
                                     form.submit();
 
                                 } else {
-                                    swal("Error!", "SomeThing Wrong!Check Your connection and Try again!", "error");
+                                    swal("Error!", xhr.responseText, "error");
 
 
                                     console.log(xhr.responseText);

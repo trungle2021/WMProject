@@ -20,7 +20,7 @@ public class Food {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "food_name", nullable = true, length = 45)
+    @Column(name = "food_name", nullable = true, length = 100)
     private String foodName;
     @Basic
     @Column(name = "food_type", nullable = true, length = 45)
