@@ -307,7 +307,7 @@
                                                             <a th:href="@{/staff/teams/getAllEmployeeByTeamId/{id}(id=${i.getTeam_id()})}" class="button-3" th:text="Details"></a>
                                                         </th:block>
 
-                                                        <th:block th:if="${i.total_members == 0 && i.getAbleToDelete() == false}">
+                                                        <th:block th:if="${i.total_members == 0 && i.has_confirm_order == false}">
                                                             <button  style="margin-right: 1rem" class="button-4 btnDeleteTeam">Delete</button>
                                                         </th:block>
                                                     </td>
@@ -410,12 +410,13 @@
         $(document).ready(function () {
 
             $('table tr').each(function() {
-                let count = $(this).find('td:eq(1) input').val();
+                let count = $(this).find('td:eq(2) input').val();
                 if (count < 2) {
-                    $(this).closest('tr').css("background-color", "#ffbe31").css("color", "white");
-                    $(this).find('td:eq(4)').text('Not enough members, minimum of 3 people required.');
+                    $(this).find('td:eq(3)').css("color", "white");
+                    $(this).closest('tr').css("background-color", "#bb2424").css("color", "white");
+                    $(this).find('td:eq(5)').text('Not enough members, minimum of 3 people required.');
                 } else {
-                    $(this).find('td:eq(4)').hide();
+                    $(this).find('td:eq(5)').hide();
                     $('#note').hide();
 
                 }

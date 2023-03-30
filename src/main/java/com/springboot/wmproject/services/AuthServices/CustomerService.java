@@ -8,6 +8,7 @@ import java.util.List;
 public interface CustomerService{
     List<CustomerDTO> findAll();
     CustomerDTO getCustomerById(int id);
+    CustomerDTO getByCustomerAccountId(int id);
     CustomerDTO create(CustomerDTO customerDTO);
     CustomerDTO update(CustomerDTO customerDTO);
     CustomerDTO updateAvatar(CustomerDTO customerDTO);

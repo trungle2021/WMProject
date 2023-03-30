@@ -32,7 +32,6 @@ public class VenueImgController {
         return ResponseEntity.ok(venueImgService.getAllVenueImg());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/venue/{id}"})
     public ResponseEntity<List<VenueImgDTO>> getAllVenueImgById(@PathVariable int id) {
