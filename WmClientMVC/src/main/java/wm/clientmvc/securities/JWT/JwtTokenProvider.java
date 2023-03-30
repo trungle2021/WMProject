@@ -42,6 +42,20 @@ public class JwtTokenProvider {
         return username;
     }
 
+    public String getIsVerified(String token){
+        Claims claims =  Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String is_verified = claims.get("is_verified",String.class);
+        if(is_verified == null){
+            return "JWT claims string is empty.";
+        }
+        return is_verified;
+    }
+
 
 
     public String getUserType(String token) {

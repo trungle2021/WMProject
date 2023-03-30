@@ -46,6 +46,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String username = jwtTokenProvider.getUsername(token);
             String userType = jwtTokenProvider.getUserType(token);
             String userID = jwtTokenProvider.getUserID(token);
+            String is_verified = jwtTokenProvider.getIsVerified(token);
             switch (userType){
                 case "ROLE_ADMIN":
                 case "ROLE_SALE":

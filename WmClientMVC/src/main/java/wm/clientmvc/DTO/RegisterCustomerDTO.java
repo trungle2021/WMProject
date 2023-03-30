@@ -46,4 +46,5 @@ public class RegisterCustomerDTO {
     private String username;
     private String password;
     private Integer customerId;
+    private boolean is_verified;
 }

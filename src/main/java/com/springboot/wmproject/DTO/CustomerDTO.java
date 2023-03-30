@@ -20,6 +20,7 @@ public class CustomerDTO {
     private String phone;
     private String gender;
     private String email;
+    private boolean is_verified;
     @Basic(fetch = FetchType.LAZY)
     @JsonIgnore
     private String avatar;

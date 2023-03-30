@@ -15,12 +15,14 @@ public class CustomUserDetails implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
     private Long userId;
+    private boolean is_verified;
 
-    public CustomUserDetails(String username, String password,  Long userId, Collection<? extends GrantedAuthority> authorities) {
+    public CustomUserDetails(String username, String password,  Long userId, boolean is_verified, Collection<? extends GrantedAuthority> authorities) {
         this.username = username;
         this.password = password;
         this.authorities = authorities;
         this.userId = userId;
+        this.is_verified = is_verified;
     }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

@@ -40,7 +40,7 @@ public class EmployeeDetailsService implements UserDetailsService {
 
         Set<GrantedAuthority> authorities = new HashSet<>();
         authorities.add(new SimpleGrantedAuthority(employeeAccounts.getRole()));
-        return new CustomUserDetails(employeeAccounts.getUsername(),employeeAccounts.getPassword(),employeeAccounts.getEmployeeId().longValue(),authorities);
+        return new CustomUserDetails(employeeAccounts.getUsername(),employeeAccounts.getPassword(),employeeAccounts.getEmployeeId().longValue(),true,authorities);
 
     }
 }
