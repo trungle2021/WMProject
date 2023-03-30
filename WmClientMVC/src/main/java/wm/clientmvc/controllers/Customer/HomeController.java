@@ -226,6 +226,24 @@ public class HomeController {
         if(!token.isEmpty()){
            try{
                String _response = APIHelper.makeApiCall(SD_CLIENT.api_verify_email + token,HttpMethod.POST,null,null,String.class);
+               RegisterCustomerDTO  registerCustomerDTO = (RegisterCustomerDTO) session.getAttribute("responseRegister");
+               if(registerCustomerDTO.getUsername() != null && registerCustomerDTO.getPassword() != null){
+                   LoginDTO loginDTO = new LoginDTO();
+                   loginDTO.setUsername(registerCustomerDTO.getUsername());
+                   loginDTO.setPassword(registerCustomerDTO.getPassword());
+                   session.invalidate();
+                   return authController.callApiLogin(
+                           SD_CLIENT.api_customerLoginUrl,
+                           "/customers/home",
+                           "/login",
+                           loginDTO,
+                           request,
+                           response,
+                           attributes);
+               }else{
+                   attributes.addFlashAttribute("errorMessage","Expired Session");
+                   return "redirect:/register";
+               }
            }catch(HttpClientErrorException ex){
                String responseError = ex.getResponseBodyAsString();
                ObjectMapper mapper = new ObjectMapper();
@@ -234,31 +252,15 @@ public class HomeController {
 
                String status = String.valueOf(ex.getStatusCode().value());
                switch (status) {
+                   case "400":
+                       attributes.addFlashAttribute("errorMessage", message);
+                       return "redirect:/register";
                    case "404":
                        attributes.addFlashAttribute("errorMessage", message);
                        return "redirect:/404-not-found";
                }
            }
-            RegisterCustomerDTO  registerCustomerDTO = (RegisterCustomerDTO) session.getAttribute("responseRegister");
-            if(registerCustomerDTO.getUsername() != null && registerCustomerDTO.getPassword() != null){
-                LoginDTO loginDTO = new LoginDTO();
-                loginDTO.setUsername(registerCustomerDTO.getUsername());
-                loginDTO.setPassword(registerCustomerDTO.getPassword());
-                return authController.callApiLogin(
-                        SD_CLIENT.api_customerLoginUrl,
-                        "/customers/home",
-                        "/login",
-                        loginDTO,
-                        request,
-                        response,
-                        attributes);
-            }else{
-                attributes.addFlashAttribute("errorMessage","Expired Session");
-                return "redirect:/register";
-            }
         }
         return "sendVerifyEmail";
     }
-
-
 }

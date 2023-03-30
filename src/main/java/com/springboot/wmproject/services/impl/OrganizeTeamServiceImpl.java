@@ -126,28 +126,8 @@ public class OrganizeTeamServiceImpl implements OrganizeTeamService {
 
     @Override
     public List<TeamSummaryDTO> getSummaryTeamOrganization() {
-        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization()
-                .stream()
-                .map(object -> {
-                    TeamSummary entity = mapToTeamSummaryEntity(object);
-                    if (entity.getTotal_members() == null) {
-                        entity.setTotal_members(0);
-                    }
-                    return mapToTeamSummaryDTO(entity);
-                })
-                .collect(Collectors.toList());
-
-        teamSummaries
-                .stream()
-                .map(object -> {
-                    if (object.getAbleToDelete() == null) {
-                        object.setAbleToDelete(false);
-                    }else{
-                        object.setAbleToDelete(true);
-                    }
-                    return object;
-                }).collect(Collectors.toList());
-
+        List<TeamSummaryDTO> teamSummaries = teamSummaryRepository.getSummaryTeamOrganization().stream()
+                .map(team -> mapToTeamSummaryDTO(team)).collect(Collectors.toList());
         return teamSummaries;
     }
     public OrganizeTeams mapToEntity(OrganizeTeamDTO organizeTeamDTO) {

@@ -85,7 +85,7 @@ public class AuthController {
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 api_customerLoginUrl,
-                "/sendVerifyEmail",
+                "/customers/home",
                 "/login",
                 loginDTO,
                 request,
@@ -182,6 +182,7 @@ public class AuthController {
 
                     String userType = tokenProvider.getUserType(token);
                     String userID = tokenProvider.getUserID(token);
+                    String is_verified = tokenProvider.getIsVerified(token);
                     String fullName = "";
                     Set<GrantedAuthority> authorities = new HashSet<>();
                     authorities.add(new SimpleGrantedAuthority(userType));
@@ -217,7 +218,7 @@ public class AuthController {
                     }
 
 
-                   CustomUserDetails customerUserDetails = new CustomUserDetails(loginDTO.getUsername(), loginDTO.getPassword(), Long.parseLong(userID), fullName,avatar, authorities);
+                   CustomUserDetails customerUserDetails = new CustomUserDetails(loginDTO.getUsername(), loginDTO.getPassword(), Long.parseLong(userID), fullName,avatar, Boolean.valueOf(is_verified),authorities);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(customerUserDetails, loginDTO.getPassword(), authorities);
 
 
@@ -255,8 +256,6 @@ public class AuthController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
-//            SecurityContextHolder.clearContext();
-//            model.asMap().clear();
         }
         return "redirect:" + logoutSuccessUrl + "?logout";
     }

@@ -6,6 +6,8 @@ import com.springboot.wmproject.entities.PasswordResetToken;
 
 import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public interface PasswordResetTokenService {
     String create(int customerAccountID);
@@ -14,6 +16,8 @@ public interface PasswordResetTokenService {
     String validatePasswordResetToken(String token) throws ParseException;
     boolean isTokenFound(PasswordResetToken passToken);
     boolean isTokenExpired(PasswordResetToken passToken) throws ParseException;
+
+    void deleteExpiredTokens();
 
 
 }

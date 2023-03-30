@@ -27,6 +27,7 @@ public class CustomerDTO {
     @JsonIgnore
     private String avatar;
     private String avatarFromDB;
+    private boolean is_verified;
     public String getAvatar() {
         return this.avatar != null ? this.avatar : this.avatarFromDB;
     }
