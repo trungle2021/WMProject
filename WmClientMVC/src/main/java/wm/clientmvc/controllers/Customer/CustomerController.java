@@ -122,7 +122,6 @@ public class CustomerController {
             String avatar = utilFunction.AddFileEncrypted(file);
             registerDTO.setAvatar(avatar);
 
-
         }
 
 
@@ -158,5 +157,7 @@ public class CustomerController {
         attributes.addFlashAttribute("message","Update Profile Success");
         return "redirect:/customers/update/" + registerDTO.getCustomerId();
     }
+
+
 
 }

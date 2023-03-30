@@ -43,6 +43,7 @@ public class MVCSecurity {
                 .requestMatchers("/staff/teams/create").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
                 .requestMatchers("/staff/teams/getAll").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/getAllEmployeeByTeamId/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
                 .requestMatchers("/staff/teams/update/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //EMPLOYEE ACCOUNT
@@ -82,7 +83,9 @@ public class MVCSecurity {
                 .requestMatchers("/staff/venues/update/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/venues/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //MATERIAL
-                .requestMatchers("/staff/materials/**").hasAnyRole("ADMIN","ANONYMOUS","ORGANIZE")
+                .requestMatchers("/staff/materials/**").hasAnyRole("ADMIN","ANONYMOUS")
+                //REVENUE
+                .requestMatchers("/staff/revenues/**").hasAnyRole("ADMIN","SALE","ANONYMOUS")
 
                 //PERSONAL PERMISSION
                 .requestMatchers("/staff/organize/**").hasAnyRole("ORGANIZE","ANONYMOUS")

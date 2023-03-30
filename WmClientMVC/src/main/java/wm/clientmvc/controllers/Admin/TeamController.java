@@ -24,6 +24,10 @@ import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.SD_CLIENT;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
@@ -92,6 +96,30 @@ public class TeamController {
         return "adminTemplate/pages/teams/index";
     }
 
+    @GetMapping(value = {"/getAllEmployeeByTeamId/{id}"})
+    public String getAllEmployeeByTeamId(Model model, @CookieValue(name = "token", defaultValue = "") String token,@PathVariable("id") int id) throws IOException {
+
+        ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTypeReference<List<EmployeeDTO>>() {};
+        List<EmployeeDTO> employeeList = APIHelper.makeApiCall(
+                api_employees_getAllEmployeeByTeamId + id,
+                HttpMethod.GET,
+                null,
+                token,
+                responseType
+        );
+        int amountMember =employeeList.size();
+        if(amountMember == 0){
+            return "redirect:/staff/teams/getAll";
+        }
+        String teamName = employeeList.stream().findFirst().get().getOrganizeTeamsByTeamId().getTeamName();
+        int team_id = employeeList.stream().findFirst().get().getTeam_id();
+        model.addAttribute("employeeList",employeeList);
+        model.addAttribute("amountMember",amountMember);
+        model.addAttribute("teamName",teamName);
+        model.addAttribute("team_id",team_id);
+        model.addAttribute("token",token);
+        return "adminTemplate/pages/teams/details";
+    }
 
 
     @PostMapping("/create")
@@ -101,7 +129,7 @@ public class TeamController {
                 attributes.addFlashAttribute("result",result);
                  return "redirect:/staff/teams/getAll";
         }
-        if(!teamDTO.getTeamName().matches(regexTeamName)){
+        if(!teamDTO.getTeamName().trim().matches(regexTeamName)){
             model.addAttribute("errorMessage","Input must start with 'TEAM ' and have at least one letter after it and do not contain 'admin or administrator' word.");
             return "redirect:/staff/teams/getAll";
         }

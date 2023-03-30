@@ -51,7 +51,6 @@ public class APIHelper {
             return responseEntity.getBody();
     }
 
-
     public static String getCookie(HttpServletRequest request,String cookieName){
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {

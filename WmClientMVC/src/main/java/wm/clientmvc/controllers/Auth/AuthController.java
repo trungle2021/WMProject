@@ -45,14 +45,17 @@ import static wm.clientmvc.utils.SD_CLIENT.*;
 public class AuthController {
 
     JwtTokenProvider tokenProvider;
+    private HttpSession session;
     @Value("${app-jwt-expiration-second}")
     private int jwtExpirationDate;
 
     @Autowired
-    public AuthController(JwtTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    public AuthController(JwtTokenProvider tokenProvider,HttpSession session) {
 
+        this.tokenProvider = tokenProvider;
+        this.session = session;
+    }
+    public AuthController(){};
     //    STAFF
 
 
@@ -82,7 +85,7 @@ public class AuthController {
     public String loginCustomer(@ModelAttribute("loginDTO") LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) throws JsonProcessingException {
         return callApiLogin(
                 api_customerLoginUrl,
-                "/customers/home",
+                "/sendVerifyEmail",
                 "/login",
                 loginDTO,
                 request,
@@ -128,17 +131,9 @@ public class AuthController {
 
         try {
             RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerDTO, null, RegisterCustomerDTO.class);
-            LoginDTO loginDTO = new LoginDTO();
-            loginDTO.setUsername(responseRegister.getUsername());
-            loginDTO.setPassword(responseRegister.getPassword());
-            return callApiLogin(
-                    api_customerLoginUrl,
-                    "/customers/home",
-                    "/login",
-                    loginDTO,
-                    request,
-                    response,
-                    attributes);
+            session.setAttribute("responseRegister",responseRegister);
+
+            return "redirect:/sendVerifyEmail";
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();

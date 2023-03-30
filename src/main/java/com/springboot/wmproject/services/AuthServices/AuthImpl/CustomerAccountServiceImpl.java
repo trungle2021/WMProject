@@ -1,6 +1,7 @@
 package com.springboot.wmproject.services.AuthServices.AuthImpl;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
+import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.Customers;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
@@ -164,14 +165,8 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
         return "Your Password Has Been Updated";
     }
 
-    @Override
-    public String validToken(String token) throws ParseException {
-        String checkToken =  passwordResetTokenService.validatePasswordResetToken(token);
-        if(!checkToken.equals("Valid")){
-            throw new WmAPIException(HttpStatus.BAD_REQUEST,checkToken);
-        }
-        return token;
-    }
+
+
 
     @Override
     public String updatePasswordMobile(String newPass,String token) throws ParseException {
@@ -221,6 +216,63 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
            return "Unable to send email!";
        }
     }
+
+    @Override
+    public String sendVerifyEmail(String email,String userAgent) {
+        CustomerAccountDTO customerAccountDTO = findByEmail(email);
+        String recipient = email;
+        String subject = " Email Verification - KTK RESTAURANT " ;
+        String content;
+        String tokenCreated;
+        if(userAgent.contains("okhttp")){
+            tokenCreated = passwordResetTokenService.createTokenMobile(customerAccountDTO.getId());
+            content = "<p>Hello,</p>"
+                    + "<p>Thank you for registering! Please verify your email address by clicking the button below:</p>"
+                    + "<p>Use OTP Code below to verify your email:</p>"
+                    + "<p>"+ tokenCreated +"</p>"
+                    + "<br>"
+                    + "<p>Ignore this email if you have not made the request.";
+
+        }else{
+            tokenCreated = passwordResetTokenService.create(customerAccountDTO.getId());
+            String link = SD.DOMAIN_APP_CLIENT + "sendVerifyEmail?token=" + tokenCreated;
+            content =
+                    "<p>Hello,</p>"
+                            + "<p>Thank you for registering! Please verify your email address by clicking the button below:</p>"
+                            + "<p>Click the link below to verify your email:</p>"
+                            + "<p><a href=\"" + link + "\">Verify Account</a></p>"
+                            + "<br>"
+                            + "<p>Ignore this email if you have not made the request.";
+        }
+        try{
+            sender.sendEmail(recipient,subject,content);
+            return tokenCreated;
+        }catch(Exception e){
+            return "Unable to send email!";
+        }
+    }
+
+    @Override
+    public String verifyEmailRegister(String token) throws ParseException {
+        CustomerAccountDTO accountDTO = getByResetPasswordToken(token);
+        Customers customerDTO = customerRepository.findById(accountDTO.getCustomerId()).orElseThrow(()->new WmAPIException(HttpStatus.BAD_REQUEST,"Token invalid"));
+        validToken(token);
+        passwordResetTokenService.delete(token);
+        customerDTO.set_verified(true);
+        customerRepository.save(customerDTO);
+        return "Your Email Has Been Verified";
+    }
+
+    @Override
+    public String validToken(String token) throws ParseException {
+        String checkToken =  passwordResetTokenService.validatePasswordResetToken(token);
+        if(!checkToken.equals("Valid")){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,checkToken);
+        }
+        return token;
+    }
+
+
 
 
     public CustomerAccountDTO mapToDto(CustomerAccounts customerAccounts){

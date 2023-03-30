@@ -115,7 +115,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="col-form-label">Avatar:</label>
-                                    <input type="file" class="form-control" name="employee-create-pic">
+                                    <input type="file" id="file-upload" class="form-control" name="employee-create-pic">
                                 </div>
                                 <div class="form-group col-md-6">
                                     <img>
@@ -164,6 +164,27 @@
 <!-- ./wrapper -->
 <section layout:fragment="optional">
     <!-- Page specific script -->
+    <script type="text/javascript">
+
+        const fileInput = document.getElementById('file-upload');
+
+        fileInput.addEventListener('change', event => {
+            const file = event.target.files[0];
+            const fileSize = file.size; // in bytes
+            const maxSize = 1048576; // 1MB in bytes
+
+            if (fileSize > maxSize) {
+                // File size exceeds maximum limit
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'File size exceeds the maximum limit of 2MB.!',
+                })
+                alert('');
+                event.target.value = ''; // Clear the file input value
+            }
+        });
+    </script>
 </section>
 </body>
 </html>

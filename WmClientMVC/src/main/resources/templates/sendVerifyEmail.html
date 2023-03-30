@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+  <body>
+
+  <section layout:fragment="content">
+      <div class="container mt-5 mb-5">
+          <div class="text-center">
+              <h2>Forgot Password</h2>
+          </div>
+
+
+              <div class="border border-secondary rounded p-3">
+
+                  <th:block th:if="${message != null}">
+                      <div>
+                          <p class="text-warning" th:text="${message}"></p>
+                      </div>
+                  </th:block>
+
+                  <th:block th:if="${errorMessage != null}" >
+                      <div>
+                          <p class="text-warning" th:text="${errorMessage}"></p> <!-- fixed: should use errorMessage instead of message -->
+                      </div>
+                  </th:block>
+
+                  <th:block th:if="${message == null and errorMessage == null}">
+                      <div>
+                          <p>We have sent confirmation link to your email. Please check your email</p>
+                      </div>
+                  </th:block>
+
+                  <div>
+                      <div>
+                          <p>if don't receive any email, check your spam or <a href="#"> resend</a></p>
+                      </div>
+
+                  </div>
+              </div>
+
+
+      </div>
+  </section>
+
+
+  </body>
+</html>

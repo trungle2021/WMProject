@@ -22,6 +22,9 @@ public interface CustomerAccountService {
     String updatePasswordMobile(String newPass,String token) throws ParseException;
     String validToken(String token) throws ParseException;
     String processForgotPassword(String email,String userAgent);
+    String sendVerifyEmail(String email, String userAgent);
+    String verifyEmailRegister(String token) throws ParseException;
+
     CustomerAccountDTO findByEmail(String email);
 
     List<CustomerAccounts> checkUsernameExists(String username);

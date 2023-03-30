@@ -17,5 +17,6 @@ public class TeamSummaryDTO {
     private Integer total_members;
     private String leader_name;
     private Integer emp_id;
+    private Boolean ableToDelete;
 
 }

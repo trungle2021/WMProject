@@ -30,7 +30,9 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerDTO> findAll() {
         //find all
         List<Customers> customersList = customerRepository.findAll();
-        List<CustomerDTO> customerDTOList = customersList.stream().map(customers -> mapToDto(customers)).collect(Collectors.toList());
+        List<CustomerDTO> customerDTOList = customersList.stream()
+                .filter(customers -> customers.is_verified())
+                .map(customers -> mapToDto(customers)).collect(Collectors.toList());
         return customerDTOList;
     }
 
