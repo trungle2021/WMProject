@@ -49,6 +49,7 @@ public class SD_CLIENT {
     public static final String api_customers_getOne_RegisterCustomer = DOMAIN_APP_API +  "/api/auth/customers/getOne/RegisterCustomer/";
     public static final String api_customers_create = DOMAIN_APP_API + "/api/auth/customers/create";
     public static final String api_customers_update = DOMAIN_APP_API +  "/api/auth/customers/update";
+    public static final String api_verify_email = DOMAIN_APP_API +  "/api/auth/customers/verifyEmailRegister/";
 
     //EMPLOYEE AND TEAM API
     public static final String api_employees_getAll = DOMAIN_APP_API + "/api/employees/all";

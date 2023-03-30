@@ -12,7 +12,7 @@ public interface AuthService {
     String employeeLogin(LoginDTO loginDTO);
     String customerLogin(LoginDTO loginDTO);
     RegisterDTO employeeRegister(RegisterDTO registerDTO) throws JsonProcessingException;
-    RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
+    RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException;
     RegisterCustomerDTO customerPersonalValid(RegisterCustomerDTO registerDTO) throws JsonProcessingException;
     RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException;
     RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO) throws JsonProcessingException;

@@ -46,13 +46,13 @@ public class Customers {
     @Column(name = "avatar", nullable = true)
     private String avatar;
 
-
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean is_verified;
 
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<CustomerAccounts> customerAccounts = new HashSet<>();
-
-
 
     @JsonIgnoreProperties({"bookings","customerAccounts","orders"})
     @OneToMany(mappedBy = "customersByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
