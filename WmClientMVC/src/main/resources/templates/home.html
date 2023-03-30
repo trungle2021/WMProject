@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -7,17 +8,53 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <style>
-        .myimg{
-            width:100%;
+        .custom-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #f1c40f;
+            color: #ffffff;
+            font-size: 18px;
+            text-decoration: none;
+            border-radius: 50px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .custom-button:hover {
+            color: #0a0e14;
+            background-color: #e67e22;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .star {
+            color: gold;
+            font-size: 40px;
+        }
+
+        .review-container {
+            width: 1200px; /* Kích thước cố định */
+            height: 300px; /* Kích thước cố định */
+            overflow: auto; /* Cho phép hiển thị thanh cuộn */
+        }
+
+        .myimg {
+            width: 100%;
             height: 200px;
             padding-top: 2px;
         }
+        .description-container-home{
+            display: -webkit-box;
+            -webkit-line-clamp: 4;
+            -webkit-box-orient: vertical;
+            overflow: auto;
+
+        }
+
     </style>
 </head>
 <body>
 <section layout:fragment="content">
-    <div class="hero-wrap"  data-stellar-background-ratio="0.5">
-        <video width="100%" id="myVideo" autoplay loop preload="auto" >
+    <div class="hero-wrap" data-stellar-background-ratio="0.5">
+        <video width="100%" id="myVideo" autoplay loop preload="auto">
             <source src="/video/weddingvideo.mp4" type="video/mp4">
         </video>
     </div>
@@ -30,7 +67,7 @@
                         <div class="icon"><span class="flaticon-placeholder"></span></div>
                         <div class="media-body">
                             <h3 class="heading mb-3">Venue</h3>
-                            <p>	590, CMT8 St, ward 11, District 3, Ho Chi Minh City, Viet Nam</p>
+                            <p> 590, CMT8 St, ward 11, District 3, Ho Chi Minh City, Viet Nam</p>
                         </div>
                     </div>
                 </div>
@@ -39,7 +76,8 @@
                         <div class="icon"><span class="flaticon-hotel"></span></div>
                         <div class="media-body">
                             <h3 class="heading mb-3">Hotel</h3>
-                            <p>Our hotel offers comfortable accommodations and exceptional amenities for a relaxing and enjoyable stay.</p>
+                            <p>Our hotel offers comfortable accommodations and exceptional amenities for a relaxing and
+                                enjoyable stay.</p>
                         </div>
                     </div>
                 </div>
@@ -48,7 +86,8 @@
                         <div class="icon"><span class="flaticon-cooking"></span></div>
                         <div class="media-body">
                             <h3 class="heading mb-3">Restaurant</h3>
-                            <p>Our restaurant serves delicious cuisine prepared with fresh, locally sourced ingredients in a warm and inviting atmosphere.</p>
+                            <p>Our restaurant serves delicious cuisine prepared with fresh, locally sourced ingredients
+                                in a warm and inviting atmosphere.</p>
                         </div>
                     </div>
                 </div>
@@ -59,7 +98,8 @@
     <section class="ftco-section ftco-no-pt ftco-no-pb">
         <div class="container">
             <div class="row no-gutters">
-                <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center" style="background-image: url(/video/wedding.jpg);">
+                <div class="col-md-5 p-md-5 img img-2 d-flex justify-content-center align-items-center"
+                     style="background-image: url(/video/wedding.jpg);">
                 </div>
                 <div class="col-md-7 wrap-about py-md-5 ftco-animate">
                     <div class="heading-section mb-5 pt-5 pl-md-5">
@@ -67,11 +107,22 @@
                             <h2 class="mb-4">What is all about us?</h2>
                         </div>
 
-                        <p> At our wedding venue rental service, we understand that finding the perfect location for your special day is crucial. That's why we offer a range of beautiful and versatile venues that can be customized to suit your unique style and vision.</p>
-                        <p>Our venues are equipped with all the necessary amenities to ensure a seamless and stress-free wedding day, including ample seating, lighting, sound systems, and catering facilities. Whether you're planning an intimate gathering or a grand celebration, our venues can accommodate weddings of all sizes and styles.
+                        <p> At our wedding venue rental service, we understand that finding the perfect location for
+                            your special day is crucial. That's why we offer a range of beautiful and versatile venues
+                            that can be customized to suit your unique style and vision.</p>
+                        <p>Our venues are equipped with all the necessary amenities to ensure a seamless and stress-free
+                            wedding day, including ample seating, lighting, sound systems, and catering facilities.
+                            Whether you're planning an intimate gathering or a grand celebration, our venues can
+                            accommodate weddings of all sizes and styles.
                         </p>
-                        <p>Our experienced team of event planners will work with you every step of the way to create a personalized and memorable wedding experience. From the initial consultation to the day of your event, we will be there to ensure that every detail is perfect and that your wedding day is everything you've dreamed of.</p>
-                        <p>At our wedding venue rental service, we are committed to providing exceptional value and service, so you can relax and enjoy your special day with your loved ones. Contact us today to learn more about our venues and services, and start planning the wedding of your dreams.</p>
+                        <p>Our experienced team of event planners will work with you every step of the way to create a
+                            personalized and memorable wedding experience. From the initial consultation to the day of
+                            your event, we will be there to ensure that every detail is perfect and that your wedding
+                            day is everything you've dreamed of.</p>
+                        <p>At our wedding venue rental service, we are committed to providing exceptional value and
+                            service, so you can relax and enjoy your special day with your loved ones. Contact us today
+                            to learn more about our venues and services, and start planning the wedding of your
+                            dreams.</p>
                         <p><a href="#" class="btn btn-primary">Join now</a></p>
                     </div>
                 </div>
@@ -80,7 +131,7 @@
     </section>
 
 
-<!--//venue-->
+    <!--//venue-->
     <section class="ftco-section ftco-gallery">
         <div class="container-fluid px-4">
             <div class="row justify-content-center mb-5">
@@ -88,31 +139,36 @@
                     <h2 class="mb-3">Venue Gallery</h2>
                 </div>
             </div>
-            <div  class="row" >
+            <div class="row">
                 <div th:if="${venuesImages!=null}" th:each="v:${venuesImages}" class="col-md-3 ftco-animate ">
-                    <a th:href="@{/customers/orders}" >
-                        <img class="gallery image-popup img d-flex align-items-center myimg" th:src="'data:image/png;base64,'+ ${v.getUrl()}" />
+                    <a th:href="@{/customers/orders}">
+                        <img class="gallery image-popup img d-flex align-items-center myimg"
+                             th:src="'data:image/png;base64,'+ ${v.getUrl()}"/>
                     </a>
                 </div>
-                <div th:else>
+                <div th:unless="${venuesImages!=null}">
+
                     <a th:href="@{/customers/orders}" >
                         <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
                     </a>
-                    <a th:href="@{/customers/orders}" >
-                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
+                    <a th:href="@{/customers/orders}">
+                        <img class="gallery image-popup img d-flex align-items-center myimg"
+                             src="/video/weddinglogo.png">
                     </a>
-                    <a th:href="@{/customers/orders}" >
-                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
+                    <a th:href="@{/customers/orders}">
+                        <img class="gallery image-popup img d-flex align-items-center myimg"
+                             src="/video/weddinglogo.png">
                     </a>
-                    <a th:href="@{/customers/orders}" >
-                        <img class="gallery image-popup img d-flex align-items-center myimg" src="/video/weddinglogo.png">
+                    <a th:href="@{/customers/orders}">
+                        <img class="gallery image-popup img d-flex align-items-center myimg"
+                             src="/video/weddinglogo.png">
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-<!--// food imamge-->
+    <!--// food imamge-->
     <section class="ftco-section testimony-section ftco-no-pt">
         <div class="container">
             <div class="row justify-content-center mb-5">
@@ -122,14 +178,16 @@
             </div>
             <div class="row ftco-animate">
                 <div class="col-md-12">
-                    <div class="carousel-testimony owl-carousel ftco-owl" >
+                    <div class="carousel-testimony owl-carousel ftco-owl">
                         <div th:each="f:${foodList}" class="item">
-                            <div  class="testimony-wrap text-center py-4 pb-5">
-                                <th:block th:if="${not #lists.isEmpty(f.getFoodImagesById())}" class="user-img mb-4" >
-                                    <img class="myimg"  th:src="'data:image/png;base64,'+ ${f.getFoodImagesById()[0].getUrl()}">
+                            <div class="testimony-wrap text-center py-4 pb-5">
+                                <th:block th:if="${not #lists.isEmpty(f.getFoodImagesById())}" class="user-img mb-4">
+                                    <img class="myimg"
+                                         th:src="'data:image/png;base64,'+ ${f.getFoodImagesById()[0].getUrl()}">
                                 </th:block>
                                 <div class="text pt-4">
-                                    <p class="mb-4"th:text="${f.getDescription()}"></p>
+
+                                    <p  class="mb-4 description-container-home"th:text="${f.getDescription()}"></p>
                                     <p class="name"th:text="${f.getFoodName()}"></p>
 
                                 </div>
@@ -142,59 +200,40 @@
     </section>
 
 
-<!--Customer feed back-->
+    <!--Customer feed back-->
     <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-7 heading-section text-center ftco-animate">
-                    <h2>Recent Blog</h2>
+                    <h2>Blog-Review</h2>
                 </div>
             </div>
+            <div class="row justify-content-center mb-5">
+                <a th:href="@{/customer/review/{cusId}(cusId=${#authentication.getPrincipal().getUserId()})}" class="custom-button">Review Now</a>
+            </div>
             <div class="row d-flex">
-                <div class="col-md-4 d-flex ftco-animate">
-                    <div class="blog-entry justify-content-end">
-                        <a href="blog-single.html" class="block-20" style="background-image: url('/images/image_1.jpg');">
-                        </a>
-                        <div class="text pt-4">
-                            <div class="meta mb-3">
-                                <div><a href="#">July. 14, 2019</a></div>
-                                <div><a href="#">Admin</a></div>
-                                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                <div class="review-container">
+                    <th:block th:each="r:${reviewList}">
+                        <div class="row mb-3" style="margin-left: 20px;border-top-left-radius: 5px;border-bottom-left-radius: 5px; background: #ddd">
+                            <div class="col-sm-4 d-flex flex-column"
+                                 style="padding-left: 35px;padding-top: 10px;border-right:3px solid #0a0e14">
+                                <div>
+                                    <span th:text="${r.getReviewByCustomerAccountId().username}"
+                                          style="font-weight: bold;font-size: 30px"></span>
+                                    <span th:text="'Date: ' +${r.getDatePost()}" class="float-right"></span>
+                                </div>
+                                <div>
+                                    <div class="float-right">
+                                        <span th:text="${r.getRating()}" style="font-size: 32px"></span>
+                                        <span class="star">&#9733;</span>
+                                    </div>
+                                </div>
                             </div>
-                            <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-                            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 d-flex ftco-animate">
-                    <div class="blog-entry justify-content-end">
-                        <a href="blog-single.html" class="block-20" style="background-image: url('/images/image_2.jpg');">
-                        </a>
-                        <div class="text pt-4">
-                            <div class="meta mb-3">
-                                <div><a href="#">July. 14, 2019</a></div>
-                                <div><a href="#">Admin</a></div>
-                                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
+                            <div class="col-sm-8">
+                                <span th:text="${r.getContent()}" style="font-size: 21px"></span>
                             </div>
-                            <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-                            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-4 d-flex ftco-animate">
-                    <div class="blog-entry">
-                        <a href="blog-single.html" class="block-20" style="background-image: url('/images/image_3.jpg');">
-                        </a>
-                        <div class="text pt-4">
-                            <div class="meta mb-3">
-                                <div><a href="#">July. 14, 2019</a></div>
-                                <div><a href="#">Admin</a></div>
-                                <div><a href="#" class="meta-chat"><span class="icon-chat"></span> 3</a></div>
-                            </div>
-                            <h3 class="heading mt-2"><a href="#">Why Lead Generation is Key for Business Growth</a></h3>
-                            <p>A small river named Duden flows by their place and supplies it with the necessary regelialia.</p>
-                        </div>
-                    </div>
+                    </th:block>
                 </div>
             </div>
         </div>
@@ -206,7 +245,7 @@
 
     <script>
         var myVideo = document.getElementById("myVideo");
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
 
             myVideo.play();
         });
@@ -217,24 +256,20 @@
         var error = [[${alertError}]];
         console.log(error);
         console.log(message);
-        if(message!=null && message.length != 0)
-        {
+        if (message != null && message.length != 0) {
             swal({
                 title: "Message!",
                 text: message,
                 icon: "success",
             });
 
-        }
-        else if(error!=null && error.length != 0)
-        {
+        } else if (error != null && error.length != 0) {
             swal({
                 title: "Error!",
                 text: error,
                 icon: "error",
             });
         }
-
 
 
     </script>

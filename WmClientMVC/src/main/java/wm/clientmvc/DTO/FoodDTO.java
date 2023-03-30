@@ -1,8 +1,10 @@
 package wm.clientmvc.DTO;
 
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Set;
@@ -11,6 +13,7 @@ import java.util.Set;
 public class FoodDTO {
     private int id;
     @NotEmpty
+    @Size(max=100)
     private String foodName;
 
     private String foodType;

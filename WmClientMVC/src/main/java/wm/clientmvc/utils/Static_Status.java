@@ -8,6 +8,9 @@ public class Static_Status {
     public static String orderStatusWarning="warning";
     public static String orderStatusConfirm="confirm";
     public static String orderStatusCompleted="completed";
+
+    public static String orderStatusUncompleted="uncompleted";
+
     public static String orderStatusRefund="refunded";
     public static String foodTypeStarter="starter";
     public static String foodTypeMain="main";

@@ -94,11 +94,20 @@ public class HomeController {
             } else {
                 foodList = fList;
             }
-
+//get all review
+            ParameterizedTypeReference<List<ReviewDTO>> reviewTypeReference = new ParameterizedTypeReference<List<ReviewDTO>>() {
+            };
+            List<ReviewDTO>reviewDTOList=APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API+"/api/reviews/allActive",
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    reviewTypeReference
+            );
 
             model.addAttribute("foodList", foodList);
             model.addAttribute("venuesImages", venuesImages);
-
+            model.addAttribute("reviewList",reviewDTOList);
 
 //get alert
 
@@ -147,6 +156,8 @@ public class HomeController {
         model.addAttribute("confirmSt", orderStatusConfirm);
         model.addAttribute("depositedSt", orderStatusDeposited);
         model.addAttribute("orderedSt", orderStatusOrdered);
+        model.addAttribute("completedSt",orderStatusCompleted);
+        model.addAttribute("refundSt",orderStatusRefund);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails custUserDetails = (CustomUserDetails) authentication.getPrincipal();

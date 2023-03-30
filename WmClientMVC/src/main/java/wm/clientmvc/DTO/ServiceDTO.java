@@ -19,7 +19,7 @@ public class ServiceDTO {
     private Double price;
     @NotEmpty
     private String description;
-    private boolean isActive;
+    private boolean active;
 
 //    private Set<ServiceDetailDTO> serviceDetailsById;
 }

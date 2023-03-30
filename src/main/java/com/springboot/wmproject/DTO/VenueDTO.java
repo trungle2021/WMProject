@@ -23,7 +23,6 @@ public class VenueDTO {
     @Min(1)
     private Double price;
 
-
     private boolean active;
     private List<VenueImgDTO> venueImagesById;
 

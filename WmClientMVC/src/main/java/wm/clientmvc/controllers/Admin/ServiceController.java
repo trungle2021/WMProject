@@ -51,7 +51,7 @@ public class ServiceController {
         }else {
             try {
                 ServiceDTO service = APIHelper.makeApiCall(
-                        SD_CLIENT.DOMAIN_APP_API + "/api/services/create",
+                        "http://localhost:8080/api/services/create",
                         HttpMethod.POST,
                         serviceDTO,
                         token,

@@ -184,7 +184,8 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byStatus/confirm";
 
              List<OrderDTO> list=getOrderList(token,ourl,date);
-             if(list==null)
+
+             if(list==null || list.size()==0)
              {
                  redirectAttributes.addFlashAttribute("alertMessage", "No confirm order found in this day! ");
                  return "redirect:/staff/materials";
@@ -206,7 +207,13 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
 //
 //get list of today
-                List<OrderDTO>list=getOrderList(token,ourl,today);
+                List<OrderDTO>list=getOrderList(token,ourl,date);
+
+                if(list==null || list.size()==0)
+                {
+                    redirectAttributes.addFlashAttribute("alertMessage", "No confirm order found in this day! ");
+                    return "redirect:/staff/materials";
+                }
 
                 List<MaterialDTO> materialList=getMaterialList(token,list);
 
@@ -241,12 +248,14 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 orderResponseType);
 
         //getlist in day
+        if(orderList!=null){
         for (OrderDTO order: orderList)
         {
             if(order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm)&& order.getTimeHappen().contains(date))
             {
                 list.add(order);
             }
+        }
         }
         return list;
     }

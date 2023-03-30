@@ -43,10 +43,10 @@
                             <th>Organize Team</th>
                             <th>Order Status</th>
                             <th>Event Date</th>
-                            <th>Number of Team employee:</th>
+                            <th>Number of fulltime employee:</th>
                             <th>Number of collaborators:</th>
                             <th>Booking Date</th>
-                            <th>Total Amount:</th>
+                            <th>Amount Received :</th>
                             <th>Contract:</th>
                             <th>Action:</th>
                         </tr>
@@ -61,9 +61,11 @@
                             <td th:text="${c.getOrderStatus()}"></td>
                             <td th:text="${c.getTimeHappen()}"></td>
                             <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamsize()}:'N/A'">N/A</td>
-                            <td th:text="${c.getPartTimeEmpAmount()}"></td>
+                            <td th:text="${c.getPartTimeEmpAmount()!=null}?${c.getPartTimeEmpAmount()}:'N/A'"></td>
                             <td th:text="${c.getOrderDate()}"></td>
-                            <td th:text="${c.getOrderTotal()}"></td>
+                            <td th:if="${c.getOrderStatus().equalsIgnoreCase(refundSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.1 : null}"></td>
+                            <td th:if="${c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal()}"></td>
+                            <td th:unless="${c.getOrderStatus().equalsIgnoreCase(refundSt) or c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.4 : null}" ></td>
                             <td><button type="button" class="btn color1" th:data-orderId="${c.getId()}" onclick="getContract(this)">
                                 Contract Detail<i class="fas fa-check-square"></i>
                             </button></td>
@@ -79,11 +81,13 @@
                                      </form>
                                  </td>
                                 <td th:case="${confirmSt}">
-                                    <form th:action="@{/staff/orders/order-completed}" method="post">
-                                        <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
-                                        <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
-                                        <button type="submit" class="btn btn-success">Complete Order</button>
-                                    </form>
+                                    <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                        <form th:action="@{/staff/orders/order-uncompleted}" method="post">
+                                            <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
+                                            <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
+                                        <button type="submit" class="btn btn-danger">Mark as UnComplete</button>
+                                        </form>
+                                    </div>
                                 </td>
                                 <td th:case="*">None</td>
                             </th:block>
@@ -119,7 +123,21 @@
         $(document).ready(function () {
             $('table.display').DataTable();
         });
+        //format
 
+        const elements=document.querySelectorAll('[data-money]');
+        elements.forEach((element) => {
+            const moneyValue = parseFloat(element.dataset.money);
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+            });
+            const formattedAmount = formatter.format(moneyValue);
+            element.textContent = formattedAmount;
+        });
     </script>
     <script th:inline="javascript">
         var orderList = [[${list}]];
@@ -130,7 +148,7 @@
     </script>
     <script th:inline="javascript">
 
-
+        var error = [[${alertError}]];
         var message = [[${alertMessage}]];
         console.log(message);
 
@@ -151,6 +169,9 @@
                 icon: "error",
             });
         }
+
+
+
     </script>
 </section>
 </body>

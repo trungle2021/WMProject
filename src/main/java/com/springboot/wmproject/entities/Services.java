@@ -13,7 +13,7 @@ public class Services {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "service_name", nullable = true, length = 45)
+    @Column(name = "service_name", nullable = true, length = 100)
     private String serviceName;
     @Basic
     @Column(name = "price", nullable = true, precision = 2)
@@ -23,7 +23,7 @@ public class Services {
     private String description;
     @Basic
     @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
-    private boolean isActive;
+    private boolean active;
     @OneToMany(mappedBy = "servicesByServiceId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetailsById;
 
@@ -60,11 +60,11 @@ public class Services {
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     @Override
