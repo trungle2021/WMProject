@@ -123,7 +123,9 @@
                             service, so you can relax and enjoy your special day with your loved ones. Contact us today
                             to learn more about our venues and services, and start planning the wedding of your
                             dreams.</p>
-                        <p><a href="#" class="btn btn-primary">Join now</a></p>
+                        <th:block th:if="${!#authorization.expression('hasRole(''CUSTOMER'')')}">
+                            <p><a th:href="@{/login}" class="btn btn-primary">Join now</a></p>
+                        </th:block>
                     </div>
                 </div>
             </div>
@@ -200,6 +202,7 @@
     </section>
 
 
+
     <!--Customer feed back-->
     <section class="ftco-section">
         <div class="container">
@@ -208,9 +211,11 @@
                     <h2>Blog-Review</h2>
                 </div>
             </div>
+            <th:block th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
             <div class="row justify-content-center mb-5">
                 <a th:href="@{/customer/review/{cusId}(cusId=${#authentication.getPrincipal().getUserId()})}" class="custom-button">Review Now</a>
             </div>
+            </th:block>
             <div class="row d-flex">
                 <div class="review-container">
                     <th:block th:each="r:${reviewList}">
@@ -218,7 +223,7 @@
                             <div class="col-sm-4 d-flex flex-column"
                                  style="padding-left: 35px;padding-top: 10px;border-right:3px solid #0a0e14">
                                 <div>
-                                    <span th:text="${r.getReviewByCustomerAccountId().username}"
+                                    <span th:text="${r.getReviewByCustomerAccountId().getUsername()}"
                                           style="font-weight: bold;font-size: 30px"></span>
                                     <span th:text="'Date: ' +${r.getDatePost()}" class="float-right"></span>
                                 </div>

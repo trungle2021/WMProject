@@ -34,7 +34,7 @@ public class OrganizeTeamController {
 
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','ANONYMOUS')")
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','ANONYMOUS','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
     public ResponseEntity<List<OrganizeTeamDTO>> getAll(){

@@ -27,7 +27,7 @@ public class Review {
     @Column(name = "rating", nullable = false)
     private double rating;
     @Basic
-    @Column(name = "active", nullable = false)
+    @Column(name = "active",nullable = false, columnDefinition = "TINYINT(1)", length = 1)
     private boolean active;
     @Basic
     @Column(name = "customerAccountId", nullable = false)

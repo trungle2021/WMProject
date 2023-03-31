@@ -152,7 +152,7 @@
                         <tr>
                             <td th:text="${myOrder.getVenues().getVenueName()}">
                             </td>
-                            <td data-price="" th:text="${myOrder.getVenues().getPrice()}"></td>
+                            <td data-price="" th:text="'$'+${myOrder.getVenues().getPrice()}"></td>
                         </tr>
 
 
