@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e62b1270-7cea-4dab-94a7-db7781e0414c" name="Changes" comment="" />
-
+    <list default="true" id="e62b1270-7cea-4dab-94a7-db7781e0414c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/adminStatic/dist/js/login.js" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/static/adminStatic/dist/js/login.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/register.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,7 +35,6 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RequestMappingsPanelOrder0": "0",
@@ -49,7 +51,6 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "spring.configuration.checksum": "a6c1a72681bbf934af904fd11f4112a5",
     "vue.rearranger.settings.migration": "true"
-
   }
 }]]></component>
   <component name="RecentsManager">
@@ -118,10 +119,8 @@
       <workItem from="1680094024792" duration="11324000" />
       <workItem from="1680106210198" duration="12737000" />
       <workItem from="1680167854700" duration="1062000" />
-
       <workItem from="1680169320611" duration="4535000" />
       <workItem from="1680196999421" duration="4261000" />
-
     </task>
     <servers />
   </component>
@@ -184,19 +183,17 @@
         <line-breakpoint type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/EmployeeService.java</url>
           <line>14</line>
-          <properties class="com.springboot.wmproject.services.AuthServices.EmployeeService" method="update">
+          <properties class="com.springboot.wmproject.services.AuthServices.EmployeeService">
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="46" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest" memberName="request" />
       </pinned-members>
     </pin-to-top-manager>
-
   </component>
 </project>
