@@ -128,10 +128,12 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
                     if (comparisonResult < 0) {
                         passwordResetTokenRepository.delete(entity);
                         CustomerDTO customerDTO = customerService.getByCustomerAccountId(entity.getCustomerAccountsId());
-                        customerService.delete(customerDTO.getId());
-                        System.out.println(newDateTime);
-                        System.out.println("Deleted expired token with expiry date: " + entity.getExpiryDate());
-                        System.out.println("Deleted customer account has name: " + customerDTO.getFirst_name() + ' ' + customerDTO.getLast_name());
+                        if(!customerDTO.is_verified()){
+                            customerService.delete(customerDTO.getId());
+                            System.out.println(newDateTime);
+                            System.out.println("Deleted expired token with expiry date: " + entity.getExpiryDate());
+                            System.out.println("Deleted customer account has name: " + customerDTO.getFirst_name() + ' ' + customerDTO.getLast_name());
+                        }
                     }
                 });
     }
