@@ -1,10 +1,7 @@
 package com.springboot.wmproject.services.impl;
 
-import com.springboot.wmproject.DTO.FoodDTO;
 import com.springboot.wmproject.DTO.FoodDetailDTO;
-import com.springboot.wmproject.entities.Food;
 import com.springboot.wmproject.entities.FoodDetails;
-import com.springboot.wmproject.entities.Materials;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.FoodDetailRepository;
 import com.springboot.wmproject.services.FoodDetailService;
