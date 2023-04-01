@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e62b1270-7cea-4dab-94a7-db7781e0414c" name="Changes" comment="" />
-
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -15,6 +14,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
@@ -32,9 +32,9 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "JPA.DatabaseSchemaImportDialog": "16953116-e2cc-4c35-8f3e-1c46994fc1aa",
     "RequestMappingsPanelOrder0": "0",
     "RequestMappingsPanelOrder1": "1",
     "RequestMappingsPanelWidth0": "75",
@@ -49,7 +49,6 @@
     "node.js.selected.package.tslint": "(autodetect)",
     "spring.configuration.checksum": "a6c1a72681bbf934af904fd11f4112a5",
     "vue.rearranger.settings.migration": "true"
-
   }
 }]]></component>
   <component name="RecentsManager">
@@ -62,6 +61,9 @@
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.springboot.wmproject.entities" />
       <recent name="com.springboot.wmproject.DTO" />
+    </key>
+    <key name="ImportMappingsDialog.RecentPackages">
+      <recent name="com.springboot.wmproject.entities" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -118,10 +120,13 @@
       <workItem from="1680094024792" duration="11324000" />
       <workItem from="1680106210198" duration="12737000" />
       <workItem from="1680167854700" duration="1062000" />
-
       <workItem from="1680169320611" duration="4535000" />
-      <workItem from="1680196999421" duration="4261000" />
-
+      <workItem from="1680196999421" duration="17170000" />
+      <workItem from="1680228378293" duration="238000" />
+      <workItem from="1680250255789" duration="5121000" />
+      <workItem from="1680255483519" duration="1341000" />
+      <workItem from="1680258699711" duration="8633000" />
+      <workItem from="1680281464440" duration="5074000" />
     </task>
     <servers />
   </component>
@@ -181,6 +186,26 @@
           <line>130</line>
           <option name="timeStamp" value="88" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
+          <line>337</line>
+          <option name="timeStamp" value="92" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Customer/WebOrderController.java</url>
+          <line>116</line>
+          <option name="timeStamp" value="100" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java</url>
+          <line>63</line>
+          <option name="timeStamp" value="117" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Admin/AdminOrderController.java</url>
+          <line>55</line>
+          <option name="timeStamp" value="118" />
+        </line-breakpoint>
         <line-breakpoint type="java-method">
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/EmployeeService.java</url>
           <line>14</line>
@@ -191,12 +216,10 @@
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-
     <pin-to-top-manager>
       <pinned-members>
         <PinnedItemInfo parentTag="org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest" memberName="request" />
       </pinned-members>
     </pin-to-top-manager>
-
   </component>
 </project>
