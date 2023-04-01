@@ -125,7 +125,7 @@
                                 <form method="post" th:action="@{/staff/venues/create}" id="createForm">
                                     <div class="form-group">
                                         <label class="col-form-label">Venue name :</label>
-                                        <input type="text" class="form-control" name="venueName" required
+                                        <input type="text" class="form-control" name="venueName" maxlength="40" required
                                                >
                                     </div>
                                     <div class="form-group">
@@ -178,7 +178,7 @@
                                     <input type="text" class="update-venue-id" name="id" hidden>
                                     <div class="form-group">
                                         <label for="venueName" class="col-form-label">Venue name :</label>
-                                        <input type="text" required class="form-control update-venue-name"
+                                        <input type="text" required class="form-control update-venue-name" maxlength="40"
                                                name="venueName" id="venueName" >
                                     </div>
                                     <div class="form-group">
