@@ -31,13 +31,24 @@ public class CustomerReviewController {
     }
 
     @PostMapping("/create")
-    public String createReview(Model model,@RequestParam("cusId") String cusId, @ModelAttribute ReviewDTO reviewDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        double rating = Double.parseDouble(request.getParameter("rating"));
+    public String createReview(Model model, @RequestParam("cusId") String cusId, @ModelAttribute ReviewDTO reviewDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response) throws IOException {
         LocalDateTime currentDate = LocalDateTime.now();
-        DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        String finalDate=currentDate.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String finalDate = currentDate.format(formatter);
         reviewDTO.setDatePost(String.valueOf(finalDate));
-        reviewDTO.setActive(false);
+        String[] badWords = {"damn", "hell", "crap", "sucks", "freaking"};
+        String checkWords = reviewDTO.getContent().toLowerCase();
+        int count = 0;
+        for (String item : badWords) {
+            if (checkWords.contains(item)) {
+                count++;
+            }
+        }
+        if (count == 0 && reviewDTO.getRating() > 3) {
+            reviewDTO.setActive(true);
+        } else {
+            reviewDTO.setActive(false);
+        }
         try {
             CustomerAccountDTO accountDTO = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/customerAccounts/customer/" + cusId,
@@ -48,14 +59,14 @@ public class CustomerReviewController {
             );
             reviewDTO.setCustomerAccountId(accountDTO.getId());
             APIHelper.makeApiCall(
-                    SD_CLIENT.DOMAIN_APP_API+"/api/reviews/create",
+                    SD_CLIENT.DOMAIN_APP_API + "/api/reviews/create",
                     HttpMethod.POST,
                     reviewDTO,
                     token,
                     String.class
             );
-            model.addAttribute("alertMessage","Thank you for your review");
-        }catch (HttpClientErrorException ex){
+            model.addAttribute("alertMessage", "Thank you for your review");
+        } catch (HttpClientErrorException ex) {
             throw new ExportException(ex.getMessage());
         }
 
