@@ -286,6 +286,7 @@ public class OrderServiceImpl implements OrderService {
             if(orders!=null){
 
                 orders.setOrderStatus(status);
+                orderRepository.save(orders);
                 if(status.equalsIgnoreCase(orderStatusRefund))
                 {
 //                    String to="khangkhangbl@gmail.com";
@@ -297,7 +298,7 @@ public class OrderServiceImpl implements OrderService {
                     String content= MailContent.getRefundMail(customer,orders.getVenues().getVenueName(),orders.getOrderDate(),orders.getTimeHappen(),String.valueOf(orders.getOrderTotal()/20));
                     try {
                         mailSender.sendEmail(to,"Your canceling request accepted!", content);
-                        orderRepository.save(orders);
+
                     } catch (MessagingException e) {
 
                         throw new RuntimeException(e);
@@ -366,11 +367,16 @@ public class OrderServiceImpl implements OrderService {
           {
               throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cant choose ADMINISTRATOR team");
           }
+
            if(order!=null && order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm) && order.getOrganizeTeam()!=teamId) {
                //change partime emp
                DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                LocalDateTime event=LocalDateTime.parse(order.getTimeHappen(),formatter);
               LocalDateTime now= LocalDateTime.now();
+               List<Orders> ordersByTime=orderRepository.findByTimeHappen(order.getTimeHappen()).stream().filter(o->o.getOrganizeTeam()==teamId).collect(Collectors.toList());
+               //check trung tiec
+               if(!ordersByTime.isEmpty()){throw new WmAPIException(HttpStatus.BAD_REQUEST,"This team organize another event this day!");}
+
               if(now.isAfter(event)){
                   throw new WmAPIException(HttpStatus.BAD_REQUEST,"You can't change the shift after event organized!");
               }

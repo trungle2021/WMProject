@@ -64,7 +64,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label">Name:</label>
                                                     <input type="text" class="form-control"
-                                                           th:value="${c.getFoodName()}" name="foodName" required>
+                                                           th:value="${c.getFoodName()}" name="foodName" maxlength="40" required>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label">Type:</label>
@@ -80,7 +80,7 @@
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label">Description:</label>
                                                     <input type="text" class="form-control" name="description"
-                                                           th:value="${c.getDescription()}" required>
+                                                           th:value="${c.getDescription()}" maxlength="200" required>
                                                 </div>
                                                 <div class="form-group col-md-6">
                                                     <label class="col-form-label">Price ($):</label>
@@ -153,9 +153,9 @@
                                             <div id="input-group-1" class="input-group">
                                                 <span>*All field must be fill or it will not added*</span><br>
                                                 <label for="input-1-1">Material name:</label><br/>
-                                                <input type="text" id="input-1-1" name="material1"/><br/><br/>
+                                                <input type="text" id="input-1-1" name="material1" maxlength="40"/><br/><br/>
                                                 <label for="input-1-2">Unit:</label><br/>
-                                                <input type="text" id="input-1-2" name="unit1"/><br/><br/>
+                                                <input type="text" id="input-1-2" name="unit1" maxlength="40"/><br/><br/>
                                                 <label for="input-1-3">Count:</label><br/>
                                                 <input type="text" id="input-1-3" name="cost1" min="1"
                                                        th:id="txtPrice1"/><br/><br/>
@@ -170,9 +170,9 @@
                                                 <span>*All field must be fill or it will not added*</span><br>
 
                                                 <label for="input-2-1">Material name:</label><br/>
-                                                <input type="text" id="input-2-1" name="material2"/><br/><br/>
+                                                <input type="text" id="input-2-1" name="material2"maxlength="40"/><br/><br/>
                                                 <label for="input-2-2">Unit:</label><br/>
-                                                <input type="text" id="input-2-2" name="unit2"/><br/><br/>
+                                                <input type="text" id="input-2-2" name="unit2"maxlength="40"/><br/><br/>
                                                 <label for="input-2-3">Count:</label><br/>
                                                 <input type="text" id="input-2-3" name="cost2"
                                                        th:id="txtPrice2" min="1"/><br/><br/>
@@ -187,9 +187,9 @@
                                             <div id="input-group-3" class="input-group">
                                                 <span>*All field must be fill or it will not added*</span><br>
                                                 <label for="input-3-1">Material name:</label><br/>
-                                                <input type="text" id="input-3-1" name="material3"/><br/><br/>
+                                                <input type="text" id="input-3-1" name="material3"maxlength="40"/><br/><br/>
                                                 <label for="input-3-2">Unit:</label><br/>
-                                                <input type="text" id="input-3-2" name="unit3"/><br/><br/>
+                                                <input type="text" id="input-3-2" name="unit3"maxlength="40"/><br/><br/>
                                                 <label for="input-3-3">Count:</label><br/>
                                                 <input type="text" id="input-3-3" name="cost3" min="1"
                                                        th:id="txtPrice3"/><br/><br/>
