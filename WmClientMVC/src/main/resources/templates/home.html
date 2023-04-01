@@ -31,7 +31,7 @@
         }
 
         .review-container {
-            width: 1200px; /* Kích thước cố định */
+            width: 1100px; /* Kích thước cố định */
             height: 300px; /* Kích thước cố định */
             overflow: auto; /* Cho phép hiển thị thanh cuộn */
         }
@@ -205,14 +205,14 @@
 
     <!--Customer feed back-->
     <section class="ftco-section">
-        <div class="container">
+        <div class="container" style="border-top: 3px solid black">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-7 heading-section text-center ftco-animate">
                     <h2>Blog-Review</h2>
                 </div>
             </div>
             <th:block th:if="${#authorization.expression('hasRole(''CUSTOMER'')')}">
-            <div class="row justify-content-center mb-5">
+            <div class="row justify-content-center mb-5" style="border-bottom: 3px solid black;padding-bottom: 10px">
                 <a th:href="@{/customer/review/{cusId}(cusId=${#authentication.getPrincipal().getUserId()})}" class="custom-button">Review Now</a>
             </div>
             </th:block>
