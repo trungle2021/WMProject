@@ -1,5 +1,7 @@
 package wm.clientmvc.controllers.Admin;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.ws.rs.PathParam;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -45,7 +47,7 @@ public class AdminMaterialController {
     }
 
 @RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
-public String showMaterialbyOrder(Model model, @PathVariable Integer id, @CookieValue(name="token",defaultValue = "")String token)
+public String showMaterialbyOrder(Model model, @PathVariable Integer id, @CookieValue(name="token",defaultValue = "")String token, HttpServletRequest request, HttpServletResponse response)
 {
     //get order
     List<OrderDTO>list= new ArrayList<>();
@@ -59,7 +61,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 HttpMethod.GET,
                 null,
                 token,
-                OrderDTO.class
+                OrderDTO.class,request,response
              );
              list.add(order);
 
@@ -73,7 +75,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 HttpMethod.GET,
                 null,
                 token,
-                responseType
+                responseType,request,response
         );
         //getday
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -97,7 +99,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
     }
 
     @RequestMapping(value="/detail/searchId",method = RequestMethod.POST)
-    public String materialSearchId(Model model,@PathParam("orderId")Integer orderId, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes)
+    public String materialSearchId(Model model,@PathParam("orderId")Integer orderId, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)
     {
 //check team
 
@@ -115,7 +117,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                         HttpMethod.GET,
                         null,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
                 list.add(order);
             //get material
@@ -129,7 +131,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType
+                    responseType,request,response
             );
 
 
@@ -162,7 +164,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
     }
 
     @RequestMapping(value="/detail/searchDate",method = RequestMethod.POST)
-    public String materialSearchDate(Model model, @PathParam("date")String date, @CookieValue(name="token",defaultValue = "")String token, RedirectAttributes redirectAttributes)
+    public String materialSearchDate(Model model, @PathParam("date")String date, @CookieValue(name="token",defaultValue = "")String token, RedirectAttributes redirectAttributes,HttpServletRequest request,HttpServletResponse response)
     {
         //check team
 
@@ -183,7 +185,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 //confirm only
                 String ourl = "http://localhost:8080/api/orders/byStatus/confirm";
 
-             List<OrderDTO> list=getOrderList(token,ourl,date);
+             List<OrderDTO> list=getOrderList(token,ourl,date,request,response);
 
              if(list==null || list.size()==0)
              {
@@ -192,7 +194,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
              }
 
                 //get material in day with count
-          List<MaterialDTO> materialList=getMaterialList(token,list);
+          List<MaterialDTO> materialList=getMaterialList(token,list,request,response);
 
                 model.addAttribute("today",today);
                 model.addAttribute("orderList",list);
@@ -207,7 +209,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
 //
 //get list of today
-                List<OrderDTO>list=getOrderList(token,ourl,date);
+                List<OrderDTO>list=getOrderList(token,ourl,date,request,response);
 
                 if(list==null || list.size()==0)
                 {
@@ -215,7 +217,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                     return "redirect:/staff/materials";
                 }
 
-                List<MaterialDTO> materialList=getMaterialList(token,list);
+                List<MaterialDTO> materialList=getMaterialList(token,list,request,response);
 
 //        totalMaterial;
                 model.addAttribute("today",today);
@@ -236,7 +238,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
         }
     }
 
-    public List<OrderDTO> getOrderList(String token,String url,String date) throws IOException {
+    public List<OrderDTO> getOrderList(String token,String url,String date,HttpServletRequest request,HttpServletResponse response) throws IOException {
 
         List<OrderDTO>list= new ArrayList<>();
         ParameterizedTypeReference<List<OrderDTO>> orderResponseType = new ParameterizedTypeReference<>() {};
@@ -245,7 +247,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 HttpMethod.GET,
                 null,
                 token,
-                orderResponseType);
+                orderResponseType,request,response);
 
         //getlist in day
         if(orderList!=null){
@@ -260,7 +262,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
         return list;
     }
 
-    public List<MaterialDTO> getMaterialList(String token,List<OrderDTO>list) throws Exception {
+    public List<MaterialDTO> getMaterialList(String token,List<OrderDTO>list,HttpServletRequest request,HttpServletResponse response) throws Exception {
         List<MaterialDTO> materialList=new ArrayList<>();
 
         for (OrderDTO order:list)
@@ -273,7 +275,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType
+                    responseType,request,response
             );
 
             Integer table=order.getTableAmount();

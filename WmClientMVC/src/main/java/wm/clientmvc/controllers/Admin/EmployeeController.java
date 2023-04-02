@@ -3,6 +3,7 @@ package wm.clientmvc.controllers.Admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -35,7 +36,7 @@ import static wm.clientmvc.utils.SD_CLIENT.*;
 public class EmployeeController {
 
     @GetMapping(value = {"/getAll"})
-    public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, RedirectAttributes attributes) throws IOException {
+    public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes,HttpServletRequest request,HttpServletResponse response) throws IOException {
         ParameterizedTypeReference<List<EmployeeDTO>> responseTypeEmployee = new ParameterizedTypeReference<List<EmployeeDTO>>() {
         };
 
@@ -50,7 +51,7 @@ public class EmployeeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeEmployee
+                    responseTypeEmployee,request,response
             );
 
             model.addAttribute("employeeList", employeeDTOList);
@@ -83,7 +84,7 @@ public class EmployeeController {
 
 
     @GetMapping("/create")
-    public String create(Model model,@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes) throws JsonProcessingException {
+    public String create(Model model,@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException {
 
 
         BindingResult result = (BindingResult) model.asMap().get("result");
@@ -108,7 +109,7 @@ public class EmployeeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeTeam
+                    responseTypeTeam,request,response
             );
             model.addAttribute("teamList", teamDTOList);
 
@@ -133,7 +134,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
+    public String create(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file,HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
@@ -155,7 +156,7 @@ public class EmployeeController {
                     HttpMethod.POST,
                     registerDTO,
                     token,
-                   RegisterDTO.class
+                   RegisterDTO.class,request,response
             );
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -180,7 +181,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/update/{id}")
-    public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
+    public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id,HttpServletRequest request, HttpServletResponse response ) throws JsonProcessingException {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails= (CustomUserDetails) authentication.getPrincipal();
         boolean isAdmin = authentication.getAuthorities().stream().findFirst().toString().contains("ROLE_ADMIN");
@@ -201,14 +202,14 @@ public class EmployeeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    RegisterDTO.class);
+                    RegisterDTO.class,request,response);
 
             List<OrganizeTeamDTO> teamDTOList = APIHelper.makeApiCall(
                     api_teams_getAll,
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeTeam
+                    responseTypeTeam,request,response
             );
             model.addAttribute("teamList", teamDTOList);
             model.addAttribute("message",model.asMap().get("message"));
@@ -234,7 +235,7 @@ public class EmployeeController {
     }
 
     @PostMapping("/update")
-    public String update(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
+    public String update(@Valid @ModelAttribute RegisterDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file,HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (result.hasErrors()) {
             attributes.addFlashAttribute("result",result);
@@ -271,7 +272,7 @@ public class EmployeeController {
                     HttpMethod.PUT,
                     registerDTO,
                     token,
-                    RegisterDTO.class
+                    RegisterDTO.class,request,response
             );
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
@@ -300,8 +301,8 @@ public class EmployeeController {
 
     @PostMapping(value = {"/updateTeamLeader/{empId}/{status}"},produces = "application/json")
     @ResponseBody
-    public Map<String, Object> updateTeamLeader(@PathVariable("empId") int empId,@PathVariable("status") int status,@CookieValue(name = "token", defaultValue = "") String token) throws IOException {
-        Map<String, Object> response = new HashMap<>();
+    public Map<String, Object> updateTeamLeader(@PathVariable("empId") int empId,@PathVariable("status") int status,@CookieValue(name = "token", defaultValue = "") String token,HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> _response = new HashMap<>();
         EmployeeDTO employeeDTO = new EmployeeDTO();
         employeeDTO.setId(empId);
         employeeDTO.setIsLeader(status);
@@ -311,45 +312,45 @@ public class EmployeeController {
                     HttpMethod.PUT,
                     employeeDTO,
                     token,
-                    EmployeeDTO.class
+                    EmployeeDTO.class,request,response
             );
-            response.put("result", "success");
-            response.put("statusCode", 200);
-            response.put("message", response_);
+            _response.put("result", "success");
+            _response.put("statusCode", 200);
+            _response.put("message", response_);
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(responseError, Map.class);
             String message = map.get("message").toString();
-            response.put("result", "success");
-            response.put("statusCode", 400);
-            response.put("message",message);
-            response.put("isLeader",1);
+            _response.put("result", "success");
+            _response.put("statusCode", 400);
+            _response.put("message",message);
+            _response.put("isLeader",1);
         }
-        return response;
+        return _response;
     }
 
     @PostMapping(value = "/delete/{id}",produces = "application/json")
     @ResponseBody
-    public Map<String, Object> delete(@PathVariable int id, @CookieValue(name = "token", defaultValue = "") String token) throws IOException {
-        Map<String, Object> response = new HashMap<>();
+    public Map<String, Object> delete(@PathVariable int id, @CookieValue(name = "token", defaultValue = "") String token,HttpServletRequest request, HttpServletResponse response) throws IOException {
+        Map<String, Object> _response = new HashMap<>();
 
         try{
-            String response_api = APIHelper.makeApiCall(api_employee_delete + id,HttpMethod.DELETE,null,token,String.class);
-            response.put("result", "success");
-            response.put("statusCode", 200);
-            response.put("message", response_api);
+            String response_api = APIHelper.makeApiCall(api_employee_delete + id,HttpMethod.DELETE,null,token,String.class,request,response);
+            _response.put("result", "success");
+            _response.put("statusCode", 200);
+            _response.put("message", response_api);
 
         }catch (HttpClientErrorException e){
             String responseError = e.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(responseError, Map.class);
             String message = map.get("message").toString();
-            response.put("result", "success");
-            response.put("statusCode", e.getStatusCode());
-            response.put("message",message);
+            _response.put("result", "success");
+            _response.put("statusCode", e.getStatusCode());
+            _response.put("message",message);
         }
 
-        return response;
+        return _response;
     }
 }

@@ -40,7 +40,9 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeFood
+                    responseTypeFood,
+                    request,
+                    response
             );
             Static_Status static_status = new Static_Status();
             List<String> foodType = new ArrayList<>();
@@ -82,7 +84,7 @@ public class FoodController {
                         HttpMethod.DELETE,
                         null,
                         token,
-                        String.class
+                        String.class,request,response
                 );
             } catch (HttpClientErrorException ex) {
                 String responseError = ex.getResponseBodyAsString();
@@ -122,7 +124,7 @@ public class FoodController {
                             HttpMethod.DELETE,
                             null,
                             token,
-                            String.class
+                            String.class,request,response
                     );
                 } catch (HttpClientErrorException ex) {
                     String responseError = ex.getResponseBodyAsString();
@@ -159,7 +161,7 @@ public class FoodController {
                         HttpMethod.POST,
                         materialDTO,
                         token,
-                        MaterialDTO.class
+                        MaterialDTO.class,request,response
                 );
             } catch (HttpClientErrorException ex) {
                 String responseError = ex.getResponseBodyAsString();
@@ -196,7 +198,7 @@ public class FoodController {
                         HttpMethod.POST,
                         materialDTO,
                         token,
-                        MaterialDTO.class
+                        MaterialDTO.class,request,response
                 );
             } catch (HttpClientErrorException ex) {
                 String responseError = ex.getResponseBodyAsString();
@@ -233,7 +235,7 @@ public class FoodController {
                         HttpMethod.POST,
                         materialDTO,
                         token,
-                        MaterialDTO.class
+                        MaterialDTO.class,request,response
                 );
             } catch (HttpClientErrorException ex) {
                 String responseError = ex.getResponseBodyAsString();
@@ -263,7 +265,7 @@ public class FoodController {
                     HttpMethod.PUT,
                     foodDTO,
                     token,
-                    FoodDTO.class
+                    FoodDTO.class,request,response
             );
             if (data == null) {
                 return "redirect:/staff/food/index?msg=Fail";
@@ -314,7 +316,7 @@ public class FoodController {
                     HttpMethod.POST,
                     newList,
                     token,
-                    responseTypeVenue
+                    responseTypeVenue,request,response
             );
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -350,7 +352,7 @@ public class FoodController {
                     HttpMethod.POST,
                     foodDTO,
                     token,
-                    FoodDTO.class
+                    FoodDTO.class,request,response
             );
             if (data == null) {
                 return "redirect:/staff/food/index?msg=Fail";
@@ -389,7 +391,7 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeFood
+                    responseTypeFood,request,response
             );
             Static_Status static_status = new Static_Status();
             List<String> foodType = new ArrayList<>();
@@ -433,7 +435,7 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeFood
+                    responseTypeFood,request,response
             );
             model.addAttribute("foodId", Integer.parseInt(id));
             model.addAttribute("foodList", foodDTOS);

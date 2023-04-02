@@ -20,7 +20,7 @@ import java.util.Map;
 public class JwtTokenProvider {
     @Value("${app.jwt-secret}")
     private String jwtSecret;
-    @Value("${app-jwt-expiration-second}")
+    @Value("${app-jwt-expiration-milisecond}")
     private long jwtExpirationDate;
 
     private Key key() {

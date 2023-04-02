@@ -38,7 +38,7 @@ import static wm.clientmvc.utils.SD_CLIENT.api_customers_update;
 @RequestMapping("/customers")
 public class CustomerController {
     @GetMapping("/update/{id}")
-    public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
+    public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ,HttpServletResponse response,HttpServletRequest request) throws JsonProcessingException {
 
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails= (CustomUserDetails) authentication.getPrincipal();
@@ -57,7 +57,7 @@ public class CustomerController {
                     HttpMethod.GET,
                     null,
                     token,
-                    RegisterCustomerDTO.class);
+                    RegisterCustomerDTO.class,request,response);
             model.addAttribute("message",model.asMap().get("message"));
             model.addAttribute("registerDTO",registerDTO);
             model.addAttribute("errorMessages",model.asMap().get("errorMessages"));
@@ -92,7 +92,7 @@ public class CustomerController {
     }
 
     @PostMapping("/update")
-    public String update(@Valid @ModelAttribute RegisterCustomerDTO registerDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
+    public String update(@Valid @ModelAttribute RegisterCustomerDTO registerDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file,HttpServletResponse response,HttpServletRequest request) throws IOException {
 
         if (result.hasErrors()) {
             attributes.addFlashAttribute("result",result);
@@ -131,7 +131,7 @@ public class CustomerController {
                     HttpMethod.PUT,
                     registerDTO,
                     token,
-                    RegisterCustomerDTO.class
+                    RegisterCustomerDTO.class,request, response
             );
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

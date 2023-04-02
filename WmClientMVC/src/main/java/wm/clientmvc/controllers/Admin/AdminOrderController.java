@@ -1,6 +1,8 @@
 package wm.clientmvc.controllers.Admin;
 
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import org.springframework.core.ParameterizedTypeReference;
@@ -40,7 +42,7 @@ public class AdminOrderController {
 //RestTemplate restTemplate=new RestTemplate();
 
     @RequestMapping("/orders/showall")
-    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError)
+    public String showAll(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError,HttpServletRequest request,HttpServletResponse response)
     {
         model.addAttribute("warningSt",orderStatusWarning);
         model.addAttribute("cancelingSt",orderStatusCancel);
@@ -59,7 +61,7 @@ public class AdminOrderController {
                 HttpMethod.GET,
                 null,
                 token,
-                responseType);
+                responseType,request,response);
 
         if(role.contains("ADMIN")) {
             model.addAttribute("list", orderList);
@@ -99,7 +101,7 @@ public class AdminOrderController {
 
     @RequestMapping("/orders/showmyorder/{status}")
 
-    public String showMyOrder(Model model,@PathVariable String status, @CookieValue(name = "token",defaultValue = "")String token)
+    public String showMyOrder(Model model,@PathVariable String status, @CookieValue(name = "token",defaultValue = "")String token,HttpServletRequest request,HttpServletResponse response)
     {
         Authentication authentication= SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails empUserDetails= (CustomUserDetails) authentication.getPrincipal();
@@ -119,7 +121,7 @@ public class AdminOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType);
+                    responseType,request,response);
 
             List<OrderDTO> myList= new ArrayList<>();
             if(orderList!=null)
@@ -144,7 +146,7 @@ public class AdminOrderController {
 
 
 @RequestMapping("/orders/order-detail/{id}")
-public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
+public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id, HttpServletRequest request, HttpServletResponse response)
 {
     String url="http://localhost:8080/api/orders/"+id;
     try {
@@ -153,7 +155,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                 HttpMethod.GET,
                 null,
                 token,
-                OrderDTO.class
+                OrderDTO.class,request,response
         );
         model.addAttribute("orderDTO",order);
         return "adminTemplate/pages/tables/order-update-status";
@@ -165,7 +167,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
 }
 
     @RequestMapping("/orders/order-detail-confirm/{id}")
-    public String OrderDetailConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id)
+    public String OrderDetailConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathVariable Integer id,HttpServletRequest request, HttpServletResponse response)
     {
         String url="http://localhost:8080/api/orders/"+id;
         try {
@@ -174,7 +176,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                     HttpMethod.GET,
                     null,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
             );
             model.addAttribute("orderDTO",order);
             return "adminTemplate/pages/tables/order-update-confirm";
@@ -186,7 +188,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
     }
 
          @RequestMapping(value = "/orders/order-refunded",method = RequestMethod.POST)
-             public String OrderRefunded(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes)
+             public String OrderRefunded(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)
              {
         if(status.equalsIgnoreCase(orderStatusCancel)) {
             String url = "http://localhost:8080/api/orders/updateStatus/"+orderId+"/"+orderStatusRefund;
@@ -196,7 +198,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                         HttpMethod.PUT,
                         null,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
                 model.addAttribute("orderDTO", order);
                 redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Refunded! ");
@@ -214,7 +216,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
 
         //completed
         @RequestMapping(value = "/orders/order-completed",method = RequestMethod.POST)
-        public String OrderCompleted(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes) {
+        public String OrderCompleted(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response) {
 
             if (status.equalsIgnoreCase(orderStatusConfirm)) {
                 OrderDTO editOrder = new OrderDTO();
@@ -226,7 +228,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                             HttpMethod.GET,
                             null,
                             token,
-                            OrderDTO.class
+                            OrderDTO.class,request,response
                     );
 
                 } catch (Exception e) {
@@ -269,7 +271,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
                                 HttpMethod.PUT,
                                 editOrder,
                                 token,
-                                OrderDTO.class
+                                OrderDTO.class,request,response
                         );
 
                         redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Party Completed!Nice Job Team! ");
@@ -295,7 +297,7 @@ public String OrderDetail(Model model, @CookieValue(name="token",defaultValue = 
 
     @RequestMapping(value = "/orders/order-update",method = RequestMethod.POST)
 public String update(@Validated  OrderDTO order, BindingResult bindingResult, Model model, @CookieValue(name="token",defaultValue = "")String token,
-                     RedirectAttributes redirectAttributes, @PathParam("file") MultipartFile file) throws IOException {
+                     RedirectAttributes redirectAttributes, @PathParam("file") MultipartFile file,HttpServletRequest request, HttpServletResponse response) throws IOException {
 
 
     OrderDTO editOrder = new OrderDTO();
@@ -310,7 +312,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
                 HttpMethod.GET,
                 null,
                 token,
-                OrderDTO.class
+                OrderDTO.class,request,response
         );
     } catch (Exception e) {
         model.addAttribute("message", e.getMessage());
@@ -367,7 +369,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
                     HttpMethod.PUT,
                     editOrder,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
             );
             redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Deposited! ");
             return "redirect:/staff/orders/showall";
@@ -384,7 +386,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
 }
 
 @RequestMapping(value = "/orders/order-confirm",method = RequestMethod.POST)
-public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult,RedirectAttributes redirectAttributes)
+public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult,RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)
 {
     //tinh lại total amount and partime emp
     OrderDTO editOrder = new OrderDTO();
@@ -399,7 +401,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                 HttpMethod.GET,
                 null,
                 token,
-                OrderDTO.class
+                OrderDTO.class,request,response
         );
     } catch (IOException e) {
         model.addAttribute("message", e.getMessage());
@@ -444,9 +446,9 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
 
         editOrder.setContract(findOrder.getContract());
         //render team
-        Integer team=getTeam(findOrder,token);
+        Integer team=getTeam(findOrder,token,request,response);
         editOrder.setOrganizeTeam(team);
-        editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
+        editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token,request,response));
             //update
              try {
                 APIHelper.makeApiCall(
@@ -454,7 +456,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                     HttpMethod.PUT,
                     editOrder,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
                  );
                  redirectAttributes.addFlashAttribute("alertMessage", "congratulation!Order confirm! ");
                     return "redirect:/staff/orders/showall";
@@ -472,7 +474,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
 
 
     @RequestMapping(value = "orders/order-uncompleted",method = RequestMethod.POST)
-    public String OrderUncompleted(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes)
+    public String OrderUncompleted(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)
     {
 
         if(status.equalsIgnoreCase(orderStatusConfirm)) {
@@ -485,7 +487,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                         HttpMethod.GET,
                         null,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
 
             } catch (Exception e) {
@@ -510,7 +512,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                         HttpMethod.PUT,
                         null,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
                 model.addAttribute("orderDTO", order);
                 redirectAttributes.addFlashAttribute("alertMessage", "Mark as Uncompleted!");
@@ -547,7 +549,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
             return total;
     }
 
-    public Integer getTeam(OrderDTO order,String token)
+    public Integer getTeam(OrderDTO order,String token,HttpServletRequest request,HttpServletResponse response)
     {
         Integer teamId;
         String myTimeHappend=order.getTimeHappen();
@@ -564,7 +566,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                     HttpMethod.GET,
                     null,
                     token,
-                    reponseOrder
+                    reponseOrder,request,response
             );
 
             List<OrganizeTeamDTO> teamList= APIHelper.makeApiCall(
@@ -572,7 +574,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTeam
+                    responseTeam,request,response
             );
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -647,7 +649,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
         return teamId;
     }
 
-    public Integer getPartTimeEmp(Integer teamId,Integer tableNum,String token)
+    public Integer getPartTimeEmp(Integer teamId,Integer tableNum,String token,HttpServletRequest request,HttpServletResponse response)
     {
         String url="http://localhost:8080/api/employees/findByTeam/"+teamId;
 ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTypeReference<List<EmployeeDTO>>() {};
@@ -657,7 +659,7 @@ ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTy
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType
+                    responseType,request,response
             );
             Integer partTimeNum=0;
             //defaul team leader 

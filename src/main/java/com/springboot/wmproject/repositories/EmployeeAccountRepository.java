@@ -28,4 +28,5 @@ public interface EmployeeAccountRepository extends JpaRepository<EmployeeAccount
     @Query("select e from EmployeeAccounts e where e.username = :username")
     List<EmployeeAccounts> checkUsernameExists(String username);
 
+
 }

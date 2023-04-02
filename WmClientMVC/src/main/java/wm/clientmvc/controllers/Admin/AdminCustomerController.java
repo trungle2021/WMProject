@@ -41,7 +41,7 @@ public class AdminCustomerController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeEmployee
+                    responseTypeEmployee,request,response
             );
 
             model.addAttribute("customerDTOS", customerDTOS);
@@ -81,7 +81,7 @@ public class AdminCustomerController {
     }
 
     @PostMapping("/create")
-    public String create(@Valid @ModelAttribute RegisterCustomerDTO registerDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
+    public String create(@Valid @ModelAttribute RegisterCustomerDTO registerDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file,HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
@@ -103,7 +103,9 @@ public class AdminCustomerController {
                     HttpMethod.POST,
                     registerDTO,
                     token,
-                    RegisterCustomerDTO.class
+                    RegisterCustomerDTO.class,
+                    request,
+                    response
             );
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -130,7 +132,7 @@ public class AdminCustomerController {
     }
 
     @GetMapping("/update/{id}")
-    public String update(@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
+    public String update(HttpServletRequest request, HttpServletResponse response,@CookieValue(name = "token", defaultValue = "") String token,RedirectAttributes attributes,Model model,@PathVariable(name = "id") int id ) throws JsonProcessingException {
 
         BindingResult result = (BindingResult) model.asMap().get("result");
         if(result != null){
@@ -143,7 +145,9 @@ public class AdminCustomerController {
                     HttpMethod.GET,
                     null,
                     token,
-                    RegisterCustomerDTO.class);
+                    RegisterCustomerDTO.class,
+                    request,
+                    response);
             model.addAttribute("message",model.asMap().get("message"));
             model.addAttribute("registerDTO",registerDTO);
             model.addAttribute("errorMessages",model.asMap().get("errorMessages"));
@@ -178,7 +182,7 @@ public class AdminCustomerController {
     }
 
     @PostMapping("/update")
-    public String update(@Valid @ModelAttribute RegisterCustomerDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
+    public String update(HttpServletRequest request, HttpServletResponse response,@Valid @ModelAttribute RegisterCustomerDTO registerDTO,BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes attributes, @RequestParam("employee-create-pic") MultipartFile file) throws IOException {
 
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
@@ -193,7 +197,7 @@ public class AdminCustomerController {
                     HttpMethod.PUT,
                     registerDTO,
                     token,
-                    RegisterCustomerDTO.class
+                    RegisterCustomerDTO.class,request,response
             );
 
             if (result.hasErrors()) {

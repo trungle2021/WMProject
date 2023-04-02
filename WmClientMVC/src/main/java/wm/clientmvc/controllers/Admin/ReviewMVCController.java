@@ -37,7 +37,7 @@ public class ReviewMVCController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeReview
+                    responseTypeReview,request,response
             );
             model.addAttribute("reviewList", reviewDTOList);
         } catch (HttpClientErrorException ex) {
@@ -73,7 +73,7 @@ public class ReviewMVCController {
                         HttpMethod.PUT,
                         null,
                         token,
-                        String.class
+                        String.class,request,response
                 );
             } else {
                 return "redirect:/staff/review?msg=rating";
@@ -111,7 +111,7 @@ public class ReviewMVCController {
                     HttpMethod.DELETE,
                     null,
                     token,
-                    String.class
+                    String.class,request,response
             );
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
