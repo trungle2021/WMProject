@@ -32,6 +32,13 @@ public class FoodController {
     }
     @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE','ANONYMOUS')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping("/getOne/{id}")
+    public ResponseEntity<FoodDTO> getOne(@PathVariable Integer id)
+    {
+        return ResponseEntity.ok(foodService.getOneFood(id));
+    }
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE','ANONYMOUS')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("/allactive")
     public ResponseEntity<List<FoodDTO>> getAllActive()
     {
@@ -50,6 +57,12 @@ public class FoodController {
     public ResponseEntity<FoodDTO> updateFood(@RequestBody FoodDTO foodDTO){
         return ResponseEntity.ok(foodService.updateFood(foodDTO));
     }
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @PutMapping(value = "/update/active")
+    public ResponseEntity<FoodDTO> activeFood(@RequestBody FoodDTO foodDTO){
+        return ResponseEntity.ok(foodService.activeFood(foodDTO.getId(), foodDTO.isActive()));
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
@@ -58,4 +71,5 @@ public class FoodController {
         foodService.deleteFood(id);
         return ResponseEntity.ok("Deleted Food Successfully");
     }
+
 }

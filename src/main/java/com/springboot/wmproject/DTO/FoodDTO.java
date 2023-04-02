@@ -22,7 +22,7 @@ public class FoodDTO {
     private Double price;
     private boolean active;
 
-    private Set<MaterialDTO> materialsById;
+    private Set<MaterialDetailDTO> materialDetailById;
     private Set<FoodImageDTO> foodImagesById;
 //    private Set<FoodDetailDTO> foodDetailsDTOById;
 }

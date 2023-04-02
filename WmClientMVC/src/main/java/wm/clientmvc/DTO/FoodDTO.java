@@ -1,8 +1,10 @@
 package wm.clientmvc.DTO;
 
 
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Set;
@@ -15,11 +17,13 @@ public class FoodDTO {
 
     private String foodType;
     @NotEmpty
+    @Size(min=1,max=250,message = "Must not empty and shorter than 250!")
     private String description;
     private boolean active;
-    @Min(1)
+    @Min(0)
+    @Max(2000)
     private Double price;
-    private Set<MaterialDTO> materialsById;
+    private Set<MaterialDetailDTO> materialDetailById;
     private Set<FoodImageDTO> foodImagesById;
 
 //    private Set<FoodDetailDTO> foodDetailsDTOById;

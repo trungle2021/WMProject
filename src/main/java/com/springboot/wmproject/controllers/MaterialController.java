@@ -2,6 +2,7 @@ package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.FoodDTO;
 import com.springboot.wmproject.DTO.MaterialDTO;
+import com.springboot.wmproject.DTO.ServiceDTO;
 import com.springboot.wmproject.services.FoodService;
 import com.springboot.wmproject.services.MaterialService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,53 +20,37 @@ import java.util.List;
 public class MaterialController {
 
     private MaterialService materialService;
+
     @Autowired
     public MaterialController(MaterialService materialService) {
         this.materialService = materialService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','CUSTOMER','ORGANIZE','ANONYMOUS')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping
-    public ResponseEntity<List<MaterialDTO>> getAll()
-    {
+    @GetMapping("/all")
+    public ResponseEntity<List<MaterialDTO>> getAll() {
         return ResponseEntity.ok(materialService.getAllMaterial());
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/byorder/{orderId}")
-    public ResponseEntity<List<MaterialDTO>> getAllbyOrderId(@PathVariable Integer orderId)
-    {
-    List<MaterialDTO>list =materialService.getAllMaterialByOrder(orderId);
-        return ResponseEntity.ok(list);
-    }
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
-    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @GetMapping("/{foodId}")
-    public ResponseEntity<List<MaterialDTO>> getAllByFoodId(@PathVariable Integer foodId)
-    {
-        return ResponseEntity.ok(materialService.getAllMaterialByFoodId(foodId));
-    }
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','ANONYMOUS')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping("/create")
-    public ResponseEntity<MaterialDTO> createMaterial(@RequestBody MaterialDTO materialDTO)
-    {return  new ResponseEntity<>(materialService.createMaterial(materialDTO), HttpStatus.CREATED);}
+    public ResponseEntity<MaterialDTO> createFood(@RequestBody MaterialDTO materialDTO) {
+        return new ResponseEntity<>(materialService.createMaterial(materialDTO), HttpStatus.CREATED);
+    }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PutMapping(value = "/update")
-    public ResponseEntity<MaterialDTO> updateFood(@RequestBody MaterialDTO materialDTO){
+    public ResponseEntity<MaterialDTO> updateFood(@RequestBody MaterialDTO materialDTO) {
         return ResponseEntity.ok(materialService.updateMaterial(materialDTO));
     }
-
-    @PreAuthorize("hasAnyRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ANONYMOUS')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
-    @DeleteMapping(value = "/delete/{id}")
-    public ResponseEntity<String> deleteMaterial(@PathVariable int id){
-        materialService.deleteMaterial(id);
-        return ResponseEntity.ok("Deleted Material Successfully");
+    @GetMapping("getOne/{id}")
+    public ResponseEntity<MaterialDTO> getOne(@PathVariable int id)
+    {
+        return ResponseEntity.ok(materialService.getOneMaterial(id));
     }
 }

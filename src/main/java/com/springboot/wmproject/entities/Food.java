@@ -39,7 +39,7 @@ public class Food {
     @OneToMany(mappedBy = "foodByFoodId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<FoodImages> foodImagesById = new HashSet<>();
     @OneToMany(mappedBy = "foodByFoodId", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<Materials> materialsById = new HashSet<>();
+    private Collection<MaterialDetail> materialDetailById = new HashSet<>();
 
     public boolean isActive() {
         return active;
