@@ -71,9 +71,11 @@ public class AdminMaterialController {
             list.add(order);
 
 
+
             //get material
             ParameterizedTypeReference<List<MaterialDetailDTO>> responseType=new ParameterizedTypeReference<List<MaterialDetailDTO>>() {};
             String url="http://localhost:8080/api/materialDetails/byOrder/"+id;
+
 
             List<MaterialDetailDTO> materialList= APIHelper.makeApiCall(
                     url,
