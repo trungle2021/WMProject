@@ -83,7 +83,7 @@ public class ServiceController {
     }
 
     @RequestMapping("/showAll")
-    public String showAllService (Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError,HttpServletRequest request,HttpServletResponse response)
+    public String showAllService (Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError, HttpServletRequest request, HttpServletResponse response)
     {
         ParameterizedTypeReference<List<ServiceDTO>> typeReference=new ParameterizedTypeReference<List<ServiceDTO>>() {};
         String url=SD_CLIENT.DOMAIN_APP_API+"/api/services/allactive";
@@ -126,7 +126,7 @@ public class ServiceController {
         //chuyen param trên link dung variable, chuyen form dung pathparam
         String url= SD_CLIENT.DOMAIN_APP_API+"/api/services/getOne/"+id;
         try {
-          ServiceDTO service=  APIHelper.makeApiCall(
+            ServiceDTO service=  APIHelper.makeApiCall(
                     url,
                     HttpMethod.GET,
                     null,
@@ -184,7 +184,7 @@ public class ServiceController {
         String url= SD_CLIENT.DOMAIN_APP_API+"/api/services/soft_delete/"+id;
 
         try {
-             APIHelper.makeApiCall(
+            APIHelper.makeApiCall(
                     url,
                     HttpMethod.PUT,
                     null,
@@ -192,8 +192,8 @@ public class ServiceController {
                     ServiceDTO.class,request,response
 
             );
-             redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Delete Service Success!! ");
-                return "redirect:/staff/services/showAll";
+            redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Delete Service Success!! ");
+            return "redirect:/staff/services/showAll";
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("alertError", "Oops Something Wrong!Delete Service Fail!! ");
