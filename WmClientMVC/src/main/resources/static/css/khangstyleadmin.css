@@ -79,7 +79,7 @@ input[type="submit"] {
 }
 
 .venue-name,
-.venue-table,.event-date,.parttime-emp .order-cost {
+.venue-table,.event-date,.parttime-emp ,.order-cost {
     font-weight: bold;
     margin-bottom: 5px;
 }
