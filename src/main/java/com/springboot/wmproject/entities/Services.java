@@ -19,6 +19,9 @@ public class Services {
     @Column(name = "price", nullable = true, precision = 2)
     private BigDecimal price;
     @Basic
+    @Column(name = "cost", nullable = true, precision = 2)
+    private Double cost;
+    @Basic
     @Column(name = "description", nullable = true, length = 255)
     private String description;
     @Basic
@@ -26,6 +29,14 @@ public class Services {
     private boolean active;
     @OneToMany(mappedBy = "servicesByServiceId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetailsById;
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
 
     public int getId() {
         return id;

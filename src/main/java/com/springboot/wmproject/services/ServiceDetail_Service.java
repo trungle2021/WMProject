@@ -17,4 +17,5 @@ public interface ServiceDetail_Service {
     void deleteDetail (Integer svDetailId);
     ServiceDetailDTO updateDetail(ServiceDetailDTO serviceDetailDTO);
 
+
 }

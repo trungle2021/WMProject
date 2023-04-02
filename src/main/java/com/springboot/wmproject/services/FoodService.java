@@ -13,5 +13,6 @@ public interface FoodService {
     FoodDTO getOneFood(int foodId);
     FoodDTO createFood(FoodDTO newFoodDTO);
     FoodDTO updateFood(FoodDTO editFoodDTO);
+    FoodDTO activeFood(Integer foodId,boolean active);
     void deleteFood(int foodId);
 }

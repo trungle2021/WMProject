@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Order Management</title>
+    <title>Material Management</title>
 
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
@@ -19,8 +19,8 @@
 
 <section layout:fragment="content"  class="content-wrapper">
 
-    <br><div class="content-header"> <h5>Service Management</h5>
-    <a th:href="@{/staff/services/create}" class="btn btn-success">Add new</a>
+    <br><div class="content-header"> <h5>Material Management</h5>
+    <a th:href="@{/staff/materials/create}" class="btn btn-success">Add new</a>
 
 </div>
     <div class="content ">
@@ -35,18 +35,18 @@
 
                         <thead>
                         <tr>
-                            <th>ServiceName</th>
-                            <th>Price ($)</th>
-                            <th>Description</th>
+                            <th>Material Code</th>
+                            <th>Material Name</th>
+                            <th>Price</th>
                             <th>Action:</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="c:${list}">
-                            <td th:text="${c.getServiceName()}"></td>
-                            <td  th:text="${c.getPrice()}"></td>
-                            <td th:text="${c.getDescription()}"></td>
-                            <td><a th:href="@{/staff/services/update/{id}(id=${c.getId()})}" class="btn btn-primary">Update</a> <a th:href="@{/staff/services/delete/{id}(id=${c.getId()})}" class="btn btn-danger">Delete</a></td>
+                            <td th:text="${c.getMaterialName()}"></td>
+                            <td  th:text="${c.getMaterialName()}"></td>
+                            <td th:text="'$'+${c.getPrice()}"></td>
+                            <td><a th:href="@{/staff/materials/update/{id}(id=${c.getId()})}" class="btn btn-primary">Update</a> </td>
                         </tr>
 
                         </tbody>
@@ -90,7 +90,7 @@
     </script>
     <script th:inline="javascript">
 
-
+        var error = [[${alertError}]];
         var message = [[${alertMessage}]];
         console.log(message);
 
@@ -101,7 +101,19 @@
                 text: message,
                 icon: "success",
             });
+
         }
+        else if(error!=null && error.length != 0)
+        {
+            swal({
+                title: "Error!",
+                text: error,
+                icon: "error",
+            });
+        }
+
+
+
     </script>
 </section>
 </body>

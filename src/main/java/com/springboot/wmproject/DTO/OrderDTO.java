@@ -37,6 +37,8 @@ public class OrderDTO {
     @JsonIgnore
     private String contract;
 
+    private Double cost;
+
 //    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;
     private EmployeeDTO employeesByBookingEmp;

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | DataTables</title>
+    <title>Food manage</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
@@ -32,12 +32,12 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>DataTables</h1>
+                            <h1>Food manage</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="#">Home</a></li>
-                                <li class="breadcrumb-item active">DataTables</li>
+                                <li class="breadcrumb-item active">Food manage</li>
                             </ol>
                         </div>
                     </div>
@@ -66,26 +66,41 @@
                                         <tr>
                                             <th>Name</th>
                                             <th>Type</th>
-                                            <th>Price ($)</th>
+                                            <th>Price($)</th>
+                                            <th>Status</th>
                                             <th>Action</th>
+                                            <th>Change Status</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr th:each="c:${foodList}">
-                                            <td th:text="${c.foodName}"></td>
-                                            <td th:text="${c.foodType}"></td>
-                                            <td th:text="${c.price}"></td>
+                                            <td th:text="${c.getFoodName()}"></td>
+                                            <td th:text="${c.getFoodType()}"></td>
+                                            <td th:text="${c.getPrice()}"></td>
+                                            <td th:text="${c.isActive()}"></td>
                                             <td>
                                                 <a  type="button"
                                                         class="btn btn-outline-primary detailBtn"
                                                         th:href="@{/staff/food/material(foodId=${c.getId()})}"
-                                                        >Detail
+                                                        >Update material
+                                                </a>
+                                                <a  type="button"
+                                                    class="btn btn-outline-primary detailBtn"
+                                                    th:href="@{/staff/food/detail-food/{foodId}(foodId=${c.getId()})}"
+                                                >Update food
                                                 </a>
                                                 <a  type="button"
                                                     class="btn btn-outline-primary detailBtn"
                                                     th:href="@{/staff/food/foodImg(foodId=${c.getId()})}"
                                                 >Image
                                                 </a>
+                                            </td>
+                                            <td>
+                                                <form th:action="@{/staff/food/detail-food/active-food}" method="post">
+                                                    <input hidden="hidden" readonly type="text" th:value="${c.getId()}" name="foodId">
+                                                    <input hidden="hidden" readonly type="text" th:value="${c.isActive()}" name="foodActive">
+                                                    <button type="submit" th:class="${c.isActive()}?'btn btn-danger':'btn btn-success'" th:text="${c.isActive()}?'inactive':'active'"></button>
+                                                </form>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -118,7 +133,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label class="col-form-label">Name:</label>
-                                    <input type="text" class="form-control" name="foodName"  maxlength="40" required>
+                                    <input type="text" class="form-control" name="foodName" required>
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="col-form-label">Type:</label>
@@ -130,13 +145,12 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label class="col-form-label">Description:</label>
-                                    <input type="text" class="form-control" name="description" maxlength="200" required>
+                                    <input type="text" class="form-control" max="250" name="description" required>
                                 </div>
                                 <div class="form-group col-md-12">
-                                    <label class="col-form-label">Price ($):</label>
+                                    <label class="col-form-label">Price (1-500.000.000):</label>
                                     <input type="text" class="form-control" name="price" id="txtPrice" required>
                                 </div>
-                                <input type="hidden" name="check" value="true">
                                 <div class="modal-footer col-md-12">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
                                     </button>
@@ -158,21 +172,42 @@
 </div>
 <!-- ./wrapper -->
 <section layout:fragment="optional">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        msg = '[[${message}]]';
-        if(msg){
+<!--    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>-->
+
+    <script th:inline="javascript">
+       var msg = '[[${message}]]';
+        var error = [[${alertError}]];
+        var message = [[${alertMessage}]];
+        console.log(msg);
+        if(message!=null && message.length != 0)
+        {
+            swal({
+                title: "Message!",
+                text: message,
+                icon: "success",
+            });
+
+        }
+        else if(error!=null && error.length != 0)
+        {
+            swal({
+                title: "Error!",
+                text: error,
+                icon: "error",
+            });
+        }
+        else if(msg){
             if (msg==="Success") {
-                Swal.fire({
+                swal.fire({
                     title: 'Notification',
                     text: msg,
                     icon: 'success',
                     confirmButtonText: 'OK'
                 });
-            }else {
-                Swal.fire({
+            }else if(msg==="Fails"){
+                swal.fire({
                     title: 'Notification',
-                    text: "Food name has been existed",
+                    text: "Fail",
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
@@ -227,6 +262,10 @@
            })
         });
     </script>
+
+
+
+
 </section>
 </body>
 </html>

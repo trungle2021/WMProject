@@ -5,10 +5,12 @@ import com.springboot.wmproject.DTO.FoodDTO;
 import com.springboot.wmproject.DTO.VenueDTO;
 import com.springboot.wmproject.entities.Food;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
+import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.FoodRepository;
 import com.springboot.wmproject.services.FoodService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -62,14 +64,11 @@ public class FoodServiceImpl implements FoodService {
 
         //convert DTO to entity
         Food food = mapToEntity(newFoodDTO);
-
-
         //save booking
         Food newFood = foodRepository.save(food);
 
         FoodDTO foodResponse = mapToDTO(newFood);
         return foodResponse;
-
 
     }
 
@@ -83,7 +82,6 @@ public class FoodServiceImpl implements FoodService {
                 checkNameChangeOrNot.setFoodType(editFoodDTO.getFoodType());
                 checkNameChangeOrNot.setDescription(editFoodDTO.getDescription());
                 checkNameChangeOrNot.setPrice(editFoodDTO.getPrice());
-                checkNameChangeOrNot.setActive(editFoodDTO.isActive());
                 Food updateFood = foodRepository.save(checkNameChangeOrNot);
                 return mapToDTO(updateFood);
             } else {
@@ -95,13 +93,26 @@ public class FoodServiceImpl implements FoodService {
                     checkNameChangeOrNot.setFoodType(editFoodDTO.getFoodType());
                     checkNameChangeOrNot.setDescription(editFoodDTO.getDescription());
                     checkNameChangeOrNot.setPrice(editFoodDTO.getPrice());
-                    checkNameChangeOrNot.setActive(editFoodDTO.isActive());
                     Food updateFood = foodRepository.save(checkNameChangeOrNot);
                     return mapToDTO(updateFood);
                 }
             }
         }
         return null;
+    }
+
+    @Override
+    public FoodDTO activeFood(Integer foodId,boolean active) {
+        Food activeFood=foodRepository.findById(foodId).orElseThrow(()->new ResourceNotFoundException("Food","id",String.valueOf(foodId)));
+        if(activeFood.getMaterialDetailById().isEmpty() && active)
+        {
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,"You must add material to food before active");
+        }
+        else{
+            activeFood.setActive(active);
+            foodRepository.save(activeFood);
+            return mapToDTO(activeFood);
+        }
     }
 
     @Override

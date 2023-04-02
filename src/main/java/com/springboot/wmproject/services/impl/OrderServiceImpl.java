@@ -321,8 +321,12 @@ public class OrderServiceImpl implements OrderService {
             //check xem co order food detail chua.
 
             if(orders!=null){
-
                 orders.setOrderStatus(status);
+                if(status.equalsIgnoreCase(orderStatusConfirm))
+                {
+                    //set cost if status is confirm
+                    orders.setCost(getTotalCostofOrder(orders,table));
+                }
                 orders.setBookingEmp(bookingEmp);
                 orders.setOrganizeTeam(organizeTeam);
                 orders.setOrderTotal(orderTotal);
@@ -380,8 +384,12 @@ public class OrderServiceImpl implements OrderService {
               if(now.isAfter(event)){
                   throw new WmAPIException(HttpStatus.BAD_REQUEST,"You can't change the shift after event organized!");
               }
+
                order.setPartTimeEmpAmount(getPartimeEmp(teamId, order.getTableAmount()));
                order.setOrganizeTeam(teamId);
+              //CACULATE cost again
+
+               //
                orderRepository.save(order);
                return mapToDTO(order);
            }
@@ -490,6 +498,44 @@ public class OrderServiceImpl implements OrderService {
                 partTimeNum=1;
             }
             return partTimeNum;
+    }
+
+
+    public Double getTotalCostofOrder(Orders myOrder,Integer newTbNum)
+    {
+        Double totalCost=0.0;
+         if(myOrder!=null)
+        {
+           List<FoodDetails> foodtList= myOrder.getFoodDetailsById().stream().toList();
+            for (FoodDetails foodDt:foodtList)
+            {
+                totalCost+=newTbNum*getCostofFood(foodDt.getFoodByFoodId());
+            }
+            //check null for service
+            List<ServiceDetails> servicedtList= myOrder.getServiceDetailsById().stream().toList();
+            if(!servicedtList.isEmpty()) {
+                for (ServiceDetails svDetail : servicedtList) {
+                    totalCost += svDetail.getServicesByServiceId().getCost();
+                }
+            }
+        }
+
+
+        return totalCost;
+    }
+    public Double getCostofFood(Food food)
+    {
+        Double costByFood=0.0;
+       List<MaterialDetail> matedtList=food.getMaterialDetailById().stream().toList();
+       if(matedtList!=null){
+        for (MaterialDetail materialdt:matedtList)
+        {
+           Integer count= materialdt.getCount();
+           Double price= materialdt.getMaterialsByMaterialId().getPrice();
+           costByFood += count*price;
+        }
+       }
+       return costByFood;
     }
 
 }
