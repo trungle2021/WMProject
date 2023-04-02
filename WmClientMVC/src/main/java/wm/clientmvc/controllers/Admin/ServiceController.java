@@ -42,6 +42,14 @@ public class ServiceController {
     @RequestMapping(value = "/create-service", method = RequestMethod.POST)
     public String create(Model model,@Validated @ModelAttribute ServiceDTO serviceDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
 
+
+
+        if(serviceDTO.getCost()>=serviceDTO.getPrice())
+        {
+            bindingResult.rejectValue("cost","cost.range","cost must smaller than price!" );
+
+        }
+
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("serviceDTO",serviceDTO);
@@ -139,6 +147,11 @@ public class ServiceController {
 
         String url= SD_CLIENT.DOMAIN_APP_API+"/api/services/update";
         serviceDTO.setActive(true);
+        if(serviceDTO.getCost()>=serviceDTO.getPrice())
+        {
+            bindingResult.rejectValue("cost","cost.range","cost must smaller than price!" );
+
+        }
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("serviceDTO",serviceDTO);

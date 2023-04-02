@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create Service</title>
+    <title>Create Material</title>
     <link rel="stylesheet" href="/css/khangstyleadmin.css">
 
 </head>
@@ -35,49 +35,49 @@
             <div class="col-md-12">
                 <div class="card card-info">
                     <div class="card-header">
-                        <h3 class="card-title">Order Detail</h3>
+                        <h3 class="card-title">Create Material</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form th:action="@{/staff/services/create-service}" th:object="${serviceDTO}" method="post" class="form-horizontal">
+                    <form th:action="@{/staff/materials/update-material}" th:object="${materialDTO}" method="post" class="form-horizontal">
 
                         <div class="card-body">
 
                             <div class="form-group row">
-                                <label for="serviceName" class="col-sm-2 col-form-label">Service Name</label>
+                                <label for="code" class="col-sm-2 col-form-label">Material Code:</label>
+                                <div class="col-sm-8">
+                                    <input type="text" id="code" readonly class="form-control" th:value="${materialDTO.getMaterialCode()}" th:field="*{materialCode}" >
+                                    <span class="text-danger" th:if="${#fields.hasErrors('materialCode')}" th:errors="*{materialCode}">Invalid code</span>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="materialName" class="col-sm-2 col-form-label">Material Name</label>
                                 <div class="col-sm-10">
-                                    <input type="text" th:value="${serviceDTO.getServiceName()}" th:field="*{serviceName}" class="form-control" id="serviceName" placeholder="Service Name">
-                                    <span class="text-danger" th:if="${#fields.hasErrors('serviceName')}" th:errors="*{serviceName}">Invalid Service Name</span>
+                                    <input type="text" readonly th:value="${materialDTO.getMaterialName()}" th:field="*{materialName}" class="form-control" id="materialName">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('materialName')}" th:errors="*{materialName}">Invalid Material Name</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="unit" class="col-sm-2 col-form-label">Unit</label>
+                                <div class="col-sm-10">
+                                    <input type="text" readonly th:value="${materialDTO.getUnit()}" th:field="*{unit}" class="form-control" id="unit">
+                                    <span class="text-danger" th:if="${#fields.hasErrors('unit')}" th:errors="*{unit}"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label for="price" class="col-sm-2 col-form-label">Price</label>
                                 <div class="col-sm-10">
-                                    <input type="number" th:value="${serviceDTO.getPrice()}" th:field="*{price}" class="form-control" id="price" placeholder="">
+                                    <input type="number" th:value="${materialDTO.getPrice()}" th:field="*{price}" class="form-control" id="price" placeholder="">
                                     <span class="text-danger" th:if="${#fields.hasErrors('price')}" th:errors="*{price}">Invalid Price</span>
 
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="cost" class="col-sm-2 col-form-label">Cost</label>
-                                <div class="col-sm-10">
-                                    <input type="number" th:value="${serviceDTO.getCost()}" th:field="*{cost}" class="form-control" id="cost" placeholder="">
-                                    <span class="text-danger" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}">Invalid cost</span>
 
-                                </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <label for="description" class="col-sm-2 col-form-label">Description:</label>
-                                <div class="col-sm-8">
-                                    <input type="text" id="description"  class="form-control" th:value="${serviceDTO.getDescription()}" th:field="*{description}" >
-                                    <span class="text-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}">Invalid Price</span>
-                                </div>
-
-                            </div>
                             <div class="card-footer">
-                                <button  type="submit" class="btn btn-info">Add Service</button>
-                                <a th:href="@{/staff/orders/showall}" class="btn btn-default float-right">Back</a>
+                                <button  type="submit" class="btn btn-info">Update Material</button>
+                                <a th:href="@{/staff/materials/showAll}" class="btn btn-default float-right">Back</a>
                             </div>
                         </div>
                         <!-- /.card-footer -->
@@ -105,6 +105,7 @@
     <script>$('#myModal').on('shown.bs.modal', function () {
 
     })</script>
+
 </section>
 </body>
 </html>

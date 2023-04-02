@@ -446,7 +446,9 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
 
         editOrder.setContract(findOrder.getContract());
         //render team
+
         Integer team=getTeam(findOrder,token,request,response);
+
         editOrder.setOrganizeTeam(team);
         editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token,request,response));
             //update

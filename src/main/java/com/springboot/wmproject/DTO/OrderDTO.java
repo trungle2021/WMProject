@@ -1,5 +1,6 @@
 package com.springboot.wmproject.DTO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.springboot.wmproject.entities.*;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
@@ -33,8 +34,10 @@ public class OrderDTO {
 
     private Integer tableAmount;
     private Integer partTimeEmpAmount;
-
+    @JsonIgnore
     private String contract;
+
+    private Double cost;
 
 //    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;

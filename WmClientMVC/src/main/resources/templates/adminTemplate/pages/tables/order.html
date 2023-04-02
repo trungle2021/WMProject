@@ -46,6 +46,7 @@
                             <th>Number of fulltime employee:</th>
                             <th>Number of collaborators:</th>
                             <th>Booking Date</th>
+                            <th>Order Cost</th>
                             <th>Amount Received :</th>
                             <th>Contract:</th>
                             <th>Action:</th>
@@ -63,6 +64,7 @@
                             <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamsize()}:'N/A'">N/A</td>
                             <td th:text="${c.getPartTimeEmpAmount()!=null}?${c.getPartTimeEmpAmount()}:'N/A'"></td>
                             <td th:text="${c.getOrderDate()}"></td>
+                            <td th:data-money="${c.getCost()!=null}?${c.getCost()}:'N/A'"></td>
                             <td th:if="${c.getOrderStatus().equalsIgnoreCase(refundSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.1 : null}"></td>
                             <td th:if="${c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal()}"></td>
                             <td th:unless="${c.getOrderStatus().equalsIgnoreCase(refundSt) or c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.4 : null}" ></td>

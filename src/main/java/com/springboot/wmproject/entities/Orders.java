@@ -48,6 +48,11 @@ public class Orders {
     @Basic
     @Column(name = "part_time_emp_amount", nullable = true)
     private Integer partTimeEmpAmount;
+
+    @Basic
+    @Column(name = "cost", nullable = true, precision = 2)
+
+    private Double cost;
     @Basic
     @Column(name = "contract", nullable = true, length = -1)
     private String contract;

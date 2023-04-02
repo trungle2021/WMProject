@@ -13,6 +13,7 @@ public class ServiceDTO {
     private Double price;
     private String description;
     private boolean active;
+    private Double cost;
 
 //    private Set<ServiceDetailDTO> serviceDetailsById;
 }

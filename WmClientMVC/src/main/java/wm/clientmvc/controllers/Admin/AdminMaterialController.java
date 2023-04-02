@@ -2,6 +2,7 @@ package wm.clientmvc.controllers.Admin;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.PathParam;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -9,19 +10,23 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.MaterialDTO;
+import wm.clientmvc.DTO.MaterialDetailDTO;
 import wm.clientmvc.DTO.OrderDTO;
+import wm.clientmvc.DTO.ServiceDTO;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
+import wm.clientmvc.utils.SD_CLIENT;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static wm.clientmvc.utils.Static_Status.orderStatusConfirm;
 
@@ -67,10 +72,10 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
 
 
     //get material
-    ParameterizedTypeReference<List<MaterialDTO>> responseType=new ParameterizedTypeReference<List<MaterialDTO>>() {};
+    ParameterizedTypeReference<List<MaterialDetailDTO>> responseType=new ParameterizedTypeReference<List<MaterialDetailDTO>>() {};
     String url="http://localhost:8080/api/materials/byorder/"+id;
 
-        List<MaterialDTO> materialList= APIHelper.makeApiCall(
+        List<MaterialDetailDTO> materialList= APIHelper.makeApiCall(
             url,
                 HttpMethod.GET,
                 null,
@@ -82,7 +87,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
         LocalDateTime now =  LocalDateTime.now();
         String today=now.format(formatter);
         if(materialList!=null){
-            for (MaterialDTO material:materialList)
+            for (MaterialDetailDTO material:materialList)
             {
                 material.setCount(material.getCount()*order.getTableAmount());
             }}
@@ -108,7 +113,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
         List<OrderDTO>list= new ArrayList<>();
 
 //    ParameterizedTypeReference orderResponseType= new ParameterizedTypeReference() {};
-
+//
         try {
 
                 String oUrl="http://localhost:8080/api/orders/"+orderId;
@@ -123,10 +128,10 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
             //get material
 
 
-            ParameterizedTypeReference<List<MaterialDTO>> responseType=new ParameterizedTypeReference<List<MaterialDTO>>() {};
-            String url="http://localhost:8080/api/materials/byorder/"+orderId;
+            ParameterizedTypeReference<List<MaterialDetailDTO>> responseType=new ParameterizedTypeReference<List<MaterialDetailDTO>>() {};
+            String url="http://localhost:8080/api/materialDetails/byorder/"+orderId;
 
-            List<MaterialDTO>   materialList= APIHelper.makeApiCall(
+            List<MaterialDetailDTO>   materialList= APIHelper.makeApiCall(
                     url,
                     HttpMethod.GET,
                     null,
@@ -141,7 +146,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
             LocalDateTime now =  LocalDateTime.now();
             String today=now.format(formatter);
             if(materialList!=null){
-            for (MaterialDTO material:materialList)
+            for (MaterialDetailDTO material:materialList)
             {
              material.setCount(material.getCount()*order.getTableAmount());
             }
@@ -188,6 +193,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
              List<OrderDTO> list=getOrderList(token,ourl,date,request,response);
 
              if(list==null || list.size()==0)
+
              {
                  redirectAttributes.addFlashAttribute("alertMessage", "No confirm order found in this day! ");
                  return "redirect:/staff/materials";
@@ -195,6 +201,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
 
                 //get material in day with count
           List<MaterialDTO> materialList=getMaterialList(token,list,request,response);
+
 
                 model.addAttribute("today",today);
                 model.addAttribute("orderList",list);
@@ -209,6 +216,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
 //
 //get list of today
+
                 List<OrderDTO>list=getOrderList(token,ourl,date,request,response);
 
                 if(list==null || list.size()==0)
@@ -218,6 +226,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 }
 
                 List<MaterialDTO> materialList=getMaterialList(token,list,request,response);
+
 
 //        totalMaterial;
                 model.addAttribute("today",today);
@@ -237,9 +246,23 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
             return "adminTemplate/error";
         }
     }
+   //
+//new
+    @RequestMapping("/showAll")
+    public String showAllMaterial (Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError)
+    {
+        ParameterizedTypeReference<List<MaterialDTO>> typeReference=new ParameterizedTypeReference<List<MaterialDTO>>() {};
+        String url=SD_CLIENT.DOMAIN_APP_API+"/api/materials/all";
+        try {
+            List<MaterialDTO> list =APIHelper.makeApiCall(
+                    url,
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    typeReference
+
 
     public List<OrderDTO> getOrderList(String token,String url,String date,HttpServletRequest request,HttpServletResponse response) throws IOException {
-
         List<OrderDTO>list= new ArrayList<>();
         ParameterizedTypeReference<List<OrderDTO>> orderResponseType = new ParameterizedTypeReference<>() {};
         List<OrderDTO> orderList = APIHelper.makeApiCall(
@@ -250,7 +273,6 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 orderResponseType,request,response);
 
         //getlist in day
-        if(orderList!=null){
         for (OrderDTO order: orderList)
         {
             if(order.getOrderStatus().equalsIgnoreCase(orderStatusConfirm)&& order.getTimeHappen().contains(date))
@@ -258,19 +280,20 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 list.add(order);
             }
         }
-        }
         return list;
     }
+
 
     public List<MaterialDTO> getMaterialList(String token,List<OrderDTO>list,HttpServletRequest request,HttpServletResponse response) throws Exception {
         List<MaterialDTO> materialList=new ArrayList<>();
 
+
         for (OrderDTO order:list)
         {
-            ParameterizedTypeReference<List<MaterialDTO>> responseType=new ParameterizedTypeReference<List<MaterialDTO>>() {};
-            String url="http://localhost:8080/api/materials/byorder/"+order.getId();
+            ParameterizedTypeReference<List<MaterialDetailDTO>> responseType=new ParameterizedTypeReference<List<MaterialDetailDTO>>() {};
+            String url="http://localhost:8080/api/materialDetails/byOrder/"+order.getId();
 
-            List<MaterialDTO> materials= APIHelper.makeApiCall(
+            List<MaterialDetailDTO> materials= APIHelper.makeApiCall(
                     url,
                     HttpMethod.GET,
                     null,
@@ -281,16 +304,16 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
             Integer table=order.getTableAmount();
 
             //loop a new list
-            for (MaterialDTO material : materials)
+            for (MaterialDetailDTO material : materials)
             {
                 boolean materialExist = false;
                 //time with table to get a new material count
                 material.setCount(material.getCount()*table);
 
-                for (MaterialDTO mate : materialList) {
+                for (MaterialDetailDTO mate : materialList) {
 
                     //exit?
-                    if (material.getMaterialCode().equalsIgnoreCase(mate.getMaterialCode())) {
+                    if (material.getMaterialsByMaterialId().getId()==mate.getMaterialsByMaterialId().getId()) {
                         //change unit if ext
                         mate.setCount(material.getCount() + mate.getCount());
                         materialExist = true;
