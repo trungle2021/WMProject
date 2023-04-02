@@ -71,7 +71,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
 
     //get material
     ParameterizedTypeReference<List<MaterialDetailDTO>> responseType=new ParameterizedTypeReference<List<MaterialDetailDTO>>() {};
-    String url="http://localhost:8080/api/materials/byorder/"+id;
+    String url="http://localhost:8080/api/materialDetails/byOrder/"+id;
 
         List<MaterialDetailDTO> materialList= APIHelper.makeApiCall(
             url,
@@ -127,7 +127,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
 
 
             ParameterizedTypeReference<List<MaterialDetailDTO>> responseType=new ParameterizedTypeReference<List<MaterialDetailDTO>>() {};
-            String url="http://localhost:8080/api/materialDetails/byorder/"+orderId;
+            String url="http://localhost:8080/api/materialDetails/byOrder/"+orderId;
 
             List<MaterialDetailDTO>   materialList= APIHelper.makeApiCall(
                     url,
