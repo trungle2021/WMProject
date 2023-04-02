@@ -49,7 +49,9 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeFood
+                    responseTypeFood,
+                    request,
+                    response
             );
             Static_Status static_status = new Static_Status();
             List<String> foodType = new ArrayList<>();
@@ -112,7 +114,7 @@ public class FoodController {
                         HttpMethod.DELETE,
                         null,
                         token,
-                        String.class
+                        String.class,request,response
                 );
             } catch (HttpClientErrorException ex) {
                 String responseError = ex.getResponseBodyAsString();
@@ -140,26 +142,47 @@ public class FoodController {
 
     //remove material
     @PostMapping("/update/material")
-    public String updateFood(@CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, String removeMaterial) throws IOException {
-            if(removeMaterial==null)
-            {
-                attributes.addFlashAttribute("alertError", "Oops Something wrong!");
-                return "redirect:/staff/food/index" ;
+
+    public String updateFood(@RequestParam("check") Boolean check, @ModelAttribute FoodDTO foodDTO, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes, String material1, String unit1, String cost1, String material2, String unit2, String cost2, String material3, String unit3, String cost3, String code1, String code2, String code3, String removeMaterial) throws IOException {
+        if (check != null) {
+            foodDTO.setActive(check);
+        }
+        if (removeMaterial != null) {
+            String[] arr = removeMaterial.split(",");
+            for (int i = 1; i < arr.length; i++) {
+                try {
+                    APIHelper.makeApiCall(
+                            SD_CLIENT.DOMAIN_APP_API + "/api/materials/delete/" + arr[i],
+                            HttpMethod.DELETE,
+                            null,
+                            token,
+                            String.class,request,response
+                    );
+                } catch (HttpClientErrorException ex) {
+                    String responseError = ex.getResponseBodyAsString();
+                    ObjectMapper mapper = new ObjectMapper();
+                    Map<String, Object> map = mapper.readValue(responseError, Map.class);
+                    String message = map.get("message").toString();
+
 
             }
-        try{
-//        call api
-        String url= SD_CLIENT.DOMAIN_APP_API+"/api/materialDetails/delete";
-        HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth(token);
-         RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<?> entity = new HttpEntity<>(removeMaterial, headers);
-        ResponseEntity<String> responsestring = restTemplate.exchange(
-                url,
-                HttpMethod.DELETE,
-                entity,
-                new ParameterizedTypeReference<String>() {
-                }
+
+        }
+        if (!material1.isEmpty() && !unit1.isEmpty() && !cost1.isEmpty() && !code1.isEmpty()) {
+            try {
+                MaterialDTO materialDTO = new MaterialDTO();
+                materialDTO.setMaterialName(material1);
+                materialDTO.setCount(Double.parseDouble(cost1));
+                materialDTO.setUnit(unit1);
+                materialDTO.setFoodId(foodDTO.getId());
+                materialDTO.setMaterialCode(code1);
+                APIHelper.makeApiCall(
+                        SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
+                        HttpMethod.POST,
+                        materialDTO,
+                        token,
+                        MaterialDTO.class,request,response
+
                 );
 
         //get alert
@@ -172,13 +195,72 @@ public class FoodController {
             return "redirect:/staff/food/index" ;
                 }
 
-    }
-//update food
-    @RequestMapping(value="/detail-food/{foodId}")
-    public String foodDetail(@CookieValue(name="token",defaultValue = "")String token,Model model, @PathVariable Integer foodId,RedirectAttributes redirectAttributes)
-    {
-        if(foodId==null){ redirectAttributes.addFlashAttribute("alertError", "Oops Something wrong!Dont Have food Id");
-            return "redirect:/staff/food/index" ;}
+
+                APIHelper.makeApiCall(
+                        SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
+                        HttpMethod.POST,
+                        materialDTO,
+                        token,
+                        MaterialDTO.class,request,response
+                );
+            } catch (HttpClientErrorException ex) {
+                String responseError = ex.getResponseBodyAsString();
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> map = mapper.readValue(responseError, Map.class);
+                String message = map.get("message").toString();
+
+                String status = String.valueOf(ex.getStatusCode().value());
+                switch (status) {
+                    case "401":
+                        attributes.addFlashAttribute("errorMessage", message);
+                        return "redirect:/staff/login";
+                    case "404":
+                        attributes.addFlashAttribute("errorMessage", message);
+                        return "redirect:/404-not-found";
+                    case "403":
+                        return "redirect:/access-denied";
+                    default:
+                        return "redirect:/staff/food/index?msg=" + message;
+                }
+            }
+        }
+        if (!material3.isEmpty() && !unit3.isEmpty() && !cost3.isEmpty() && !code3.isEmpty()) {
+            try {
+                MaterialDTO materialDTO = new MaterialDTO();
+                materialDTO.setMaterialName(material3);
+                materialDTO.setCount(Double.parseDouble(cost3));
+                materialDTO.setUnit(unit3);
+                materialDTO.setFoodId(foodDTO.getId());
+                materialDTO.setMaterialCode(code3);
+
+                APIHelper.makeApiCall(
+                        SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
+                        HttpMethod.POST,
+                        materialDTO,
+                        token,
+                        MaterialDTO.class,request,response
+                );
+            } catch (HttpClientErrorException ex) {
+                String responseError = ex.getResponseBodyAsString();
+                ObjectMapper mapper = new ObjectMapper();
+                Map<String, Object> map = mapper.readValue(responseError, Map.class);
+                String message = map.get("message").toString();
+
+                String status = String.valueOf(ex.getStatusCode().value());
+                switch (status) {
+                    case "401":
+                        attributes.addFlashAttribute("errorMessage", message);
+                        return "redirect:/staff/login";
+                    case "404":
+                        attributes.addFlashAttribute("errorMessage", message);
+                        return "redirect:/404-not-found";
+                    case "403":
+                        return "redirect:/access-denied";
+                    default:
+                        return "redirect:/staff/food/index?msg=" + message;
+                }
+            }
+        }
 
         try {
             FoodDTO foodDTO = APIHelper.makeApiCall(
@@ -186,7 +268,7 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    FoodDTO.class
+                    FoodDTO.class,request,response
             );
 
             model.addAttribute("stater",foodTypeStarter);
@@ -334,7 +416,7 @@ public class FoodController {
                     HttpMethod.POST,
                     newList,
                     token,
-                    responseTypeVenue
+                    responseTypeVenue,request,response
             );
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -369,7 +451,7 @@ public class FoodController {
                     HttpMethod.POST,
                     foodDTO,
                     token,
-                    FoodDTO.class
+                    FoodDTO.class,request,response
             );
             if (data == null) {
                 return "redirect:/staff/food/index?msg=Fails";
@@ -406,7 +488,8 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    FoodDTO.class
+                    responseTypeFood,request,response
+
             );
 
             ParameterizedTypeReference<List<MaterialDTO>> reference=new ParameterizedTypeReference<List<MaterialDTO>>() {};
@@ -456,7 +539,7 @@ public class FoodController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeFood
+                    responseTypeFood,request,response
             );
             model.addAttribute("foodId", Integer.parseInt(id));
             model.addAttribute("foodList", foodDTOS);

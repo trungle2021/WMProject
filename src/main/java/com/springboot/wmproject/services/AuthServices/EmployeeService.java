@@ -25,6 +25,4 @@ public interface EmployeeService {
     void softDelete(int employeeId);
      List<EmployeeDTO> getAllEmployeeByTeamId(Integer empId);
 
-
-
 }

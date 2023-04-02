@@ -1,10 +1,17 @@
 package com.springboot.wmproject.securities.JWT;
 
+import com.springboot.wmproject.DTO.CustomerAccountDTO;
+import com.springboot.wmproject.DTO.EmployeeAccountDTO;
+import com.springboot.wmproject.DTO.RefreshTokenDTO;
+import com.springboot.wmproject.entities.RefreshToken;
 import com.springboot.wmproject.exceptions.WmAPIException;
+import com.springboot.wmproject.repositories.RefreshTokenRepository;
 import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
+import com.springboot.wmproject.services.AuthServices.RefreshTokenService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -18,11 +25,24 @@ import java.util.Map;
 public class JwtTokenProvider {
     @Value("${app.jwt-secret}")
     private String jwtSecret;
-    @Value("${app-jwt-expiration-second}")
+    @Value("${app-jwt-expiration-milisecond}")
     private long jwtExpirationDate;
 
+    @Value("${app-jwt-refresh-milisecond}")
+    private long jwtRefresh;
+
+    private RefreshTokenService refreshTokenService;
+
+    @Autowired
+    public JwtTokenProvider(RefreshTokenService refreshTokenService) {
+        this.refreshTokenService = refreshTokenService;
+    }
+
+
+
     //generate JWT token
-    public String generateToken(Authentication authentication){
+    public String generateAccessToken(Authentication authentication){
+        Date expirationDate;
         String username = authentication.getName();
         String userType = authentication.getAuthorities().stream().findFirst().get().getAuthority();
         String userID = "";
@@ -39,7 +59,10 @@ public class JwtTokenProvider {
 
 
             Date currentDate = new Date();
-            Date expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
+
+
+            expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
+
 
             String token = Jwts.builder()
                     .setClaims(claims)
@@ -49,8 +72,56 @@ public class JwtTokenProvider {
                     .compact();
             return token;
 
+        }else{
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cannot generate token");
         }
-        return "Cannot generate token";
+
+    }
+
+    public String generateRefreshToken(Authentication authentication,Object user){
+        Date expirationDate;
+        String username = authentication.getName();
+        String userType = authentication.getAuthorities().stream().findFirst().get().getAuthority();
+        String userID = "";
+        String is_verified = "";
+        Object userDetail = authentication.getPrincipal();
+        if(userDetail instanceof CustomUserDetails) {
+            userID =    ((CustomUserDetails) userDetail).getUserId().toString();
+            is_verified =    String.valueOf(((CustomUserDetails) userDetail).is_verified());
+            Map<String, String> claims = new HashMap<>();
+            claims.put("userID",userID);
+            claims.put("username",username);
+            claims.put("userType",userType);
+            claims.put("is_verified",is_verified);
+
+            Date currentDate = new Date();
+            expirationDate = new Date(currentDate.getTime() + jwtRefresh);
+
+            String token = Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(new Date())
+                    .setExpiration(expirationDate)
+                    .signWith(key())
+                    .compact();
+
+            RefreshToken refreshToken = new RefreshToken();
+
+            if(user instanceof CustomerAccountDTO){
+                refreshToken.setCustomerId(((CustomerAccountDTO) user).getId());
+            }else if(user instanceof EmployeeAccountDTO){
+                refreshToken.setEmployeeId(((EmployeeAccountDTO) user).getId());
+            }else{
+                return "Account ID is required";
+            }
+
+            refreshToken.setToken(token);
+            refreshToken.setExpiryDate(expirationDate.toString());
+            RefreshTokenDTO tokenDTO = refreshTokenService.create(refreshToken);
+            return tokenDTO.getToken();
+
+        }else{
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cannot generate token");
+        }
     }
 
     private Key key(){

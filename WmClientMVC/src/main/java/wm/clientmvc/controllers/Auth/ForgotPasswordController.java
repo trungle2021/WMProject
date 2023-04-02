@@ -42,7 +42,7 @@ public class ForgotPasswordController {
                     HttpMethod.POST,
                     email,
                     null,
-                    String.class);
+                    String.class,request,response);
             redirectAttributes.addFlashAttribute("message", "We have sent a password reset link to your email. Please check your inbox and follow the instructions provided.");
             return "redirect:/forgot_password";
 
@@ -76,7 +76,7 @@ public class ForgotPasswordController {
     }
 
     @PostMapping("/changePassword")
-    public String changePassword(HttpServletRequest request, RedirectAttributes redirectAttributes, Model model) throws IOException {
+    public String changePassword( RedirectAttributes redirectAttributes, Model model, HttpServletResponse response,HttpServletRequest request) throws IOException {
         String password = request.getParameter("password") != null ? request.getParameter("password") : "";
         String cpassword = request.getParameter("cpassword") != null ? request.getParameter("cpassword") : "";
         String token = request.getParameter("reset_token") != null ? request.getParameter("reset_token") : "";
@@ -89,13 +89,13 @@ public class ForgotPasswordController {
         passwordDTO.setConfirmPassword(cpassword);
         passwordDTO.setToken(token);
         try {
-            String response = APIHelper.makeApiCall(
+            String _response = APIHelper.makeApiCall(
                     api_processChangePassword,
                     HttpMethod.POST,
                     passwordDTO,
                     null,
-                    String.class);
-            redirectAttributes.addFlashAttribute("message", response);
+                    String.class,request,response);
+            redirectAttributes.addFlashAttribute("message", _response);
             return "redirect:/login";
 
         } catch (HttpClientErrorException e) {

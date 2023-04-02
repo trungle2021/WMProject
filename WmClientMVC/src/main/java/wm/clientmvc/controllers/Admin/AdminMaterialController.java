@@ -1,5 +1,7 @@
 package wm.clientmvc.controllers.Admin;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.ws.rs.PathParam;
 import org.springframework.core.ParameterizedTypeReference;
@@ -50,7 +52,7 @@ public class AdminMaterialController {
     }
 
 @RequestMapping(value="/detail/{id}",method = RequestMethod.GET)
-public String showMaterialbyOrder(Model model, @PathVariable Integer id, @CookieValue(name="token",defaultValue = "")String token)
+public String showMaterialbyOrder(Model model, @PathVariable Integer id, @CookieValue(name="token",defaultValue = "")String token, HttpServletRequest request, HttpServletResponse response)
 {
     //get order
     List<OrderDTO>list= new ArrayList<>();
@@ -64,7 +66,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 HttpMethod.GET,
                 null,
                 token,
-                OrderDTO.class
+                OrderDTO.class,request,response
              );
              list.add(order);
 
@@ -78,7 +80,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 HttpMethod.GET,
                 null,
                 token,
-                responseType
+                responseType,request,response
         );
         //getday
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -102,7 +104,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
     }
 
     @RequestMapping(value="/detail/searchId",method = RequestMethod.POST)
-    public String materialSearchId(Model model,@PathParam("orderId")Integer orderId, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes)
+    public String materialSearchId(Model model,@PathParam("orderId")Integer orderId, @CookieValue(name="token",defaultValue = "")String token,RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)
     {
 //check team
 
@@ -120,7 +122,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                         HttpMethod.GET,
                         null,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
                 list.add(order);
             //get material
@@ -134,7 +136,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType
+                    responseType,request,response
             );
 
 
@@ -167,7 +169,7 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
     }
 
     @RequestMapping(value="/detail/searchDate",method = RequestMethod.POST)
-    public String materialSearchDate(Model model, @PathParam("date")String date, @CookieValue(name="token",defaultValue = "")String token, RedirectAttributes redirectAttributes)
+    public String materialSearchDate(Model model, @PathParam("date")String date, @CookieValue(name="token",defaultValue = "")String token, RedirectAttributes redirectAttributes,HttpServletRequest request,HttpServletResponse response)
     {
         //check team
 
@@ -188,15 +190,18 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 //confirm only
                 String ourl = "http://localhost:8080/api/orders/byStatus/confirm";
 
-             List<OrderDTO> list=getOrderList(token,ourl,date);
-             if(list==null || list.isEmpty())
+             List<OrderDTO> list=getOrderList(token,ourl,date,request,response);
+
+             if(list==null || list.size()==0)
+
              {
                  redirectAttributes.addFlashAttribute("alertMessage", "No confirm order found in this day! ");
                  return "redirect:/staff/materials";
              }
 
                 //get material in day with count
-          List<MaterialDetailDTO> materialList=getMaterialList(token,list);
+          List<MaterialDTO> materialList=getMaterialList(token,list,request,response);
+
 
                 model.addAttribute("today",today);
                 model.addAttribute("orderList",list);
@@ -211,9 +216,17 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                 String ourl = "http://localhost:8080/api/orders/byTeam/empId/"+empId;
 //
 //get list of today
-                List<OrderDTO>list=getOrderList(token,ourl,date);
-//
-                List<MaterialDetailDTO> materialList=getMaterialList(token,list);
+
+                List<OrderDTO>list=getOrderList(token,ourl,date,request,response);
+
+                if(list==null || list.size()==0)
+                {
+                    redirectAttributes.addFlashAttribute("alertMessage", "No confirm order found in this day! ");
+                    return "redirect:/staff/materials";
+                }
+
+                List<MaterialDTO> materialList=getMaterialList(token,list,request,response);
+
 
 //        totalMaterial;
                 model.addAttribute("today",today);
@@ -248,138 +261,8 @@ public String showMaterialbyOrder(Model model, @PathVariable Integer id, @Cookie
                     token,
                     typeReference
 
-            );
-            //reverse
-            Collections.reverse(list);
-            model.addAttribute("list",list);
 
-            if (!alertMessage.isEmpty()) {
-                model.addAttribute("alertMessage", alertMessage);
-            }
-            else {
-                model.addAttribute("alertMessage", null);
-            }
-            if (!alertError.isEmpty()) {
-                model.addAttribute("alertError", alertError);
-            }
-            else {
-                model.addAttribute("alertError", null);
-            }
-
-
-            return "adminTemplate/pages/materials/show_materials";
-        } catch (Exception e) {
-            model.addAttribute("message", e.getMessage());
-            return "adminTemplate/error";
-        }
-    }
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create(Model model,@ModelAttribute("alertError") String alertError) {
-        //tao đối tượng cho view
-        model.addAttribute("materialDTO", new MaterialDTO());
-
-        if (!alertError.isEmpty()) {
-            model.addAttribute("alertError", alertError);
-        }
-        else {
-            model.addAttribute("alertError", null);
-        }
-
-        return "adminTemplate/pages/materials/add-material";
-    }
-
-    @RequestMapping(value = "/create-material", method = RequestMethod.POST)
-    public String create(Model model, @Validated @ModelAttribute MaterialDTO materialDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes redirectAttributes)
-    {
-        if (bindingResult.hasErrors()) {
-
-            model.addAttribute("materialDTO",materialDTO);
-
-            return "adminTemplate/pages/materials/add-material";
-
-        } else {
-            try {
-                try{
-                MaterialDTO material = APIHelper.makeApiCall(
-                        SD_CLIENT.DOMAIN_APP_API + "/api/materials/create",
-                        HttpMethod.POST,
-                        materialDTO,
-                        token,
-                        MaterialDTO.class
-                );
-
-
-                    redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Create Material Success!! ");
-                    return "redirect:/staff/materials/showAll";
-
-                }catch (HttpClientErrorException e) {
-                    String responseError = e.getResponseBodyAsString();
-                    ObjectMapper mapper = new ObjectMapper();
-                    Map<String, Object> map = mapper.readValue(responseError, Map.class);
-                    String message = map.get("message").toString();
-                    redirectAttributes.addFlashAttribute("alertError", message);
-                    return "redirect:/staff/materials/create";
-                }
-            } catch (IOException e) {
-                model.addAttribute("message", e.getMessage());
-                return "adminTemplate/error";
-
-            }
-        }
-    }
-//update
-@RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-public String update(Model model,  @PathVariable("id") Integer id,@CookieValue(name = "token", defaultValue = "")String token ) {
-    //chuyen param trên link dung variable, chuyen form dung pathparam
-    String url= SD_CLIENT.DOMAIN_APP_API+"/api/materials/getOne/"+id;
-    try {
-        MaterialDTO materialDTO=  APIHelper.makeApiCall(
-                url,
-                HttpMethod.GET,
-                null,
-                token,
-                MaterialDTO.class
-        );
-        model.addAttribute("materialDTO", materialDTO);
-        return "adminTemplate/pages/materials/update-material";
-    } catch (Exception e) {
-        model.addAttribute("message", e.getMessage());
-        return "adminTemplate/error";
-    }
-
-}
-    @RequestMapping(value = "/update-material", method = RequestMethod.POST)
-    public String update(Model model, @Validated MaterialDTO materialDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "")String token , RedirectAttributes redirectAttributes) {
-
-        String url= SD_CLIENT.DOMAIN_APP_API+"/api/materials/update";
-        if (bindingResult.hasErrors()) {
-
-            model.addAttribute("materialDTO",materialDTO);
-
-            return "adminTemplate/pages/materials/update-material";
-
-        }else {
-            try {
-                APIHelper.makeApiCall(
-                        url,
-                        HttpMethod.PUT,
-                        materialDTO,
-                        token,
-                        MaterialDTO.class
-
-                );
-                redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Update Material Success!! ");
-                return "redirect:/staff/materials/showAll";
-            } catch (Exception e) {
-                redirectAttributes.addFlashAttribute("alertError", "Oops Something Wrong!Update Material Fail!! ");
-                return "redirect:/staff/materials/showAll";
-            }
-        }
-    }
-
-//old
-    public List<OrderDTO> getOrderList(String token,String url,String date) throws IOException {
-
+    public List<OrderDTO> getOrderList(String token,String url,String date,HttpServletRequest request,HttpServletResponse response) throws IOException {
         List<OrderDTO>list= new ArrayList<>();
         ParameterizedTypeReference<List<OrderDTO>> orderResponseType = new ParameterizedTypeReference<>() {};
         List<OrderDTO> orderList = APIHelper.makeApiCall(
@@ -387,7 +270,7 @@ public String update(Model model,  @PathVariable("id") Integer id,@CookieValue(n
                 HttpMethod.GET,
                 null,
                 token,
-                orderResponseType);
+                orderResponseType,request,response);
 
         //getlist in day
         for (OrderDTO order: orderList)
@@ -400,8 +283,10 @@ public String update(Model model,  @PathVariable("id") Integer id,@CookieValue(n
         return list;
     }
 
-    public List<MaterialDetailDTO> getMaterialList(String token,List<OrderDTO>list) throws Exception {
-        List<MaterialDetailDTO> materialList=new ArrayList<>();
+
+    public List<MaterialDTO> getMaterialList(String token,List<OrderDTO>list,HttpServletRequest request,HttpServletResponse response) throws Exception {
+        List<MaterialDTO> materialList=new ArrayList<>();
+
 
         for (OrderDTO order:list)
         {
@@ -413,7 +298,7 @@ public String update(Model model,  @PathVariable("id") Integer id,@CookieValue(n
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType
+                    responseType,request,response
             );
 
             Integer table=order.getTableAmount();

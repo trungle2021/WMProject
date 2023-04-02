@@ -23,6 +23,7 @@ public class MVCSecurity {
                 //STAFF SECURITY CONFIGURATION
                 .requestMatchers("/staff/login").permitAll()
                 .requestMatchers("/staff/logout").hasAnyRole("ADMIN","ORGANIZE","SALE")
+                .requestMatchers("/refreshToken/**").hasAnyRole("ADMIN","ORGANIZE","SALE","CUSTOMER")
                 .requestMatchers("/login","/forgot_password","/changePassword","/register").permitAll()
                 //ORDER
 

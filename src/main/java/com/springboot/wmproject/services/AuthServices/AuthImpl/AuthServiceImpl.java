@@ -3,26 +3,31 @@ package com.springboot.wmproject.services.AuthServices.AuthImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.*;
+import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.Employees;
+import com.springboot.wmproject.exceptions.RefreshTokenNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.JWT.JwtTokenProvider;
+import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
 import com.springboot.wmproject.services.AuthServices.*;
 import com.springboot.wmproject.services.OrganizeTeamService;
 import com.springboot.wmproject.utils.SD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 
@@ -37,10 +42,11 @@ public class AuthServiceImpl implements AuthService {
     private JwtTokenProvider tokenProvider;
     private OrganizeTeamService teamService;
     private PasswordResetTokenService passwordResetTokenService;
+    private RefreshTokenService refreshTokenService;
     private List<String> errors;
 
     @Autowired
-    public AuthServiceImpl(OrganizeTeamService teamService, AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PasswordResetTokenService passwordResetTokenService) {
+    public AuthServiceImpl(RefreshTokenService refreshTokenService,OrganizeTeamService teamService, AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PasswordResetTokenService passwordResetTokenService) {
         this.authenticationManager = authenticationManager;
         this.employeeService = employeeService;
         this.customerService = customerService;
@@ -50,6 +56,7 @@ public class AuthServiceImpl implements AuthService {
         this.tokenProvider = tokenProvider;
         this.passwordResetTokenService = passwordResetTokenService;
         this.teamService = teamService;
+        this.refreshTokenService = refreshTokenService;
     }
 
 
@@ -68,24 +75,38 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String employeeLogin(LoginDTO loginDTO) {
+    public HashMap<String, String> employeeLogin(LoginDTO loginDTO) {
         Authentication authentication = authenticationManager
                 .authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
 
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authentication);
-        String token = tokenProvider.generateToken(authentication);
-        return token;
+        String accessToken = tokenProvider.generateAccessToken(authentication);
+        int id = Math.toIntExact(((CustomUserDetails) authentication.getPrincipal()).getUserId());
+        EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeId(id);
+        String refreshToken = tokenProvider.generateRefreshToken(authentication,employeeAccountDTO);
+
+        HashMap<String,String> map = new HashMap<>();
+        map.put("accessToken",accessToken);
+        map.put("refreshToken",refreshToken);
+        return map;
     }
 
     @Override
-    public String customerLogin(LoginDTO loginDTO) {
+    public HashMap<String, String> customerLogin(LoginDTO loginDTO) {
         Authentication authentication = authenticationManager
                 .authenticate(new CustomerUsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String token = tokenProvider.generateToken(authentication);
-        return token;
+        String accessToken = tokenProvider.generateAccessToken(authentication);
+        int id = Math.toIntExact(((CustomUserDetails) authentication.getPrincipal()).getUserId());
+        CustomerAccountDTO customerAccountDTO = customerAccountService.getAccountByCustomerId(id);
+
+        String refreshToken = tokenProvider.generateRefreshToken(authentication,customerAccountDTO);
+        HashMap<String,String> map = new HashMap<>();
+        map.put("accessToken",accessToken);
+        map.put("refreshToken",refreshToken);
+        return map;
     }
 
     @Override
@@ -527,4 +548,53 @@ public class AuthServiceImpl implements AuthService {
         registerDTO.setCustomerId(customerID);
         return registerDTO;
     }
+
+    @Override
+    public String refreshToken(String refreshToken) {
+        RefreshTokenDTO refreshTokenDTO = refreshTokenService.getOneByRefreshToken(refreshToken);
+        //check refresh token in DB is expired or not ?
+        if (refreshTokenDTO != null) {
+            boolean refreshTokenIsValid = tokenProvider.validateToken(refreshToken);
+            //if valid
+            if (refreshTokenIsValid) {
+                if (refreshTokenDTO.getEmployeeId() != null) {
+                    EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeAccountId(refreshTokenDTO.getEmployeeId());
+
+                    Set<GrantedAuthority> authorities = new HashSet<>();
+                    authorities.add(new SimpleGrantedAuthority(employeeAccountDTO.getRole()));
+
+                    long userid = Long.parseLong(tokenProvider.getUserID(refreshToken));
+                    String username = tokenProvider.getUsername(refreshToken);
+                    String password = employeeAccountDTO.getPassword();
+
+                    CustomUserDetails customUserDetails = new CustomUserDetails(username,password,userid,true,authorities);
+                    Authentication authentication = new EmployeeUsernamePasswordAuthenticationToken(customUserDetails,null,authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+                    String newAccessToken = tokenProvider.generateAccessToken(authentication);
+                    return newAccessToken;
+                } else {
+                    CustomerAccountDTO customerAccountDTO = customerAccountService.getAccountByAccountId(refreshTokenDTO.getCustomerId());
+                    long userid = Long.parseLong(tokenProvider.getUserID(refreshToken));
+                    String role = tokenProvider.getUserType(refreshToken);
+                    String username = tokenProvider.getUsername(refreshToken);
+                    String password = customerAccountDTO.getPassword();
+                    boolean isVerified = Boolean.parseBoolean(tokenProvider.getIsVerified(refreshToken));
+                    Set<GrantedAuthority> authorities = new HashSet<>();
+                    authorities.add(new SimpleGrantedAuthority(role));
+
+                    CustomUserDetails customUserDetails = new CustomUserDetails(username,password,userid,isVerified,authorities);
+                    Authentication authentication = new CustomerUsernamePasswordAuthenticationToken(customUserDetails,null,authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    String newAccessToken = tokenProvider.generateAccessToken(authentication);
+                    return newAccessToken;
+                }
+            }else{
+                refreshTokenService.delete(refreshToken);
+                throw new RefreshTokenNotFoundException("Refresh token has expired");
+            }
+        }
+        return null;
+    }
+
 }

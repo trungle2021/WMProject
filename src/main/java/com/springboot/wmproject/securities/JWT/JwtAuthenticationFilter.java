@@ -6,6 +6,7 @@ import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernameP
 //import com.springboot.wmproject.security.UserDetailsService.CustomerDetailsService;
 import com.springboot.wmproject.securities.UserDetailsService.CustomerDetailsService;
 import com.springboot.wmproject.securities.UserDetailsService.EmployeeDetailsService;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -40,47 +41,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         //get JWT token from Http Request
-        String token = getTokenFromRequest(request);
-        if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
-            //get Username from token
-            String username = jwtTokenProvider.getUsername(token);
-            String userType = jwtTokenProvider.getUserType(token);
-            String userID = jwtTokenProvider.getUserID(token);
-            String is_verified = jwtTokenProvider.getIsVerified(token);
-            switch (userType){
-                case "ROLE_ADMIN":
-                case "ROLE_SALE":
-                case "ROLE_ORGANIZE":
-                    UserDetails userDetails = employeeDetailsService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken authenticationToken = new EmployeeUsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-                    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-                    break;
-                case "ROLE_CUSTOMER":
-                    UserDetails customerUserDetails = customerDetailsService.loadUserByUsername(username);
-                    UsernamePasswordAuthenticationToken customer_authenticationToken = new CustomerUsernamePasswordAuthenticationToken(
-                            customerUserDetails,
-                            null,
-                            customerUserDetails.getAuthorities()
-                    );
-                    customer_authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(customer_authenticationToken);
-                    break;
-                default:
-                    break;
 
+            String token = getTokenFromRequest(request);
+            if (StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
+                //get Username from token
+                String username = jwtTokenProvider.getUsername(token);
+                String userType = jwtTokenProvider.getUserType(token);
+                String userID = jwtTokenProvider.getUserID(token);
+                String is_verified = jwtTokenProvider.getIsVerified(token);
+                switch (userType){
+                    case "ROLE_ADMIN":
+                    case "ROLE_SALE":
+                    case "ROLE_ORGANIZE":
+                        UserDetails userDetails = employeeDetailsService.loadUserByUsername(username);
+                        UsernamePasswordAuthenticationToken authenticationToken = new EmployeeUsernamePasswordAuthenticationToken(
+                                userDetails,
+                                null,
+                                userDetails.getAuthorities()
+                        );
+                        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                        break;
+                    case "ROLE_CUSTOMER":
+                        UserDetails customerUserDetails = customerDetailsService.loadUserByUsername(username);
+                        UsernamePasswordAuthenticationToken customer_authenticationToken = new CustomerUsernamePasswordAuthenticationToken(
+                                customerUserDetails,
+                                null,
+                                customerUserDetails.getAuthorities()
+                        );
+                        customer_authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(customer_authenticationToken);
+                        break;
+                    default:
+                        break;
+                }
             }
-
-
-        }
         filterChain.doFilter(request,response);
-
     }
-
     private String getTokenFromRequest(HttpServletRequest request){
         String bearerToken = request.getHeader("Authorization");
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){

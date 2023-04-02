@@ -44,7 +44,7 @@ public class CustomerReviewController {
                     HttpMethod.GET,
                     null,
                     token,
-                    CustomerAccountDTO.class
+                    CustomerAccountDTO.class,request,response
             );
             reviewDTO.setCustomerAccountId(accountDTO.getId());
             APIHelper.makeApiCall(
@@ -52,7 +52,7 @@ public class CustomerReviewController {
                     HttpMethod.POST,
                     reviewDTO,
                     token,
-                    String.class
+                    String.class,request,response
             );
             model.addAttribute("alertMessage","Thank you for your review");
         }catch (HttpClientErrorException ex){

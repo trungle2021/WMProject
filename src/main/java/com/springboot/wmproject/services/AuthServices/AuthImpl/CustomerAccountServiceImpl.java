@@ -56,7 +56,8 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
 
     @Override
     public CustomerAccountDTO getAccountByAccountId(int id) {
-        return null;
+        CustomerAccountDTO customerAccountDTO = mapToDto(customerAccountRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Customer Account","id",String.valueOf(id))));
+        return customerAccountDTO;
     }
 
     @Override

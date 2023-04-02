@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 //import com.google.gson.Gson;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.websocket.server.PathParam;
 import jakarta.ws.rs.BadRequestException;
@@ -133,7 +135,7 @@ public class WebOrderController {
 
     @RequestMapping("/create")
     @ResponseBody
-    public ResponseEntity<String> createOrder(@RequestBody String jsonData,@CookieValue(name="token",defaultValue = "") String token) throws JsonProcessingException {
+    public ResponseEntity<String> createOrder(@RequestBody String jsonData, @CookieValue(name="token",defaultValue = "") String token, HttpServletResponse response, HttpServletRequest request) throws JsonProcessingException {
 
         DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -181,7 +183,7 @@ public class WebOrderController {
                         HttpMethod.POST,
                         newOrder,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
                 if(responseOrder!=null)
                 {
@@ -257,7 +259,7 @@ public class WebOrderController {
     }
     @RequestMapping(value="/create-order", method=RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> createNewOrder(@RequestBody String jsonData,@CookieValue(name="token",defaultValue = "") String token) throws IOException {
+    public ResponseEntity<String> createNewOrder(@RequestBody String jsonData,@CookieValue(name="token",defaultValue = "") String token,HttpServletResponse response,HttpServletRequest request) throws IOException {
         // Process the request data here...
 
         ObjectMapper objectMapper = new ObjectMapper();
@@ -311,7 +313,7 @@ public class WebOrderController {
                 HttpMethod.PUT,
                 null,
                 token,
-                OrderDTO.class
+                OrderDTO.class,request,response
         );
 
 //getorder
@@ -321,7 +323,7 @@ public class WebOrderController {
 
     //CANCELING
     @RequestMapping(value = "/myorder/order-cancel",method = RequestMethod.POST)
-    public String OrderCancel(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status,@PathParam("confirmMess")String confirmMess, RedirectAttributes redirectAttributes)
+    public String OrderCancel(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status,@PathParam("confirmMess")String confirmMess, RedirectAttributes redirectAttributes,HttpServletResponse response,HttpServletRequest request)
     {
 
         if(confirmMess==null || !confirmMess.equalsIgnoreCase(confirmCancel))
@@ -341,7 +343,7 @@ public class WebOrderController {
                         HttpMethod.PUT,
                         null,
                         token,
-                        OrderDTO.class
+                        OrderDTO.class,request,response
                 );
 //                model.addAttribute("orderDTO", order);
                 redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Your order canceling,wait for our employee accept!Or contact us to get refund!");
@@ -360,7 +362,7 @@ public class WebOrderController {
     }
 //confirm order
     @RequestMapping(value = "/myorder/order-confirm",method = RequestMethod.POST)
-    public String OrderConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, RedirectAttributes redirectAttributes)
+    public String OrderConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, RedirectAttributes redirectAttributes,HttpServletResponse response,HttpServletRequest request)
     {
         String url="http://localhost:8080/api/orders/"+orderId;
         try {
@@ -369,7 +371,7 @@ public class WebOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
             );
             model.addAttribute("orderDTO",order);
             return "customerTemplate/customer-order-confirm";
@@ -382,7 +384,7 @@ public class WebOrderController {
     }
     //update confirm
     @RequestMapping(value = "/myorder/update-confirm",method = RequestMethod.POST)
-    public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult, RedirectAttributes redirectAttributes)
+    public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult, RedirectAttributes redirectAttributes,HttpServletResponse response,HttpServletRequest request)
     {
         //tinh lại total amount and partime emp
         OrderDTO editOrder = new OrderDTO();
@@ -397,7 +399,7 @@ public class WebOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
             );
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("alertError", "Oops! Something wrong!Server poor connection!Check Your connection and try again!");
@@ -441,10 +443,10 @@ public class WebOrderController {
                 editOrder.setOrderTotal(findOrder.getOrderTotal());
                 editOrder.setContract(findOrder.getContract());
                 //get team
-                Integer team=getTeam(findOrder,token);
+                Integer team=getTeam(findOrder,token,request,response);
                 editOrder.setOrganizeTeam(team);
                 //render number of partime
-                editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
+                editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token,request,response));
                 //update
                 try {
                     APIHelper.makeApiCall(
@@ -452,7 +454,7 @@ public class WebOrderController {
                             HttpMethod.PUT,
                             editOrder,
                             token,
-                            OrderDTO.class
+                            OrderDTO.class,request, response
                     );
                     redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order confirm! ");
 
@@ -473,7 +475,7 @@ public class WebOrderController {
 
     //orderdetail
     @RequestMapping(value = "/myorder/order-detail",method = RequestMethod.POST)
-    public String OrderDetail(Model model,@CookieValue(name="token",defaultValue = "")String token,@PathParam("orderId") Integer orderId,RedirectAttributes redirectAttributes)
+    public String OrderDetail(Model model,@CookieValue(name="token",defaultValue = "")String token,@PathParam("orderId") Integer orderId,RedirectAttributes redirectAttributes,HttpServletResponse response,HttpServletRequest request)
     {
         model.addAttribute("warningSt",orderStatusWarning);
         model.addAttribute("cancelingSt",orderStatusCancel);
@@ -489,7 +491,7 @@ public class WebOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
             );
 //            DateTimeFormatter formatter= DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
@@ -657,7 +659,7 @@ public class WebOrderController {
         }
     }
 
-    public Integer getPartTimeEmp(Integer teamId,Integer tableNum,String token)
+    public Integer getPartTimeEmp(Integer teamId,Integer tableNum,String token,HttpServletRequest request,HttpServletResponse response)
     {
         String url="http://localhost:8080/api/employees/findByTeam/"+teamId;
         ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTypeReference<List<EmployeeDTO>>() {};
@@ -667,7 +669,7 @@ public class WebOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType
+                    responseType,request,response
             );
             Integer partTimeNum=0;
             //defaul team leader +2 chef
@@ -681,7 +683,7 @@ public class WebOrderController {
     }
 
 
-    public Integer getTeam(OrderDTO order,String token)
+    public Integer getTeam(OrderDTO order,String token,HttpServletRequest request,HttpServletResponse response)
     {
         Integer teamId;
         String myTimeHappend=order.getTimeHappen();
@@ -698,7 +700,7 @@ public class WebOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    reponseOrder
+                    reponseOrder,request,response
             );
 
             List<OrganizeTeamDTO> teamList= APIHelper.makeApiCall(
@@ -706,7 +708,7 @@ public class WebOrderController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTeam
+                    responseTeam,request,response
             );
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
