@@ -26,13 +26,16 @@ public class JwtTokenProvider {
         String username = authentication.getName();
         String userType = authentication.getAuthorities().stream().findFirst().get().getAuthority();
         String userID = "";
+        String is_verified = "";
         Object userDetail = authentication.getPrincipal();
         if(userDetail instanceof CustomUserDetails) {
             userID =    ((CustomUserDetails) userDetail).getUserId().toString();
+            is_verified =    String.valueOf(((CustomUserDetails) userDetail).is_verified());
             Map<String, String> claims = new HashMap<>();
             claims.put("userID",userID);
             claims.put("username",username);
             claims.put("userType",userType);
+            claims.put("is_verified",is_verified);
 
 
             Date currentDate = new Date();
@@ -94,6 +97,20 @@ public class JwtTokenProvider {
             throw new WmAPIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
         }
         return userID;
+    }
+
+    public String getIsVerified(String token){
+        Claims claims =  Jwts.parserBuilder()
+                .setSigningKey(key())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        String is_verified = claims.get("is_verified",String.class);
+        if(is_verified == null){
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, "JWT claims string is empty.");
+        }
+        return is_verified;
     }
 
     //validate Jwt Token

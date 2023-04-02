@@ -330,8 +330,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
 
         }
 
-        ClientUtilFunction utilFunction=new ClientUtilFunction();
-        String contract=utilFunction.AddFileEncrypted(file);
+
 
         if (bindingResult.hasErrors()) {
             order.setVenues(findOrder.getVenues());
@@ -342,7 +341,9 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
 
         }
         else{
-
+            try {
+            ClientUtilFunction utilFunction = new ClientUtilFunction();
+            String contract = utilFunction.AddFileEncrypted(file);
         String url = "http://localhost:8080/api/orders/updateStatus";
         editOrder.setId(order.getId());
         editOrder.setOrderStatus(orderStatusDeposited);
@@ -360,7 +361,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
 //
 //        editOrder.setPartTimeEmpAmount(getPartTimeEmp(team,tbNum,token));
 
-        try {
+
             APIHelper.makeApiCall(
                     url,
                     HttpMethod.PUT,
@@ -371,7 +372,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
             redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Order Deposited! ");
             return "redirect:/staff/orders/showall";
          } catch (Exception e) {
-                model.addAttribute("message", e.getMessage());
+                model.addAttribute("message","fail!"+ e.getMessage());
                 return "adminTemplate/error";
             }
         }
@@ -595,7 +596,7 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
     Map<Integer,Integer> map=new HashMap<>();
             for (OrganizeTeamDTO team:teamList)
             {
-                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted()) {
+                if(!team.getTeamName().equalsIgnoreCase(teamAdmin) && !team.is_deleted() && team.getTeamsize()!=0) {
                     int count = 0;
                     for (OrderDTO obj : ordersInMonth) {
 

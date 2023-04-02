@@ -129,7 +129,7 @@ public class AuthServiceImpl implements AuthService {
         if (isLeader == 1) {
             List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(isLeader);
             if(allEmpInTeam != null){
-                Boolean hasLeaderInTeam = allEmpInTeam.stream().map(emp -> isLeader == 1).findFirst().isPresent();
+                Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
                 if (!hasLeaderInTeam) {
                     employeeDTO.setIsLeader(1);
                 } else {
@@ -192,7 +192,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException {
         errors = new ArrayList<>();
         boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
         boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
@@ -244,6 +244,11 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.create(customerAccountDTO);
         registerDTO.setCustomerId(cusDTO.getId());
+
+        customerAccountService.sendVerifyEmail(registerDTO.getEmail(),userAgent);
+
+
+
         return registerDTO;
     }
 
@@ -334,7 +339,7 @@ public class AuthServiceImpl implements AuthService {
            if (isLeader == 1 ) {
                List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(team_id);
                if(allEmpInTeam != null){
-                   Boolean hasLeaderInTeam = allEmpInTeam.stream().map(emp -> isLeader == 1).findFirst().isPresent();
+                   Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
                    if (!hasLeaderInTeam) {
                        employeeDTO.setIsLeader(1);
                    } else {
@@ -406,7 +411,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO) throws JsonProcessingException {
+    public RegisterCustomerDTO customerUpdate(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException {
         errors = new ArrayList<>();
         CustomerDTO customerDTO = new CustomerDTO();
         CustomerAccountDTO customerAccountDTO = new CustomerAccountDTO();
@@ -479,7 +484,7 @@ public class AuthServiceImpl implements AuthService {
         customerAccountDTO.setCustomerId(cusDTO.getId());
         customerAccountService.update(customerAccountDTO);
         registerDTO.setCustomerId(cusDTO.getId());
-
+        registerDTO.setAvatar(cusDTO.getAvatar());
         return registerDTO;
     }
 

@@ -1,5 +1,6 @@
 package com.springboot.wmproject.controllers;
 
+import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.DTO.OrganizeTeamDTO;
 import com.springboot.wmproject.DTO.TeamSummaryDTO;
 import com.springboot.wmproject.services.OrganizeTeamService;
@@ -31,7 +32,9 @@ public class OrganizeTeamController {
         return ResponseEntity.ok(list);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','ANONYMOUS')")
+
+
+    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE','ANONYMOUS','CUSTOMER')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
     public ResponseEntity<List<OrganizeTeamDTO>> getAll(){

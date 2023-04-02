@@ -1,5 +1,6 @@
 package com.springboot.wmproject.repositories;
 
+import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.entities.OrganizeTeams;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,7 @@ public interface OrganizeTeamRepository extends JpaRepository<OrganizeTeams,Inte
     List<OrganizeTeams> getOrganizeTeamsByName(String name);
     @Query("Select a from OrganizeTeams a where a.teamName like %:name%")
     List<OrganizeTeams> searchOrganizeTeamsByName(String name);
+
 
 
 

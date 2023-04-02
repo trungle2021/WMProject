@@ -14,8 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RegisterCustomerDTO {
     private int id;
-
-
     private String first_name;
 
     private String last_name;
@@ -23,14 +21,11 @@ public class RegisterCustomerDTO {
     private String address;
 
     private String phone;
-
     private String gender;
-
     private String email;
     private String avatar;
-
     private String username;
-
     private String password;
     private Integer customerId;
+    private boolean is_verified;
 }

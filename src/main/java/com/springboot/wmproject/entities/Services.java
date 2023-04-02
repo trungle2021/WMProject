@@ -13,7 +13,7 @@ public class Services {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "service_name", nullable = true, length = 45)
+    @Column(name = "service_name", nullable = true, length = 100)
     private String serviceName;
     @Basic
     @Column(name = "price", nullable = true, precision = 2)

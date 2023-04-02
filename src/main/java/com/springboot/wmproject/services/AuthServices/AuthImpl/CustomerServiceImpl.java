@@ -30,13 +30,25 @@ public class CustomerServiceImpl implements CustomerService {
     public List<CustomerDTO> findAll() {
         //find all
         List<Customers> customersList = customerRepository.findAll();
-        List<CustomerDTO> customerDTOList = customersList.stream().map(customers -> mapToDto(customers)).collect(Collectors.toList());
+        List<CustomerDTO> customerDTOList = customersList.stream()
+                .filter(customers -> customers.is_verified())
+                .map(customers -> mapToDto(customers)).collect(Collectors.toList());
         return customerDTOList;
     }
 
     @Override
     public CustomerDTO getCustomerById(int id) {
         Customers customers = customerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Customer", "id", String.valueOf(id)));
+        return mapToDto(customers);
+    }
+
+    @Override
+    public CustomerDTO getByCustomerAccountId(int id) {
+        Customers customers = customerRepository.getByCustomerAccountId(id);
+        if(customers == null){
+
+            throw new ResourceNotFoundException("Customer", "id", String.valueOf(id));
+        }
         return mapToDto(customers);
     }
 

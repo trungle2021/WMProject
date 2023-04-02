@@ -22,19 +22,16 @@ public class FoodImgController {
     public FoodImgController(FoodImgService foodImgService) {
         this.foodImgService = foodImgService;
     }
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all"})
     public ResponseEntity<List<FoodImageDTO>> getAll() {
         return ResponseEntity.ok(foodImgService.getAllFoodImg());
     }
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/one/{id}"})
     public ResponseEntity<FoodImageDTO> getOneById(@PathVariable int id) {
         return ResponseEntity.ok(foodImgService.getOneFoodImgById(id));
     }
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/food/{id}"})
     public ResponseEntity<List<FoodImageDTO>> getAllByFoodId(@PathVariable int id) {

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{customerTemplate/customerlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.css">
+
+
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <section layout:fragment="content">
+    </section>
+
+</div>
+<aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+</aside>
+<!-- /.control-sidebar -->
+</section>
+</div>
+<!-- ./wrapper -->
+<section layout:fragment="content">
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1>Review</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="#">Home</a></li>
+                            <li class="breadcrumb-item active">DataTables</li>
+                        </ol>
+                    </div>
+                </div>
+            </div><!-- /.container-fluid -->
+        </section>
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Review</h3>
+                            </div>
+                            <div class="card-body">
+                                <span class="error-message" style="color: red"></span>
+                                <form th:action="@{/customer/review/create}" method="post" id="reviewForm">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                            <label for="customerReviewContent">Review (250 characters included space
+                                                bar)</label>
+                                            <textarea class="form-control" type="text" id="customerReviewContent" name="content"
+                                                       required></textarea>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <div id="rateYo"></div>
+                                            <input type="hidden" name="rating" id="rating">
+                                            <input type="hidden" th:value="${cusId}" name="cusId">
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-info" type="submit">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Page specific script -->
+</section>
+<section layout:fragment="optional">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/rateYo/2.3.2/jquery.rateyo.min.js"></script>
+    <script>
+
+        $(function () {
+
+            $("#rateYo").rateYo({
+                rating:0,
+                numStars:5,
+                maxValue:5,
+                halfStar: true,
+                onChange:function (rating,rateYoInstance){
+                    $('#rating').val(rating);
+                }
+            });
+
+            $('#reviewForm').submit(function(event) {
+                var message = $('#customerReviewContent').val();
+                var maxLength = 800;
+                var currentLengthWithSpaces = message.replace(/\s/g, '').length;
+                if (currentLengthWithSpaces > maxLength || $.trim(message) === '') {
+                    event.preventDefault();
+                    $('.error-message').text('The message must be less than 800 characters and not contain only spaces.');
+                } else {
+                    $('.error-message').text('');
+                }
+            });
+        });
+
+    </script>
+</section>
+</body>
+</html>

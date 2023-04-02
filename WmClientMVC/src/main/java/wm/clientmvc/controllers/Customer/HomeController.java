@@ -3,11 +3,10 @@ package wm.clientmvc.controllers.Customer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -15,14 +14,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import wm.clientmvc.DTO.*;
+import wm.clientmvc.controllers.Auth.AuthController;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 import wm.clientmvc.utils.APIHelper;
 import wm.clientmvc.utils.SD_CLIENT;
 
 import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +35,19 @@ import static wm.clientmvc.utils.Static_Status.orderStatusOrdered;
 @Controller
 public class HomeController {
 
+    AuthController authController;
+
+    private HttpSession session;
+
+    @Autowired
+    public HomeController(AuthController authController, HttpSession session) {
+        this.authController = authController;
+        this.session = session;
+    }
+
     @GetMapping(value = {"/home", "/customers/home", "/"})
     public String home(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertError") String alertError, @ModelAttribute("alertMessage") String alertMessage) {
-//get venue image
+    //get venue image
         ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenueImg = new ParameterizedTypeReference<List<VenueImgDTO>>() {
         };
         try {
@@ -82,11 +94,20 @@ public class HomeController {
             } else {
                 foodList = fList;
             }
-
+//get all review
+            ParameterizedTypeReference<List<ReviewDTO>> reviewTypeReference = new ParameterizedTypeReference<List<ReviewDTO>>() {
+            };
+            List<ReviewDTO>reviewDTOList=APIHelper.makeApiCall(
+                    SD_CLIENT.DOMAIN_APP_API+"/api/reviews/allActive",
+                    HttpMethod.GET,
+                    null,
+                    token,
+                    reviewTypeReference
+            );
 
             model.addAttribute("foodList", foodList);
             model.addAttribute("venuesImages", venuesImages);
-
+            model.addAttribute("reviewList",reviewDTOList);
 
 //get alert
 
@@ -200,5 +221,46 @@ public class HomeController {
         return "login";
     }
 
+    @GetMapping("/sendVerifyEmail")
+    public String sendVerifyEmail(@RequestParam(value = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
+        if(!token.isEmpty()){
+           try{
+               String _response = APIHelper.makeApiCall(SD_CLIENT.api_verify_email + token,HttpMethod.POST,null,null,String.class);
+               RegisterCustomerDTO  registerCustomerDTO = (RegisterCustomerDTO) session.getAttribute("responseRegister");
+               if(registerCustomerDTO.getUsername() != null && registerCustomerDTO.getPassword() != null){
+                   LoginDTO loginDTO = new LoginDTO();
+                   loginDTO.setUsername(registerCustomerDTO.getUsername());
+                   loginDTO.setPassword(registerCustomerDTO.getPassword());
+                   session.invalidate();
+                   return authController.callApiLogin(
+                           SD_CLIENT.api_customerLoginUrl,
+                           "/customers/home",
+                           "/login",
+                           loginDTO,
+                           request,
+                           response,
+                           attributes);
+               }else{
+                   attributes.addFlashAttribute("errorMessage","Expired Session");
+                   return "redirect:/register";
+               }
+           }catch(HttpClientErrorException ex){
+               String responseError = ex.getResponseBodyAsString();
+               ObjectMapper mapper = new ObjectMapper();
+               Map<String, Object> map = mapper.readValue(responseError, Map.class);
+               String message = map.get("message").toString();
 
+               String status = String.valueOf(ex.getStatusCode().value());
+               switch (status) {
+                   case "400":
+                       attributes.addFlashAttribute("errorMessage", message);
+                       return "redirect:/register";
+                   case "404":
+                       attributes.addFlashAttribute("errorMessage", message);
+                       return "redirect:/404-not-found";
+               }
+           }
+        }
+        return "sendVerifyEmail";
+    }
 }

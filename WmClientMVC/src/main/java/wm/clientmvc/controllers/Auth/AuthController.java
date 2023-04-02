@@ -45,14 +45,17 @@ import static wm.clientmvc.utils.SD_CLIENT.*;
 public class AuthController {
 
     JwtTokenProvider tokenProvider;
+    private HttpSession session;
     @Value("${app-jwt-expiration-second}")
     private int jwtExpirationDate;
 
     @Autowired
-    public AuthController(JwtTokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    public AuthController(JwtTokenProvider tokenProvider,HttpSession session) {
 
+        this.tokenProvider = tokenProvider;
+        this.session = session;
+    }
+    public AuthController(){};
     //    STAFF
 
 
@@ -128,17 +131,9 @@ public class AuthController {
 
         try {
             RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerDTO, null, RegisterCustomerDTO.class);
-            LoginDTO loginDTO = new LoginDTO();
-            loginDTO.setUsername(responseRegister.getUsername());
-            loginDTO.setPassword(responseRegister.getPassword());
-            return callApiLogin(
-                    api_customerLoginUrl,
-                    "/customers/home",
-                    "/login",
-                    loginDTO,
-                    request,
-                    response,
-                    attributes);
+            session.setAttribute("responseRegister",responseRegister);
+
+            return "redirect:/sendVerifyEmail";
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
@@ -187,6 +182,7 @@ public class AuthController {
 
                     String userType = tokenProvider.getUserType(token);
                     String userID = tokenProvider.getUserID(token);
+                    String is_verified = tokenProvider.getIsVerified(token);
                     String fullName = "";
                     Set<GrantedAuthority> authorities = new HashSet<>();
                     authorities.add(new SimpleGrantedAuthority(userType));
@@ -222,7 +218,7 @@ public class AuthController {
                     }
 
 
-                   CustomUserDetails customerUserDetails = new CustomUserDetails(loginDTO.getUsername(), loginDTO.getPassword(), Long.parseLong(userID), fullName,avatar, authorities);
+                   CustomUserDetails customerUserDetails = new CustomUserDetails(loginDTO.getUsername(), loginDTO.getPassword(), Long.parseLong(userID), fullName,avatar, Boolean.valueOf(is_verified),authorities);
                     Authentication authentication = new UsernamePasswordAuthenticationToken(customerUserDetails, loginDTO.getPassword(), authorities);
 
 
@@ -260,8 +256,6 @@ public class AuthController {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
-//            SecurityContextHolder.clearContext();
-//            model.asMap().clear();
         }
         return "redirect:" + logoutSuccessUrl + "?logout";
     }

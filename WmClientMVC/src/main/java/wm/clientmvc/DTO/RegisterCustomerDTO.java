@@ -41,8 +41,10 @@ public class RegisterCustomerDTO {
     private String email;
     private String avatar;
     @NotEmpty
-    @Size(max = 15)
+    @Pattern(regexp = Regex.username,message = Regex.username_message)
+    @Size(min = 8, max = 20)
     private String username;
     private String password;
     private Integer customerId;
+    private boolean is_verified;
 }

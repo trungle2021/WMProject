@@ -13,6 +13,7 @@ import java.util.Set;
 public class FoodDTO {
     private int id;
     @NotEmpty
+    @Size(max=100)
     private String foodName;
 
     private String foodType;
