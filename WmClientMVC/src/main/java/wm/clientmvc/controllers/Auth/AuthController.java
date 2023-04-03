@@ -169,6 +169,7 @@ public class AuthController {
                     loginDTO,
                     null,
                     JWTAuthResponse.class,request,response);
+            System.out.println("Call API Login");
 
             //Create and config for cookie. Store JWT token in cookie
             if (jwtAuthResponse != null) {
@@ -206,6 +207,7 @@ public class AuthController {
                                 null,
                                 token,
                                 CustomerDTO.class,request,response);
+                        System.out.println("Call API Get Info Customer");
                         if(customerDTO.getAvatar() == null){
                             avatar = avatarDefault;
                         }else{
@@ -221,6 +223,8 @@ public class AuthController {
                                 null,
                                 token,
                                 EmployeeDTO.class,request,response);
+                        System.out.println("Call API Get Info Employee");
+
                         if(employeeDTO.getAvatar() == null){
                             avatar = avatarDefault;
                         }else{

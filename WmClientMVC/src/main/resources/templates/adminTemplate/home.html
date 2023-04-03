@@ -5,7 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Tabbed IFrames</title>
-  <link href="">
+  <style>
+    .extra-info{
+      padding-left: 30px;
+      font-size: 30px;
+    }
+  </style>
 </head>
 <body>
   <section layout:fragment="content">
@@ -17,7 +22,14 @@
               <!-- AREA CHART -->
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title" id="revenueYear"></h3>
+                  <h3 class="card-title align-middle" id="revenueYear"></h3>
+
+                    <span  class="extra-info" data-toggle="tooltip" data-placement="top" title="Total Revenue = 100% money OrderCompleted + 40% money OrderCanceled + 40% money OrderUncompleted + 10% money OrderRefunded.">
+                      <i class="fas fa-info-circle"></i>
+                    </span>
+
+
+
 
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
