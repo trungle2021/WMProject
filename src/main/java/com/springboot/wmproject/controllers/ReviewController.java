@@ -67,10 +67,11 @@ public class ReviewController {
         return ResponseEntity.ok(reviewService.updateReview(reviewDTO));
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','CUSTOMER','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @DeleteMapping(value = "delete/{id}")
-    public ResponseEntity<String> deleteReview(@Valid @PathVariable int id) {
+    public ResponseEntity<String> deleteReview(@Valid @PathVariable int id)
+    {
         reviewService.deleteReview(id);
         return ResponseEntity.ok("Review has been deleted");
     }

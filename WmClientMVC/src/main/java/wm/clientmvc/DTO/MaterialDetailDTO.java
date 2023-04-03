@@ -1,6 +1,10 @@
 package wm.clientmvc.DTO;
 
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.hibernate.validator.constraints.Range;
 
 @Data
 public class MaterialDetailDTO {
@@ -9,8 +13,10 @@ public class MaterialDetailDTO {
     private Integer materialId;
 
     private Integer foodId;
-
-    private Integer count;
+    @Min(0)
+    @Max(50)
+    @NotEmpty
+    private Double count;
 
     private MaterialDTO materialsByMaterialId;
 }

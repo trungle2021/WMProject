@@ -46,7 +46,7 @@ public class MaterialController {
     public ResponseEntity<MaterialDTO> updateFood(@RequestBody MaterialDTO materialDTO) {
         return ResponseEntity.ok(materialService.updateMaterial(materialDTO));
     }
-    @PreAuthorize("hasAnyRole('ADMIN','SALE','ANONYMOUS')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping("getOne/{id}")
     public ResponseEntity<MaterialDTO> getOne(@PathVariable int id)

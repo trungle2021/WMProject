@@ -15,7 +15,7 @@ public class MaterialDetailDTO {
 
     private String unit;
 
-    private Integer count;
+    private Double count;
     private MaterialDTO materialsByMaterialId;
 
 }

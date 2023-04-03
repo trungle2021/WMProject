@@ -289,7 +289,7 @@ public class FoodController {
 
             Integer foodId= Integer.parseInt(data.get("foodId").toString());
             Integer materialId=Integer.parseInt(data.get("materialId").toString());
-            Integer count=Integer.parseInt(data.get("materialCount").toString());
+            Double count=Double.parseDouble(data.get("materialCount").toString());
             MaterialDetailDTO materialDetailDTO=new MaterialDetailDTO();
             materialDetailDTO.setMaterialId(materialId);
             materialDetailDTO.setFoodId(foodId);
