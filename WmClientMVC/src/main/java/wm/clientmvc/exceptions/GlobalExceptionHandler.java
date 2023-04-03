@@ -18,4 +18,9 @@ public class GlobalExceptionHandler {
             return "redirect:/staff/login";
         }
     }
+
+    @ExceptionHandler(TokenException.class)
+    public String handleTokenException(HttpServletRequest request, RedirectAttributes redirectAttributes) {
+            return "404-not-found";
+    }
 }

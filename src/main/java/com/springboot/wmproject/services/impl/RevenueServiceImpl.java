@@ -5,6 +5,7 @@ import com.springboot.wmproject.DTO.*;
 import com.springboot.wmproject.entities.Orders;
 import com.springboot.wmproject.services.OrderService;
 import com.springboot.wmproject.services.RevenueService;
+import com.springboot.wmproject.utils.SD;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,13 +43,13 @@ public class RevenueServiceImpl implements RevenueService {
                     }
                 })
                 .mapToDouble(order -> {
-                    if (order.getOrderStatus().equals("canceled")) {
+                    if (order.getOrderStatus().equals(SD.orderStatusCanceled)) {
                         return 0.4 * order.getOrderTotal();
-                    } else if (order.getOrderStatus().equals("completed")) {
+                    } else if (order.getOrderStatus().equals(SD.orderStatusCompleted)) {
                         return order.getOrderTotal();
-                    } else if (order.getOrderStatus().equals("uncompleted")) {
+                    } else if (order.getOrderStatus().equals(SD.orderStatusUncompleted)) {
                         return 0.4 * order.getOrderTotal();
-                    } else if (order.getOrderStatus().equals("refund")) {
+                    } else if (order.getOrderStatus().equals(SD.orderStatusRefund)) {
                         return 0.1 * order.getOrderTotal();
                     } else {
                         return 0.0;
@@ -102,10 +103,10 @@ public class RevenueServiceImpl implements RevenueService {
                 })
                 .collect(Collectors.groupingBy(OrderDTO::getOrderStatus, Collectors.counting()));
 
-        int countOrderCompleted = orderStatusCounts.containsKey("completed") ? orderStatusCounts.get("completed").intValue() : 0;
-        int countOrderRefund = orderStatusCounts.containsKey("refund") ? orderStatusCounts.get("refund").intValue() : 0;
-        int countOrderCancel = orderStatusCounts.containsKey("cancel")? orderStatusCounts.get("cancel").intValue() : 0;
-        int countOrderUnCompleted = orderStatusCounts.containsKey("uncompleted") ? orderStatusCounts.get("uncompleted").intValue() : 0;
+        int countOrderCompleted = orderStatusCounts.containsKey(SD.orderStatusCompleted) ? orderStatusCounts.get(SD.orderStatusCompleted).intValue() : 0;
+        int countOrderRefund = orderStatusCounts.containsKey(SD.orderStatusRefund) ? orderStatusCounts.get(SD.orderStatusRefund).intValue() : 0;
+        int countOrderCancel = orderStatusCounts.containsKey(SD.orderStatusCanceled)? orderStatusCounts.get(SD.orderStatusCanceled).intValue() : 0;
+        int countOrderUnCompleted = orderStatusCounts.containsKey(SD.orderStatusUncompleted) ? orderStatusCounts.get(SD.orderStatusUncompleted).intValue() : 0;
 
 
 
@@ -142,21 +143,6 @@ public class RevenueServiceImpl implements RevenueService {
             orderInMonth = getOrderCountByMonth(year-1,11);
             orderIn3Month.add(orderInMonth);
 
-//            int totalOrderCompleted = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderCompleted)
-//                    .sum();
-//
-//            int totalOrderRefund = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderRefund)
-//                    .sum();
-//
-//            int totalOrderCancel = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderCancel)
-//                    .sum();
-//
-//            int totalOrderUnCompleted = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderUnCompleted)
-//                    .sum();
             int[] totals = orderIn3Month.stream()
                     .reduce(new int[4],
                             (acc, order) -> {
@@ -197,21 +183,6 @@ public class RevenueServiceImpl implements RevenueService {
             orderInMonth = getOrderCountByMonth(year-1,12);
             orderIn3Month.add(orderInMonth);
 
-//            int totalOrderCompleted = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderCompleted)
-//                    .sum();
-//
-//            int totalOrderRefund = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderRefund)
-//                    .sum();
-//
-//            int totalOrderCancel = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderCancel)
-//                    .sum();
-//
-//            int totalOrderUnCompleted = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderUnCompleted)
-//                    .sum();
             int[] totals = orderIn3Month.stream()
                     .reduce(new int[4],
                             (acc, order) -> {
@@ -251,21 +222,6 @@ public class RevenueServiceImpl implements RevenueService {
                 orderIn3Month.add(orderInMonth);
             }
 
-//            int totalOrderCompleted = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderCompleted)
-//                    .sum();
-//
-//            int totalOrderRefund = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderRefund)
-//                    .sum();
-//
-//            int totalOrderCancel = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderCancel)
-//                    .sum();
-//
-//            int totalOrderUnCompleted = orderInYear.stream()
-//                    .mapToInt(order -> order.countOrderUnCompleted)
-//                    .sum();
             int[] totals = orderIn3Month.stream()
                     .reduce(new int[4],
                             (acc, order) -> {

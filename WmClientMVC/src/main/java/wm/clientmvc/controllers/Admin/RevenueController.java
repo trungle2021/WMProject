@@ -28,6 +28,8 @@ public class RevenueController {
         Map<String, Object> _response = new HashMap<>();
         try{
             RevenueYearDTO response_api = APIHelper.makeApiCall(api_getRevenueByYear + year, HttpMethod.GET,null,token,RevenueYearDTO.class,request,response);
+            System.out.println("Call API Get Revenue Chart");
+
             _response.put("result", "success");
             _response.put("statusCode", 200);
             _response.put("message", response_api);
@@ -53,6 +55,8 @@ public class RevenueController {
         Map<String, Object> _response = new HashMap<>();
         try{
             OrderIn3MonthDTO response_api = APIHelper.makeApiCall(api_getOrderCount3Month + year, HttpMethod.GET,null,token,OrderIn3MonthDTO.class,request,response);
+            System.out.println("Call API Get Order Count Chart");
+
             _response.put("result", "success");
             _response.put("statusCode", 200);
             _response.put("message", response_api);
