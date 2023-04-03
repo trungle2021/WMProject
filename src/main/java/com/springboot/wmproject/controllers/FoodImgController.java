@@ -27,6 +27,12 @@ public class FoodImgController {
     public ResponseEntity<List<FoodImageDTO>> getAll() {
         return ResponseEntity.ok(foodImgService.getAllFoodImg());
     }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = {"/some"})
+    public ResponseEntity<List<FoodImageDTO>> getSome() {
+        return ResponseEntity.ok(foodImgService.getSomeFoodImg());
+    }
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/one/{id}"})
     public ResponseEntity<FoodImageDTO> getOneById(@PathVariable int id) {

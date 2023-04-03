@@ -31,6 +31,12 @@ public class FoodImgServiceImp implements FoodImgService {
     }
 
     @Override
+    public List<FoodImageDTO> getSomeFoodImg() {
+        return foodImgRepository.findAll().stream().limit(4).map(foodImages -> mapToDTO(foodImages)).collect(Collectors.toList());
+
+    }
+
+    @Override
     public List<FoodImageDTO> getAllFoodImgByFoodId(int id) {
         return foodImgRepository.getAllFoodImgByFoodId(id).stream().map(foodImages -> mapToDTO(foodImages)).collect(Collectors.toList());
     }
