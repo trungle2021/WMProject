@@ -48,6 +48,7 @@ public class WebOrderController {
     RestTemplate restTemplate = new RestTemplate();
     String url = "http://localhost:8080/api/venues/allactive";
     String orderurl="http://localhost:8080/api/orders";
+    String orderForVenue="http://localhost:8080/api/orders/forVenue";
 
         @GetMapping("")
         public String order(){
@@ -72,9 +73,8 @@ public class WebOrderController {
             List<VenueDTO> venueList = response.getBody();
   //get active venueList
 
-//
             ResponseEntity<List<OrderDTO>> orderResponse = restTemplate.exchange(
-                    orderurl,
+                    orderForVenue,
                     HttpMethod.GET,
                     entity,
                     new ParameterizedTypeReference<List<OrderDTO>>() {}

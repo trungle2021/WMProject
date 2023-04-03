@@ -27,5 +27,6 @@ public interface OrderRepository extends JpaRepository<Orders,Integer> {
     @Query("select o from Orders o where o.timeHappen=:time and o.venueId=:venueId") // COI LẠI SAU BUSINESS LOGIC VỀ KHUNG GIO
     List<Orders> orderListInTimeVenue(String time,int venueId);
 
-
+    @Query("SELECT NEW Orders(o.id, o.orderStatus, o.timeHappen, o.venueId) FROM Orders o")
+    List<Orders> findAllToGetVenue();
 }
