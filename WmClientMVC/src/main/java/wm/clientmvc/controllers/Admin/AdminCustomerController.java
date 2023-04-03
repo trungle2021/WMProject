@@ -190,6 +190,7 @@ public class AdminCustomerController {
             String avatar = utilFunction.AddFileEncrypted(file);
             registerDTO.setAvatar(avatar);
         }
+        registerDTO.is_verified();
 
         try {
             RegisterCustomerDTO response_ =  APIHelper.makeApiCall(

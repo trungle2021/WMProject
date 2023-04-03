@@ -243,13 +243,14 @@ public class EmployeeController {
             return "redirect:/staff/employees/update/" + registerDTO.getEmployeeId();
         }
         //xu ly avatar
+
         String contentType = file.getContentType();
         ArrayList<String> validateErrors = new ArrayList();
 
         //xu ly avatar
         ClientUtilFunction utilFunction = new ClientUtilFunction();
 
-        if(!file.isEmpty()){
+        if(!file.isEmpty() && !contentType.isEmpty()){
             if (file.getSize() > 2 * 1024 * 1024) {
                 validateErrors.add("The file size must be less than 2MB");
             }
@@ -278,7 +279,9 @@ public class EmployeeController {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
             if(response_.getEmployeeId() == customUserDetails.getUserId().intValue()){
                 ((CustomUserDetails) authentication.getPrincipal()).setFullName(response_.getName());
-                ((CustomUserDetails) authentication.getPrincipal()).setAvatar(response_.getAvatar());
+                if(response_.getAvatar() != null){
+                    ((CustomUserDetails) authentication.getPrincipal()).setAvatar(response_.getAvatar());
+                }
             }
 
         }catch (HttpClientErrorException ex) {

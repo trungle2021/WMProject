@@ -43,9 +43,9 @@ public class MVCSecurity {
                 //TEAM
 
                 .requestMatchers("/staff/teams/create").hasAnyRole("ADMIN","ANONYMOUS")
-                .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/getAll").hasAnyRole("ADMIN","ANONYMOUS")
-                .requestMatchers("/staff/teams/getAllEmployeeByTeamId/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/getAllEmployeeByTeamId/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/update/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //EMPLOYEE ACCOUNT

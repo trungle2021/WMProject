@@ -41,6 +41,6 @@ public class CustomerAccounts {
     private Collection<Review> reviewById=new HashSet<>();
 
     @OneToMany(mappedBy = "customerAccountsByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<RefreshToken> refreshTokensById;
+    private Collection<RefreshToken> refreshTokensById = new HashSet<>();
 
 }

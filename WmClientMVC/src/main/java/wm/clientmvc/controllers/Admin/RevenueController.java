@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import wm.clientmvc.DTO.OrderIn3MonthDTO;
+import wm.clientmvc.DTO.ProfitYearDTO;
 import wm.clientmvc.DTO.RevenueYearDTO;
 import wm.clientmvc.utils.APIHelper;
 
@@ -16,8 +17,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static wm.clientmvc.utils.SD_CLIENT.api_getOrderCount3Month;
-import static wm.clientmvc.utils.SD_CLIENT.api_getRevenueByYear;
+import static wm.clientmvc.utils.SD_CLIENT.*;
 
 @Controller
 @RequestMapping("/staff/revenues")
@@ -27,12 +27,14 @@ public class RevenueController {
     public Map<String, Object> getRevenueByYear(@PathVariable("year") int year, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response) throws JsonProcessingException {
         Map<String, Object> _response = new HashMap<>();
         try{
-            RevenueYearDTO response_api = APIHelper.makeApiCall(api_getRevenueByYear + year, HttpMethod.GET,null,token,RevenueYearDTO.class,request,response);
+            RevenueYearDTO response_revenue_api = APIHelper.makeApiCall(api_getRevenueByYear + year, HttpMethod.GET,null,token,RevenueYearDTO.class,request,response);
+            ProfitYearDTO response_profit_api = APIHelper.makeApiCall(api_getProfitByYear + year, HttpMethod.GET,null,token, ProfitYearDTO.class,request,response);
             System.out.println("Call API Get Revenue Chart");
 
             _response.put("result", "success");
             _response.put("statusCode", 200);
-            _response.put("message", response_api);
+            _response.put("revenues", response_revenue_api);
+            _response.put("profits", response_profit_api);
 
         }catch (HttpClientErrorException e){
             String responseError = e.getResponseBodyAsString();

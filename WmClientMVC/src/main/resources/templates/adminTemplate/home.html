@@ -117,17 +117,32 @@
           },
           data: { },
           success: function(response) {
+            console.log(response)
             if(response.statusCode == 200){
-              $("#revenueYear").text("Monthly Revenue Report for " + currentYear)
+              $("#revenueYear").text("Monthly Finance Report for " + currentYear)
               const monthsArray = [];
               const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
               const revenueInYearArray = [];
+              const profitInYearArray = [];
+              const costInYearArray = [];
 
-              response.message['revenueMonthList'].map(item => {
+
+              response.profits['profitMonthList'].map(item => {
+                profitInYearArray.push(item.totalProfitInMonth);
+              });
+
+              response.revenues['revenueMonthList'].map(item => {
                 const monthName = monthNames[item.month - 1];
                 revenueInYearArray.push(item.revenueInMonth);
                 monthsArray.push(monthName);
               });
+
+              for (let i = 0; i < revenueInYearArray.length; i++) {
+                const cost = revenueInYearArray[i] - profitInYearArray[i];
+                costInYearArray.push(cost);
+              }
+
+
 
               const ctx = document.getElementById('revenueYearChart').getContext('2d');
 
@@ -139,7 +154,18 @@
                     label: 'Revenue',
                     data: revenueInYearArray, //revenue
                     borderWidth: 1
-                  }]
+                  },{
+                    label: 'Cost',
+                    data: costInYearArray, //revenue
+                    borderWidth: 0.5
+                  },
+                    {
+                      label: 'Profit',
+                      data: profitInYearArray, //revenue
+                      borderWidth: 1
+                    }
+
+                  ]
                 },
                 options: {
                   scales: {
@@ -175,7 +201,7 @@
           success: function(response) {
             console.log(response);
             if(response.statusCode == 200){
-              $("#revenueYear").text("Monthly Revenue Report for " + currentYear)
+              console.log(response)
               const monthsArray = [];
               const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
               // const orderComplete = response.message['totalOrderCompleted']
@@ -183,19 +209,19 @@
               // const orderCancel = response.message['totalOrderCancel']
               // const orderUnComplete = response.message['totalOrderUncompleted']
 
-              const orderComplete = []
-              const orderRefund = []
-              const orderCancel = []
-              const orderUnComplete = []
+              const orderCompleted = []
+              const orderRefunded = []
+              const orderCanceled = []
+              const orderUnCompleted = []
               const orderIn3Month = [];
 
               response.message['orderIn3Month'].map(item => {
                 const monthName = monthNames[item.month - 1];
                 monthsArray.push(monthName);
-                orderComplete.push(item.countOrderCompleted)
-                orderRefund.push(item.countOrderRefund)
-                orderCancel.push(item.countOrderCancel)
-                orderUnComplete.push(item.countOrderUnCompleted)
+                orderCompleted.push(item.countOrderCompleted)
+                orderRefunded.push(item.countOrderRefunded)
+                orderCanceled.push(item.countOrderCanceled)
+                orderUnCompleted.push(item.countOrderUnCompleted)
               });
 
               const ctx1 = document.getElementById('orderCount3MonthChart').getContext('2d');
@@ -205,22 +231,22 @@
                   labels: monthsArray, //month
                   datasets: [{
                     label: 'Order Completed',
-                    data: orderComplete, //revenue
+                    data: orderCompleted, //revenue
                     borderWidth: 1
                   },
                     {
-                      label: 'Order Refund',
-                      data: orderRefund, //revenue
+                      label: 'Order Refunded',
+                      data: orderRefunded, //revenue
                       borderWidth: 1
                     },
                     {
-                      label: 'Order Cancel',
-                      data: orderCancel, //revenue
+                      label: 'Order Canceled',
+                      data: orderCanceled, //revenue
                       borderWidth: 1
                     },
                     {
                       label: 'Order Uncompleted',
-                      data: orderUnComplete, //revenue
+                      data: orderUnCompleted, //revenue
                       borderWidth: 1
                     }
                   ]

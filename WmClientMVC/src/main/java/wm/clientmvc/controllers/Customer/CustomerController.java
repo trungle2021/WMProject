@@ -102,7 +102,7 @@ public class CustomerController {
         String contentType = file.getContentType();
         ArrayList<String> validateErrors = new ArrayList();
         //xu ly avatar
-        ClientUtilFunction utilFunction = new ClientUtilFunction();
+
 
 
 
@@ -119,7 +119,7 @@ public class CustomerController {
                 return "redirect:/customers/update/" + registerDTO.getCustomerId();
             }
             
-            String avatar = utilFunction.AddFileEncrypted(file);
+            String avatar = ClientUtilFunction.AddFileEncrypted(file);
             registerDTO.setAvatar(avatar);
 
         }
@@ -138,7 +138,9 @@ public class CustomerController {
             CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
             if(response_.getCustomerId() == customUserDetails.getUserId().intValue()){
                 ((CustomUserDetails) authentication.getPrincipal()).setFullName(response_.getFirst_name() + " " + response_.getLast_name());
-                ((CustomUserDetails) authentication.getPrincipal()).setAvatar(response_.getAvatar());
+               if(response_.getAvatar()!=null){
+                   ((CustomUserDetails) authentication.getPrincipal()).setAvatar(response_.getAvatar());
+               }
             }
         }catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();

@@ -25,7 +25,7 @@ public class EmployeeController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/all")
     public ResponseEntity<List<EmployeeDTO>> getAll(){
-        return ResponseEntity.ok(employeeService.getAllEmployees());
+        return ResponseEntity.ok(employeeService.getAllEmployeesExceptAdmin());
     }
 
     @PreAuthorize("hasAnyRole('ADMIN','ORGANIZE','SALE')")

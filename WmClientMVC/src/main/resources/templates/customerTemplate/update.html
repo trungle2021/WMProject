@@ -133,7 +133,7 @@
                                         <!-- Form Group (first name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1">Username</label>
-                                            <input type="text" class="form-control" th:field="*{username}" required>
+                                            <input type="text" readonly class="form-control" th:field="*{username}" required>
                                             <ul>
                                                 <th:block th:if="${result != null}">
                                                     <li th:each="err : ${result.getFieldErrors('username')}" th:text="${err.defaultMessage}" class="error" />

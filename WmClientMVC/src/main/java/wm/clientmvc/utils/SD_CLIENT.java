@@ -70,6 +70,7 @@ public class SD_CLIENT {
 
     //REVENUE
     public static final String api_getRevenueByYear = DOMAIN_APP_API + "/api/revenues/getRevenueByYear/";
+    public static final String api_getProfitByYear = DOMAIN_APP_API + "/api/revenues/getProfitByYear/";
     public static final String api_getRevenueByMonth = DOMAIN_APP_API + "/api/revenues/getRevenueByMonth/";
     public static final String api_getOrderCountByMonth = DOMAIN_APP_API + "/api/revenues/getRevenueByMonth/";
     public static final String api_getOrderCount3Month = DOMAIN_APP_API + "/api/revenues/getOrderCount3Month/";

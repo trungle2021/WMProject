@@ -45,7 +45,7 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
         //create token
         String token = UUID.randomUUID().toString();
 
-        LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(5);
+        LocalDateTime expiryDateTime = LocalDateTime.now().plusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String expiry_date = expiryDateTime.format(formatter);
 
@@ -65,7 +65,7 @@ public class PasswordResetTokenImpl implements PasswordResetTokenService {
         String token = generateOTP();
 //        c56a5c3f-cfaf-487c-ac25-ddcef5ccc5f0
 
-        LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(5);
+        LocalDateTime expiryDateTime = LocalDateTime.now().plusMinutes(30);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String expiry_date = expiryDateTime.format(formatter);
 

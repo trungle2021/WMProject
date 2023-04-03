@@ -35,13 +35,13 @@ public class APIHelper {
         this.tokenProvider = tokenProvider;
     }
 
+
     public static <T> T makeApiCall(String url, HttpMethod method, Object payload, String token, Class<T> responseType, HttpServletRequest request, HttpServletResponse response) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         if (StringUtils.hasLength(token)) {
-
             validateToken(token,headers,request,response);
         }
         HttpEntity<Object> requestEntity = new HttpEntity<>(payload, headers);

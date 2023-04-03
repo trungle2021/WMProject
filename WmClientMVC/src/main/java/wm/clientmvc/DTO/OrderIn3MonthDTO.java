@@ -14,8 +14,8 @@ import java.util.List;
 public class OrderIn3MonthDTO {
     private List<OrderInMonthDTO> orderIn3Month;
     private Integer totalOrderCompleted;
-    private Integer totalOrderCancel;
-    private Integer totalOrderRefund;
+    private Integer totalOrderCanceled;
+    private Integer totalOrderRefunded;
     private Integer totalOrderUncompleted;
 
 }

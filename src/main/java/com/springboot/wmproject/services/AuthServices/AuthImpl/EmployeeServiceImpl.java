@@ -34,10 +34,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<EmployeeDTO> getAllEmployeesExceptAdmin() {
         //find all
         List<Employees> employeesList = employeeRepository.findAllExceptAdmin();
         List<EmployeeDTO> employeeDTOList = employeesList.stream()
+                .map(employees -> mapToDto(employees)).collect(Collectors.toList());
+        return employeeDTOList;
+    }
+
+    @Override
+    public List<EmployeeDTO> getAllEmployees() {
+        //find all
+        List<Employees> employeesList = employeeRepository.findAll();
+        List<EmployeeDTO> employeeDTOList = employeesList.stream()
+                .filter(employees -> employees.is_deleted() == false)
                 .map(employees -> mapToDto(employees)).collect(Collectors.toList());
         return employeeDTOList;
     }
