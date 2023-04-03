@@ -530,7 +530,7 @@ public class OrderServiceImpl implements OrderService {
        if(matedtList!=null){
         for (MaterialDetail materialdt:matedtList)
         {
-           Integer count= materialdt.getCount();
+           Double count= materialdt.getCount();
            Double price= materialdt.getMaterialsByMaterialId().getPrice();
            costByFood += count*price;
         }

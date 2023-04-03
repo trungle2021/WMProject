@@ -16,7 +16,7 @@ public class MaterialDTO {
     @NotEmpty
     private String materialCode;
     @NotEmpty
-    @Size(min=5,max=45,message="Name from 5 to 45")
+    @Size(min=2,max=45,message="Name from 2 to 45")
     private String materialName;
 
     @NotEmpty
