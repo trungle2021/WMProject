@@ -133,8 +133,6 @@ public class AuthController {
 
         try {
             RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerDTO, null, RegisterCustomerDTO.class,request,response);
-            session.setAttribute("responseRegister",responseRegister);
-
             return "redirect:/sendVerifyEmail";
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();

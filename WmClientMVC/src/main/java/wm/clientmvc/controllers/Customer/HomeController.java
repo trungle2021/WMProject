@@ -229,24 +229,7 @@ public class HomeController {
         if(!token.isEmpty()){
            try{
                String _response = APIHelper.makeApiCall(SD_CLIENT.api_verify_email + token,HttpMethod.POST,null,null,String.class,request,response);
-               RegisterCustomerDTO  registerCustomerDTO = (RegisterCustomerDTO) session.getAttribute("responseRegister");
-               if(registerCustomerDTO.getUsername() != null && registerCustomerDTO.getPassword() != null){
-                   LoginDTO loginDTO = new LoginDTO();
-                   loginDTO.setUsername(registerCustomerDTO.getUsername());
-                   loginDTO.setPassword(registerCustomerDTO.getPassword());
-                   session.invalidate();
-                   return authController.callApiLogin(
-                           SD_CLIENT.api_customerLoginUrl,
-                           "/customers/home",
-                           "/login",
-                           loginDTO,
-                           request,
-                           response,
-                           attributes);
-               }else{
-                   attributes.addFlashAttribute("errorMessage","Expired Session");
-                   return "redirect:/register";
-               }
+                   return "redirect:/login";
            }catch(HttpClientErrorException ex){
                String responseError = ex.getResponseBodyAsString();
                ObjectMapper mapper = new ObjectMapper();
