@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | DataTables</title>
+    <title>Team Detail</title>
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
@@ -130,7 +130,9 @@
                                             <th>Phone</th>
                                             <th>Type</th>
                                             <th>Is Leader ?</th>
-                                            <th>Details</th>
+                                            <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                                <th>Details</th>
+                                            </th:block>
                                             <th>Address</th>
                                             <th>Email</th>
                                             <th>Join Date</th>

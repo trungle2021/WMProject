@@ -260,7 +260,7 @@ public class CustomerAccountServiceImpl implements CustomerAccountService {
     }
 
     @Override
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 86400000) //1days
     public void ExpiredTokenChecker() throws ParseException {
         passwordResetTokenService.deleteExpiredTokens();
 
