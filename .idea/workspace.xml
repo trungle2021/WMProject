@@ -4,9 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-
-    <list default="true" id="afbdc886-a25e-4a39-a2a3-787d1446f2c1" name="Changes" comment="" />
-
+    <list default="true" id="afbdc886-a25e-4a39-a2a3-787d1446f2c1" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/adminlayout.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/update.html" beforeDir="false" afterPath="$PROJECT_DIR$/WmClientMVC/src/main/resources/templates/adminTemplate/pages/employees/update.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/EmployeeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/EmployeeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -48,7 +55,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "spring.configuration.checksum": "a6c1a72681bbf934af904fd11f4112a5",
+    "spring.configuration.checksum": "ed049b57b5c80a2a9381a536731a729a",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -64,7 +71,7 @@
       </set>
     </option>
   </component>
-  <component name="RunManager" selected="Spring Boot.mvc">
+  <component name="RunManager" selected="Spring Boot.api">
     <configuration name="wm" type="CompoundRunConfigurationType">
       <toRun name="api" type="SpringBootApplicationConfigurationType" />
       <toRun name="mvc" type="SpringBootApplicationConfigurationType" />
@@ -119,12 +126,10 @@
       <workItem from="1680467066235" duration="50000" />
       <workItem from="1680467141645" duration="3412000" />
       <workItem from="1680486948308" duration="13346000" />
-
       <workItem from="1680525912061" duration="3930000" />
       <workItem from="1680532065132" duration="909000" />
       <workItem from="1680536868545" duration="20279000" />
       <workItem from="1680560805324" duration="21000" />
-
     </task>
     <servers />
   </component>
@@ -140,11 +145,9 @@
           <option name="timeStamp" value="8" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/controllers/Auth/AuthController.java</url>
           <line>258</line>
           <option name="timeStamp" value="18" />
-
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/WmClientMVC/src/main/java/wm/clientmvc/utils/APIHelper.java</url>
@@ -162,7 +165,6 @@
           <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
-
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/controllers/OrderController.java</url>
           <line>171</line>
           <option name="timeStamp" value="123" />
@@ -179,7 +181,6 @@
             <option name="lambda-ordinal" value="-1" />
           </properties>
           <option name="timeStamp" value="130" />
-
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/impl/RevenueServiceImpl.java</url>
@@ -195,6 +196,21 @@
           <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/EmployeeServiceImpl.java</url>
           <line>89</line>
           <option name="timeStamp" value="93" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java</url>
+          <line>406</line>
+          <option name="timeStamp" value="131" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java</url>
+          <line>412</line>
+          <option name="timeStamp" value="132" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/springboot/wmproject/services/AuthServices/AuthImpl/AuthServiceImpl.java</url>
+          <line>399</line>
+          <option name="timeStamp" value="133" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -271,7 +271,13 @@
 
                                    <div class="col-md-6">
                                        <label class="small mb-1">JoinDate</label>
-                                       <input type="date" class="form-control" th:field="*{joinDate}"  value="2013-03-08"  required>
+                                       <th:block th:if="${#authorization.expression('hasAnyRole(''ORGANIZE'',''SALE'')')}">
+                                           <input type="date" class="form-control" readonly th:field="*{joinDate}"  value="2013-03-08"  required>
+                                       </th:block>
+
+                                       <th:block th:unless="${#authorization.expression('hasAnyRole(''ORGANIZE'',''SALE'')')}">
+                                           <input type="date" class="form-control" th:field="*{joinDate}"  value="2013-03-08"  required>
+                                       </th:block>
                                        <ul>
                                            <th:block th:if="${result != null}">
                                                <li th:each="err : ${result.getFieldErrors('joinDate')}" th:text="${err.defaultMessage}" class="error" />
