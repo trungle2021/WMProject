@@ -29,8 +29,8 @@ public class MaterialDetail {
     private Integer foodId;
 
     @Basic
-    @Column(name = "count", nullable = true)
-    private Integer count;
+    @Column(name = "count", nullable = true, precision = 2)
+    private Double count;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "material_id", referencedColumnName = "id",insertable = false,updatable = false)
@@ -64,12 +64,11 @@ public class MaterialDetail {
     }
 
 
-
-    public Integer getCount() {
+    public Double getCount() {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(Double count) {
         this.count = count;
     }
 

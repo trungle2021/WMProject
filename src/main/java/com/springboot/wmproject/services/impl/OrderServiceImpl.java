@@ -72,6 +72,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<OrderDTO> getAllForGetVenue() {
+       List<Orders >ordersList=orderRepository.findAllToGetVenue();
+       return ordersList.stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
+
+    }
+
+    @Override
     public List<OrderDTO> getAllOrderHaveShift() {
         List<OrderDTO> confirmList=orderRepository.findByOrderStatus(orderStatusConfirm).stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
         List<OrderDTO> completedList=orderRepository.findByOrderStatus(orderStatusCompleted).stream().map(orders -> mapToDTO(orders)).collect(Collectors.toList());
@@ -530,7 +537,7 @@ public class OrderServiceImpl implements OrderService {
        if(matedtList!=null){
         for (MaterialDetail materialdt:matedtList)
         {
-           Integer count= materialdt.getCount();
+           Double count= materialdt.getCount();
            Double price= materialdt.getMaterialsByMaterialId().getPrice();
            costByFood += count*price;
         }

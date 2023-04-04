@@ -33,6 +33,12 @@ public class VenueImgController {
     }
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = {"/some"})
+    public ResponseEntity<List<VenueImgDTO>> getSome() {
+        return ResponseEntity.ok(venueImgService.getSomeVenueImg());
+    }
+
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = {"/all/venue/{id}"})
     public ResponseEntity<List<VenueImgDTO>> getAllVenueImgById(@PathVariable int id) {
         return ResponseEntity.ok(venueImgService.getAllVenueImgByVenueId(id));

@@ -38,6 +38,7 @@
                             <th>Material Code</th>
                             <th>Material Name</th>
                             <th>Price</th>
+                            <th>Unit</th>
                             <th>Action:</th>
                         </tr>
                         </thead>
@@ -46,6 +47,7 @@
                             <td th:text="${c.getMaterialName()}"></td>
                             <td  th:text="${c.getMaterialName()}"></td>
                             <td th:text="'$'+${c.getPrice()}"></td>
+                            <td th:text="${c.getUnit()}"></td>
                             <td><a th:href="@{/staff/materials/update/{id}(id=${c.getId()})}" class="btn btn-primary">Update</a> </td>
                         </tr>
 

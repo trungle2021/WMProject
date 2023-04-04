@@ -388,10 +388,7 @@ public String update(@Validated  OrderDTO order, BindingResult bindingResult, Mo
 @RequestMapping(value = "/orders/order-confirm",method = RequestMethod.POST)
 public String updateConfirm(Model model, @CookieValue(name="token",defaultValue = "")String token, @Valid @ModelAttribute OrderDTO order, BindingResult bindingResult,RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)
 {
-    //tinh lại total amount and partime emp
     OrderDTO editOrder = new OrderDTO();
-//    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//    CustomUserDetails employeeDetails = (CustomUserDetails) authentication.getPrincipal();
 
     String orderUrl = "http://localhost:8080/api/orders/" + order.getId();
     OrderDTO findOrder= new OrderDTO();
@@ -473,7 +470,6 @@ public String updateConfirm(Model model, @CookieValue(name="token",defaultValue 
         return "adminTemplate/error";
     }
 }
-
 
     @RequestMapping(value = "orders/order-uncompleted",method = RequestMethod.POST)
     public String OrderUncompleted(Model model, @CookieValue(name="token",defaultValue = "")String token, @PathParam("orderId") Integer orderId, @PathParam("status")String status, RedirectAttributes redirectAttributes,HttpServletRequest request, HttpServletResponse response)

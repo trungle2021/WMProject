@@ -124,15 +124,15 @@
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Dashboard
+              Profile
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="./index.html" class="nav-link">
+                <a th:href="@{/staff/employees/update/{id}(id=${#authentication.getPrincipal().getUserId()})}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard v1</p>
+                  <p>Profile</p>
                 </a>
               </li>
 
@@ -209,6 +209,12 @@
                   </a>
                 </li>
                 <li class="nav-item">
+                  <a th:href="@{/staff/materials/showAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Material Management</p>
+                  </a>
+                </li>
+                <li class="nav-item">
                   <a th:href="@{/staff/orders/showall}" class="nav-link">
                     <i class="far fa-circle nav-icon"></i>
                     <p>Order Management</p>
@@ -278,12 +284,6 @@
               </th:block>
 
               <th:block th:if="${ #authorization.expression('hasRole(''ORGANIZE'')')}"}>
-                <li class="nav-item">
-                  <a th:href="@{/staff/teams/getAll}" class="nav-link">
-                    <i class="far fa-circle nav-icon"></i>
-                    <p>Teams</p>
-                  </a>
-                </li>
 
                 <li class="nav-item">
                   <a th:href="@{/staff/teams/showallorder/organize}" class="nav-link">

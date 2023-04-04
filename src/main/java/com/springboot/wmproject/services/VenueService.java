@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface VenueService {
     List<VenueDTO> getAllVenue();
+
     List<VenueDTO> getAllVenueActive();
     VenueDTO getOneVenueById(int id);
     List<VenueDTO> getAllVenueByOrderId(Integer orderId);

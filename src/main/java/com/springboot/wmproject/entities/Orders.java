@@ -74,4 +74,11 @@ public class Orders {
     private Collection<ServiceDetails> serviceDetailsById;
 
 
+    public Orders(int id, String orderStatus, String timeHappen, Integer venueId) {
+        this.id = id;
+        this.orderStatus = orderStatus;
+        this.timeHappen = timeHappen;
+        this.venueId = venueId;
+    }
+
 }
