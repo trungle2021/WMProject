@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Tabbed IFrames</title>
+  <title>Staff DashBoard</title>
   <style>
     .extra-info{
       padding-left: 30px;
@@ -19,12 +19,16 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-md-12">
+
+<!--              <h3 th:text="${#authorization.getAuthentication().getAuthorities()}"></h3>-->
+<!--              <th:block th:if="${! #authorization.getAuthentication().getAuthorities().equals('[ROLE_ORGANIZE]')}">-->
+
               <!-- AREA CHART -->
               <div class="card card-primary">
                 <div class="card-header">
                   <h3 class="card-title align-middle" id="revenueYear"></h3>
 
-                    <span  class="extra-info" data-toggle="tooltip" data-placement="top" title="Total Revenue = 100% money OrderCompleted + 40% money OrderCanceled + 40% money OrderUncompleted + 10% money OrderRefunded.">
+                  <span  class="extra-info" data-toggle="tooltip" data-placement="top" title="Total Revenue = 100% money OrderCompleted + 40% money OrderCanceled + 40% money OrderUncompleted + 10% money OrderRefunded.">
                       <i class="fas fa-info-circle"></i>
                     </span>
 
@@ -43,6 +47,7 @@
                 <div class="card-body">
                   <div class="chart">
                     <canvas id="revenueYearChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+<!--                    <button onclick="changeCurrency('en-US','VND','23474')">USD -> VND</button>-->
                   </div>
                 </div>
                 <!-- /.card-body -->
@@ -50,7 +55,7 @@
 
               <div class="card card-primary">
                 <div class="card-header">
-                  <h3 class="card-title"> Three-Month Order Status Overview Chart</h3>
+                  <h3 class="card-title"> Three-Month Order Status Count Chart</h3>
 
                   <div class="card-tools">
                     <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -68,26 +73,27 @@
                 </div>
                 <!-- /.card-body -->
               </div>
+              <input type="hidden" id="token" th:value="${token}">
+
               <!-- /.card -->
+<!--              </th:block>-->
+
             </div>
           </div>
           <!-- /.row -->
         </div><!-- /.container-fluid -->
       </section>
-      <input type="hidden" id="token" th:value="${token}">
 
     </div>
-
-
-
-
-
 
   </section>
 </body>
 
 <section layout:fragment="optional">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js"></script>
+
 
   <script>
     let token = $('#token').val();
@@ -99,10 +105,13 @@
 
     $(function(){
 
-
-
+    if(token != undefined){
       loadRevenueByYear(currentYear);
       loadOrderIn3Month(currentYear);
+    }
+
+
+
 
       function loadRevenueByYear(currentYear){
         console.log(currentYear)
@@ -157,7 +166,7 @@
                   },{
                     label: 'Cost',
                     data: costInYearArray, //revenue
-                    borderWidth: 0.5
+                    borderWidth: 1,
                   },
                     {
                       label: 'Profit',
@@ -168,12 +177,24 @@
                   ]
                 },
                 options: {
+                locale:'en-US',
                   scales: {
                     y: {
-                      beginAtZero: true
+                      beginAtZero: true,
+                      ticks:{
+                        callback:(value, index, values) => {
+                          return new Intl.NumberFormat('en-US',{
+                            style:'currency',
+                            currency :'USD',
+                            maximumSignificantDigits: 3
+                          }).format(value)
+                        }
+                      }
+
                     }
-                  }
-                }
+                  },
+                },
+                plugins:[ChartDataLabels]
               });
 
 
@@ -232,7 +253,7 @@
                   datasets: [{
                     label: 'Order Completed',
                     data: orderCompleted, //revenue
-                    borderWidth: 1
+                    borderWidth: 1,formatter: function (value, context) { return value || null;  }
                   },
                     {
                       label: 'Order Refunded',
@@ -252,6 +273,7 @@
                   ]
                 },
                 options: {
+
                   scales: {
                     y: {
                       ticks: {
@@ -259,7 +281,8 @@
                       }
                     }
                   }
-                }
+                },
+                plugins:[ChartDataLabels]
               });
 
 
