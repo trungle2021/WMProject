@@ -12,6 +12,7 @@ import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernameP
 import com.springboot.wmproject.securities.JWT.JwtTokenProvider;
 import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
 import com.springboot.wmproject.services.AuthServices.*;
+import com.springboot.wmproject.services.OrderService;
 import com.springboot.wmproject.services.OrganizeTeamService;
 import com.springboot.wmproject.utils.SD;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,10 +44,12 @@ public class AuthServiceImpl implements AuthService {
     private OrganizeTeamService teamService;
     private PasswordResetTokenService passwordResetTokenService;
     private RefreshTokenService refreshTokenService;
+    private OrderService orderService;
     private List<String> errors;
 
     @Autowired
-    public AuthServiceImpl(RefreshTokenService refreshTokenService,OrganizeTeamService teamService, AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PasswordResetTokenService passwordResetTokenService) {
+    public AuthServiceImpl(OrderService orderService,RefreshTokenService refreshTokenService,OrganizeTeamService teamService, AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PasswordResetTokenService passwordResetTokenService) {
+        this.orderService = orderService;
         this.authenticationManager = authenticationManager;
         this.employeeService = employeeService;
         this.customerService = customerService;
@@ -390,6 +393,20 @@ public class AuthServiceImpl implements AuthService {
             employeeAccountDTO.setPassword(empHasAccount.getPassword());
         }
 
+        int currentTeam = empExist.getTeam_id();
+        int teamSize = teamService.getOneOrganizeTeamById(currentTeam).getTeamsize().intValue();
+        List<OrderDTO> orderByTeam = orderService.getAllByOrganizeTeam(currentTeam);
+
+        boolean isAlreadyWorkShift = false;
+                if(orderByTeam != null){
+                     isAlreadyWorkShift = orderByTeam.stream()
+                            .anyMatch(orderDTO -> orderDTO.getOrderStatus().equals(SD.orderStatusConfirm));
+                }
+
+        if(teamSize == 1 && isAlreadyWorkShift){
+            errors.add("Cannot remove all member if team already has work shift");
+        }
+
         if (errors.size() != 0) {
             ObjectMapper objectMapper = new ObjectMapper();
             String responseError = objectMapper.writeValueAsString(errors);
@@ -402,7 +419,9 @@ public class AuthServiceImpl implements AuthService {
         employeeDTO.setJoinDate(registerDTO.getJoinDate());
         employeeDTO.setSalary(registerDTO.getSalary());
         employeeDTO.setIsLeader(isLeader);
-//        employeeDTO.setTeam_id(team_id_intValue);
+
+
+
         employeeDTO.setGender(registerDTO.getGender());
         employeeDTO.setAvatar(registerDTO.getAvatar());
         employeeDTO.setId(empExist.getId());

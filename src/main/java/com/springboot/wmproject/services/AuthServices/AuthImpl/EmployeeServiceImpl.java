@@ -112,6 +112,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
         checkEmployees.setTeam_id(dto.getTeam_id() != null ? dto.getTeam_id() : checkEmployees.getTeam_id());
+
         checkEmployees.setEmail(dto.getEmail() != null ? dto.getEmail() : checkEmployees.getEmail());
         employeeRepository.save(checkEmployees);
         return mapToDto(checkEmployees);
