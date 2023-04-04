@@ -204,7 +204,10 @@ public class HomeController {
     public String about() {
         return "about";
     }
-
+    @GetMapping(value = {"/contact", "/customers/contact"})
+    public String contact() {
+        return "contact";
+    }
     @GetMapping(value = {"/login"})
     public String customerLogin(Model model) {
 
