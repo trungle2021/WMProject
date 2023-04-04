@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/adminTemplate/adminlayout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -21,10 +22,10 @@
             <div class="col-md-12">
 
 <!--              <h3 th:text="${#authorization.getAuthentication().getAuthorities()}"></h3>-->
-<!--              <th:block th:if="${! #authorization.getAuthentication().getAuthorities().equals('[ROLE_ORGANIZE]')}">-->
+                <th:block th:if="${#authorization.expression('hasAnyRole(''ADMIN'',''SALE'')')}">
 
               <!-- AREA CHART -->
-              <div class="card card-primary">
+                <div class="card card-primary">
                 <div class="card-header">
                   <h3 class="card-title align-middle" id="revenueYear"></h3>
 
@@ -53,7 +54,7 @@
                 <!-- /.card-body -->
               </div>
 
-              <div class="card card-primary">
+                <div class="card card-primary">
                 <div class="card-header">
                   <h3 class="card-title"> Three-Month Order Status Count Chart</h3>
 
@@ -73,10 +74,12 @@
                 </div>
                 <!-- /.card-body -->
               </div>
-              <input type="hidden" id="token" th:value="${token}">
 
               <!-- /.card -->
-<!--              </th:block>-->
+              </th:block>
+                <input type="hidden" id="token" th:value="${token}">
+
+
 
             </div>
           </div>
