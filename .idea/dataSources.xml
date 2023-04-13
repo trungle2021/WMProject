@@ -5,7 +5,7 @@
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/wmproject</jdbc-url>
+      <jdbc-url>jdbc:mysql://localhost:3306/wmproject?SSL=false</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="default/Hibernate" uuid="705ecab2-31a6-4569-b6ef-d051946cd634">

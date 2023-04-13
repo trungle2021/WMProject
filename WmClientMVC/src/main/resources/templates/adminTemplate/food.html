@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <style>
+        .highlight {
+            background-color: yellow;
+        }
+
+        .input-group {
+            display: none;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <section layout:fragment="content">
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>DataTables</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">DataTables</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Material</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <table
+                                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                                            id="foodTable" style="width:100%" aria-describedby="example-info">
+                                        <button type="button" class="btn btn-outline-primary float-right"
+                                                data-toggle="modal"
+                                                data-target="#createFoodModal" data-whatever="@mdo">Create
+                                        </button>
+                                        <thead>
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Type</th>
+                                            <th>Price ($)</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="c:${foodList}">
+                                            <td th:text="${c.foodName}"></td>
+                                            <td th:text="${c.foodType}"></td>
+                                            <td th:text="${c.price}"></td>
+                                            <td>
+                                                <a  type="button"
+                                                        class="btn btn-outline-primary detailBtn"
+                                                        th:href="@{/staff/food/material(foodId=${c.getId()})}"
+                                                        >Detail
+                                                </a>
+                                                <a  type="button"
+                                                    class="btn btn-outline-primary detailBtn"
+                                                    th:href="@{/staff/food/foodImg(foodId=${c.getId()})}"
+                                                >Image
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!--create food Modal-->
+        <div class="modal fade" id="createFoodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Food</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" th:action="@{/staff/food/create}"
+                              >
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Name:</label>
+                                    <input type="text" class="form-control" name="foodName"  maxlength="40" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Type:</label>
+                                    <select name="foodType" >
+                                        <th:block th:each="t:${foodTypeList}">
+                                            <option th:text="${t}" th:value="${t}"></option>
+                                        </th:block>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Description:</label>
+                                    <input type="text" class="form-control" name="description" maxlength="200" required>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <label class="col-form-label">Price ($):</label>
+                                    <input type="text" class="form-control" name="price" id="txtPrice" required>
+                                </div>
+                                <input type="hidden" name="check" value="true">
+                                <div class="modal-footer col-md-12">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                    </button>
+                                    <input type="submit" class="btn btn-primary" value="Create">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </section>
+</div>
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        msg = '[[${message}]]';
+        if(msg){
+            if (msg==="Success") {
+                Swal.fire({
+                    title: 'Notification',
+                    text: msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }else {
+                Swal.fire({
+                    title: 'Notification',
+                    text: "Food name has been existed",
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#foodTable').DataTable();
+        });
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+        $(function (){
+            $("#createFoodModal").submit(function (e){
+                var txtPrice=$('#txtPrice').val()
+                var regex=/^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+                if (!regex.test(txtPrice)) {
+                    alert("Please enter a valid number between 1 and 500000000.");
+                    e.preventDefault(); // prevent form submission
+                }
+            })
+        })
+
+
+
+
+
+        let buttons=document.querySelectorAll('.detailBtn');
+        buttons.forEach(btn=>{
+           btn.addEventListener('click',()=>{
+               var id = btn.getAttribute("data-foodid");
+               var name = btn.getAttribute("data-foodname");
+               var type = btn.getAttribute("data-foodtype");
+               var des = btn.getAttribute("data-description");
+               var price = btn.getAttribute("data-price");
+               document.getElementById("updateid").value = id
+               document.getElementById("updatename").value = name
+               document.getElementById("updatetype").value = type
+               document.getElementById("updatedes").value = des
+               document.getElementById("updateprice").value = price
+           })
+        });
+    </script>
+</section>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+    <title>Order Page</title>
+    <link rel="stylesheet" href="/css/khangstyle.css">
+
+</head>
+<body>
+<section layout:fragment="content">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+
+
+
+                <div id="orderList" class="">
+                    <h3>Choose Food And Service </h3>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+
+                        <div>
+                            <label>Number Table</label>
+                           <input class="form-control select-box" id="tableAmount" type="number" required>
+                        </div>
+
+                    <hr>
+
+                    <div id="foodList" class="">
+                        <div id="starter">
+                            <label>Starter Dish</label>
+                            <select data-index="food" class="form-control select-box" onchange="getId(this)" required>
+                                <option value="default">Choose Menu </option>
+                                <option th:each="food : ${foodList}" th:if="${food.getFoodType().equalsIgnoreCase('starter')}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
+
+                            </select>
+                        </div>
+                        <hr>
+                        <a id="btn-newMain" class="btn color">Add More Main Dish <i class="fas fa-cart-plus"></i></a>
+                        <div id="main">
+
+<!--                            <div th:if="${#authentication.getPrincipal().getUserId()}">-->
+<!--                                -->
+<!--                            </div>-->
+
+
+                        </div>
+                        <hr>
+
+                        <div id="dessert">
+                            <label>Dessert <i class="fa-solid fa-trash-xmark"></i></label>
+                            <select data-index="food" class="form-control select-box" onchange="getId(this)" required>
+                                <option value="default"> Choose Dish </option>
+                                <option th:each="food : ${foodList}" th:if="${food.getFoodType().equalsIgnoreCase('dessert')}" th:value="${food.getId()}" th:text="${food.getFoodName()}"></option>
+
+                            </select>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div id="serviceList">
+
+                        <button id="btn-newService" class="btn color">Add more Service <i
+                                class="fas fa-cart-plus"></i></button>
+                        <div id="service">
+                            <div data-service="0" class="new-container">
+                                <label data-label="service">Service 1 :</label>
+                                <span class="form-control select-box">Basic Service : </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6">
+                <div id="orderInfo">
+                    <h3>Booking Information</h3>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+                    <div class="card-container">
+                        <div class="info-container">
+                            <label> Venue :</label>
+                            <p th:text="${myOrder.getVenues().getVenueName()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Party Booking Date :</label>
+                            <p th:text="${myOrder.getOrderDate()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Event Date:</label>
+                            <p th:text="${myOrder.getTimeHappen()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Booking Status :</label>
+                            <p th:text="${myOrder.getOrderStatus()}"></p>
+                        </div>
+                        <div class="info-container">
+                            <label>Number of Table :</label>
+                            <p>From:<span th:text="${myOrder.getVenues().getMinPeople()/10}"> </span> To <span th:text="${myOrder.getVenues().getMaxPeople()/10}"></span>
+                        </div>
+                    </div>
+                    <hr>
+                    <table id="food-table">
+                        <tr>
+                            <th>Food</th>
+                            <th>Price</th>
+                        </tr>
+
+                    </table>
+                    <table id="service-table">
+                        <tr>
+                            <th>Service</th>
+                            <th>Price</th>
+                        </tr>
+                        <tr>
+                            <td>Basic Service
+                            </td>
+                            <td>Free</td>
+                        </tr>
+
+
+                    </table>
+                    <table>
+                        <tr>
+                            <th>Venue :</th>
+                            <th>Price</th>
+                        </tr>
+                        <tr>
+                            <td th:text="${myOrder.getVenues().getVenueName()}">
+                            </td>
+                            <td data-price="" th:text="'$'+${myOrder.getVenues().getPrice()}"></td>
+                        </tr>
+
+
+                    </table>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+                    <div class="total">
+                        <h4 class="total-label">Total :</h4>
+                        <h4 id="total" class="total-price" th:text="${myOrder.getVenues().getPrice()}"></h4>
+                    </div>
+                    <svg viewBox="0 0 100 1">
+                        <style>
+                            .line {
+                                stroke: #7bdcb5;
+                                stroke-width: 5;
+                                stroke-linecap: round;
+                            }
+                        </style>
+                        <symbol id="horizontal-line">
+                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                        </symbol>
+                        <use xlink:href="#horizontal-line" />
+                    </svg>
+                    <button id="confirm" class="btn color1">Confirm Update Booking  <i class="fas fa-check-square"></i></button>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+
+</section>
+<section layout:fragment="optional">
+
+    <script th:inline="javascript">
+        var foodList = [[${foodList}]];
+        var serviceList = [[${serviceList}]];
+        var myOrder = [[${myOrder}]];
+    </script>
+    <script src="/js/khangorder.js" >
+
+    </script>
+
+</section>
+</body>
+
+
+</html>

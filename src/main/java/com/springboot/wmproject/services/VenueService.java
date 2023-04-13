@@ -7,9 +7,10 @@ import java.util.List;
 
 public interface VenueService {
     List<VenueDTO> getAllVenue();
-    List<VenueDTO> getAllVenueByCustomerId(Integer customerId);
+    List<VenueDTO> getAllVenueActive();
+    VenueDTO getOneVenueById(int id);
     List<VenueDTO> getAllVenueByOrderId(Integer orderId);
-    VenueDTO getOneVenue(int venueId);
+    List<VenueDTO> getVenueByName(String name);
     VenueDTO createVenue(VenueDTO venueDTO);
     VenueDTO updateVenue(VenueDTO venueDTO);
     void deleteVenue(int venueId);

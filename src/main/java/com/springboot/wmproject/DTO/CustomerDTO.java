@@ -1,24 +1,34 @@
 package com.springboot.wmproject.DTO;
 
-import com.springboot.wmproject.entities.CustomerAccounts;
-import com.springboot.wmproject.entities.Customers;
-import com.springboot.wmproject.entities.Orders;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Basic;
+import jakarta.persistence.FetchType;
+import lombok.*;
 
-import javax.persistence.*;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerDTO {
     private int id;
-    private String name;
+    private String first_name;
+    private String last_name;
     private String address;
     private String phone;
     private String gender;
+    private String email;
+    private boolean is_verified;
+    @Basic(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private String avatar;
+    private String avatarFromDB;
+    public String getAvatar() {
+        return this.avatar != null ? this.avatar : this.avatarFromDB;
+    }
 
-    private Set<BookingDTO> bookingDTOS;
+//    private Set<OrderDTO> orders = new HashSet<>();
 
 }

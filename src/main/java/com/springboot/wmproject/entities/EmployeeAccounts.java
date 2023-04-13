@@ -1,14 +1,16 @@
 package com.springboot.wmproject.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -30,9 +32,9 @@ public class EmployeeAccounts {
     @Basic
     @Column(name = "employee_id", nullable = true)
     private Integer employeeId;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private Employees employees;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id",insertable = false,updatable = false)
+    private Employees employeesByEmployeeId;
 
 
 }

@@ -7,15 +7,33 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="WmClientMVC" />
+        <module name="ClientMVC" />
         <module name="wmproject" />
+      </profile>
+      <profile name="Gradle Imported" enabled="true">
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar" />
+        </processorPath>
+        <module name="MVC.main" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="wmproject" target="17" />
+      <module name="demo1" target="17" />
+      <module name="MVC" target="17" />
+      <module name="Wm_MVC" target="17" />
+      <module name="WM_MVC" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="ClientMVC" options="-parameters" />
+      <module name="MVC" options="-parameters" />
+      <module name="WM_MVC" options="-parameters" />
+      <module name="WmClientMVC" options="-parameters" />
+      <module name="Wm_MVC" options="-parameters" />
+      <module name="demo1" options="-parameters" />
       <module name="wmproject" options="-parameters" />
     </option>
   </component>

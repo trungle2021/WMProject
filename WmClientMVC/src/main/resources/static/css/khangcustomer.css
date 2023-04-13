@@ -1,0 +1,229 @@
+.content-wrapper{
+    background-color: white;
+}
+#orderList,
+#orderInfo {
+    border: 1px solid #ddd;
+    padding: 20px;
+    height: 100%;
+}
+
+#foodList,
+#serviceList {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#starter,
+#main,
+#dessert,
+#service {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.select-box {
+    flex: 1;
+    max-width: 200px;
+    margin-right: 10px;
+}
+
+.new-container {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 10px;
+
+}
+
+.color {
+    background-color: #7bdcb5;
+    width: 100%;
+    font-weight: bold;
+}
+
+.color:hover {
+    background-color: #00d084;
+}
+
+.color1 {
+    background-color: #8ed1fc;
+    width: 100%;
+    font-weight: bold;
+}
+
+.color1:hover {
+    background-color: #0693e3;
+}
+.color2{
+    background-color: #FF165D;
+    width: 100%;
+    font-weight: bold;
+
+}
+.color2:hover{
+    background-color: #b90505;
+
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 800px;
+}
+
+.info-container {
+    flex-basis: 45%;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+p {
+    font-size: 14px;
+}
+
+@media screen and (max-width: 767px) {
+    .info-container {
+        flex-basis: 100%;
+    }
+
+    label {
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 20px;
+
+}
+
+th,
+td {
+    text-align: left;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+   min-width: 100px;
+}
+
+th {
+    background-color: #7bdcb5;
+    color: #fff;
+}
+
+.action {
+    font-size: large;
+    font-weight: bold;
+    justify-content: space-around;
+    display: flex;
+    margin-top: 20px;
+}
+
+/* timeline */
+.mytimeline {
+    display: flex;
+    flex-direction: row;
+    margin-top: 20px;
+    position: relative;
+}
+
+.mytimeline .today-line
+{
+    position: absolute;
+    background-color: black;
+    border-radius: 100%;
+    width: 10px;
+    height: 10px;
+    z-index: 100;
+    display: block;
+    /* bottom:5px; */
+
+}
+
+
+.mytimeline .order-line {
+
+    height: 10px;
+    background-color: #FF165D;
+
+    /* transform: translateY(-50%); */
+}
+
+.mytimeline .deposited-line {
+    height: 10px;
+    background-color: #25CED1;
+
+    /* transform: translateY(-50%); */
+}
+
+.mytimeline .warning-line {
+    height: 10px;
+    background-color: #FDFFB6;
+
+    /* transform: translateY(-50%); */
+}
+
+.mytimeline .event-line {
+
+    height: 10px;
+    background-color: #FF9B71;
+
+    /* transform: translateY(-50%); */
+}
+
+.date {
+
+    position: absolute;
+    display: none;
+    top: 20px;
+    /* adjust the value as needed */
+    left: 50%;
+    /* adjust the value as needed */
+    transform: translateX(-50%);
+    background-color: #fff;
+    border: 1px solid #ccc;
+    max-width:250px ;
+    width: 200px;
+    height: 100px;
+    padding: 5px;
+    z-index: 2;
+    overflow: scroll;
+}
+
+.day-line:hover .date {
+    display: block;
+}
+
+@media only screen and (max-width: 600px) {
+    .mytimeline .event .date {
+        display: none;
+    }
+}
+.description
+{
+    overflow: scroll;
+
+}
+.description-container{
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: auto;
+
+}

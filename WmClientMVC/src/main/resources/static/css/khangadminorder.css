@@ -1,0 +1,26 @@
+.contract-container {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    /* bottom: 0%; */
+    transform: translate(-50%, -50%);
+     visibility: hidden;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 450px;
+    height: 650px;
+}
+
+.contract-container > div {
+    /*background-color: rgb(244, 247, 248);*/
+    position: absolute;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    top: 0;
+    right: 0;
+    display: flex;
+    max-width: 30px;
+    justify-content: center;
+}

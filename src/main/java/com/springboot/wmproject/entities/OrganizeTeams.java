@@ -1,17 +1,12 @@
 package com.springboot.wmproject.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 
-import javax.persistence.*;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "organize_teams", schema = "wmproject", catalog = "")
 public class OrganizeTeams {
@@ -19,13 +14,69 @@ public class OrganizeTeams {
     @Id
     @Column(name = "id", nullable = false)
     private int id;
+    @NotEmpty
     @Basic
     @Column(name = "team_name", nullable = true, length = 45)
     private String teamName;
-    @OneToMany(mappedBy = "organizeTeams",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Employees> employees;
-    @OneToMany(mappedBy = "organizeTeams",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Orders> orders;
 
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean is_deleted;
+    @OneToMany(mappedBy = "organizeTeamsByTeamId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<Employees> employeesById = new HashSet<>();
+    @OneToMany(mappedBy = "organizeTeamsByOrganizeTeam",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<Orders> ordersById = new HashSet<>();
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getTeamName() {
+        return teamName;
+    }
+
+    public void setTeamName(String teamName) {
+        this.teamName = teamName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrganizeTeams that = (OrganizeTeams) o;
+        return id == that.id && Objects.equals(teamName, that.teamName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, teamName);
+    }
+
+    public Collection<Employees> getEmployeesById() {
+        return employeesById;
+    }
+
+    public void setEmployeesById(Collection<Employees> employeesById) {
+        this.employeesById = employeesById;
+    }
+
+    public Collection<Orders> getOrdersById() {
+        return ordersById;
+    }
+
+    public void setOrdersById(Collection<Orders> ordersById) {
+        this.ordersById = ordersById;
+    }
+
+    public boolean isIs_deleted() {
+        return is_deleted;
+    }
+
+    public void setIs_deleted(boolean is_deleted) {
+        this.is_deleted = is_deleted;
+    }
 }

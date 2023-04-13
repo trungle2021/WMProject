@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wedding Management</title>
+
+  <!-- Google Font: Source Sans Pro -->
+<!--  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">-->
+  <!-- Font Awesome -->
+
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/adminStatic/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <!-- overlayScrollbars -->
+  <link rel="stylesheet" href="/adminStatic/plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <style>
+    .button-34 {
+      background: #5E5DF0;
+      border-radius: 999px;
+      box-shadow: #5E5DF0 0 10px 20px -10px;
+      box-sizing: border-box;
+      color: #FFFFFF;
+      cursor: pointer;
+      font-family: Inter,Helvetica,"Apple Color Emoji","Segoe UI Emoji",NotoColorEmoji,"Noto Color Emoji","Segoe UI Symbol","Android Emoji",EmojiSymbols,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans",sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 24px;
+      opacity: 1;
+      outline: 0 solid transparent;
+      padding: 8px 18px;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      width: fit-content;
+      word-break: break-word;
+      border: 0;
+      margin-top: 20px;
+
+    }
+
+    a.button-34 {
+
+    }
+  </style>
+
+</head>
+<body class="hold-transition sidebar-mini layout-fixed" data-panel-auto-height-mode="height">
+<div class="wrapper">
+
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+      <li class="nav-item">
+
+      </li>
+    </ul>
+
+    <!-- Right navbar links -->
+    <ul class="navbar-nav ml-auto">
+
+
+
+      <!-- Navbar Search -->
+
+
+      <!-- Messages Dropdown Menu -->
+
+      <!-- Notifications Dropdown Menu -->
+
+
+      <li class="nav-item">
+        <a th:href="'javascript:window.history.back()'" class="button-34 pl-3 nav-link">Go back</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <!-- Sidebar user panel (optional) -->
+      <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+
+        <div class="image">
+          <img th:src="'data:image/jpeg;base64,'+${#authentication.getPrincipal().getAvatar()}" class="img-circle elevation-2" alt="User Image">
+        </div>
+        <div class="info">
+          <a th:href="@{/staff/employees/update/{id}(id=${#authentication.getPrincipal().getUserId()})}" class="d-block" th:text="${#authentication.getPrincipal().getFullName()}"></a>
+        </div>
+      </div>
+
+      <!-- SidebarSearch Form -->
+      <div class="form-inline">
+        <div class="input-group" data-widget="sidebar-search">
+          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+          <div class="input-group-append">
+            <button class="btn btn-sidebar">
+              <i class="fas fa-search fa-fw"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar Menu -->
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+          <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-tachometer-alt"></i>
+              <p>
+                Dashboard
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="./index.html" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Dashboard v1</p>
+                </a>
+              </li>
+
+            </ul>
+          </li>
+
+<!--          <li class="nav-item">-->
+<!--            <a href="#" class="nav-link">-->
+<!--              <i class="nav-icon fas fa-chart-pie"></i>-->
+<!--              <p>-->
+<!--                Charts-->
+<!--                <i class="right fas fa-angle-left"></i>-->
+<!--              </p>-->
+<!--            </a>-->
+<!--            <ul class="nav nav-treeview">-->
+<!--              <li class="nav-item">-->
+<!--                <a href="adminTemplate/pages/charts/chartjs.html" class="nav-link">-->
+<!--                  <i class="far fa-circle nav-icon"></i>-->
+<!--                  <p>ChartJS</p>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--              <li class="nav-item">-->
+<!--                <a href="adminTemplate/pages/charts/flot.html" class="nav-link">-->
+<!--                  <i class="far fa-circle nav-icon"></i>-->
+<!--                  <p>Flot</p>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--              <li class="nav-item">-->
+<!--                <a href="/adminTemplate/pages/charts/inline.html" class="nav-link">-->
+<!--                  <i class="far fa-circle nav-icon"></i>-->
+<!--                  <p>Inline</p>-->
+<!--                </a>-->
+<!--              </li>-->
+<!--            </ul>-->
+<!--          </li>-->
+
+
+
+
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <i class="nav-icon fas fa-table"></i>
+              <p>
+
+                Management
+
+                <i class="fas fa-angle-left right"></i>
+              </p>
+            </a>
+
+
+            <ul class="nav nav-treeview">
+
+              <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}"}>
+                <li class="nav-item">
+                  <a th:href="@{/staff/employees/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Employees</p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a th:href="@{/staff/teams/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Teams</p>
+                  </a>
+                </li>
+
+
+                <li class="nav-item">
+                  <a th:href="@{/staff/materials}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Material</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/orders/showall}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Order Management</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/customers/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Customers</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/services/showAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Service</p>
+                   </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/food/index}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Menu</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/venues}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Venue</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/review}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Review</p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a th:href="@{/staff/teams/shift-manage}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Shift Manage</p>
+                  </a>
+                </li>
+
+              </th:block>
+
+              </th:block>
+
+              <th:block th:if="${#authorization.expression('hasRole(''SALE'')')}"}>
+                <li class="nav-item">
+                  <a th:href="@{/staff/customers/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Customers</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/orders/showall}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Order Management</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a th:href="@{/staff/review}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Review</p>
+                  </a>
+                </li>
+              </th:block>
+
+              <th:block th:if="${ #authorization.expression('hasRole(''ORGANIZE'')')}"}>
+                <li class="nav-item">
+                  <a th:href="@{/staff/teams/getAll}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Teams</p>
+                  </a>
+                </li>
+
+                <li class="nav-item">
+                  <a th:href="@{/staff/teams/showallorder/organize}" class="nav-link">
+                    <i class="far fa-circle nav-icon"></i>
+                    <p>Event Manage</p>
+                  </a>
+                </li>
+
+              </th:block>
+
+
+            </ul>
+
+          </li>
+
+          <!-- page -->
+
+
+
+          <!-- login -->
+
+
+          <li class="nav-item d-none d-sm-inline-block">
+            <a th:href="@{/staff/logout}" class="nav-link">
+              <i class="nav-icon far fa-plus-square"></i>
+              <p>
+                Logout
+
+              </p>
+            </a>
+          </li>
+
+
+        </ul>
+      </nav>
+      <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+  </aside>
+  <!-- Content Wrapper. Contains page content -->
+
+  <section layout:fragment="content" >
+
+  </section>
+
+
+
+  <!-- /.content-wrapper -->
+<!--  <footer class="main-footer">-->
+<!--    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>-->
+<!--    All rights reserved.-->
+<!--    <div class="float-right d-none d-sm-inline-block">-->
+<!--      <b>Version</b> 3.2.0-->
+<!--    </div>-->
+<!--  </footer>-->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+</div>
+<!-- ./wrapper -->
+
+<!-- jQuery -->
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>-->
+<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>-->
+
+
+
+
+<!-- AdminLTE for demo purposes -->
+
+<script src="/adminStatic/plugins/jquery/jquery.min.js"></script>
+<!--&lt;!&ndash; Bootstrap &ndash;&gt;-->
+
+<!--&lt;!&ndash; jQuery UI &ndash;&gt;-->
+<script src="/adminStatic/plugins/jquery-ui/jquery-ui.min.js"></script>
+
+<script src="/adminStatic/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<script src="/adminStatic/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<!-- AdminLTE App -->
+<script src="/adminStatic/dist/js/adminlte.min.js"></script>
+<!-- fullCalendar 2.2.5 -->
+<script src=" /adminStatic/plugins/moment/moment.min.js"></script>
+<script>
+</script>
+<th:block layout:fragment="optional"></th:block>
+</body>
+</html>

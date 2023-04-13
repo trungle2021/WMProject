@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Management</title>
+
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="/css/khangform.css">
+</head>
+<body>
+
+
+
+<section layout:fragment="content"  class="content-wrapper">
+
+  <br><div class="content-header"> <h5>My Booking</h5>
+
+
+</div>
+
+  <div class="content ">
+    <!-- Main content -->
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-container">
+            <form class="form" th:action="@{/staff/teams/showallorder/organize/search}" th:method="post">
+              <div class="combobox">
+                <label for="year">Year:</label>
+                <select id="year" name="year">
+                  <option th:each="year : ${years}" th:value="${year}" th:text="${year}"></option>
+                </select>
+              </div>
+              <div class="combobox">
+                <label for="month">Month:</label>
+                <select id="month" name="month">
+                  <option th:each="month : ${months}" th:value="${month.ordinal() + 1}" th:text="${month}"></option>
+                </select>
+              </div>
+              <div class="buttons">
+                <input type="submit" class="submit" value="Search">
+              </div>
+            </form>
+          </div>
+
+          <table
+                  class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                  style="position: relative;width: 100%;" aria-describedby="example-info">
+
+            <thead>
+            <tr>
+              <th>Order Id</th>
+              <th>Venue</th>
+              <th>Table Amount</th>
+              <th>Organize Team</th>
+              <th>Order Status</th>
+              <th>Event Date</th>
+              <th>Number of collaborators:</th>
+              <th>Action:</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="c:${list}">
+              <td th:text="${c.getId()}"></td>
+              <td th:text="${c.getVenues().getVenueName()}"></td>
+              <td th:text="${c.getTableAmount()}"></td>
+              <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'"></td>
+              <td th:text="${c.getOrderStatus()}"></td>
+              <td th:text="${c.getTimeHappen()}"></td>
+              <td th:text="${c.getPartTimeEmpAmount()!=null}?${c.getPartTimeEmpAmount()}:'N/A'"></td>
+              <td>
+                <a th:href="@{/staff/materials/detail/{id}(id=${c.getId()})}" class="btn btn-success">Material Detail</a>
+               </br>
+                <br>
+                <th:block>
+                  <form th:action="@{/staff/orders/order-completed}" method="post">
+                    <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
+                    <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
+                    <button type="submit" class="btn btn-success">Complete Order</button>
+                  </form>
+                </th:block>
+
+              </td>
+            </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.content -->
+
+  <!-- /.content-wrapper -->
+  <!--create employee Modal-->
+
+  <!--create organize team Modal-->
+
+  <!-- Control Sidebar -->
+
+  <!-- /.control-sidebar -->
+  <br/>
+  <br/>
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+  <!-- Page specific script -->
+  <script>
+    $(document).ready(function () {
+      $('table.display').DataTable();
+    });
+  </script>
+  <script th:inline="javascript">
+
+    var error = [[${alertError}]];
+    var message = [[${alertMessage}]];
+    console.log(message);
+
+    if(message!=null && message.length != 0)
+    {
+      swal({
+        title: "Message!",
+        text: message,
+        icon: "success",
+      });
+
+    }
+    else if(error!=null && error.length != 0)
+    {
+      swal({
+        title: "Error!",
+        text: error,
+        icon: "error",
+      });
+    }
+  </script>
+</section>
+</body>
+</html>

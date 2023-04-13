@@ -1,17 +1,15 @@
 package com.springboot.wmproject.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Objects;
-
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -28,7 +26,7 @@ public class Orders {
     private String orderStatus;
     @Basic
     @Column(name = "order_total", nullable = true, precision = 2)
-    private BigDecimal orderTotal;
+    private Double orderTotal;
     @Basic
     @Column(name = "time_happen", nullable = true, length = 20)
     private String timeHappen;
@@ -44,24 +42,31 @@ public class Orders {
     @Basic
     @Column(name = "customer_id", nullable = true)
     private Integer customerId;
+    @Basic
+    @Column(name = "table_amount", nullable = true)
+    private Integer tableAmount;
+    @Basic
+    @Column(name = "part_time_emp_amount", nullable = true)
+    private Integer partTimeEmpAmount;
+    @Basic
+    @Column(name = "contract", nullable = true, length = -1)
+    private String contract;
     @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<FoodDetails> foodDetails;
-    @ManyToOne
-    @JoinColumn(name = "venue_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private Venues venues;
-    @ManyToOne
-    @JoinColumn(name = "booking_emp", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private Employees employees;
-    @ManyToOne
-    @JoinColumn(name = "organize_team", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private OrganizeTeams organizeTeams;
+    private Collection<FoodDetails> foodDetailsById;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private Customers customers;
-
-
-    @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<ServiceDetails> serviceDetails;
+    @JoinColumn(name = "venue_id", referencedColumnName = "id",insertable = false,updatable = false)
+    private Venues venues;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_emp", referencedColumnName = "id",insertable = false,updatable = false)
+    private Employees employeesByBookingEmp;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "organize_team", referencedColumnName = "id",insertable = false,updatable = false)
+    private OrganizeTeams organizeTeamsByOrganizeTeam;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
+    private Customers customersByCustomerId;
+    @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<ServiceDetails> serviceDetailsById;
 
 
 }

@@ -1,6 +1,7 @@
 package com.springboot.wmproject.services.impl;
 
 import com.springboot.wmproject.DTO.BookingDTO;
+import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.Booking;
 import com.springboot.wmproject.entities.Customers;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +31,9 @@ public class BookingServiceImpl implements BookingService {
         this.modelMapper = modelMapper;
     }
 
+    //get all booking by customerID or allBooking
+
+
     @Override
     public List<BookingDTO> getAllBooking(Integer customerId) {
         if(customerId == null){
@@ -36,12 +41,28 @@ public class BookingServiceImpl implements BookingService {
             List<BookingDTO> bookingDTOList =  bookingList.stream().map(booking -> mapToDto(booking)).collect(Collectors.toList());
             return bookingDTOList;
         }
-        return bookingRepository.findAllById(customerId).stream().map(booking ->mapToDto(booking)).collect(Collectors.toList());
+        List<BookingDTO> bookingDTOList = bookingRepository.findAllById(customerId).stream().map(booking ->mapToDto(booking)).collect(Collectors.toList());
+        if(bookingDTOList.size() == 0){
+            throw new ResourceNotFoundException("Booking List","id",String.valueOf(customerId));
+        }
+        return bookingDTOList;
     }
 
+    //get one booking by bookingID or bookingID and customerID
     @Override
-    public BookingDTO getOneBooking(int bookingId) {
-        return null;
+    public BookingDTO getOneBooking(Integer bookingId,Integer customerId) {
+        if(customerId == null){
+            Optional<Booking> booking = bookingRepository.findById(bookingId);
+            BookingDTO bookingDTO = mapToDto(booking.orElseThrow(()->new ResourceNotFoundException("Booking","booking_id",String.valueOf(bookingId))));
+//            bookingDTO.setCustomers(booking.get().getCustomersByCustomerId());
+            return bookingDTO;
+        }
+        Booking booking = bookingRepository.findByBookingIdAndCustomerId(bookingId,customerId);
+        if (booking == null){
+            throw new ResourceNotFoundException("Booking","booking_id",String.valueOf(bookingId).concat(" or customer_id ").concat(String.valueOf(customerId)));
+        }
+
+        return mapToDto(booking);
     }
 
     @Override
@@ -98,6 +119,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     public BookingDTO mapToDto(Booking booking){
+
         BookingDTO postDto = modelMapper.map(booking, BookingDTO.class);
         return postDto;
     }

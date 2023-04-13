@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
+<head>
+
+	<section layout:fragment="optional">
+		<!-- Font-->
+		<link rel="stylesheet" type="text/css" href="/css/register/montserrat-font.css">
+		<link rel="stylesheet" type="text/css" href="/css/register/fonts/material-design-iconic-font/css/material-design-iconic-font.min.css">
+		<!-- Main Style Css -->
+		<link rel="stylesheet" href="/css/register/register.css"/>
+	</section>
+</head>
+<body>
+<section layout:fragment="content">
+	<div class="form-v10">
+		<div class="page-content">
+			<div class="form-v10-content">
+
+				<th:block th:if="${errorMessages != null}">
+					<ul>
+						<li th:each="error : ${errorMessages}" th:text="${error}" style="color: red"></li>
+					</ul>
+				</th:block>
+
+				<th:block th:if="${message != null}">
+					<li style="color: green" th:text="${message}"></li>
+				</th:block>
+
+
+				<th:block th:if="${result != null}">
+					<ul>
+						<li th:each="err : ${result.getFieldErrors('username')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('password')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('first_name')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('last_name')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('address')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('gender')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('phone')}" th:text="${err.defaultMessage}" style="color: red" />
+						<li th:each="err : ${result.getFieldErrors('email')}" th:text="${err.defaultMessage}" style="color: red" />
+						
+					</ul>
+				</th:block>
+
+				<form class="form-detail" th:action="@{/register}" method="post" id="myform" th:object="${registerDTO}">
+
+
+					<div class="form-left">
+						<h2>Account Infomation</h2>
+						<div class="form-group">
+							<div class="form-row form-row-3">
+								<input type="text" th:field="*{username}" class="business" placeholder="Username" required>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<div class="form-row form-row-3">
+								<input type="password" th:field="*{password}" class="business" placeholder="Password" minlength="5" required>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-right">
+						<h2>Contact Details</h2>
+
+						<div class="form-group">
+							<div class="form-row form-row-1">
+								<input type="text" th:field="*{first_name}" class="input-text" placeholder="First Name" required>
+							</div>
+							<div class="form-row form-row-2">
+								<input type="text" th:field="*{last_name}" class="input-text" placeholder="Last Name" required>
+							</div>
+						</div>
+
+
+						<div class="form-row">
+							<input type="text" th:field="*{address}" class="street"  placeholder="Address" required>
+
+						</div>
+
+
+						<div class="form-group">
+							<div class="form-row form-row-1">
+								<select th:field="*{gender}">
+									<option value="" disabled>Gender</option>
+									<option th:value="Male" th:text="Male"></option>
+									<option th:value="Female" th:text="Female">Female</option>
+								</select>
+
+								<span class="select-btn">
+						  			<i class="zmdi zmdi-chevron-down"></i>
+								</span>
+							</div>
+							<div class="form-row form-row-2">
+								<input type="text"  class="phone" th:field="*{phone}" pattern="^(0|(84)|(\+84)?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$" placeholder="Phone Number" required>
+
+							</div>
+						</div>
+						<div class="form-row">
+							<input type="text" th:field="*{email}" class="input-text" required pattern="^[a-z0-9._-]+@[a-z0-9-]+\.[a-z]{2,}\.?[a-z]{0,}$" placeholder="Your Email">
+						</div>
+						<div class="form-row-last">
+							<input type="submit" name="register" class="register" value="Register">
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</section>
+</body>
+</html>

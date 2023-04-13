@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Management</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/khangcustomer.css">
+    <link rel="stylesheet" href="/css/khangadminorder.css">
+</head>
+<body>
+
+
+
+    <section layout:fragment="content"  class="content-wrapper">
+
+   <br><div class="content-header"> <h5>Order Management</h5>
+        <a th:href="@{/staff/orders/showall}" class="btn btn-success">All Order</a>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${depositedSt})}" class="btn btn-success">Deposited Order</a>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${warningSt})}" class="btn btn-warning">Warning Order</a>
+        <a th:href="@{/staff/orders/showmyorder/{status}(status=${cancelingSt})}" class="btn btn-danger">Canceling Order</a>
+    </div>
+        <div class="content ">
+            <!-- Main content -->
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <table
+                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                            style="position: relative;width: 100%;" aria-describedby="example-info">
+
+                        <thead>
+                        <tr>
+                            <th>Order Id</th>
+                            <th>Venue</th>
+                            <th>Table Amount</th>
+                            <th>Sale employee</th>
+                            <th>Organize Team</th>
+                            <th>Order Status</th>
+                            <th>Event Date</th>
+                            <th>Number of fulltime employee:</th>
+                            <th>Number of collaborators:</th>
+                            <th>Booking Date</th>
+                            <th>Amount Received :</th>
+                            <th>Contract:</th>
+                            <th>Action:</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${list}">
+                            <td th:text="${c.getId()}"></td>
+                            <td th:text="${c.getVenues().getVenueName()}"></td>
+                            <td th:text="${c.getTableAmount()}"></td>
+                            <td th:text="${c.getEmployeesByBookingEmp()!=null}?${c.getEmployeesByBookingEmp().getName()}:'N/A'"></td>
+                            <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamName()}:'N/A'">N/A</td>
+                            <td th:text="${c.getOrderStatus()}"></td>
+                            <td th:text="${c.getTimeHappen()}"></td>
+                            <td th:text="${c.getOrganizeTeamsByOrganizeTeam()!=null}?${c.getOrganizeTeamsByOrganizeTeam().getTeamsize()}:'N/A'">N/A</td>
+                            <td th:text="${c.getPartTimeEmpAmount()!=null}?${c.getPartTimeEmpAmount()}:'N/A'"></td>
+                            <td th:text="${c.getOrderDate()}"></td>
+                            <td th:if="${c.getOrderStatus().equalsIgnoreCase(refundSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.1 : null}"></td>
+                            <td th:if="${c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal()}"></td>
+                            <td th:unless="${c.getOrderStatus().equalsIgnoreCase(refundSt) or c.getOrderStatus().equalsIgnoreCase(completedSt)}" th:data-money="${c.getOrderTotal() != null ? c.getOrderTotal() * 0.4 : null}" ></td>
+                            <td><button type="button" class="btn color1" th:data-orderId="${c.getId()}" onclick="getContract(this)">
+                                Contract Detail<i class="fas fa-check-square"></i>
+                            </button></td>
+                             <th:block th:switch="${c.getOrderStatus()}">
+                                <td th:case="${orderedSt}"><a th:href="@{/staff/orders/order-detail/{id}(id=${c.getId()})}" class="btn btn-primary">Order Detail</a> </td>
+                                <td th:case="${depositedSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
+                                 <td th:case="${warningSt}"><a th:href="@{/staff/orders/order-detail-confirm/{id}(id=${c.getId()})}" class="btn btn-warning">Confirm Order</a> </td>
+                                 <td th:case="${cancelingSt}">
+                                     <form th:action="@{/staff/orders/order-refunded}" method="post">
+                                         <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
+                                         <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
+                                         <button type="submit" class="btn btn-danger">Refund Order</button>
+                                     </form>
+                                 </td>
+                                <td th:case="${confirmSt}">
+                                    <div th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                        <form th:action="@{/staff/orders/order-uncompleted}" method="post">
+                                            <input hidden="hidden" name="orderId" th:value="${c.getId()}" >
+                                            <input hidden="hidden" name="status" th:value="${c.getOrderStatus()}">
+                                        <button type="submit" class="btn btn-danger">Mark as UnComplete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td th:case="*">None</td>
+                            </th:block>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- contract image                           -->
+                 <div id="contract-container" class="contract-container">
+
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <br/>
+        <br/>
+    </section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+
+        $(document).ready(function () {
+            $('table.display').DataTable();
+        });
+        //format
+
+        const elements=document.querySelectorAll('[data-money]');
+        elements.forEach((element) => {
+            const moneyValue = parseFloat(element.dataset.money);
+            const formatter = new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+                useGrouping: true,
+            });
+            const formattedAmount = formatter.format(moneyValue);
+            element.textContent = formattedAmount;
+        });
+    </script>
+    <script th:inline="javascript">
+        var orderList = [[${list}]];
+
+    </script>
+    <script src="/js/khangcontract.js" >
+
+    </script>
+    <script th:inline="javascript">
+
+        var error = [[${alertError}]];
+        var message = [[${alertMessage}]];
+        console.log(message);
+
+        if(message!=null && message.length != 0)
+        {
+            swal({
+                title: "Message!",
+                text: message,
+                icon: "success",
+            });
+
+        }
+        else if(error!=null && error.length != 0)
+        {
+            swal({
+                title: "Error!",
+                text: error,
+                icon: "error",
+            });
+        }
+
+
+
+    </script>
+</section>
+</body>
+</html>

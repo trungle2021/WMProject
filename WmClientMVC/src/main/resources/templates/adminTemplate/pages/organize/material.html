@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order Detail</title>
+    <link rel="stylesheet" href="/css/khangstyleadmin.css">
+
+</head>
+<body>
+<section layout:fragment="content"  class="content-wrapper">
+
+
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1>Material Management</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active">Text Editors</li>
+                    </ol>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <h5 class="p-2">To day is: <p th:text="${today}"></p></h5>
+        <div class="d-flex flex-row">
+        <form th:if="${#authorization.expression('hasRole(''ADMIN'')')}"  class="p-2"  th:action="@{/staff/materials/detail/searchId}" method="post">
+            <input type="text" name="orderId">
+            <input type="submit" value="Search">
+
+        </form>
+
+
+        <form class="p-2" th:action="@{/staff/materials/detail/searchDate}" method="post">
+            <input type="date" name="date">
+            <input type="submit" value="Search">
+        </form>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div  th:each="o:${orderList}" class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Food/Service Detail</h3>
+
+                    </div>
+                    <div  class="card-body">
+                        <div class="card-info">
+                            <p class="venue-name" >Venue Name: <span th:text="${o.getVenues().getVenueName()}"></span></p>
+                            <p class="venue-table" >Number of Table : <span th:text="${o.getTableAmount()}"></span></p>
+                            <p class="event-date" >Event Date : <span th:text="${o.getTimeHappen()}"></span></p>
+                            <p class="parttime-emp" > Number of collaborators : <span th:text="${o.getPartTimeEmpAmount()}"></span> </p>
+                        </div>
+                        <hr>
+                    <table th:boder="1">
+                        <tr>
+                            <th>Food Name</th>
+                            <th>Food Type</th>
+                            <th>Description</th>
+
+                        </tr>
+                        <tr th:each="f:${o.getFoodDetailsById()}">
+                            <td th:text="${f.getFoodByFoodId().getFoodName()}"></td>
+                            <td th:text="${f.getFoodByFoodId().getFoodType()}"></td>
+                            <td class="description-container" th:text="${f.getFoodByFoodId().getDescription()}"></td>
+                        </tr>
+                    </table>
+                    <hr>
+                    <table th:boder="1">
+                        <tr>
+                            <th>Service Name</th>
+                            <th >Service Description</th>
+                        </tr >
+                        <tr  th:each="s:${o.getServiceDetailsById()}">
+                            <td th:text="${s.getServicesByServiceId().getServiceName()}"></td>
+                            <td class="description-container" th:text="${s.getServicesByServiceId().getDescription()}"></td>
+                        </tr>
+                    </table>
+
+                </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card card-info">
+                    <div class="card-header">
+                        <h3 class="card-title">Material Detail</h3>
+                    </div>
+
+                    <div class="card-body">
+                        <table th:boder="1">
+                            <tr>
+                                <th>No:</th>
+                                <th>Material Code</th>
+                                <th>Material Name</th>
+                                <th>Material Amount</th>
+                                <th>Material  Unit</th>
+
+                            </tr>
+                            <tr th:each="m,no:${materials}">
+                                <td th:text="${no.count}"></td>
+                                <td th:text="${m.getMaterialCode()}"></td>
+                                <td th:text="${m.getMaterialName()}"></td>
+                                <td th:text="${m.getCount()}"></td>
+                                <td th:text="${m.getUnit()}"></td>
+                            </tr>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </section>
+    <!-- /.content -->
+
+    <!-- /.content-wrapper -->
+
+
+
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+    <script>$('#myModal').on('shown.bs.modal', function () {
+
+    })</script>
+
+</section>
+</body>
+</html>

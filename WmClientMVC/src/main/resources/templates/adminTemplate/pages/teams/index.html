@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | DataTables</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+
+   <style>
+       .button-3 {
+           appearance: none;
+           background-color: #2ea44f;
+           border: 1px solid rgba(27, 31, 35, .15);
+           border-radius: 6px;
+           box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+           box-sizing: border-box;
+           color: #fff;
+           cursor: pointer;
+           display: inline-block;
+           font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+           font-size: 14px;
+           font-weight: 600;
+           line-height: 20px;
+           padding: 6px 16px;
+           position: relative;
+           text-align: center;
+           text-decoration: none;
+           user-select: none;
+           -webkit-user-select: none;
+           touch-action: manipulation;
+           vertical-align: middle;
+           white-space: nowrap;
+       }
+       .button-3:focus:not(:focus-visible):not(.focus-visible) {
+           box-shadow: none;
+           outline: none;
+       }
+
+       .button-3:hover {
+           background-color: #2c974b;
+       }
+
+       .button-3:focus {
+           box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+           outline: none;
+       }
+
+       .button-3:disabled {
+           background-color: #94d3a2;
+           border-color: rgba(27, 31, 35, .1);
+           color: rgba(255, 255, 255, .8);
+           cursor: default;
+       }
+
+       .button-3:active {
+           background-color: #298e46;
+           box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+       }
+
+       a.button-3{
+           text-decoration: none;
+           text-underline-mode: none;
+       }
+
+       a.button-3:hover{
+           color: white;
+       }
+
+       .button-4 {
+           appearance: none;
+           background-color: orangered;
+           border: 1px solid rgba(27, 31, 35, .15);
+           border-radius: 6px;
+           box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+           box-sizing: border-box;
+           color: #fff;
+           cursor: pointer;
+           display: inline-block;
+           font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+           font-size: 14px;
+           font-weight: 600;
+           line-height: 20px;
+           padding: 6px 16px;
+           position: relative;
+           text-align: center;
+           text-decoration: none;
+           user-select: none;
+           -webkit-user-select: none;
+           touch-action: manipulation;
+           vertical-align: middle;
+           white-space: nowrap;
+       }
+       .button-4:focus:not(:focus-visible):not(.focus-visible) {
+           box-shadow: none;
+           outline: none;
+       }
+
+       .button-4:hover {
+           background-color: orangered;
+       }
+
+       .button-4:focus {
+           box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+           outline: none;
+       }
+
+       .button-4:disabled {
+           background-color: #d57344;
+           border-color: rgba(27, 31, 35, .1);
+           color: rgba(255, 255, 255, .8);
+           cursor: default;
+       }
+
+       .button-4:active {
+           background-color: #8e4129;
+           box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+       }
+
+       a.button-4{
+           text-decoration: none;
+           text-underline-mode: none;
+       }
+
+       a.button-4:hover{
+           color: white;
+       }
+
+       .button-5 {
+           appearance: none;
+           background-color: #1E96C8;
+           border: 1px solid rgba(27, 31, 35, .15);
+           border-radius: 6px;
+           box-shadow: rgba(27, 31, 35, .1) 0 1px 0;
+           box-sizing: border-box;
+           color: #fff;
+           cursor: pointer;
+           display: inline-block;
+           font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+           font-size: 14px;
+           font-weight: 600;
+           line-height: 20px;
+           padding: 6px 16px;
+           position: relative;
+           text-align: center;
+           text-decoration: none;
+           user-select: none;
+           -webkit-user-select: none;
+           touch-action: manipulation;
+           vertical-align: middle;
+           white-space: nowrap;
+       }
+       .button-5:focus:not(:focus-visible):not(.focus-visible) {
+           box-shadow: none;
+           outline: none;
+       }
+
+       .button-5:hover {
+           background-color: #1E96C8;
+       }
+
+       .button-5:focus {
+           box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+           outline: none;
+       }
+
+       .button-5:disabled {
+           background-color: #2c6989;
+           border-color: rgba(27, 31, 35, .1);
+           color: rgba(255, 255, 255, .8);
+           cursor: default;
+       }
+
+       .button-5:active {
+           background-color: #1E96C8;
+           box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+       }
+
+       a.button-5{
+           text-decoration: none;
+           text-underline-mode: none;
+       }
+
+       a.button-5:hover{
+           color: white;
+       }
+   </style>
+</head>
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <section layout:fragment="content">
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1> Teams</h1>
+                            <th:block th:if="${errorMessage != null}">
+                                <ul>
+                                    <li th:text="${errorMessage}" style="color: red"></li>
+                                </ul>
+                            </th:block>
+
+                            <th:block th:if="${message != null}">
+                                <li style="color: green" th:text="${message}"></li>
+                            </th:block>
+
+                            <th:block th:if="${result != null}">
+                                <li style="color: red" th:text="${result.getFieldError().getDefaultMessage()}"></li>
+                            </th:block>
+
+
+
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="/staff/dashboard">Home</a></li>
+                                <li class="breadcrumb-item active"><a href="/staff/teams">Teams</a></li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+<!--                        -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h3 class="card-title">Teams</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <input type="hidden" id="token" th:value="${token}">
+                                            <table
+                                                    class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                                                    style="width:100%" aria-describedby="example-info">
+                                                <button type="button" class="btn btn-outline-primary float-right"
+                                                        data-toggle="modal"
+                                                        data-target="#createTeamModal">Create
+                                                </button>
+                                                <thead>
+                                                <tr>
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Total Members</th>
+                                                    <th>Leader Name</th>
+                                                    <th>Action</th>
+                                                    <th id="note">Note</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="i: ${teamSummary}">
+                                                    <input class="teamid" type="hidden" th:attr="data-teamid=${i.getTeam_id()}" th:value="${i.getTeam_id()}">
+                                                    <td th:text="${i.getTeam_id()}"></td>
+                                                    <td th:text="${i.getTeam_name()}"></td>
+                                                    <td>
+                                                        <span  th:text="${i.getTotal_members()}"></span>
+                                                        <input type="hidden" th:value="${i.getTotal_members()}">
+                                                    </td>
+                                                    <th:block th:if="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                        <td><span th:text="${i.getLeader_name()}"></span></td>
+                                                    </th:block>
+
+                                                    <th:block th:unless="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                        <td><a th:href="@{/staff/employees/update/{id}(id=${i.getEmp_id()})}" th:text="${i.getLeader_name()}"></a></td>
+                                                    </th:block>
+
+                                                    <td>
+                                                        <th:block th:if="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                            <button type="button"
+                                                                    class="button-5 "
+                                                                    data-toggle="modal"
+                                                                    data-target="#updateTeamModal"
+                                                                    th:attr="data-updateteam=${i.getTeam_id()}"
+                                                                    th:attrappend="data-teamname=${i.getTeam_name()}"
+                                                                    style="margin-right: 1rem" disabled>
+                                                                Update
+                                                            </button>
+                                                        </th:block>
+
+                                                        <th:block th:unless="${i.team_name.equals('TEAM ADMINISTRATOR')}">
+                                                            <button type="button"
+                                                                    class="button-5 "
+                                                                    data-toggle="modal"
+                                                                    data-target="#updateTeamModal"
+                                                                    th:attr="data-updateteam=${i.getTeam_id()}"
+                                                                    th:attrappend="data-teamname=${i.getTeam_name()}"
+                                                                    style="margin-right: 1rem">
+                                                                Update
+                                                            </button>
+                                                        </th:block>
+                                                        <th:block th:if="${i.total_members > 0}">
+                                                            <a th:href="@{/staff/teams/getAllEmployeeByTeamId/{id}(id=${i.getTeam_id()})}" class="button-3" th:text="Details"></a>
+                                                        </th:block>
+
+                                                        <th:block th:if="${i.total_members == 0 && i.has_confirm_order == false}">
+                                                            <button  style="margin-right: 1rem" class="button-4 btnDeleteTeam">Delete</button>
+                                                        </th:block>
+                                                    </td>
+                                                    <td></td>
+                                                </tr>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- /.card-body -->
+                                    </div>
+                                    <!-- /.card -->
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+        <!--create organize team Modal-->
+        <div class="modal fade" id="createTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create Team</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" th:action="@{/staff/teams/create}" >
+                            <div class="form-group">
+                                <label class="col-form-label">Team name:</label>
+                                <input type="text" class="form-control" name="teamName" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <input type="submit" class="btn btn-primary" value="Create">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--update team Modal-->
+        <div class="modal fade" id="updateTeamModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Update Team</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form method="post" th:action="@{/staff/teams/update}" th:object="${teams}">
+                            <div class="form-group">
+                                <input type="hidden" th:field="*{id}">
+                                <label class="col-form-label">Team name:</label>
+                                <input type="text" class="form-control" th:field="*{teamName}"  required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                </button>
+                                <input type="submit" class="btn btn-primary" value="Update">
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!--                End create modal-->
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </section>
+</div>
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+
+
+    <script>
+        var domain = "http://localhost:9999"
+        var api_teams_delete = domain + "/staff/teams/delete/";
+        $(document).ready(function () {
+
+            $('table tr').each(function() {
+                let count = $(this).find('td:eq(2) input').val();
+                if (count < 2) {
+                    $(this).find('td:eq(3)').css("color", "white");
+                    $(this).closest('tr').css("background-color", "#bb2424").css("color", "white");
+                    $(this).find('td:eq(5)').text('Not enough members, minimum of 3 people required.');
+                } else {
+                    $(this).find('td:eq(5)').hide();
+                    $('#note').hide();
+
+                }
+            });
+
+            $('table.display').DataTable( {
+                "columns": [
+                    { "width": "5%" },
+                    { "width": "20%" },
+                    { "width": "20%" },
+                    { "width": "20%" },
+                    { "width": "20%" },
+                    { "width": "20%" }
+                ]
+            } );
+
+            $('.btnDeleteTeam').on('click',function (event) {
+                let teamid = $(this).closest('tr').find('.teamid').data('teamid');
+                var token = $("#token").val();
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            type: "POST",
+                            url: api_teams_delete + teamid,
+                            dataType: "json",
+                            contentType: "application/json",
+                            headers: {
+                                "Authorization": "Bearer " + token
+                            },
+                            data: { },
+                            success: function(response) {
+                                console.log(response);
+                                if(response.statusCode == 200){
+                                    Swal.fire(
+                                        'Deleted!',
+                                        'Your file has been deleted.',
+                                        'success'
+                                    )
+                                    window.location.href = '/staff/teams/getAll';
+                                }
+                                // Do something with the response data
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                console.log(xhr.responseText);
+                                // Handle error
+                            }
+                        });
+
+                    }
+                })
+            })
+
+
+        });
+        $('#updateTeamModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('updateteam') // Extract info from data-* attributes
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var teamName = button.data('teamname')
+            $('#id').val(recipient)
+            $('#teamName').val(teamName.replace(/[0-9]/g, ""))
+        })
+
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+
+</section>
+</body>
+</html>

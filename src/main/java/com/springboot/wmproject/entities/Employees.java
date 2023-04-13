@@ -1,17 +1,18 @@
 package com.springboot.wmproject.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -35,19 +36,40 @@ public class Employees {
     @Basic
     @Column(name = "salary", nullable = true, precision = 2)
     private Double salary;
-    @Basic
-    @Column(name = "emp_type", nullable = true, length = 20)
-    private String empType;
-    @Basic
-    @Column(name = "team_id", nullable = true)
-    private Integer teamId;
-    @OneToMany(mappedBy = "employees",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<EmployeeAccounts> employeeAccounts;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "team_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private OrganizeTeams organizeTeams;
-    @OneToMany(mappedBy = "employees",cascade = CascadeType.ALL,orphanRemoval = true)
-    private Collection<Orders> orders;
 
+    @Basic
+    @Column(name = "email", nullable = true)
+    private String email;
+
+    @Basic
+    @Column(name = "gender", nullable = true)
+    private String gender;
+
+    @Basic
+    @Column(name = "isLeader", nullable = true ,columnDefinition = "integer default 0")
+    private Integer isLeader;
+
+    @Basic
+    @Column(name = "team_id", nullable = true,columnDefinition = "integer default 0")
+    private Integer team_id;
+
+    @Basic
+    @Column(name = "avatar", nullable = true)
+    private String avatar;
+
+
+    @Basic
+    @Column(nullable = false, columnDefinition = "TINYINT(1)", length = 1)
+    private boolean is_deleted;
+
+
+    @OneToMany(mappedBy = "employeesByEmployeeId")
+    private Collection<EmployeeAccounts> employeeAccountsById=new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id",insertable = false,updatable = false)
+    private OrganizeTeams organizeTeamsByTeamId;
+    @OneToMany(mappedBy = "employeesByBookingEmp",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<Orders> ordersById = new HashSet<>();
 
 }

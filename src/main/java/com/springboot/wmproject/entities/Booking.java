@@ -1,14 +1,17 @@
 package com.springboot.wmproject.entities;
 
-import com.fasterxml.jackson.annotation.*;
-import lombok.*;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import java.util.Objects;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+
 @Entity
 public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,9 +27,9 @@ public class Booking {
     @Basic
     @Column(name = "appointment_date", nullable = true, length = 45)
     private String appointmentDate;
-
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "customer_id", referencedColumnName = "id",nullable = false,insertable = false,updatable = false)
-    private Customers customers;
+    @JoinColumn(name = "customer_id", referencedColumnName = "id",insertable = false,updatable = false)
+    private Customers customersByCustomerId;
+
 
 }

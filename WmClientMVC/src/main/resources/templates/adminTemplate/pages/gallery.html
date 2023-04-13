@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AdminLTE 3 | Gallery</title>
+
+    <!-- Ekko Lightbox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+          integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+    <section layout:fragment="content">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Gallery</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Gallery</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+
+            <!-- Main content -->
+            <section class="content">
+                <!--                                        Modal-->
+                <!--                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Open modal for @mdo</button>-->
+                <!--                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@fat">Open modal for @fat</button>-->
+                <!--                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@getbootstrap">Open modal for @getbootstrap</button>-->
+
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <div class="col-12">
+                            <div class="card card-primary">
+                                <div class="card-header">
+                                    <h4 class="card-title">Venue Images</h4>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="float-right">
+                                        <select class="custom-select select-venue" style="width: auto;">
+                                            <option selected="selected" value="all">All</option>
+                                            <th:block th:each="c:${list}">
+                                                <option id="venue-name-update" th:value="${c.getId()}"
+                                                        th:attr="data-id=${c.getVenueName()}"><p
+                                                        th:text="${c.getVenueName()}"></p></option>
+                                            </th:block>
+                                        </select>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-default" data-toggle="modal"
+                                                    data-target="#createModal" data-whatever="@mdo">Create
+                                            </button>
+                                            <button type="button" class="btn btn-default" id="updateBtn"
+                                                    data-toggle="modal" data-target="#updateModal" data-whatever="@mdo">
+                                                Update
+                                            </button>
+
+                                            <form id="add-picture-form" method="post"
+                                                  th:action="@{/staff/venues/venueImgs/create}" enctype="multipart/form-data">
+                                                <div class="input-group mb-3" style="margin-top: 1rem">
+                                                    <div class="input-group-prepend">
+                                                        <input type="text" id="add-picture-form-venue-id"
+                                                               name="venueId" hidden>
+                                                        <input type="submit" class="input-group-text"
+                                                               value="Add more picture">
+                                                    </div>
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input"
+                                                               id="inputGroupFile02" multiple
+                                                               name="create-multiple-picture" required>
+                                                        <label class="custom-file-label" for="inputGroupFile02">Choose
+                                                            file</label>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <th:block th:each="i:${imgList}">
+                                            <div class="col-sm-2 venue-img" th:attr="data-venue=${i.getVenueId()}">
+                                                <a th:href="'data:image/jpeg;base64,'+${i.getUrl()}"
+                                                   th:attr="data-footer='<a onclick=\'return myConfirm()\' href='+'/staff/venues/delete?imgId='+${i.getId()}+'>Delete</a>'"
+                                                   data-toggle="lightbox"
+                                                   th:attrappend="data-title='Venue '+${i.getVenueId()}"
+                                                   data-gallery="gallery">
+                                                    <img th:src="'data:image/jpeg;base64,'+${i.getUrl()}"
+                                                         class="img-fluid mb-2" th:alt="Venue +${i.getVenueId()}"/>
+                                                </a>
+                                            </div>
+                                        </th:block>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+                <!--createModal-->
+                <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Create Venue</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" th:action="@{/staff/venues/create}" id="createForm">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Venue name :</label>
+                                        <input type="text" class="form-control" name="venueName" maxlength="40" required
+                                               >
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Min People (1-3000):</label>
+                                        <input type="number" class="form-control" name="minPeople" required min="1"
+                                               max="3000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Max People (1-3000):</label>
+                                        <input type="number" class="form-control" name="maxPeople" required min="1"
+                                               max="3000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-form-label">Price ($):</label>
+                                        <input type="text" class="form-control" name="price" required
+                                               id="txtPriceCreateVenue">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price" class="col-form-label">Is active:</label>
+                                        <select class="form-control" name="checkCreate">
+                                            <option th:text="No" value="false"></option>
+                                            <option th:text="Yes" value="true" selected></option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <input type="submit" class="btn btn-primary" value="Create">
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--                End create modal-->
+                <!--update Modal-->
+                <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Update Venue</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form method="post" th:action="@{/staff/venues/update}" id="updateForm">
+                                    <input type="text" class="update-venue-id" name="id" hidden>
+                                    <div class="form-group">
+                                        <label for="venueName" class="col-form-label">Venue name :</label>
+                                        <input type="text" required class="form-control update-venue-name" maxlength="40"
+                                               name="venueName" id="venueName" >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="minPeople" class="col-form-label">Min People (1-3000):</label>
+                                        <input type="number" class="form-control update-venue-min" id="minPeople"
+                                               required
+                                               name="minPeople" min="1" max="3000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="maxPeople" class="col-form-label">Max People (1-3000):</label>
+                                        <input type="number" class="form-control update-venue-max" id="maxPeople"
+                                               required
+                                               name="maxPeople" min="1" max="3000">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price" class="col-form-label">Price ($):</label>
+                                        <input class="form-control update-venue-price" id="price" name="price" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="price" class="col-form-label">Is active:</label>
+                                        <select class="form-control update-venue-active" id="check" name="check">
+                                            <option th:text="No" value="false"></option>
+                                            <option th:text="Yes" value="true"></option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                                        </button>
+                                        <input type="submit" class="btn btn-primary" value="Update">
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!--                End update modal-->
+
+                <!--                                        End Modal-->
+            </section>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+
+
+        <!-- Control Sidebar -->
+        <aside class="control-sidebar control-sidebar-dark">
+            <!-- Control sidebar content goes here -->
+        </aside>
+        <!-- /.control-sidebar -->
+    </section>
+</div>
+<!-- ./wrapper -->
+<section layout:fragment="optional"><!-- jQuery -->
+    <!--    modal popup-->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct"
+            crossorigin="anonymous"></script>
+    <!--    sweet alert script-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        msg = '[[${message}]]';
+        if(msg){
+            if (msg === "Success") {
+                Swal.fire({
+                    title: 'Notification',
+                    text: msg,
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                Swal.fire({
+                    title: 'Notification',
+                    text: 'Venue name has been existed',
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }
+
+
+    </script>
+    <script>
+        function myConfirm() {
+            return confirm("Are you sure to delete ?")
+        }
+    </script>
+    <!-- Ekko Lightbox -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.min.js"
+            integrity="sha512-Y2IiVZeaBwXG1wSV7f13plqlmFOx8MdjuHyYFVoYzhyRr3nH/NMDjTBSswijzADdNzMyWNetbLMfOpIPl6Cv9g=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.js"
+            integrity="sha512-YibiFIKqwi6sZFfPm5HNHQYemJwFbyyYHjrr3UT+VobMt/YBo1kBxgui5RWc4C3B4RJMYCdCAJkbXHt+irKfSA=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+
+        $(document).ready(function () {
+            if ($(this).attr('data-venue') !== 'undefined' || $(this).attr('data-venue') !== false) {
+                $('#updateBtn').hide()
+                $('#add-picture-form').hide();
+                $('.select-venue').on('change', function () {
+                    let selectedOption = $(this).val();
+                    let updateId = $('.update-venue-id');
+                    let venueIdAddPictureForm = $('#add-picture-form-venue-id');
+                    let venueList = '[[${list}]]'.replace(/VenueDTO/g, "").replace(/\(/g, "{").replace(/\)/g, "}").replace(/([^,\[\{]+)=([^,\]\}]+)/g, '"$1":"$2"').replace(/\s+/g, "");
+                    let name = $('.update-venue-name')
+                    let min = $('.update-venue-min')
+                    let max = $('.update-venue-max')
+                    let price = $('.update-venue-price')
+                    updateId.val(selectedOption)
+                    venueIdAddPictureForm.val(selectedOption)
+                    console.log(venueList)
+                    $.each($.parseJSON(venueList), function (index, item) {
+                        if (item.id === selectedOption) {
+                            name.val(item.venueName)
+                            min.val(item.minPeople)
+                            max.val(item.maxPeople)
+                            price.val(item.price)
+                            $('.update-venue-active option').each(function () {
+                                var value = $(this).val();
+                                if (value === item.active) {
+                                    $(this).prop('selected', true);
+                                }
+                            })
+                        }
+                    })
+                    if (selectedOption !== 0 && selectedOption !== "all") {
+                        $(this).show()
+                        $('#updateBtn').show()
+                        $('#add-picture-form').show();
+                    } else if (selectedOption === "all") {
+                        $('#updateBtn').hide()
+                        $('#add-picture-form').hide();
+                    } else {
+                        $(this).hide()
+                    }
+                });
+            } else {
+                $('#updateBtn').hide();
+                $('#add-picture-form').hide();
+            }
+        })
+        $('.update-venue-active').on('change', function () {
+            var selected = $(this).find('option:selected').val();
+            $(this).val(selected);
+        })
+    </script>
+    <script>
+
+        $(function () {
+            $("#createForm").submit(function (e) {
+                var inputPrice = $('#txtPriceCreateVenue').val()
+                var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+
+                if (!regex.test(inputPrice)) {
+                    alert("Please enter a valid number between 1 and 500000000.");
+                    e.preventDefault(); // prevent form submission
+                }
+            });
+            $("#updateForm").submit(function (e) {
+                var inputPrice = $('.update-venue-price').val()
+                var regex = /^([1-9][0-9]{0,8}|[1-4][0-9]{8}|500000000)(\.[0-9]+)?$/;
+
+                if (!regex.test(inputPrice)) {
+                    alert("Please enter a valid number between 1 and 500000000.");
+                    e.preventDefault(); // prevent form submission
+                }
+            });
+            $(document).on('click', '[data-toggle="lightbox"]', function (event) {
+                event.preventDefault();
+                $(this).ekkoLightbox({
+                    alwaysShowClose: true,
+                });
+            });
+            $('.select-venue').on('change', function () {
+                let selectedOption = $(this).val();
+                let updateId = $('.update-venue-id');
+                let venueIdAddPictureForm = $('#add-picture-form-venue-id');
+                let venueList = '[[${list}]]'.replace(/VenueDTO/g, "").replace(/\(/g, "{").replace(/\)/g, "}").replace(/([^,\[\{]+)=([^,\]\}]+)/g, '"$1":"$2"').replace(/\s+/g, "");
+                let name = $('.update-venue-name')
+                let min = $('.update-venue-min')
+                let max = $('.update-venue-max')
+                let price = $('.update-venue-price')
+                updateId.val(selectedOption)
+                venueIdAddPictureForm.val(selectedOption)
+                console.log(venueList)
+                $.each($.parseJSON(venueList), function (index, item) {
+                    if (item.id === selectedOption) {
+                        name.val(item.venueName)
+                        min.val(item.minPeople)
+                        max.val(item.maxPeople)
+                        price.val(item.price)
+                        $('.update-venue-active option').each(function () {
+                            var value = $(this).val();
+                            if (value === item.active) {
+                                $(this).prop('selected', true);
+                            }
+                        })
+                    }
+                })
+                $('.update-venue-active').on('change', function () {
+                    var selected = $(this).find('option:selected').val();
+                    $(this).val(selected);
+                })
+                $('div[data-venue]').each(function () {
+                    if ($(this).attr('data-venue') === selectedOption) {
+                        $(this).show()
+                        $('#updateBtn').show()
+                        $('#add-picture-form').show();
+                    } else if (selectedOption === "all") {
+                        $('div[data-venue]').show()
+                        $('#updateBtn').hide()
+                        $('#add-picture-form').hide();
+                    } else {
+                        $(this).hide()
+                    }
+                })
+            });
+
+        })
+    </script>
+</section>
+</body>
+</html>
