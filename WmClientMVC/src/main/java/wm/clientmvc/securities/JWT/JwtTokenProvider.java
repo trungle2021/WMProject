@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import wm.clientmvc.exceptions.TokenException;
 import wm.clientmvc.securities.UserDetails.CustomUserDetails;
 //import wm.clientmvc.securities.UserDetails.CustomerUserDetails;
 //import wm.clientmvc.securities.UserDetails.EmployeeUserDetails;
@@ -20,7 +21,7 @@ import java.util.Map;
 public class JwtTokenProvider {
     @Value("${app.jwt-secret}")
     private String jwtSecret;
-    @Value("${app-jwt-expiration-second}")
+    @Value("${app-jwt-expiration-milisecond}")
     private long jwtExpirationDate;
 
     private Key key() {
@@ -85,6 +86,27 @@ public class JwtTokenProvider {
         }
         return userID;
     }
+
+    public HashMap<Boolean,String> validateToken(String token){
+        HashMap<Boolean,String> result = new HashMap<>();
+        try{
+            Jwts.parserBuilder()
+                    .setSigningKey(key())
+                    .build()
+                    .parse(token);
+            result.put(true,"Valid");
+        }catch (MalformedJwtException ex) {
+            result.put(false,"Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            result.put(false,"Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            result.put(false,"Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            result.put(false,"JWT claims string is empty.");
+        }
+        return result;
+    }
+
 
 
 }

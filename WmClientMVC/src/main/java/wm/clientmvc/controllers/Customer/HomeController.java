@@ -46,7 +46,7 @@ public class HomeController {
     }
 
     @GetMapping(value = {"/home", "/customers/home", "/"})
-    public String home(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertError") String alertError, @ModelAttribute("alertMessage") String alertMessage) {
+    public String home(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertError") String alertError, @ModelAttribute("alertMessage") String alertMessage,HttpServletRequest request,HttpServletResponse response) {
     //get venue image
         ParameterizedTypeReference<List<VenueImgDTO>> responseTypeVenueImg = new ParameterizedTypeReference<List<VenueImgDTO>>() {
         };
@@ -56,7 +56,7 @@ public class HomeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeVenueImg
+                    responseTypeVenueImg,request,response
             );
 
             List<VenueImgDTO> venuesImages = new ArrayList<>();
@@ -85,7 +85,7 @@ public class HomeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    foodReference);
+                    foodReference,request,response);
             List<FoodDTO> foodList = new ArrayList<>();
             if (fList != null && fList.size() > 8) {
                 for (int i = 0; i < 8; i++) {
@@ -102,7 +102,7 @@ public class HomeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    reviewTypeReference
+                    reviewTypeReference,request,response
             );
 
             model.addAttribute("foodList", foodList);
@@ -150,7 +150,7 @@ public class HomeController {
     }
 
     @GetMapping(value = {"/customers/dashboard",})
-    public String dashboard(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage, @ModelAttribute("alertError") String alertError) {
+    public String dashboard(Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage, @ModelAttribute("alertError") String alertError,HttpServletRequest request,HttpServletResponse response) {
         model.addAttribute("warningSt", orderStatusWarning);
         model.addAttribute("cancelingSt", orderStatusCancel);
         model.addAttribute("confirmSt", orderStatusConfirm);
@@ -171,7 +171,7 @@ public class HomeController {
                     HttpMethod.GET,
                     null,
                     token,
-                    typeReference
+                    typeReference,request,response
 
             );
             model.addAttribute("list", list);
@@ -228,25 +228,8 @@ public class HomeController {
     public String sendVerifyEmail(@RequestParam(value = "token", defaultValue = "") String token, HttpServletRequest request, HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         if(!token.isEmpty()){
            try{
-               String _response = APIHelper.makeApiCall(SD_CLIENT.api_verify_email + token,HttpMethod.POST,null,null,String.class);
-               RegisterCustomerDTO  registerCustomerDTO = (RegisterCustomerDTO) session.getAttribute("responseRegister");
-               if(registerCustomerDTO.getUsername() != null && registerCustomerDTO.getPassword() != null){
-                   LoginDTO loginDTO = new LoginDTO();
-                   loginDTO.setUsername(registerCustomerDTO.getUsername());
-                   loginDTO.setPassword(registerCustomerDTO.getPassword());
-                   session.invalidate();
-                   return authController.callApiLogin(
-                           SD_CLIENT.api_customerLoginUrl,
-                           "/customers/home",
-                           "/login",
-                           loginDTO,
-                           request,
-                           response,
-                           attributes);
-               }else{
-                   attributes.addFlashAttribute("errorMessage","Expired Session");
-                   return "redirect:/register";
-               }
+               String _response = APIHelper.makeApiCall(SD_CLIENT.api_verify_email + token,HttpMethod.POST,null,null,String.class,request,response);
+                   return "redirect:/login";
            }catch(HttpClientErrorException ex){
                String responseError = ex.getResponseBodyAsString();
                ObjectMapper mapper = new ObjectMapper();

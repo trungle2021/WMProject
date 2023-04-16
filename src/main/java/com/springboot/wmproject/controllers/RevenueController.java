@@ -1,9 +1,6 @@
 package com.springboot.wmproject.controllers;
 
-import com.springboot.wmproject.DTO.OrderIn3MonthDTO;
-import com.springboot.wmproject.DTO.OrderInMonthDTO;
-import com.springboot.wmproject.DTO.RevenueMonthDTO;
-import com.springboot.wmproject.DTO.RevenueYearDTO;
+import com.springboot.wmproject.DTO.*;
 import com.springboot.wmproject.services.RevenueService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -26,7 +23,7 @@ public class RevenueController {
         this.revenueService = revenueService;
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/getRevenueByMonth/{year}/{month}")
     public ResponseEntity<RevenueMonthDTO> getRevenueByMonth(@PathVariable("year") int year, @PathVariable("month") int month){
@@ -34,7 +31,7 @@ public class RevenueController {
         return ResponseEntity.ok(revenueByMonth);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/getOrderCountByMonth/{year}/{month}")
     public ResponseEntity<OrderInMonthDTO> getOrderCountByMonth(@PathVariable("year") int year, @PathVariable("month") int month){
@@ -42,7 +39,7 @@ public class RevenueController {
         return ResponseEntity.ok(orderCountByMonth);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/getOrderCount3Month/{year}")
     public ResponseEntity<OrderIn3MonthDTO> getOrderCount3Month(@PathVariable("year") int year){
@@ -51,12 +48,28 @@ public class RevenueController {
     }
 
 
-    @PreAuthorize("hasAnyRole('ADMIN','SALE')")
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @GetMapping(value = "/getRevenueByYear/{year}")
     public ResponseEntity<RevenueYearDTO> getRevenueByYear(@PathVariable("year") int year){
         RevenueYearDTO revenueByYear = revenueService.getRevenueByYear(year);
         return ResponseEntity.ok(revenueByYear);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/getProfitByYear/{year}")
+    public ResponseEntity<ProfitYearDTO> getProfitByYear(@PathVariable("year") int year){
+        ProfitYearDTO profitByYear = revenueService.getProfitByYear(year);
+        return ResponseEntity.ok(profitByYear);
+    }
+
+    @PreAuthorize("hasAnyRole('ADMIN','SALE','ORGANIZE')")
+    @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
+    @GetMapping(value = "/getProfitByMonth/{year}/{month}")
+    public ResponseEntity<ProfitMonthDTO> getProfitByMonth(@PathVariable("year") int year, @PathVariable("month") int month){
+        ProfitMonthDTO profitByMonth = revenueService.getProfitByMonth(year,month);
+        return ResponseEntity.ok(profitByMonth);
     }
 
 }

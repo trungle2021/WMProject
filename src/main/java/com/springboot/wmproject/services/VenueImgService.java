@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface VenueImgService {
     List<VenueImgDTO> getAllVenueImg();
+    List<VenueImgDTO> getSomeVenueImg();
     List<VenueImgDTO> getAllVenueImgByVenueId(int id);
     VenueImgDTO createVenueImg(VenueImgDTO venueImgDTO);
     List<VenueImgDTO> createMultipleVenueImg(List<VenueImgDTO> venueImgDTO);

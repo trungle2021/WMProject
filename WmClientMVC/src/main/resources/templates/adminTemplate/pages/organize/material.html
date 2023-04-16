@@ -57,6 +57,7 @@
                             <p class="venue-name" >Venue Name: <span th:text="${o.getVenues().getVenueName()}"></span></p>
                             <p class="venue-table" >Number of Table : <span th:text="${o.getTableAmount()}"></span></p>
                             <p class="event-date" >Event Date : <span th:text="${o.getTimeHappen()}"></span></p>
+                            <p class="order-cost">Booking Cost :<span th:text="'$'+${o.getCost()}"></span></p>
                             <p class="parttime-emp" > Number of collaborators : <span th:text="${o.getPartTimeEmpAmount()}"></span> </p>
                         </div>
                         <hr>
@@ -64,24 +65,26 @@
                         <tr>
                             <th>Food Name</th>
                             <th>Food Type</th>
-                            <th>Description</th>
+
 
                         </tr>
                         <tr th:each="f:${o.getFoodDetailsById()}">
                             <td th:text="${f.getFoodByFoodId().getFoodName()}"></td>
                             <td th:text="${f.getFoodByFoodId().getFoodType()}"></td>
-                            <td class="description-container" th:text="${f.getFoodByFoodId().getDescription()}"></td>
+
                         </tr>
                     </table>
                     <hr>
                     <table th:boder="1">
                         <tr>
                             <th>Service Name</th>
-                            <th >Service Description</th>
+                            <th>Service Cost($)</th>
+
                         </tr >
                         <tr  th:each="s:${o.getServiceDetailsById()}">
                             <td th:text="${s.getServicesByServiceId().getServiceName()}"></td>
-                            <td class="description-container" th:text="${s.getServicesByServiceId().getDescription()}"></td>
+                            <td th:text="${s.getServicesByServiceId().getCost()}"></td>
+
                         </tr>
                     </table>
 
@@ -97,19 +100,20 @@
                     <div class="card-body">
                         <table th:boder="1">
                             <tr>
-                                <th>No:</th>
+
                                 <th>Material Code</th>
                                 <th>Material Name</th>
                                 <th>Material Amount</th>
+                                <th>Material Price ($)</th>
                                 <th>Material  Unit</th>
 
                             </tr>
-                            <tr th:each="m,no:${materials}">
-                                <td th:text="${no.count}"></td>
-                                <td th:text="${m.getMaterialCode()}"></td>
-                                <td th:text="${m.getMaterialName()}"></td>
+                            <tr th:each="m:${materials}">
+                                <td th:text="${m.getMaterialsByMaterialId().getMaterialCode()}"></td>
+                                <td th:text="${m.getMaterialsByMaterialId().getMaterialName()}"></td>
                                 <td th:text="${m.getCount()}"></td>
-                                <td th:text="${m.getUnit()}"></td>
+                                <td th:text="${m.getMaterialsByMaterialId().getPrice()}"></td>
+                                <td th:text="${m.getMaterialsByMaterialId().getUnit()!=null}?${m.getMaterialsByMaterialId().getUnit()}:'N/A'"></td>
                             </tr>
                         </table>
                     </div>

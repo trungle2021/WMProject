@@ -41,7 +41,7 @@ import static wm.clientmvc.utils.Static_Status.*;
 @RequestMapping("/staff/teams")
 public class TeamController {
     @GetMapping(value = {"/getAll"})
-    public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token, HttpServletRequest request, RedirectAttributes attributes) throws IOException {
+    public String getAll(Model model, @CookieValue(name = "token", defaultValue = "") String token,HttpServletRequest request,HttpServletResponse response, RedirectAttributes attributes) throws IOException {
         String message = (String) model.asMap().get("message");
         ParameterizedTypeReference<List<TeamSummaryDTO>> responseTypeTeam = new ParameterizedTypeReference<List<TeamSummaryDTO>>() {};
         String errorMessage = (String) model.asMap().get("errorMessage");
@@ -54,7 +54,7 @@ public class TeamController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeTeam
+                    responseTypeTeam,request,response
             );
 
             model.addAttribute("teamSummary", teamSummary);
@@ -97,7 +97,7 @@ public class TeamController {
     }
 
     @GetMapping(value = {"/getAllEmployeeByTeamId/{id}"})
-    public String getAllEmployeeByTeamId(Model model, @CookieValue(name = "token", defaultValue = "") String token,@PathVariable("id") int id) throws IOException {
+    public String getAllEmployeeByTeamId(Model model, @CookieValue(name = "token", defaultValue = "") String token,@PathVariable("id") int id,HttpServletRequest request,HttpServletResponse response) throws IOException {
 
         ParameterizedTypeReference<List<EmployeeDTO>> responseType = new ParameterizedTypeReference<List<EmployeeDTO>>() {};
         List<EmployeeDTO> employeeList = APIHelper.makeApiCall(
@@ -105,7 +105,7 @@ public class TeamController {
                 HttpMethod.GET,
                 null,
                 token,
-                responseType
+                responseType,request,response
         );
         int amountMember =employeeList.size();
         if(amountMember == 0){
@@ -123,7 +123,7 @@ public class TeamController {
 
 
     @PostMapping("/create")
-    public String createTeam(@Valid @ModelAttribute OrganizeTeamDTO teamDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes) throws IOException {
+    public String createTeam(@Valid @ModelAttribute OrganizeTeamDTO teamDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
        String regexTeamName = "^TEAM\\s+(?!(?:administrator|admin|ADMINISTRATOR|ADMIN)\\b)[a-zA-Z]+(\\s+[^\\d\\s]+)*$";
         if(result.hasErrors()){
                 attributes.addFlashAttribute("result",result);
@@ -139,7 +139,7 @@ public class TeamController {
                     HttpMethod.POST,
                     teamDTO,
                     token,
-                    OrganizeTeamDTO.class
+                    OrganizeTeamDTO.class,request,response
             );
 
         }catch (HttpClientErrorException  | HttpServerErrorException e) {
@@ -170,7 +170,7 @@ public class TeamController {
     }
 
     @PostMapping("/update")
-    public String updateTeam(@Valid @ModelAttribute OrganizeTeamDTO teamDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes) throws IOException {
+    public String updateTeam(@Valid @ModelAttribute OrganizeTeamDTO teamDTO, BindingResult result, @CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
         if(result.hasErrors()){
             String errorMessage = result.getFieldError().getDefaultMessage();
             attributes.addFlashAttribute("errorMessage",errorMessage);
@@ -182,7 +182,7 @@ public class TeamController {
                     HttpMethod.PUT,
                     teamDTO,
                     token,
-                    OrganizeTeamDTO.class
+                    OrganizeTeamDTO.class,request,response
             );
         }catch (HttpClientErrorException  | HttpServerErrorException e) {
             String message = "";
@@ -214,27 +214,27 @@ public class TeamController {
 
     @PostMapping(value = "/delete/{id}",produces = "application/json")
     @ResponseBody
-    public Map<String, Object> deleteTeam(@PathVariable int id ,@CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes) throws IOException {
+    public Map<String, Object> deleteTeam(@PathVariable int id ,@CookieValue(name = "token", defaultValue = "") String token, Model model, RedirectAttributes attributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> _response = new HashMap<>();
 
         try{
-            String response_api = APIHelper.makeApiCall(api_teams_delete + id,HttpMethod.DELETE,null,token,String.class);
-            response.put("result", "success");
-            response.put("statusCode", 200);
-            response.put("message", response_api);
+            String response_api = APIHelper.makeApiCall(api_teams_delete + id,HttpMethod.DELETE,null,token,String.class,request,response);
+            _response.put("result", "success");
+            _response.put("statusCode", 200);
+            _response.put("message", response_api);
 
         }catch (HttpClientErrorException e){
             String responseError = e.getResponseBodyAsString();
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(responseError, Map.class);
             String message = map.get("message").toString();
-            response.put("result", "success");
-            response.put("statusCode", e.getStatusCode());
-            response.put("message",message);
+            _response.put("result", "success");
+            _response.put("statusCode", e.getStatusCode());
+            _response.put("message",message);
         }
 
-        return response;
+        return _response;
     }
 
 
@@ -243,7 +243,7 @@ public class TeamController {
     //organize team
     @RequestMapping("/showallorder/organize")
 
-    public String showAllbyOrganize(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError)
+    public String showAllbyOrganize(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError,HttpServletRequest request,HttpServletResponse response)
     {
         List<Integer> years = Arrays.asList(2023, 2024,2025,2026,2027,2028,2029,2030);
         List<Month> months = Arrays.asList(
@@ -268,7 +268,7 @@ public class TeamController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType);
+                    responseType,request,response);
 
 
             model.addAttribute("list",orderList);
@@ -300,7 +300,7 @@ public class TeamController {
 
     @RequestMapping(value = "/showallorder/organize/search",method = RequestMethod.POST)
 
-    public String searchOrderbyDay(Model model, @CookieValue(name = "token",defaultValue = "")String token, @RequestParam("month") String monthStr, @RequestParam("year") Integer year)
+    public String searchOrderbyDay(Model model, @CookieValue(name = "token",defaultValue = "")String token, @RequestParam("month") String monthStr, @RequestParam("year") Integer year,HttpServletRequest request,HttpServletResponse response)
     {
         List<Integer> years = Arrays.asList(2023,2024,2025,2026,2027,2028,2029,2030);
         List<Month> months = Arrays.asList(
@@ -323,7 +323,7 @@ public class TeamController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseType);
+                    responseType,request,response);
 
             List<OrderDTO> orderListInMonth =new ArrayList<>();
             for (OrderDTO order:orderList)
@@ -354,7 +354,7 @@ public class TeamController {
     }
 
     @RequestMapping(value="/shift-manage")
-    public String TeamMangeShift(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError)
+    public String TeamMangeShift(Model model, @CookieValue(name = "token",defaultValue = "")String token,@ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError,HttpServletRequest request,HttpServletResponse response)
     {
         List<Integer> years = Arrays.asList(2023,2024,2025,2026,2027,2028,2029,2030);
         List<Month> months = Arrays.asList(
@@ -378,7 +378,7 @@ public class TeamController {
                          HttpMethod.GET,
                          null,
                          token,
-                         typeReference
+                         typeReference,request,response
                  );
 //ngày
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -408,7 +408,7 @@ public class TeamController {
                         HttpMethod.GET,
                         null,
                         token,
-                        teamReference
+                        teamReference,request,response
                 );
                     List<TeamShift>list=getShiftList(teamList,orderListInMonth);
                     model.addAttribute("chosenMonth",month);
@@ -447,7 +447,7 @@ public class TeamController {
     }
 
     @RequestMapping(value="/shift-manage/search")
-    public String TeamMangeShiftSearch(Model model, @CookieValue(name = "token",defaultValue = "")String token,@RequestParam("month") String monthStr, @RequestParam("year") Integer year,RedirectAttributes redirectAttributes)
+    public String TeamMangeShiftSearch(Model model, @CookieValue(name = "token",defaultValue = "")String token,@RequestParam("month") String monthStr, @RequestParam("year") Integer year,RedirectAttributes redirectAttributes,HttpServletRequest request,HttpServletResponse response)
     {
         //search
         List<Integer> years = Arrays.asList(2023, 2024,2025,2026,2027,2028,2029,2030);
@@ -473,7 +473,7 @@ public class TeamController {
                         HttpMethod.GET,
                         null,
                         token,
-                        typeReference
+                        typeReference,request,response
                 );
 //ngày
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -505,7 +505,7 @@ public class TeamController {
                         HttpMethod.GET,
                         null,
                         token,
-                        teamReference
+                        teamReference,request,response
                 );
                 List<TeamShift>list=getShiftList(teamList,orderListInMonth);
 
@@ -530,7 +530,7 @@ public class TeamController {
 
 
     @RequestMapping(value="/shift-by-team",method = RequestMethod.POST)
-    public String shiftByTeam(Model model,@CookieValue(name="token",defaultValue = "")String token,@RequestParam("teamId")Integer teamId,@RequestParam("choosenMonth")String monthStr,@RequestParam("choosenYear")Integer year,RedirectAttributes redirectAttributes) throws IOException {
+    public String shiftByTeam(Model model,@CookieValue(name="token",defaultValue = "")String token,@RequestParam("teamId")Integer teamId,@RequestParam("choosenMonth")String monthStr,@RequestParam("choosenYear")Integer year,RedirectAttributes redirectAttributes,HttpServletRequest request,HttpServletResponse response) throws IOException {
         ParameterizedTypeReference<List<OrganizeTeamDTO>> teamsReference= new ParameterizedTypeReference<List<OrganizeTeamDTO>>() {};
         String tUrl="http://localhost:8080/api/teams/all";
         String oUrl="http://localhost:8080/api/orders/byTeam/time/"+teamId+"/"+monthStr+"/"+year;
@@ -540,7 +540,7 @@ public class TeamController {
                     HttpMethod.GET,
                     null,
                     token,
-                    teamsReference
+                    teamsReference,request,response
             );
             List<OrganizeTeamDTO>teamsList=teams.stream().filter(team->!team.getTeamName().equalsIgnoreCase(teamAdmin)).collect(Collectors.toList());
 
@@ -550,7 +550,7 @@ public class TeamController {
                    HttpMethod.GET,
                    null,
                    token,
-                   orderReference
+                   orderReference,request,response
            );
 
             model.addAttribute("orders",orders);
@@ -565,7 +565,7 @@ public class TeamController {
     }
 
     @RequestMapping(value="shift-change-team",method=RequestMethod.POST)
-    public String changeTeam(Model model,@CookieValue(name="token",defaultValue = "")String token,@RequestParam("orderId")Integer orderId,@RequestParam("teamId")Integer teamId,RedirectAttributes redirectAttributes) throws IOException {
+    public String changeTeam(Model model,@CookieValue(name="token",defaultValue = "")String token,@RequestParam("orderId")Integer orderId,@RequestParam("teamId")Integer teamId,RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) throws IOException {
         String url="http://localhost:8080/api/orders/update/changeTeam/"+orderId+"/"+teamId;
         try {
             APIHelper.makeApiCall(
@@ -573,7 +573,7 @@ public class TeamController {
                     HttpMethod.PUT,
                     null,
                     token,
-                    OrderDTO.class
+                    OrderDTO.class,request,response
             );
 
             redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!The Shift was change! ");

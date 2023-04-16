@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface OrderService {
     List<OrderDTO> getAllOrder();
+    List<OrderDTO> getAllForGetVenue();
     List<OrderDTO>getAllOrderHaveShift();
 
     List<OrderDTO> getAllByOrderDate(String orderDate);
@@ -15,6 +16,7 @@ public interface OrderService {
     List<OrderDTO> getAllByOrganizeTeam(int id);
     List<OrderDTO> getAllByTeamEmpId(int id);
     List<OrderDTO> getAllByCustomerId(int id);
+
     List<OrderDTO> getAllByOrderStatus(String status);
     OrderDTO getOneOrderByOrderId(int id);
     OrderDTO createOrder(OrderDTO orderDTO);
@@ -26,6 +28,7 @@ public interface OrderService {
     public OrderDTO updateOrderTable(Integer orderDTOId,Integer table);
     public OrderDTO updateOrderTeam(Integer orderDTOId,Integer team);
     public OrderDTO updateOrderDetailCustomer(String json);
+
 
 
     //test autoUpdate

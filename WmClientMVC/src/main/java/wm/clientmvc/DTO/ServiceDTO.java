@@ -20,6 +20,10 @@ public class ServiceDTO {
     @NotEmpty
     private String description;
     private boolean active;
+    @NotNull
+    @PositiveOrZero(message = "Price must be positive or zero")
+    @DecimalMax(value = "999.99", message = "Price must be at most 999,99")
+    private Double cost;
 
 //    private Set<ServiceDetailDTO> serviceDetailsById;
 }

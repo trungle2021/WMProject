@@ -36,7 +36,7 @@ public class CustomerReviewController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         String finalDate = currentDate.format(formatter);
         reviewDTO.setDatePost(String.valueOf(finalDate));
-        String[] badWords = {"damn", "hell", "crap", "sucks", "freaking"};
+        String[] badWords = {"damn", "hell", "crap", "suck", "freaking"};
         String checkWords = reviewDTO.getContent().toLowerCase();
         int count = 0;
         for (String item : badWords) {
@@ -44,7 +44,7 @@ public class CustomerReviewController {
                 count++;
             }
         }
-        if (count == 0 && reviewDTO.getRating() > 3) {
+        if (count == 0 && reviewDTO.getRating() >= 3) {
             reviewDTO.setActive(true);
         } else {
             reviewDTO.setActive(false);
@@ -55,7 +55,7 @@ public class CustomerReviewController {
                     HttpMethod.GET,
                     null,
                     token,
-                    CustomerAccountDTO.class
+                    CustomerAccountDTO.class,request,response
             );
             reviewDTO.setCustomerAccountId(accountDTO.getId());
             APIHelper.makeApiCall(
@@ -63,7 +63,7 @@ public class CustomerReviewController {
                     HttpMethod.POST,
                     reviewDTO,
                     token,
-                    String.class
+                    String.class,request,response
             );
             model.addAttribute("alertMessage", "Thank you for your review");
         } catch (HttpClientErrorException ex) {

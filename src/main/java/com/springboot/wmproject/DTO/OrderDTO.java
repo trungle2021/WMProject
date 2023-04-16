@@ -34,8 +34,10 @@ public class OrderDTO {
 
     private Integer tableAmount;
     private Integer partTimeEmpAmount;
-    @JsonIgnore
+
     private String contract;
+
+    private Double cost;
 
 //    private Set<FoodDetailDTO> foodDetails;
     private VenueDTO venues;

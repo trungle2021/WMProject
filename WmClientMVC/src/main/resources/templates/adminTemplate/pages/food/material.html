@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Food Detail</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/khangcustomer.css">
+    <link rel="stylesheet" href="/css/khangform.css">
+    <style>
+        .highlight {
+            background-color: yellow;
+        }
+
+        .input-group {
+            display: none;
+        }
+    </style>
+</head>
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+
+    <section layout:fragment="content">
+
+        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-12">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">Food Details</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+            <!--detail food Modal-->
+
+            <section class="content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-10 offset-1">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3>Food Information</h3>
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="form-row">
+                                    <svg viewBox="0 0 100 1">
+                                        <style>
+                                            .line {
+                                                stroke: #7bdcb5;
+                                                stroke-width: 5;
+                                                stroke-linecap: round;
+                                            }
+                                        </style>
+                                        <symbol id="horizontal-line">
+                                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                                        </symbol>
+                                        <use xlink:href="#horizontal-line" />
+                                    </svg>
+                                    <br>
+                                    <div class="card-container">
+                                        <div class="info-container">
+                                            <label> Food Name :</label>
+                                            <p th:text="${foodDTO.getFoodName()}"></p>
+                                        </div>
+                                        <div class="info-container">
+                                            <label>Food Price :</label>
+                                            <p th:text="'$'+${foodDTO.getPrice()}"></p>
+                                        </div>
+                                        <div class="info-container">
+                                            <label>Food Type:</label>
+                                            <p th:text="${foodDTO.getFoodType()}"></p>
+                                        </div>
+                                        <div class="info-container">
+                                            <label>Food description :</label>
+                                            <p th:text="${foodDTO.getDescription()}"></p>
+                                        </div>
+                                        <div class="info-container">
+                                            <label>Add more material :</label>
+                                            <button type="button" class="btn btn-outline-primary"
+                                                    data-toggle="modal"
+                                                    data-target="#createFoodModal" data-whatever="@mdo"> +
+                                            </button>
+                                        </div>
+
+                                    </div>
+<!--                                    -->
+                                    <div class="modal fade" id="createFoodModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title">Add Material for food</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form>
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-12">
+                                                                <label class="col-form-label">Food Id:</label>
+                                                                <input type="text" class="form-control" id="foodId" th:value="${foodDTO.getId()}" readonly>
+                                                            </div>
+                                                            <div class="form-group col-md-12">
+                                                                <label class="col-form-label">Material :</label>
+                                                                <select class="select-box" id="materialId" >
+
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-8">
+                                                                <label class="col-form-label">Count:</label>
+                                                                <input type="number" id="material-count" min="0" class="form-control" required>
+                                                                <label class="col-form-label">Unit:</label>
+                                                                <span id="unit-display"></span>
+                                                            </div>
+                                                            <div class="modal-footer col-md-12">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                                <button type="button" class="btn btn-primary" id="add-material" >Add</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!--                                    -->
+                                    <svg viewBox="0 0 100 1">
+                                        <style>
+                                            .line {
+                                                stroke: #7bdcb5;
+                                                stroke-width: 5;
+                                                stroke-linecap: round;
+                                            }
+                                        </style>
+                                        <symbol id="horizontal-line">
+                                            <line x1="0" y1="0.5" x2="100" y2="0.5" class="line" />
+                                        </symbol>
+                                        <use xlink:href="#horizontal-line" />
+                                    </svg>
+                                </div>
+                                <!--//modal-->
+                                <!--                                            <button type="button" onclick="addMaterial(this)"-->
+                                <!--                                                    class="btn btn-outline-primary">-->
+                                <!--                                                Add material-->
+                                <!--                                            </button>-->
+                                <form method="post" id="formDetail" th:action="@{/staff/food/update/material}"
+                                      enctype="multipart/form-data">
+                                    <div class="form-group col-md-12">
+                                        <label class="col-form-label">Materials:</label>
+                                        <div class="form-group col-md-12">
+                                            <label class="col-form-label">Have:</label>
+                                            <div id="box1" style="border: 1px solid black">
+
+                                                <th:block th:if="${foodDTO.getMaterialDetailById()}" th:each="mat:${foodDTO.getMaterialDetailById()}">
+                                                    <button type="button" class="btn btn-primary"
+                                                            style="margin: 1px"
+                                                            onclick="highlight(this)"
+                                                            th:value="${mat.getId()}"
+                                                            th:text="${mat.getMaterialsByMaterialId().getMaterialName()}+'(Code: '+${mat.getMaterialsByMaterialId().getMaterialCode()}+')'"></button>
+                                                </th:block>
+                                                <!--                                        <button onclick="highlight(this)">Button 1</button>-->
+                                                <!--                                        <button onclick="highlight(this)">Button 2</button>-->
+                                                <!--                                        <button onclick="highlight(this)">Button 3</button>-->
+                                            </div>
+                                            <button type="button" onclick="deleteButtons()"
+                                                    class="btn btn-outline-warning"
+                                                    style="margin-top: 1rem">Remove
+                                            </button>
+                                        </div>
+
+                                        <div class="form-group col-md-12">
+                                            <label class="col-form-label">Will be removed:</label>
+                                            <div id="box2" style="border: 1px solid black">
+                                            </div>
+                                            <button type="button" onclick="addButton()"
+                                                    class="btn btn-outline-warning"
+                                                    style="margin-top: 1rem">Restore
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" id="removeMaterial" name="removeMaterial">
+
+                                    <div class="modal-footer col-md-12">
+                                        <a type="button" class="btn btn-secondary"
+                                           th:href="@{/staff/food/index}">Back
+                                        </a>
+                                        <input type="submit" class="btn btn-primary" value="Update">
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="card-body">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.container-fluid -->
+            </section>
+
+            <aside class="control-sidebar control-sidebar-dark">
+                <!-- Control sidebar content goes here -->
+            </aside>
+            <!-- /.control-sidebar -->
+        </div>
+    </section>
+
+</div>
+<section layout:fragment="optional">
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+
+    <script>
+
+        function deleteButtons() {
+            var box1 = document.getElementById("box1");
+            var box2 = document.getElementById("box2");
+
+            var highlightedButtons = box1.querySelectorAll(".highlight");
+
+            highlightedButtons.forEach(function (button) {
+                box1.removeChild(button);
+                box2.appendChild(button);
+                button.classList.remove("highlight");
+            });
+        }
+
+        function highlight(button) {
+            button.classList.toggle("highlight");
+        }
+
+        function toggle(id) {
+            var group = document.getElementById(id);
+            if (group.style.display === "none") {
+                group.style.display = "block";
+            } else {
+                group.style.display = "none";
+            }
+        }
+
+        function addButton() {
+            var box1 = document.getElementById("box1");
+            var box2 = document.getElementById("box2");
+
+            var highlightedButtons = box2.querySelectorAll(".highlight");
+
+            highlightedButtons.forEach(function (button) {
+                box2.removeChild(button);
+                box1.appendChild(button);
+                button.classList.remove("highlight");
+            });
+        }
+
+        var formDetail = document.getElementById("formDetail");
+
+
+        formDetail.addEventListener('submit', (e) => {
+            e.preventDefault();
+                var box1=document.getElementById("box1");
+                var form = document.getElementById("formDetail");
+                var box2 = document.getElementById("box2");
+
+                var allBox2Btn = box2.querySelectorAll('button');
+                console.log(allBox2Btn)
+
+
+            if(box1.childElementCount == 0){
+                swal("Warning!", "You can't remove all material!", "warning");
+            }else{
+                var input = document.getElementById("removeMaterial");
+                allBox2Btn.forEach(function (button) {
+                    console.log(button)
+                    input.value = input.value + button.value+ "," ;
+                });
+                form.submit();
+            }
+
+
+        })
+
+    </script>
+
+    <script th:inline="javascript">
+        var materialList = [[${materialList}]];
+        console.log(materialList);
+
+    </script>
+    <script src="/js/khangfoodmaterial.js"></script>
+
+</section>
+</body>
+</html>

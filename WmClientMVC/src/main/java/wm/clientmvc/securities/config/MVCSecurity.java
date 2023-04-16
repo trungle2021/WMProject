@@ -23,6 +23,7 @@ public class MVCSecurity {
                 //STAFF SECURITY CONFIGURATION
                 .requestMatchers("/staff/login").permitAll()
                 .requestMatchers("/staff/logout").hasAnyRole("ADMIN","ORGANIZE","SALE")
+                .requestMatchers("/refreshToken/**").hasAnyRole("ADMIN","ORGANIZE","SALE","CUSTOMER")
                 .requestMatchers("/login","/forgot_password","/changePassword","/register").permitAll()
                 //ORDER
 
@@ -42,9 +43,9 @@ public class MVCSecurity {
                 //TEAM
 
                 .requestMatchers("/staff/teams/create").hasAnyRole("ADMIN","ANONYMOUS")
-                .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/getOne/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/getAll").hasAnyRole("ADMIN","ANONYMOUS")
-                .requestMatchers("/staff/teams/getAllEmployeeByTeamId/**").hasAnyRole("ADMIN","ORGANIZE","SALE","ANONYMOUS")
+                .requestMatchers("/staff/teams/getAllEmployeeByTeamId/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/update/**").hasAnyRole("ADMIN","ANONYMOUS")
                 .requestMatchers("/staff/teams/delete/**").hasAnyRole("ADMIN","ANONYMOUS")
                 //EMPLOYEE ACCOUNT
@@ -86,7 +87,7 @@ public class MVCSecurity {
                 //MATERIAL
                 .requestMatchers("/staff/materials/**").hasAnyRole("ADMIN","ORGANIZE","ANONYMOUS")
                 //REVENUE
-                .requestMatchers("/staff/revenues/**").hasAnyRole("ADMIN","SALE","ANONYMOUS")
+                .requestMatchers("/staff/revenues/**").hasAnyRole("ADMIN","SALE","ORGANIZE","ANONYMOUS")
 
                 //PERSONAL PERMISSION
                 .requestMatchers("/staff/organize/**").hasAnyRole("ORGANIZE","ANONYMOUS")

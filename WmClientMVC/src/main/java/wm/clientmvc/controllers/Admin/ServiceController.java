@@ -40,7 +40,15 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/create-service", method = RequestMethod.POST)
-    public String create(Model model,@Validated @ModelAttribute ServiceDTO serviceDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes redirectAttributes) {
+    public String create(Model model,@Validated @ModelAttribute ServiceDTO serviceDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "") String token, RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
+
+
+
+        if(serviceDTO.getCost()>=serviceDTO.getPrice())
+        {
+            bindingResult.rejectValue("cost","cost.range","cost must smaller than price!" );
+
+        }
 
         if (bindingResult.hasErrors()) {
 
@@ -55,7 +63,7 @@ public class ServiceController {
                         HttpMethod.POST,
                         serviceDTO,
                         token,
-                        ServiceDTO.class
+                        ServiceDTO.class,request,response
                 );
 
                 if (service != null) {
@@ -75,7 +83,7 @@ public class ServiceController {
     }
 
     @RequestMapping("/showAll")
-    public String showAllService (Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError)
+    public String showAllService (Model model, @CookieValue(name = "token", defaultValue = "") String token, @ModelAttribute("alertMessage") String alertMessage,@ModelAttribute("alertError") String alertError, HttpServletRequest request, HttpServletResponse response)
     {
         ParameterizedTypeReference<List<ServiceDTO>> typeReference=new ParameterizedTypeReference<List<ServiceDTO>>() {};
         String url=SD_CLIENT.DOMAIN_APP_API+"/api/services/allactive";
@@ -85,7 +93,7 @@ public class ServiceController {
                     HttpMethod.GET,
                     null,
                     token,
-                    typeReference
+                    typeReference,request,response
 
             );
             //reverse
@@ -114,16 +122,16 @@ public class ServiceController {
     }
 
     @RequestMapping(value = "/update/{id}", method = RequestMethod.GET)
-    public String update(Model model,  @PathVariable("id") Integer id,@CookieValue(name = "token", defaultValue = "")String token ) {
+    public String update(Model model,  @PathVariable("id") Integer id,@CookieValue(name = "token", defaultValue = "")String token , HttpServletRequest request, HttpServletResponse response) {
         //chuyen param trên link dung variable, chuyen form dung pathparam
         String url= SD_CLIENT.DOMAIN_APP_API+"/api/services/getOne/"+id;
         try {
-          ServiceDTO service=  APIHelper.makeApiCall(
+            ServiceDTO service=  APIHelper.makeApiCall(
                     url,
                     HttpMethod.GET,
                     null,
                     token,
-                    ServiceDTO.class
+                    ServiceDTO.class,request,response
 
             );
             model.addAttribute("serviceDTO", service);
@@ -135,10 +143,15 @@ public class ServiceController {
 
     }
     @RequestMapping(value = "/update-service", method = RequestMethod.POST)
-    public String update(Model model, @Validated ServiceDTO serviceDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "")String token , RedirectAttributes redirectAttributes) {
+    public String update(Model model, @Validated ServiceDTO serviceDTO, BindingResult bindingResult, @CookieValue(name = "token", defaultValue = "")String token , RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
 
         String url= SD_CLIENT.DOMAIN_APP_API+"/api/services/update";
         serviceDTO.setActive(true);
+        if(serviceDTO.getCost()>=serviceDTO.getPrice())
+        {
+            bindingResult.rejectValue("cost","cost.range","cost must smaller than price!" );
+
+        }
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("serviceDTO",serviceDTO);
@@ -152,7 +165,7 @@ public class ServiceController {
                         HttpMethod.PUT,
                         serviceDTO,
                         token,
-                        ServiceDTO.class
+                        ServiceDTO.class,request,response
 
                 );
                 redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Update Service Success!! ");
@@ -166,21 +179,21 @@ public class ServiceController {
         }
     }
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-    public String update(Model model,@PathVariable("id") int id,@CookieValue(name = "token", defaultValue = "")String token ,RedirectAttributes redirectAttributes) {
+    public String update(Model model,@PathVariable("id") int id,@CookieValue(name = "token", defaultValue = "")String token ,RedirectAttributes redirectAttributes, HttpServletRequest request, HttpServletResponse response) {
 
         String url= SD_CLIENT.DOMAIN_APP_API+"/api/services/soft_delete/"+id;
 
         try {
-             APIHelper.makeApiCall(
+            APIHelper.makeApiCall(
                     url,
                     HttpMethod.PUT,
                     null,
                     token,
-                    ServiceDTO.class
+                    ServiceDTO.class,request,response
 
             );
-             redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Delete Service Success!! ");
-                return "redirect:/staff/services/showAll";
+            redirectAttributes.addFlashAttribute("alertMessage", "Congratulation!Delete Service Success!! ");
+            return "redirect:/staff/services/showAll";
 
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("alertError", "Oops Something Wrong!Delete Service Fail!! ");

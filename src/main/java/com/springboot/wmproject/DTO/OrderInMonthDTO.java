@@ -14,6 +14,6 @@ public class OrderInMonthDTO {
     public Integer month;
     public Integer countOrderCompleted;
     public Integer countOrderUnCompleted;
-    public Integer countOrderCancel;
-    public Integer countOrderRefund;
+    public Integer countOrderCanceled;
+    public Integer countOrderRefunded;
 }

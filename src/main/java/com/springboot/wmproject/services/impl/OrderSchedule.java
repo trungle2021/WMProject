@@ -20,11 +20,6 @@ import static com.springboot.wmproject.utils.SD.*;
 @Component
 public class OrderSchedule {
 
-
-
-
-
-
     private OrderRepository orderRepository;
     private OrderService orderService;
 @Autowired

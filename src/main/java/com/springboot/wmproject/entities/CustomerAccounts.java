@@ -1,5 +1,6 @@
 package com.springboot.wmproject.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,5 +39,8 @@ public class CustomerAccounts {
     private Collection<PasswordResetToken> passwordResetTokensById;
     @OneToMany(mappedBy = "reviewByCustomerAccountId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<Review> reviewById=new HashSet<>();
+
+    @OneToMany(mappedBy = "customerAccountsByCustomerId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<RefreshToken> refreshTokensById = new HashSet<>();
 
 }

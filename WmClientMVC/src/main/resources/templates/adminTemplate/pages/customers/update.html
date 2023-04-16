@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AdminLTE 3 | DataTables</title>
+    <title>Customer Update</title>
     <style>
         .error {
             color: red;
@@ -133,7 +133,7 @@
                                         <!-- Form Group (first name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1">Username</label>
-                                            <input type="text" class="form-control" th:field="*{username}" required>
+                                            <input type="text" readonly class="form-control" th:field="*{username}" required>
                                             <ul>
                                                 <th:block th:if="${result != null}">
                                                     <li th:each="err : ${result.getFieldErrors('username')}" th:text="${err.defaultMessage}" class="error" />
@@ -143,7 +143,7 @@
                                         <!-- Form Group (last name)-->
                                         <div class="col-md-6">
                                             <label class="small mb-1">Password: </label>
-                                            <input type="password" class="form-control" th:field="*{password}" placeholder="Change your password here">
+                                            <input type="password" class="form-control" placeholder="Change your password here">
                                             <ul>
                                                 <th:block th:if="${result != null}">
                                                     <li th:each="err : ${result.getFieldErrors('password')}" th:text="${err.defaultMessage}" class="error" />

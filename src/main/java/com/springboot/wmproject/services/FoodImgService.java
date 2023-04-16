@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface FoodImgService {
     List<FoodImageDTO> getAllFoodImg();
+    List<FoodImageDTO> getSomeFoodImg();
     List<FoodImageDTO> getAllFoodImgByFoodId(int id);
     FoodImageDTO getOneFoodImgById(int id);
     List<FoodImageDTO> createMultipleFoodImg(List<FoodImageDTO> foodImageDTOS);

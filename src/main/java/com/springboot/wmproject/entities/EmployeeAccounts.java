@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Collection;
-import java.util.Objects;
+import java.util.HashSet;
 
 @Getter
 @Setter
@@ -35,6 +35,9 @@ public class EmployeeAccounts {
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id",insertable = false,updatable = false)
     private Employees employeesByEmployeeId;
+
+    @OneToMany(mappedBy = "employeeAccountsByEmployeeId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<RefreshToken> refreshTokensById = new HashSet<>();
 
 
 }

@@ -48,6 +48,11 @@ public class Orders {
     @Basic
     @Column(name = "part_time_emp_amount", nullable = true)
     private Integer partTimeEmpAmount;
+
+    @Basic
+    @Column(name = "cost", nullable = true, precision = 2)
+
+    private Double cost;
     @Basic
     @Column(name = "contract", nullable = true, length = -1)
     private String contract;
@@ -68,5 +73,12 @@ public class Orders {
     @OneToMany(mappedBy = "ordersByOrderId",cascade = CascadeType.ALL,orphanRemoval = true)
     private Collection<ServiceDetails> serviceDetailsById;
 
+
+    public Orders(int id, String orderStatus, String timeHappen, Integer venueId) {
+        this.id = id;
+        this.orderStatus = orderStatus;
+        this.timeHappen = timeHappen;
+        this.venueId = venueId;
+    }
 
 }

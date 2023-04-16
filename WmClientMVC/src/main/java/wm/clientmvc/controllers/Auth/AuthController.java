@@ -46,8 +46,10 @@ public class AuthController {
 
     JwtTokenProvider tokenProvider;
     private HttpSession session;
-    @Value("${app-jwt-expiration-second}")
+    @Value("${app-jwt-expiration-milisecond}")
     private int jwtExpirationDate;
+    @Value("${app-jwt-refresh-milisecond}")
+    private int jwtExpirationRefreshToken;
 
     @Autowired
     public AuthController(JwtTokenProvider tokenProvider,HttpSession session) {
@@ -130,9 +132,7 @@ public class AuthController {
         }
 
         try {
-            RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerDTO, null, RegisterCustomerDTO.class);
-            session.setAttribute("responseRegister",responseRegister);
-
+            RegisterCustomerDTO responseRegister = APIHelper.makeApiCall(api_customerRegisterUrl, HttpMethod.POST, registerDTO, null, RegisterCustomerDTO.class,request,response);
             return "redirect:/sendVerifyEmail";
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -166,19 +166,30 @@ public class AuthController {
                     HttpMethod.POST,
                     loginDTO,
                     null,
-                    JWTAuthResponse.class);
+                    JWTAuthResponse.class,request,response);
+            System.out.println("Call API Login");
 
             //Create and config for cookie. Store JWT token in cookie
             if (jwtAuthResponse != null) {
                 String token = jwtAuthResponse.getAccessToken();
+                String refreshToken = jwtAuthResponse.getRefreshToken();
 
                 if (StringUtils.hasLength(token)) {
                     Cookie cookie = new Cookie("token", token);
+                    Cookie cookie_refreshToken = new Cookie("refresh_token", refreshToken);
+
+
                     cookie.setMaxAge(jwtExpirationDate);
+                    cookie_refreshToken.setMaxAge(jwtExpirationRefreshToken);
+
                     cookie.setSecure(true);
+                    cookie_refreshToken.setSecure(true);
                     cookie.setHttpOnly(true);
+                    cookie_refreshToken.setHttpOnly(true);
                     cookie.setPath("/");
+                    cookie_refreshToken.setPath("/");
                     response.addCookie(cookie);
+                    response.addCookie(cookie_refreshToken);
 
                     String userType = tokenProvider.getUserType(token);
                     String userID = tokenProvider.getUserID(token);
@@ -193,7 +204,8 @@ public class AuthController {
                                 HttpMethod.GET,
                                 null,
                                 token,
-                                CustomerDTO.class);
+                                CustomerDTO.class,request,response);
+                        System.out.println("Call API Get Info Customer");
                         if(customerDTO.getAvatar() == null){
                             avatar = avatarDefault;
                         }else{
@@ -208,7 +220,9 @@ public class AuthController {
                                 HttpMethod.GET,
                                 null,
                                 token,
-                                EmployeeDTO.class);
+                                EmployeeDTO.class,request,response);
+                        System.out.println("Call API Get Info Employee");
+
                         if(employeeDTO.getAvatar() == null){
                             avatar = avatarDefault;
                         }else{

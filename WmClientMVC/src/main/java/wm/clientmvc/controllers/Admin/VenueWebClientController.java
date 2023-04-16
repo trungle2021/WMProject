@@ -53,14 +53,14 @@ public class VenueWebClientController {
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeVenue
+                    responseTypeVenue,request,response
             );
             List<VenueImgDTO> venueImgDTOList = APIHelper.makeApiCall(
                     SD_CLIENT.DOMAIN_APP_API + "/api/venuesImgs/all",
                     HttpMethod.GET,
                     null,
                     token,
-                    responseTypeVenueImg
+                    responseTypeVenueImg,request,response
             );
             for (VenueDTO item : venueDTOList
             ) {
@@ -100,7 +100,7 @@ public class VenueWebClientController {
                     HttpMethod.DELETE,
                     null,
                     token,
-                    String.class
+                    String.class,request,response
             );
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -136,7 +136,7 @@ public class VenueWebClientController {
                     HttpMethod.POST,
                     venueDTO,
                     token,
-                    VenueDTO.class
+                    VenueDTO.class,request,response
             );
             if (data == null) {
                 return "redirect:/staff/venues?msg=Fail";
@@ -188,7 +188,7 @@ public class VenueWebClientController {
                     HttpMethod.POST,
                     newList,
                     token,
-                    responseTypeVenue
+                    responseTypeVenue,request,response
             );
         } catch (HttpClientErrorException ex) {
             String responseError = ex.getResponseBodyAsString();
@@ -224,7 +224,7 @@ public class VenueWebClientController {
                     HttpMethod.PUT,
                     venueDTO,
                     token,
-                    VenueDTO.class
+                    VenueDTO.class,request,response
             );
             if (data == null) {
                 return "redirect:/staff/venues?msg=Fail";

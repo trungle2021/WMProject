@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class VenueImgServiceImpl implements VenueImgService {
+
     private VenueImgRepository venueImgRepository;
     private ModelMapper modelMapper;
 
@@ -29,6 +30,11 @@ public class VenueImgServiceImpl implements VenueImgService {
     @Override
     public List<VenueImgDTO> getAllVenueImg() {
         return venueImgRepository.findAll().stream().map(venueImages -> mapToDTO(venueImages)).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<VenueImgDTO> getSomeVenueImg() {
+        return venueImgRepository.findAll().stream().limit(4).map(venueImages -> mapToDTO(venueImages)).collect(Collectors.toList());
     }
 
     @Override

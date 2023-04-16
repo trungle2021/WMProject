@@ -43,3 +43,11 @@
     border-radius: 5px;
     padding: 10px 20px;
 }
+.select-box{
+    padding: 8px;
+    font-size: 16px;
+    border: black;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    color: #555;
+}

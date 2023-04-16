@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/adminTemplate/adminlayout}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Material Management</title>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.3/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/css/khangcustomer.css">
+    <link rel="stylesheet" href="/css/khangadminorder.css">
+</head>
+<body>
+
+
+
+<section layout:fragment="content"  class="content-wrapper">
+
+    <br><div class="content-header"> <h5>Material Management</h5>
+    <a th:href="@{/staff/materials/create}" class="btn btn-success">Add new</a>
+
+</div>
+    <div class="content ">
+        <!-- Main content -->
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12">
+                    <table
+                            class="display table table-striped table-bordered dt-responsive nowrap dtr-inline collapsed "
+                            style="position: relative;width: 100%;" aria-describedby="example-info">
+
+                        <thead>
+                        <tr>
+                            <th>Material Code</th>
+                            <th>Material Name</th>
+                            <th>Price</th>
+                            <th>Unit</th>
+                            <th>Action:</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="c:${list}">
+                            <td th:text="${c.getMaterialName()}"></td>
+                            <td  th:text="${c.getMaterialName()}"></td>
+                            <td th:text="'$'+${c.getPrice()}"></td>
+                            <td th:text="${c.getUnit()}"></td>
+                            <td><a th:href="@{/staff/materials/update/{id}(id=${c.getId()})}" class="btn btn-primary">Update</a> </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- contract image                           -->
+                <div id="contract-container" class="contract-container">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+    <br/>
+</section>
+
+<!-- ./wrapper -->
+<section layout:fragment="optional">
+
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.3/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/responsive.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.3.5/js/dataTables.buttons.min.js"></script>
+    <!-- Page specific script -->
+    <script>
+
+        $(document).ready(function () {
+            $('table.display').DataTable();
+        });
+
+    </script>
+    <script th:inline="javascript">
+        var orderList = [[${list}]];
+
+    </script>
+    <script src="/js/khangcontract.js" >
+
+    </script>
+    <script th:inline="javascript">
+
+        var error = [[${alertError}]];
+        var message = [[${alertMessage}]];
+        console.log(message);
+
+        if(message!=null && message.length != 0)
+        {
+            swal({
+                title: "Message!",
+                text: message,
+                icon: "success",
+            });
+
+        }
+        else if(error!=null && error.length != 0)
+        {
+            swal({
+                title: "Error!",
+                text: error,
+                icon: "error",
+            });
+        }
+
+
+
+    </script>
+</section>
+</body>
+</html>

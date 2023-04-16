@@ -4,8 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Objects;
 @Getter
 @Setter
@@ -18,7 +21,7 @@ public class Materials {
     @Column(name = "id", nullable = false)
     private int id;
     @Basic
-    @Column(name = "material_code", nullable = true, length = 45)
+    @Column(name = "material_code", nullable = true, length = 45,unique = true)
     private String materialCode;
     @Basic
     @Column(name = "material_name", nullable = true, length = 45)
@@ -27,12 +30,12 @@ public class Materials {
     @Column(name = "unit", nullable = true, length = 45)
     private String unit;
     @Basic
-    @Column(name = "food_id", nullable = true)
-    private int foodId;
-    @Basic
-    @Column(name = "count", nullable = true, precision = 2)
-    private Double count;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "food_id", referencedColumnName = "id",insertable = false,updatable = false)
-    private Food foodByFoodId;
+    @Column(name = "price", nullable = true, precision = 2)
+    private Double price;
+    @OneToMany(mappedBy = "materialsByMaterialId",cascade = CascadeType.ALL,orphanRemoval = true)
+    private Collection<MaterialDetail> materialsByMaterialId = new HashSet<>();
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "food_id", referencedColumnName = "id",insertable = false,updatable = false)
+//    private Food foodByFoodId;
 }

@@ -53,4 +53,12 @@ public class GlobalExceptionHandler {
                 webRequest.getDescription(false),HttpStatus.NOT_FOUND.toString());
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(RefreshTokenNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleRefreshTokenNotFoundException(RefreshTokenNotFoundException exception,
+                                                                    WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(new Date(), exception.getMessage(),
+                webRequest.getDescription(false),HttpStatus.NOT_FOUND.toString());
+        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    }
 }

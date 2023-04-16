@@ -53,7 +53,7 @@ public class RegisterDTO {
     //emp_account
     @NotEmpty
     @Pattern(regexp = Regex.username,message = Regex.username_message)
-    @Size(min = 8, max = 20)
+    @Size(min = 5, max = 20)
     private String username;
 
     private String password;
