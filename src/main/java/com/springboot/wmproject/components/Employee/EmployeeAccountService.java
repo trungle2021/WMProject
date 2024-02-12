@@ -1,4 +1,4 @@
-package com.springboot.wmproject.services.AuthServices;
+package com.springboot.wmproject.components.Employee;
 
 import com.springboot.wmproject.DTO.EmployeeAccountDTO;
 import com.springboot.wmproject.entities.EmployeeAccounts;

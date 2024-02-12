@@ -1,17 +1,14 @@
-package com.springboot.wmproject.services.AuthServices.AuthImpl;
+package com.springboot.wmproject.components.Customer;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
-import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.Customers;
-import com.springboot.wmproject.entities.PasswordResetToken;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.CustomerAccountRepository;
 import com.springboot.wmproject.repositories.CustomerRepository;
-import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
-import com.springboot.wmproject.services.AuthServices.PasswordResetTokenService;
+import com.springboot.wmproject.components.Auth.PasswordResetTokenService;
 import com.springboot.wmproject.utils.EmailSender;
 import com.springboot.wmproject.utils.SD;
 import org.modelmapper.ModelMapper;
@@ -23,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

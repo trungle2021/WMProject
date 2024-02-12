@@ -1,4 +1,4 @@
-package com.springboot.wmproject.DTO;
+package com.springboot.wmproject.components.Auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

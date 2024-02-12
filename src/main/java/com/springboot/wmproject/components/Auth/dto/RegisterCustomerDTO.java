@@ -1,8 +1,5 @@
-package com.springboot.wmproject.DTO;
+package com.springboot.wmproject.components.Auth.dto;
 
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

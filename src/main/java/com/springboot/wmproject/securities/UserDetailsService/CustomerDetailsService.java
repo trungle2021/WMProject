@@ -2,12 +2,10 @@ package com.springboot.wmproject.securities.UserDetailsService;
 
 import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;
-import com.springboot.wmproject.entities.Customers;
-import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.CustomerAccountRepository;
 import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
-import com.springboot.wmproject.services.AuthServices.CustomerService;
+import com.springboot.wmproject.components.Customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;

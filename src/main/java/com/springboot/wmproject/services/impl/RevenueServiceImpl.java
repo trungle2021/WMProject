@@ -1,7 +1,7 @@
 package com.springboot.wmproject.services.impl;
 
 import com.springboot.wmproject.DTO.*;
-import com.springboot.wmproject.services.AuthServices.EmployeeService;
+import com.springboot.wmproject.components.Employee.EmployeeService;
 import com.springboot.wmproject.services.OrderService;
 import com.springboot.wmproject.services.RevenueService;
 import com.springboot.wmproject.utils.SD;

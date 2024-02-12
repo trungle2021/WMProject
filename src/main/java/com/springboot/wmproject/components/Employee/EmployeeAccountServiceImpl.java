@@ -1,4 +1,4 @@
-package com.springboot.wmproject.services.AuthServices.AuthImpl;
+package com.springboot.wmproject.components.Employee;
 
 import com.springboot.wmproject.DTO.EmployeeAccountDTO;
 import com.springboot.wmproject.entities.EmployeeAccounts;
@@ -7,7 +7,6 @@ import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.EmployeeAccountRepository;
 import com.springboot.wmproject.repositories.EmployeeRepository;
-import com.springboot.wmproject.services.AuthServices.EmployeeAccountService;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

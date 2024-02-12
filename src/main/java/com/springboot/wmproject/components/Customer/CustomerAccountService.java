@@ -1,4 +1,4 @@
-package com.springboot.wmproject.services.AuthServices;
+package com.springboot.wmproject.components.Customer;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
 import com.springboot.wmproject.entities.CustomerAccounts;

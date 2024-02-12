@@ -1,12 +1,10 @@
 package com.springboot.wmproject.securities.UserDetailsService;
 
-import com.springboot.wmproject.DTO.EmployeeDTO;
 import com.springboot.wmproject.entities.EmployeeAccounts;
 import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.repositories.EmployeeAccountRepository;
 import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
 //import com.springboot.wmproject.securities.UserDetails.CustomerUserDetails;
-import com.springboot.wmproject.services.AuthServices.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

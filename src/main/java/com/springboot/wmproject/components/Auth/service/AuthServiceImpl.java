@@ -1,10 +1,16 @@
-package com.springboot.wmproject.services.AuthServices.AuthImpl;
+package com.springboot.wmproject.components.Auth.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springboot.wmproject.DTO.*;
-import com.springboot.wmproject.entities.CustomerAccounts;
-import com.springboot.wmproject.entities.Employees;
+import com.springboot.wmproject.components.Auth.dto.LoginDTO;
+import com.springboot.wmproject.components.Auth.dto.RegisterCustomerDTO;
+import com.springboot.wmproject.components.Auth.dto.RegisterDTO;
+import com.springboot.wmproject.components.Auth.RefreshTokenService;
+import com.springboot.wmproject.components.Employee.EmployeeAccountService;
+import com.springboot.wmproject.components.Employee.EmployeeService;
+import com.springboot.wmproject.components.Customer.CustomerAccountService;
+import com.springboot.wmproject.components.Customer.CustomerService;
 import com.springboot.wmproject.exceptions.RefreshTokenNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
@@ -15,10 +21,9 @@ import com.springboot.wmproject.services.AuthServices.*;
 import com.springboot.wmproject.services.OrderService;
 import com.springboot.wmproject.services.OrganizeTeamService;
 import com.springboot.wmproject.utils.SD;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -31,37 +36,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 
 @Service
-
+@AllArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private AuthenticationManager authenticationManager;
-    private EmployeeService employeeService;
-    private CustomerService customerService;
-    private EmployeeAccountService employeeAccountService;
-    private CustomerAccountService customerAccountService;
-    private BCryptPasswordEncoder passwordEncoder;
-    private JwtTokenProvider tokenProvider;
-    private OrganizeTeamService teamService;
-    private PasswordResetTokenService passwordResetTokenService;
-    private RefreshTokenService refreshTokenService;
-    private OrderService orderService;
-    private List<String> errors;
-
-    @Autowired
-    public AuthServiceImpl(OrderService orderService,RefreshTokenService refreshTokenService,OrganizeTeamService teamService, AuthenticationManager authenticationManager, EmployeeService employeeService, CustomerService customerService, EmployeeAccountService employeeAccountService, CustomerAccountService customerAccountService, BCryptPasswordEncoder passwordEncoder, JwtTokenProvider tokenProvider, PasswordResetTokenService passwordResetTokenService) {
-        this.orderService = orderService;
-        this.authenticationManager = authenticationManager;
-        this.employeeService = employeeService;
-        this.customerService = customerService;
-        this.employeeAccountService = employeeAccountService;
-        this.customerAccountService = customerAccountService;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
-        this.passwordResetTokenService = passwordResetTokenService;
-        this.teamService = teamService;
-        this.refreshTokenService = refreshTokenService;
-    }
-
+    private final AuthenticationManager authenticationManager;
+    private final EmployeeService employeeService;
+    private final CustomerService customerService;
+    private final EmployeeAccountService employeeAccountService;
+    private final CustomerAccountService customerAccountService;
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
+    private final OrganizeTeamService teamService;
+    private final RefreshTokenService refreshTokenService;
+    private final OrderService orderService;
+    private  List<String> errors;
 
     @Override
     public String findRoleByEmployeeID(int empID) {
@@ -84,6 +72,7 @@ public class AuthServiceImpl implements AuthService {
 
         SecurityContext sc = SecurityContextHolder.getContext();
         sc.setAuthentication(authentication);
+
         String accessToken = tokenProvider.generateAccessToken(authentication);
         int id = Math.toIntExact(((CustomUserDetails) authentication.getPrincipal()).getUserId());
         EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeId(id);
@@ -216,7 +205,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO,String userAgent) throws JsonProcessingException {
+    public RegisterCustomerDTO customerRegister(RegisterCustomerDTO registerDTO, String userAgent) throws JsonProcessingException {
         errors = new ArrayList<>();
         boolean isPhoneValid = customerService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
         boolean isEmailValid = customerService.checkEmailExists(registerDTO.getEmail()).size() == 0;
@@ -300,7 +289,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException {
+public RegisterDTO employeeUpdate(RegisterDTO registerDTO) throws JsonProcessingException {
         String teamName = "";
         OrganizeTeamDTO teamDTO;
         Integer team_id = registerDTO.getTeam_id() == null ? 0 : registerDTO.getTeam_id();

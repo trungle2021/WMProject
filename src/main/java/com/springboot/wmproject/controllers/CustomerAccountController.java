@@ -1,9 +1,7 @@
 package com.springboot.wmproject.controllers;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
-import com.springboot.wmproject.DTO.GenericResponse;
-import com.springboot.wmproject.DTO.PasswordDTO;
-import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
+import com.springboot.wmproject.components.Customer.CustomerAccountService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;

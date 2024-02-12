@@ -1,16 +1,11 @@
-package com.springboot.wmproject.services.AuthServices.AuthImpl;
+package com.springboot.wmproject.components.Auth;
 
-import com.springboot.wmproject.DTO.CustomerAccountDTO;
 import com.springboot.wmproject.DTO.CustomerDTO;
-import com.springboot.wmproject.entities.CustomerAccounts;
 import com.springboot.wmproject.entities.PasswordResetToken;
 import com.springboot.wmproject.exceptions.ResourceNotFoundException;
 import com.springboot.wmproject.repositories.CustomerAccountRepository;
 import com.springboot.wmproject.repositories.PasswordResetTokenRepository;
-import com.springboot.wmproject.services.AuthServices.CustomerAccountService;
-import com.springboot.wmproject.services.AuthServices.CustomerService;
-import com.springboot.wmproject.services.AuthServices.PasswordResetTokenService;
-import org.modelmapper.ModelMapper;
+import com.springboot.wmproject.components.Customer.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static com.springboot.wmproject.utils.OTPGenerator.generateOTP;
 
