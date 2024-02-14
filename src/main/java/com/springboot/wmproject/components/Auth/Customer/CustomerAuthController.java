@@ -16,12 +16,12 @@ import java.util.HashMap;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/auth")
+@RequestMapping("/api/customer/auth")
 public class CustomerAuthController {
-    private final AuthService authService;
+    private final CustomerAuthService customerAuthService;
     @PostMapping(value = {"/customers/login"})
     public ResponseEntity<JWTAuthResponse> customerLogin(@RequestBody LoginDTO loginDTO){
-        HashMap<String,String> map = authService.customerLogin(loginDTO);
+        HashMap<String,String> map = customerAuthService.login(loginDTO);
 
         if(map.containsKey("accessToken") && map.containsKey("refreshToken")){
             JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
