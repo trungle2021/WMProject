@@ -19,7 +19,7 @@ import java.util.*;
 import static com.springboot.wmproject.utils.OTPGenerator.generateOTP;
 
 @Service
-public class PasswordResetTokenImpl implements PasswordResetTokenService {
+public class  PasswordResetTokenImpl implements PasswordResetTokenService {
     private PasswordResetTokenRepository passwordResetTokenRepository;
     private CustomerService customerService;
     private CustomerAccountRepository customerAccountRepository;

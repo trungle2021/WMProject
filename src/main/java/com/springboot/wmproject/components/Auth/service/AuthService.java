@@ -7,17 +7,7 @@ import com.springboot.wmproject.components.Auth.dto.RegisterDTO;
 
 import java.util.HashMap;
 
-public interface AuthService {
-
-    String refreshToken(String refreshToken);
-
-
-
-
-
-
-
-
-
-
+public interface AuthService<T> {
+   HashMap<String, String> login(LoginDTO loginDTO);
+   T register(T registerDTO);
 }

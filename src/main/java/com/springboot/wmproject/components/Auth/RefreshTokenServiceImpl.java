@@ -30,6 +30,11 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return null;
     }
 
+    @Override
+    public String refreshToken(String refreshToken) {
+        return null;
+    }
+
 
 //    private ModelMapper modelMapper;
 //    private RefreshTokenRepository rftRepository;
