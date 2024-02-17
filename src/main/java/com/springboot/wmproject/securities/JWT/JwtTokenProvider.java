@@ -55,14 +55,8 @@ public class JwtTokenProvider {
             claims.put("username",username);
             claims.put("userType",userType);
             claims.put("is_verified",is_verified);
-
-
             Date currentDate = new Date();
-
-
             expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
-
-
             String token = Jwts.builder()
                     .setClaims(claims)
                     .setIssuedAt(new Date())
@@ -77,6 +71,7 @@ public class JwtTokenProvider {
 
     }
 
+    public String generate
     public String generateRefreshToken(Authentication authentication,Object user){
         Date expirationDate;
         String username = authentication.getName();
@@ -92,10 +87,8 @@ public class JwtTokenProvider {
             claims.put("username",username);
             claims.put("userType",userType);
             claims.put("is_verified",is_verified);
-
             Date currentDate = new Date();
             expirationDate = new Date(currentDate.getTime() + jwtRefresh);
-
             String token = Jwts.builder()
                     .setClaims(claims)
                     .setIssuedAt(new Date())

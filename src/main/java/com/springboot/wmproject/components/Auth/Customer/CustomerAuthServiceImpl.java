@@ -2,6 +2,7 @@ package com.springboot.wmproject.components.Auth.Customer;
 
 import com.springboot.wmproject.components.Auth.dto.LoginDTO;
 import com.springboot.wmproject.components.Auth.dto.RegisterCustomerDTO;
+import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,7 @@ import java.util.List;
 public class CustomerAuthServiceImpl implements CustomerAuthService
 {
     private final AuthenticationManager authenticationManager;
+    private final
 
         private List<String> errors;
     @Override
