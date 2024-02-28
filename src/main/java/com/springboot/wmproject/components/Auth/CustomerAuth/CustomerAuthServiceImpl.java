@@ -1,7 +1,7 @@
-package com.springboot.wmproject.components.Auth.Customer;
+package com.springboot.wmproject.components.Auth.CustomerAuth;
 
-import com.springboot.wmproject.components.Auth.dto.LoginDTO;
-import com.springboot.wmproject.components.Auth.dto.RegisterCustomerDTO;
+import com.springboot.wmproject.components.Auth.DTO.LoginDTO;
+import com.springboot.wmproject.components.Auth.DTO.RegisterCustomerDTO;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

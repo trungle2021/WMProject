@@ -1,4 +1,4 @@
-package com.springboot.wmproject.securities.JWT;
+package com.springboot.wmproject.components.Token.JWT;
 
 import com.springboot.wmproject.DTO.CustomerAccountDTO;
 import com.springboot.wmproject.DTO.EmployeeAccountDTO;
@@ -6,7 +6,7 @@ import com.springboot.wmproject.DTO.RefreshTokenDTO;
 import com.springboot.wmproject.entities.RefreshToken;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
-import com.springboot.wmproject.components.Auth.RefreshTokenService;
+import com.springboot.wmproject.components.Token.RefreshToken.RefreshTokenService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -14,11 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
+import static com.springboot.wmproject.utils.SD.*;
 
 @Component
 public class JwtTokenProvider {
@@ -38,6 +42,40 @@ public class JwtTokenProvider {
     }
 
 
+    private Object extractUserDetailFromAuthenticationObject(Authentication authentication){
+        return authentication.getPrincipal();
+    }
+    private String generateToken(Authentication authentication){
+        Date expirationDate;
+        String username = authentication.getName();
+        Optional<String> userTypeOptional = authentication.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .findFirst();
+        String userType = userTypeOptional.orElse(null);
+        String userID;
+        String isVerified ;
+        Object userDetail = extractUserDetailFromAuthenticationObject(authentication);
+        if(userDetail instanceof CustomUserDetails) {
+            userID =    ((CustomUserDetails) userDetail).getUserId().toString();
+            isVerified =    String.valueOf(((CustomUserDetails) userDetail).is_verified());
+            Map<String, String> claims = new HashMap<>();
+            claims.put(USER_ID,userID);
+            claims.put(USERNAME,username);
+            claims.put(USER_TYPE,userType);
+            claims.put(IS_VERIFIED,isVerified);
+            Date currentDate = new Date();
+            expirationDate = new Date(currentDate.getTime() + jwtExpirationDate);
+            String token = Jwts.builder()
+                    .setClaims(claims)
+                    .setIssuedAt(new Date())
+                    .setExpiration(expirationDate)
+                    .signWith(key())
+                    .compact();
+            return token;
+        }else{
+            throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cannot generate token");
+        }
+    }
 
     //generate JWT token
     public String generateAccessToken(Authentication authentication){
@@ -64,14 +102,13 @@ public class JwtTokenProvider {
                     .signWith(key())
                     .compact();
             return token;
-
-        }else{
+        }
+        else{
             throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cannot generate token");
         }
 
     }
 
-    public String generate
     public String generateRefreshToken(Authentication authentication,Object user){
         Date expirationDate;
         String username = authentication.getName();
@@ -111,9 +148,13 @@ public class JwtTokenProvider {
             RefreshTokenDTO tokenDTO = refreshTokenService.create(refreshToken);
             return tokenDTO.getToken();
 
-        }else{
+        }
+        else{
             throw new WmAPIException(HttpStatus.BAD_REQUEST,"Cannot generate token");
         }
+
+
+        String token = generateToken(authentication);
     }
 
     private Key key(){

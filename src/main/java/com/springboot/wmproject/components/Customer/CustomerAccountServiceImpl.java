@@ -8,7 +8,7 @@ import com.springboot.wmproject.exceptions.UserNotFoundException;
 import com.springboot.wmproject.exceptions.WmAPIException;
 import com.springboot.wmproject.repositories.CustomerAccountRepository;
 import com.springboot.wmproject.repositories.CustomerRepository;
-import com.springboot.wmproject.components.Auth.PasswordResetTokenService;
+import com.springboot.wmproject.components.Auth.Password.PasswordResetTokenService;
 import com.springboot.wmproject.utils.EmailSender;
 import com.springboot.wmproject.utils.SD;
 import org.modelmapper.ModelMapper;

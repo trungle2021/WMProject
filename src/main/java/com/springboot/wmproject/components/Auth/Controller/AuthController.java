@@ -1,9 +1,5 @@
-package com.springboot.wmproject.components.Auth.controller;
+package com.springboot.wmproject.components.Auth.Controller;
 
-import com.springboot.wmproject.DTO.*;
-import com.springboot.wmproject.components.Auth.dto.PasswordDTO;
-import com.springboot.wmproject.components.Auth.service.AuthService;
-import com.springboot.wmproject.components.Auth.PasswordResetTokenService;
 import com.springboot.wmproject.components.Customer.CustomerAccountService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

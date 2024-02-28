@@ -1,7 +1,8 @@
- package com.springboot.wmproject.components.Auth.Employee;
+ package com.springboot.wmproject.components.Auth.EmployeeAuth;
 
- import com.springboot.wmproject.components.Auth.dto.LoginDTO;
- import com.springboot.wmproject.components.Auth.dto.RegisterDTO;
+ import com.springboot.wmproject.components.Auth.DTO.LoginDTO;
+ import com.springboot.wmproject.components.Auth.DTO.RegisterDTO;
+ import com.springboot.wmproject.components.Token.TokenService;
  import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
  import lombok.AllArgsConstructor;
  import org.springframework.security.authentication.AuthenticationManager;
@@ -19,12 +20,11 @@
  public class EmployeeAuthServiceImpl implements EmployeeAuthService{
 
      private final AuthenticationManager authenticationManager;
-
-         private List<String> errors;
+     private final TokenService tokenService;
+     private List<String> errors;
      @Override
      public HashMap<String, String> login(LoginDTO loginDTO) {
-                 Authentication authentication = authenticationManager
-                 .authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+         Authentication authentication = authenticationManager.authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
 
          SecurityContext sc = SecurityContextHolder.getContext();
          sc.setAuthentication(authentication);

@@ -1,4 +1,4 @@
-package com.springboot.wmproject.components.Auth.dto;
+package com.springboot.wmproject.components.Auth.DTO;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;

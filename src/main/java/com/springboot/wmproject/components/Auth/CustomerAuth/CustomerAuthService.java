@@ -1,11 +1,7 @@
-package com.springboot.wmproject.components.Auth.Customer;
+package com.springboot.wmproject.components.Auth.CustomerAuth;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.springboot.wmproject.components.Auth.dto.LoginDTO;
-import com.springboot.wmproject.components.Auth.dto.RegisterCustomerDTO;
-import com.springboot.wmproject.components.Auth.service.AuthService;
-
-import java.util.HashMap;
+import com.springboot.wmproject.components.Auth.DTO.RegisterCustomerDTO;
+import com.springboot.wmproject.components.Auth.Service.AuthService;
 
 public interface CustomerAuthService extends AuthService<RegisterCustomerDTO> {
 //    HashMap<String, String> customerLogin(LoginDTO loginDTO);

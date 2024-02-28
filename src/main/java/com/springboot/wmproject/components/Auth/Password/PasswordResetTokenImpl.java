@@ -1,4 +1,4 @@
-package com.springboot.wmproject.components.Auth;
+package com.springboot.wmproject.components.Auth.Password;
 
 import com.springboot.wmproject.DTO.CustomerDTO;
 import com.springboot.wmproject.entities.PasswordResetToken;

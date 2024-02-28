@@ -1,4 +1,4 @@
-package com.springboot.wmproject.securities.JWT;
+package com.springboot.wmproject.components.Token.JWT;
 
 import com.springboot.wmproject.exceptions.WmAPIException;
 import jakarta.servlet.ServletException;

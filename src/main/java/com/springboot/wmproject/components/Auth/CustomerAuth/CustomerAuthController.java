@@ -1,15 +1,13 @@
-package com.springboot.wmproject.components.Auth.Customer;
+package com.springboot.wmproject.components.Auth.CustomerAuth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.springboot.wmproject.DTO.JWTAuthResponse;
-import com.springboot.wmproject.components.Auth.dto.LoginDTO;
-import com.springboot.wmproject.components.Auth.dto.RegisterCustomerDTO;
-import com.springboot.wmproject.components.Auth.service.AuthService;
+import com.springboot.wmproject.components.Auth.DTO.LoginDTO;
+import com.springboot.wmproject.components.Auth.DTO.RegisterCustomerDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -35,7 +33,8 @@ public class CustomerAuthController {
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))
     @PostMapping(value = {"/customers/register"})
     public ResponseEntity<RegisterCustomerDTO> customerRegister(@RequestBody RegisterCustomerDTO registerDTO, @RequestHeader("User-Agent") String userAgent) throws JsonProcessingException {
-        RegisterCustomerDTO response = customerAuthService.register(registerDTO, userAgent);
+//        RegisterCustomerDTO response = customerAuthService.register(registerDTO, userAgent);
+        RegisterCustomerDTO response = customerAuthService.register(registerDTO);
         return ResponseEntity.ok(response);
     }
 

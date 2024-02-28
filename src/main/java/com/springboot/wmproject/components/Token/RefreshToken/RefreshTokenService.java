@@ -1,4 +1,4 @@
-package com.springboot.wmproject.components.Auth;
+package com.springboot.wmproject.components.Token.RefreshToken;
 
 import com.springboot.wmproject.DTO.RefreshTokenDTO;
 import com.springboot.wmproject.components.Token.TokenService;

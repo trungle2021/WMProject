@@ -30,4 +30,10 @@ public class SD {
     public static String orderStatusUncompleted="uncompleted";
     public static String orderStatusCompleted="completed";
 
+    public static String USER_ID = "USER_ID";
+    public static String USERNAME = "USERNAME";
+    public static String USER_TYPE = "USER_TYPE";
+    public static String IS_VERIFIED = "IS_VERIFIED";
+
+
 }

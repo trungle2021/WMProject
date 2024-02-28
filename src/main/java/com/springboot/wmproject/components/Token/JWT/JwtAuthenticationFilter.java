@@ -1,4 +1,4 @@
-package com.springboot.wmproject.securities.JWT;
+package com.springboot.wmproject.components.Token.JWT;
 
 //import com.springboot.wmproject.security.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
 import com.springboot.wmproject.securities.AuthenticationToken.CustomerUsernamePasswordAuthenticationToken;
@@ -6,7 +6,6 @@ import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernameP
 //import com.springboot.wmproject.security.UserDetailsService.CustomerDetailsService;
 import com.springboot.wmproject.securities.UserDetailsService.CustomerDetailsService;
 import com.springboot.wmproject.securities.UserDetailsService.EmployeeDetailsService;
-import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

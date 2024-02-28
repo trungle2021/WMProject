@@ -1,8 +1,8 @@
 package com.springboot.wmproject.config;
 
 import com.springboot.wmproject.securities.AuthenticationProvider.CustomAuthenticationProvider;
-import com.springboot.wmproject.securities.JWT.JwtAuthenticationEntryPoint;
-import com.springboot.wmproject.securities.JWT.JwtAuthenticationFilter;
+import com.springboot.wmproject.components.Token.JWT.JwtAuthenticationEntryPoint;
+import com.springboot.wmproject.components.Token.JWT.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

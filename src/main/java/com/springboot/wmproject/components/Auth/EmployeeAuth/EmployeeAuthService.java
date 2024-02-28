@@ -1,11 +1,7 @@
-package com.springboot.wmproject.components.Auth.Employee;
+package com.springboot.wmproject.components.Auth.EmployeeAuth;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.springboot.wmproject.components.Auth.dto.LoginDTO;
-import com.springboot.wmproject.components.Auth.dto.RegisterDTO;
-import com.springboot.wmproject.components.Auth.service.AuthService;
-
-import java.util.HashMap;
+import com.springboot.wmproject.components.Auth.DTO.RegisterDTO;
+import com.springboot.wmproject.components.Auth.Service.AuthService;
 
 public interface EmployeeAuthService extends AuthService<RegisterDTO> {
 //    HashMap<String, String> employeeLogin(LoginDTO loginDTO);
