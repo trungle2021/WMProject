@@ -1,13 +1,13 @@
 package com.springboot.wmproject.components.Token.RefreshToken;
 
-import com.springboot.wmproject.DTO.RefreshTokenDTO;
 import com.springboot.wmproject.entities.RefreshToken;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RefreshTokenServiceImpl implements RefreshTokenService {
+
     @Override
-    public RefreshToken create(RefreshTokenDTO credential) {
+    public RefreshToken create(RefreshToken credential) {
         return null;
     }
 
@@ -22,7 +22,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    public RefreshToken update(RefreshTokenDTO credential) {
+    public RefreshToken update(RefreshToken credential) {
         return null;
     }
 
@@ -32,7 +32,8 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
 
-//    private ModelMapper modelMapper;
+
+
 //    private RefreshTokenRepository rftRepository;
 //
 //    @Autowired
@@ -87,13 +88,5 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
 //
 //    }
 //
-//    public RefreshToken mapToEntity(RefreshTokenDTO refreshTokenDTO){
-//        RefreshToken refreshToken = modelMapper.map(refreshTokenDTO,RefreshToken.class);
-//        return refreshToken;
-//    }
-//
-//    public RefreshTokenDTO mapToDTO(RefreshToken refreshToken){
-//        RefreshTokenDTO refreshTokenDTO = modelMapper.map(refreshToken,RefreshTokenDTO.class);
-//        return refreshTokenDTO;
-//    }
+
 }

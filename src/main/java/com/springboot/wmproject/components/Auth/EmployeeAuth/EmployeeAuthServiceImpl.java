@@ -1,144 +1,162 @@
- package com.springboot.wmproject.components.Auth.EmployeeAuth;
+package com.springboot.wmproject.components.Auth.EmployeeAuth;
 
- import com.springboot.wmproject.components.Auth.DTO.LoginDTO;
- import com.springboot.wmproject.components.Auth.DTO.RegisterDTO;
- import com.springboot.wmproject.components.Token.TokenService;
- import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
- import lombok.AllArgsConstructor;
- import org.springframework.security.authentication.AuthenticationManager;
- import org.springframework.security.core.Authentication;
- import org.springframework.security.core.context.SecurityContext;
- import org.springframework.security.core.context.SecurityContextHolder;
- import org.springframework.stereotype.Service;
+import com.springboot.wmproject.DTO.EmployeeAccountDTO;
+import com.springboot.wmproject.DTO.EmployeeDTO;
+import com.springboot.wmproject.DTO.OrganizeTeamDTO;
+import com.springboot.wmproject.components.Auth.DTO.LoginDTO;
+import com.springboot.wmproject.components.Auth.DTO.RegisterDTO;
+import com.springboot.wmproject.components.Employee.EmployeeAccountService;
+import com.springboot.wmproject.components.Employee.EmployeeService;
+import com.springboot.wmproject.components.Token.JWT.JwtTokenProvider;
+import com.springboot.wmproject.securities.AuthenticationToken.EmployeeUsernamePasswordAuthenticationToken;
+import com.springboot.wmproject.securities.UserDetails.CustomUserDetails;
+import com.springboot.wmproject.services.OrganizeTeamService;
+import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
- import java.util.ArrayList;
- import java.util.HashMap;
- import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
- @Service
- @AllArgsConstructor
- public class EmployeeAuthServiceImpl implements EmployeeAuthService{
+@Service
+@AllArgsConstructor
+public class EmployeeAuthServiceImpl implements EmployeeAuthService {
 
-     private final AuthenticationManager authenticationManager;
-     private final TokenService tokenService;
-     private List<String> errors;
-     @Override
-     public HashMap<String, String> login(LoginDTO loginDTO) {
-         Authentication authentication = authenticationManager.authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
+    private final AuthenticationManager authenticationManager;
+    private final EmployeeAccountService employeeAccountService;
+    private final OrganizeTeamService teamService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final EmployeeService employeeService;
+    private final PasswordEncoder passwordEncoder;
+    private List<String> errors;
 
-         SecurityContext sc = SecurityContextHolder.getContext();
-         sc.setAuthentication(authentication);
+    @Override
+    public HashMap<String, String> login(LoginDTO loginDTO)
+    {
+        Authentication authentication = authenticationManager.authenticate(new EmployeeUsernamePasswordAuthenticationToken(loginDTO.getUsername(), loginDTO.getPassword()));
 
-         String accessToken = tokenProvider.generateAccessToken(authentication);
-         int id = Math.toIntExact(((CustomUserDetails) authentication.getPrincipal()).getUserId());
-         EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeId(id);
-         String refreshToken = tokenProvider.generateRefreshToken(authentication,employeeAccountDTO);
+        SecurityContext sc = SecurityContextHolder.getContext();
+        sc.setAuthentication(authentication);
 
-         HashMap<String,String> map = new HashMap<>();
-         map.put("accessToken",accessToken);
-         map.put("refreshToken",refreshToken);
-         return map;
-     }
+        String accessToken = jwtTokenProvider.generateAccessToken(authentication);
+        int id = Math.toIntExact(((CustomUserDetails) authentication.getPrincipal()).getUserId());
+        EmployeeAccountDTO employeeAccountDTO = employeeAccountService.getEmployeeAccountByEmployeeId(id);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(authentication, employeeAccountDTO);
 
-     @Override
-     public RegisterDTO register(RegisterDTO registerDTO) {
-         errors = new ArrayList<>();
-         Integer team_id = registerDTO.getTeam_id();
-         OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(team_id);
-         String teamName = teamDTO.getTeamName().trim();
-
-         EmployeeDTO employeeDTO = new EmployeeDTO();
-         EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
-
-         Integer isLeader = registerDTO.getIsLeader() == null ? 0 : registerDTO.getIsLeader();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("accessToken", accessToken);
+        map.put("refreshToken", refreshToken);
+        return map;
+    }
 
 
 
-         boolean isValidPhone = employeeService.checkPhoneExists(registerDTO.getPhone()).size() == 0;
-         boolean isValidEmail = employeeService.checkEmailExists(registerDTO.getEmail()).size() == 0;
-         boolean isValidUsername = employeeAccountService.checkUsernameExists(registerDTO.getUsername()).size() == 0;
-         boolean isValidPassword = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
+    private boolean checkValidEmployeeInformation(RegisterDTO registerDTO) {
 
-         //VALID PHONE
+        errors = new ArrayList<>();
 
-         if (isValidPhone) {
-             employeeDTO.setPhone(registerDTO.getPhone());
-         } else {
-             errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
-         }
+        Integer teamId = registerDTO.getTeam_id();
+        OrganizeTeamDTO teamDTO = teamService.getOneOrganizeTeamById(teamId);
+//         String teamName = teamDTO.getTeamName().trim();
 
-         //VALID EMAIL
+        EmployeeDTO employeeDTO = new EmployeeDTO();
+        EmployeeAccountDTO employeeAccountDTO = new EmployeeAccountDTO();
 
-         if (isValidEmail) {
-             employeeDTO.setEmail(registerDTO.getEmail().trim());
-         } else {
-             errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
-         }
+        boolean isLeader = registerDTO.isLeader();
+        boolean isPhoneValid = employeeService.checkPhoneExists(registerDTO.getPhone());
+        boolean isEmailValid = employeeService.checkEmailExists(registerDTO.getEmail());
+        boolean isUsernameValid = employeeAccountService.checkUsernameExists(registerDTO.getUsername());
+        boolean isPasswordValid = registerDTO.getPassword() != null && !registerDTO.getPassword().isEmpty() && !registerDTO.getPassword().trim().isBlank();
 
-         //VALID LEADER
+        //VALID PHONE
 
-         if (isLeader == 1) {
-             List<EmployeeDTO> allEmpInTeam = employeeService.findAllByTeamId(isLeader);
-             if(allEmpInTeam != null){
-                 Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
-                 if (!hasLeaderInTeam) {
-                     employeeDTO.setIsLeader(1);
-                 } else {
-                     errors.add(teamDTO.getTeamName() + " already has a leader");
-                 }
-             } else{
-                 // Team has no members
-                 employeeDTO.setIsLeader(1);
-             }
-         }else{
-             // isLeader == 0
-             employeeDTO.setIsLeader(isLeader);
-         }
+        if (isPhoneValid) {
+            employeeDTO.setPhone(registerDTO.getPhone());
+        } else {
+            errors.add("Phone number: " + registerDTO.getPhone() + " has already existed");
+        }
 
-         //VALID USERNAME
-         if (isValidUsername) {
-             employeeAccountDTO.setUsername(registerDTO.getUsername().trim());
-         } else {
-             errors.add("Username : " + registerDTO.getUsername() + " has already existed");
-         }
-         //VALID PASSWORD
+        //VALID EMAIL
 
-         if(isValidPassword){
-             employeeAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
-         } else {
-             errors.add("Password cannot be empty");
-         }
+        if (isEmailValid) {
+            employeeDTO.setEmail(registerDTO.getEmail().trim());
+        } else {
+            errors.add("Email Address : " + registerDTO.getEmail() + " has already existed");
+        }
 
-         if (errors.size() != 0) {
-             ObjectMapper objectMapper = new ObjectMapper();
-             String responseError = objectMapper.writeValueAsString(errors);
-             throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
-         }
+        //VALID LEADER
 
-         employeeDTO.setName(registerDTO.getName().trim());
-         employeeDTO.setSalary(registerDTO.getSalary());
-         employeeDTO.setAddress(registerDTO.getAddress().trim());
-         employeeDTO.setJoinDate(registerDTO.getJoinDate());
-         employeeDTO.setTeam_id(registerDTO.getTeam_id());
-         employeeDTO.setGender(registerDTO.getGender());
-         employeeDTO.setAvatar(registerDTO.getAvatar());
-         employeeDTO.set_deleted(false);
-         EmployeeDTO empDTO = employeeService.create(employeeDTO);
-         //getID after employee created -> then pass to employee account
+        if (isLeader) {
+            List<EmployeeDTO> teamByTeamId = employeeService.findAllByTeamId(teamId);
+            if (!teamByTeamId.isEmpty()) {
+                boolean isAlreadyLeaderInTeam = teamByTeamId.stream().anyMatch(EmployeeDTO::isLeader);
+                if (isAlreadyLeaderInTeam) {
+                    errors.add(teamDTO.getTeamName() + " already has a leader");
+                } else {
+                    employeeDTO.setLeader(true);
+                }
+            } else {
+                // Team has no members
+                employeeDTO.setLeader(true);
+            }
+        } else {
+            // isLeader == false
+            employeeDTO.setLeader(false);
+        }
 
-         String role;
+        //VALID USERNAME
+        if (isUsernameValid) {
+            employeeAccountDTO.setUsername(registerDTO.getUsername().trim());
+        } else {
+            errors.add("Username : " + registerDTO.getUsername() + " has already existed");
+        }
+        //VALID PASSWORD
 
-         if (teamName.equals(SD.TEAM_ADMINISTRATOR)) {
-             role = SD.ROLE_SALE;
-         } else {
-             role = SD.ROLE_ORGANIZE;
-         }
-         employeeAccountDTO.setRole(role);
-         employeeAccountDTO.setEmployeeId(empDTO.getId());
-         employeeAccountService.create(employeeAccountDTO);
-         registerDTO.setEmployeeId(empDTO.getId());
-         registerDTO.setRole(role);
+        if (isPasswordValid) {
+            employeeAccountDTO.setPassword(passwordEncoder.encode(registerDTO.getPassword()));
+        } else {
+            errors.add("Password cannot be empty");
+        }
 
-         return registerDTO;
-     }
- }
+        if (errors.size() != 0) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            String responseError = objectMapper.writeValueAsString(errors);
+            throw new WmAPIException(HttpStatus.BAD_REQUEST, responseError);
+        }
+
+
+
+        employeeDTO.empl
+
+        EmployeeDTO empDTO = employeeService.create(employeeDTO);
+
+
+        String role;
+
+        if (teamName.equals(SD.TEAM_ADMINISTRATOR)) {
+            role = SD.ROLE_SALE;
+        } else {
+            role = SD.ROLE_ORGANIZE;
+        }
+        employeeAccountDTO.setRole(role);
+        employeeAccountDTO.setEmployeeId(empDTO.getId());
+        employeeAccountService.create(employeeAccountDTO);
+        registerDTO.setEmployeeId(empDTO.getId());
+        registerDTO.setRole(role);
+
+
+        return false;
+    }
+
+    @Override
+    public RegisterDTO register(RegisterDTO registerDTO) {
+        //CHECK VALID INFORMATION
+        checkValidEmployeeInformation(registerDTO);
+        return registerDTO;
+    }
+}

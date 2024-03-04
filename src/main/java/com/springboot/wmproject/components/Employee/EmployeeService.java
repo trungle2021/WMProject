@@ -14,8 +14,8 @@ public interface EmployeeService {
     EmployeeDTO update(EmployeeDTO updateEmployeeDTO);
     List<EmployeeDTO> findAllByRole(String role);
 
-    List<Employees> checkPhoneExists(String phone);
-    List<Employees> checkEmailExists(String email);
+    boolean checkPhoneExists(String phone);
+    boolean checkEmailExists(String email);
     List<EmployeeDTO> findAllByName(String empType);
     List<EmployeeDTO> findAllByTeamId(Integer teamId);
 

@@ -17,7 +17,6 @@ import java.text.ParseException;
 @AllArgsConstructor
 public class TokenController {
 
-    private final AuthService authService;
 
     private final CustomerAccountService accountService;
 

@@ -116,8 +116,8 @@ public class EmployeeAccountServiceImpl implements EmployeeAccountService {
     }
 
     @Override
-    public List<EmployeeAccounts> checkUsernameExists(String username) {
-        return empAccRepo.checkUsernameExists(username);
+    public boolean checkUsernameExists(String username) {
+        return empAccRepo.checkUsernameExists(username).isEmpty();
     }
 
 

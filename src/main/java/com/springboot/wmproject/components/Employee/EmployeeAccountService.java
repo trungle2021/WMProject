@@ -18,6 +18,6 @@ public interface EmployeeAccountService {
     EmployeeAccountDTO create(EmployeeAccountDTO employeeAccountDTO);
     EmployeeAccountDTO update(EmployeeAccountDTO employeeAccountDTO);
     void delete(int id);
-    List<EmployeeAccounts> checkUsernameExists(String username);
+    boolean checkUsernameExists(String username);
 
 }

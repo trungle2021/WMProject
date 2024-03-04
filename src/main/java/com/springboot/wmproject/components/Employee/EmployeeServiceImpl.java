@@ -53,8 +53,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDTO getEmployeeById(int id) {
         Employees employees = employeeRepository.getEmployeeById(id);
-        if(employees == null){
-              throw new ResourceNotFoundException("Employee", "id", String.valueOf(id));
+        if (employees == null) {
+            throw new ResourceNotFoundException("Employee", "id", String.valueOf(id));
         }
         return mapToDto(employees);
     }
@@ -87,24 +87,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         checkEmployees.setAvatar(dto.getAvatar() != null ? dto.getAvatar() : checkEmployees.getAvatar());
 
-        if(isLeader != checkEmployees.getIsLeader())
-        {
-            if (isLeader == 1 ) {
+        if (isLeader != checkEmployees.getIsLeader()) {
+            if (isLeader == 1) {
                 List<EmployeeDTO> allEmpInTeam = findAllByTeamId(checkEmployees.getTeam_id());
-                if(allEmpInTeam != null){
+                if (allEmpInTeam != null) {
                     Boolean hasLeaderInTeam = allEmpInTeam.stream().filter(emp -> emp.getIsLeader() == 1).findFirst().isPresent();
                     if (!hasLeaderInTeam) {
                         checkEmployees.setIsLeader(1);
                     } else {
-                        throw new WmAPIException(HttpStatus.BAD_REQUEST, checkEmployees.getOrganizeTeamsByTeamId().getTeamName() +  " already has a leader");
+                        throw new WmAPIException(HttpStatus.BAD_REQUEST, checkEmployees.getOrganizeTeamsByTeamId().getTeamName() + " already has a leader");
                     }
-                }else{
+                } else {
                     checkEmployees.setIsLeader(1);
                 }
-            }else{
+            } else {
                 checkEmployees.setIsLeader(0);
             }
-        }else{
+        } else {
             checkEmployees.setIsLeader(isLeader);
         }
 
@@ -124,14 +123,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employees> checkPhoneExists(String phone) {
-        List<Employees> employeesList = employeeRepository.checkPhoneExists(phone);
-        return employeesList;
+    public boolean checkPhoneExists(String phone) {
+       return employeeRepository.checkPhoneExists(phone).isEmpty();
+
     }
 
     @Override
-    public List<Employees> checkEmailExists(String email) {
-        return employeeRepository.checkEmailExists(email);
+    public boolean checkEmailExists(String email) {
+        return employeeRepository.checkEmailExists(email).isEmpty();
     }
 
     @Override
@@ -142,7 +141,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDTO> findAllByTeamId(Integer teamId) {
-        List<EmployeeDTO> employeeDTOList = employeeRepository.findAllTeamId(teamId).stream().map(employees -> mapToDto(employees)).collect(Collectors.toList());
+        List<EmployeeDTO> employeeDTOList = employeeRepository.findAllTeamId(teamId).stream().map(this::mapToDto).collect(Collectors.toList());
         return employeeDTOList;
     }
 
@@ -158,7 +157,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<EmployeeDTO> getAllEmployeeByTeamId(Integer empId) {
-        List<EmployeeDTO> employeeDTOList = employeeRepository.getAllEmployeeByTeamId(empId).stream().map(emp->mapToDto(emp)).collect(Collectors.toList());
+        List<EmployeeDTO> employeeDTOList = employeeRepository.getAllEmployeeByTeamId(empId).stream().map(emp -> mapToDto(emp)).collect(Collectors.toList());
         return employeeDTOList;
     }
 

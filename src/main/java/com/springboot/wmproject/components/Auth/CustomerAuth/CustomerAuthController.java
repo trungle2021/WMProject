@@ -17,17 +17,14 @@ import java.util.HashMap;
 @RequestMapping("/api/customer/auth")
 public class CustomerAuthController {
     private final CustomerAuthService customerAuthService;
-    @PostMapping(value = {"/customers/login"})
-    public ResponseEntity<JWTAuthResponse> customerLogin(@RequestBody LoginDTO loginDTO){
-        HashMap<String,String> map = customerAuthService.login(loginDTO);
 
-        if(map.containsKey("accessToken") && map.containsKey("refreshToken")){
-            JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
-            jwtAuthResponse.setAccessToken(map.get("accessToken"));
-            jwtAuthResponse.setRefreshToken(map.get("refreshToken"));
-            return ResponseEntity.ok(jwtAuthResponse);
-        }
-        return null;
+    @PostMapping(value = {"/customers/login"})
+    public ResponseEntity<JWTAuthResponse> customerLogin(@RequestBody LoginDTO loginDTO) {
+        HashMap<String, String> map = customerAuthService.login(loginDTO);
+        JWTAuthResponse jwtAuthResponse = new JWTAuthResponse();
+        jwtAuthResponse.setAccessToken(map.get("accessToken"));
+        jwtAuthResponse.setRefreshToken(map.get("refreshToken"));
+        return ResponseEntity.ok(jwtAuthResponse);
     }
 
     @Operation(summary = "My endpoint", security = @SecurityRequirement(name = "bearerAuth"))

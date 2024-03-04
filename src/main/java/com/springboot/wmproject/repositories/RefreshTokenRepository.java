@@ -1,6 +1,5 @@
 package com.springboot.wmproject.repositories;
 
-import com.springboot.wmproject.DTO.RefreshTokenDTO;
 import com.springboot.wmproject.entities.RefreshToken;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

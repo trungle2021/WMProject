@@ -1,5 +1,6 @@
 package com.springboot.wmproject.DTO;
 
+import com.springboot.wmproject.components.Auth.DTO.RegisterDTO;
 import lombok.*;
 
 import java.util.List;
@@ -18,11 +19,22 @@ public class EmployeeDTO {
     private Double salary;
     private String email;
     private String gender;
-    private Integer isLeader;
-    private Integer team_id;
+    private boolean isLeader;
+    private Integer teamId;
     private String avatar;
-    private boolean is_deleted;
+    private boolean isDeleted;
     private OrganizeTeamDTO organizeTeamsByTeamId;
     private List<EmployeeAccountDTO> employeeAccountsById;
 
+    private EmployeeDTO registerDTO(EmployeeDTO employeeDTO, RegisterDTO registerDTO){
+        employeeDTO.setName(registerDTO.getName().trim());
+        employeeDTO.setSalary(registerDTO.getSalary());
+        employeeDTO.setAddress(registerDTO.getAddress().trim());
+        employeeDTO.setJoinDate(registerDTO.getJoinDate());
+        employeeDTO.setTeamId(registerDTO.getTeam_id());
+        employeeDTO.setGender(registerDTO.getGender());
+        employeeDTO.setAvatar(registerDTO.getAvatar());
+        employeeDTO.setDeleted(false);
+        return employeeDTO;
+    }
 }
